@@ -1003,34 +1003,34 @@ BEGIN
     PUSHBUTTON      "インポート(&I)...",IDC_BUTTON_IMPORT,18,198,53,14,
                     WS_GROUP
     PUSHBUTTON      "エクスポート(&X)...",IDC_BUTTON_EXPORT,73,198,53,14
-    LTEXT           "強調キーワード(&E)",IDC_STATIC,143,6,54,8
-    COMBOBOX        IDC_COMBO_SET,197,3,70,180,CBS_DROPDOWNLIST | WS_VSCROLL | 
+    LTEXT           "強調キーワード1(&1)",IDC_STATIC,142,7,58,8
+    COMBOBOX        IDC_COMBO_SET,204,7,63,180,CBS_DROPDOWNLIST | WS_VSCROLL | 
                     WS_TABSTOP
-    LTEXT           "範囲指定型(&F)",IDC_STATIC,150,35,44,8
-    EDITTEXT        IDC_EDIT_BLOCKCOMMENT_FROM,197,33,24,12,ES_AUTOHSCROLL
-    LTEXT           "～(&T)",IDC_STATIC,224,35,16,8,NOT WS_GROUP
-    EDITTEXT        IDC_EDIT_BLOCKCOMMENT_TO,241,33,24,12,ES_AUTOHSCROLL
-    LTEXT           "行型&1",IDC_STATIC,150,50,18,8
-    EDITTEXT        IDC_EDIT_LINECOMMENT,170,48,24,12,ES_AUTOHSCROLL
+    LTEXT           "範囲指定型(&F)",IDC_STATIC,150,52,44,8
+    EDITTEXT        IDC_EDIT_BLOCKCOMMENT_FROM,197,50,24,12,ES_AUTOHSCROLL
+    LTEXT           "～(&T)",IDC_STATIC,224,52,16,8,NOT WS_GROUP
+    EDITTEXT        IDC_EDIT_BLOCKCOMMENT_TO,241,50,24,12,ES_AUTOHSCROLL
+    LTEXT           "行型&1",IDC_STATIC,150,67,18,8
+    EDITTEXT        IDC_EDIT_LINECOMMENT,170,65,24,12,ES_AUTOHSCROLL
     CONTROL         "位置(&P)",IDC_CHECK1,"Button",BS_AUTOCHECKBOX | 
-                    WS_DISABLED | WS_TABSTOP,197,49,33,10
-    EDITTEXT        IDC_EDIT3,250,48,15,12,ES_AUTOHSCROLL | WS_DISABLED
-    LTEXT           "行型&2",IDC_STATIC,150,65,18,8
-    EDITTEXT        IDC_EDIT_LINECOMMENT2,170,63,24,12,ES_AUTOHSCROLL
+                    WS_DISABLED | WS_TABSTOP,197,66,33,10
+    EDITTEXT        IDC_EDIT3,250,65,15,12,ES_AUTOHSCROLL | WS_DISABLED
+    LTEXT           "行型&2",IDC_STATIC,150,82,18,8
+    EDITTEXT        IDC_EDIT_LINECOMMENT2,170,80,24,12,ES_AUTOHSCROLL
     CONTROL         "位置(&O)",IDC_CHECK6,"Button",BS_AUTOCHECKBOX | 
-                    WS_DISABLED | WS_TABSTOP,197,64,34,10
-    EDITTEXT        IDC_EDIT5,250,63,15,12,ES_AUTOHSCROLL | WS_DISABLED
-    GROUPBOX        "コメントスタイル",IDC_STATIC,145,21,122,60,WS_GROUP
+                    WS_DISABLED | WS_TABSTOP,197,81,34,10
+    EDITTEXT        IDC_EDIT5,250,80,15,12,ES_AUTOHSCROLL | WS_DISABLED
+    GROUPBOX        "コメントスタイル",IDC_STATIC,145,38,122,60,WS_GROUP
     CONTROL         "C言語風: ""&\\""",IDC_RADIO_ESCAPETYPE_1,"Button",
-                    BS_AUTORADIOBUTTON | WS_GROUP,153,97,58,10
+                    BS_AUTORADIOBUTTON | WS_GROUP,148,126,58,10
     CONTROL         "PL/S&QL風: """"""""",IDC_RADIO_ESCAPETYPE_2,"Button",
-                    BS_AUTORADIOBUTTON,153,111,63,10
-    GROUPBOX        "文字列中のエスケープ",IDC_STATIC,145,86,122,40,WS_GROUP
+                    BS_AUTORADIOBUTTON,148,140,59,10
+    GROUPBOX        "エスケープ",IDC_STATIC,145,115,65,40,WS_GROUP
     CONTROL         "折り返し単位(&R)",IDC_RADIO_LINENUM_LAYOUT,"Button",
-                    BS_AUTORADIOBUTTON | WS_GROUP,148,143,58,10
+                    BS_AUTORADIOBUTTON | WS_GROUP,148,176,58,10
     CONTROL         "改行単位(&W)",IDC_RADIO_LINENUM_CRLF,"Button",
-                    BS_AUTORADIOBUTTON,148,157,53,10
-    GROUPBOX        "行番号の表示",IDC_STATIC,145,131,65,40,WS_GROUP
+                    BS_AUTORADIOBUTTON,148,190,53,10
+    GROUPBOX        "行番号の表示",IDC_STATIC,145,164,65,40,WS_GROUP
     CONTROL         "なし(&N)",IDC_RADIO_LINETERMTYPE0,"Button",
                     BS_AUTORADIOBUTTON | WS_GROUP,218,143,35,10
     CONTROL         "縦線(&V)",IDC_RADIO_LINETERMTYPE1,"Button",
@@ -1040,6 +1040,9 @@ BEGIN
     LTEXT           "半角(&S)",IDC_LABEL_LINETERMCHAR,223,187,26,8
     EDITTEXT        IDC_EDIT_LINETERMCHAR,249,185,15,12,ES_AUTOHSCROLL
     GROUPBOX        "行番号区切り",IDC_STATIC,215,131,52,73
+    LTEXT           "強調キーワード2(&2)",IDC_STATIC,143,23,61,8
+    COMBOBOX        IDC_COMBO_SET2,204,24,63,180,CBS_DROPDOWNLIST | 
+                    WS_VSCROLL | WS_TABSTOP
 END
 
 IDD_COMPARE DIALOG DISCARDABLE  0, 0, 365, 165
@@ -1725,7 +1728,7 @@ BEGIN
     IDD_PROP_COLOR, DIALOG
     BEGIN
         LEFTMARGIN, 7
-        RIGHTMARGIN, 263
+        RIGHTMARGIN, 267
         TOPMARGIN, 7
         BOTTOMMARGIN, 206
     END
@@ -1928,8 +1931,8 @@ END
 //
 
 VS_VERSION_INFO VERSIONINFO
- FILEVERSION 1,2,23,0
- PRODUCTVERSION 1,2,23,0
+ FILEVERSION 1,2,24,0
+ PRODUCTVERSION 1,2,24,0
  FILEFLAGSMASK 0x3fL
 #ifdef _DEBUG
  FILEFLAGS 0x21L
@@ -1947,14 +1950,14 @@ BEGIN
             VALUE "Comments", "フリーソフトです。ご自由にお使い下さい。\0"
             VALUE "CompanyName", "Norio Nakatani\0"
             VALUE "FileDescription", "\0"
-            VALUE "FileVersion", "1.2.23.0\0"
+            VALUE "FileVersion", "1.2.24.0\0"
             VALUE "InternalName", "sakura\0"
             VALUE "LegalCopyright", "Copyright (C) Norio Nakatani\0"
             VALUE "LegalTrademarks", "\0"
             VALUE "OriginalFilename", "sakura.exe\0"
             VALUE "PrivateBuild", "\0"
             VALUE "ProductName", "テキストエディタ SAKURA\0"
-            VALUE "ProductVersion", "1.2.23.0\0"
+            VALUE "ProductVersion", "1.2.24.0\0"
             VALUE "SpecialBuild", "unofficial release 3\0"
         END
     END

@@ -246,6 +246,7 @@
 #define IDC_BUTTON_EDITKEYWORD          1177
 #define IDC_BUTTON_DELSET               1178
 #define IDC_COMBO_SET                   1179
+#define IDC_COMBO_SET2                  1180
 #define IDC_LIST_KEYWORD                1181
 #define IDC_SPIN_MAX_MRU_FILE           1184
 #define IDC_SPIN_MAX_MRU_FOLDER         1185

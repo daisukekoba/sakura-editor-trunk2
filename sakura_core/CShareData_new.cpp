@@ -737,7 +737,7 @@ BOOL CShareData::ShareData_IO( BOOL bRead )
 			bRet = FALSE;
 			goto Section02;
 		}
-		static const char* pszForm = "%d,%d,%d,%d,%d,%d,%d,%d,%d,%d";
+		static const char* pszForm = "%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d";	//MIK
 		strcpy( szKeyName, "nInts" );
 		if( bRead ){
 			if( ERROR_SUCCESS == MY_RegVal_IO( bRead, hkReg, szKeyName, REGCNV_SZ2SZ, (BYTE *)szKeyData, 0 ) ){
@@ -747,6 +747,7 @@ BOOL CShareData::ShareData_IO( BOOL bRead )
 					&m_pShareData->m_Types[i].m_nColmSpace,
 					&m_pShareData->m_Types[i].m_nTabSpace,
 					&m_pShareData->m_Types[i].m_nKeyWordSetIdx,
+					&m_pShareData->m_Types[i].m_nKeyWordSetIdx2,	//MIK
 					&m_pShareData->m_Types[i].m_nStringType,
 					&m_pShareData->m_Types[i].m_bLineNumIsCRLF,
 					&m_pShareData->m_Types[i].m_nLineTermType,
@@ -761,6 +762,7 @@ BOOL CShareData::ShareData_IO( BOOL bRead )
 				m_pShareData->m_Types[i].m_nColmSpace,
 				m_pShareData->m_Types[i].m_nTabSpace,
 				m_pShareData->m_Types[i].m_nKeyWordSetIdx,
+				m_pShareData->m_Types[i].m_nKeyWordSetIdx2,	//MIK
 				m_pShareData->m_Types[i].m_nStringType,
 				m_pShareData->m_Types[i].m_bLineNumIsCRLF,
 				m_pShareData->m_Types[i].m_nLineTermType,
@@ -1527,7 +1529,7 @@ BOOL CShareData::ShareData_IO_2( BOOL bRead )
 //		}
 		wsprintf( szKey, "Types(%d)", i );
 		pszSecName = szKey;
-		static const char* pszForm = "%d,%d,%d,%d,%d,%d,%d,%d,%d,%d";
+		static const char* pszForm = "%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d";	//MIK
 		strcpy( szKeyName, "nInts" );
 		if( bRead ){
 			if( TRUE == cProfile.IOProfileData( bRead, pszSecName, szKeyName, REGCNV_SZ2SZ, (char*)szKeyData, 0 ) ){
@@ -1537,6 +1539,7 @@ BOOL CShareData::ShareData_IO_2( BOOL bRead )
 					&m_pShareData->m_Types[i].m_nColmSpace,
 					&m_pShareData->m_Types[i].m_nTabSpace,
 					&m_pShareData->m_Types[i].m_nKeyWordSetIdx,
+					&m_pShareData->m_Types[i].m_nKeyWordSetIdx2,	//MIK
 					&m_pShareData->m_Types[i].m_nStringType,
 					&m_pShareData->m_Types[i].m_bLineNumIsCRLF,
 					&m_pShareData->m_Types[i].m_nLineTermType,
@@ -1551,6 +1554,7 @@ BOOL CShareData::ShareData_IO_2( BOOL bRead )
 				m_pShareData->m_Types[i].m_nColmSpace,
 				m_pShareData->m_Types[i].m_nTabSpace,
 				m_pShareData->m_Types[i].m_nKeyWordSetIdx,
+				m_pShareData->m_Types[i].m_nKeyWordSetIdx2,	//MIK
 				m_pShareData->m_Types[i].m_nStringType,
 				m_pShareData->m_Types[i].m_bLineNumIsCRLF,
 				m_pShareData->m_Types[i].m_nLineTermType,

@@ -742,7 +742,7 @@ searchnext:;
 						/* キーワードが登録単語ならば、色を変える */
 						j = i - nPos;
 						/* ｎ番目のセットから指定キーワードをサーチ 無いときは-1を返す */
-						nIdx = m_pShareData->m_CKeyWordSetMgr.SearchKeyWord( 
+						nIdx = m_pShareData->m_CKeyWordSetMgr.SearchKeyWord2(		//MIK UPDATE 2000.12.01 binary search
 							TypeDataPtr->m_nKeyWordSetIdx , 
 							(const char *)&pLine[nPos],
 							j
@@ -760,11 +760,36 @@ searchnext:;
 							if( !bSearchStringMode ){
 								SetCurrentColor( hdc, nCOMMENTMODE );
 							}
-						}
+						}else{		//MIK START ADD 2000.12.01 second keyword & binary search
+							if(TypeDataPtr->m_nKeyWordSetIdx2 != -1 && /* キーワードセット */							//MIK 2000.12.01 second keyword
+								TypeDataPtr->m_ColorInfoArr[COLORIDX_KEYWORD2].m_bDisp)									//MIK
+							{																							//MIK
+								/* ｎ番目のセットから指定キーワードをサーチ 無いときは-1を返す */						//MIK
+								nIdx = m_pShareData->m_CKeyWordSetMgr.SearchKeyWord2(									//MIK 2000.12.01 binary search
+									TypeDataPtr->m_nKeyWordSetIdx2 ,													//MIK
+									(const char *)&pLine[nPos],															//MIK
+									j																					//MIK
+								);																						//MIK
+								if( nIdx != -1 ){																		//MIK
+									if( y/* + nLineHeight*/ >= m_nViewAlignTop ){										//MIK
+										/* テキスト表示 */																//MIK
+										nX += DispText( hdc, x + nX * ( nCharWidth ), y, &pLine[nBgn], nPos - nBgn );	//MIK
+									}																					//MIK
+									/* 現在の色を指定 */																//MIK
+									nBgn = nPos;																		//MIK
+									nCOMMENTMODE = 50;	/* キーワード2モード */											//MIK
+									nCOMMENTEND = i;																	//MIK
+									if( !bSearchStringMode ){															//MIK
+										SetCurrentColor( hdc, nCOMMENTMODE );											//MIK
+									}																					//MIK
+								}																						//MIK
+							}																							//MIK
+						}			//MIK END
 					}
 					break;
 				case 80:	/* URLモードである */					
 				case 5:	/* キーワードモードである */
+				case 50:	/* キーワード2モードである */	//MIK
 					if( nPos == nCOMMENTEND ){
 						if( y/* + nLineHeight*/ >= m_nViewAlignTop ){
 							/* テキスト表示 */

@@ -2018,6 +2018,27 @@ void CPropTypes::SetData_p3_new( HWND hwndDlg )
 			::SendMessage( hwndWork, CB_SETCURSEL, (WPARAM)m_Types.m_nKeyWordSetIdx + 1, 0 );
 		}
 	}
+
+	//MIK START 2000.12.01 second keyword
+	/* セット名コンボボックスの値セット */														//MIK
+	hwndWork = ::GetDlgItem( hwndDlg, IDC_COMBO_SET2 );											//MIK
+	::SendMessage( hwndWork, CB_RESETCONTENT, 0, 0 );  /* コンボボックスを空にする */			//MIK
+	/* 一行目は空白 */																			//MIK
+	::SendMessage( hwndWork, CB_ADDSTRING, 0, (LPARAM)(LPCTSTR)" " );							//MIK
+	if( 0 < m_CKeyWordSetMgr.m_nKeyWordSetNum ){												//MIK
+		for( i = 0; i < m_CKeyWordSetMgr.m_nKeyWordSetNum; ++i ){								//MIK
+			::SendMessage( hwndWork, CB_ADDSTRING, 0, (LPARAM) (LPCTSTR)m_CKeyWordSetMgr.GetTypeName( i ) );	//MIK
+		}																						//MIK
+		if( -1 == m_Types.m_nKeyWordSetIdx2 ){													//MIK	
+			/* セット名コンボボックスのデフォルト選択 */										//MIK
+			::SendMessage( hwndWork, CB_SETCURSEL, (WPARAM)0, 0 );								//MIK
+		}else{																					//MIK
+			/* セット名コンボボックスのデフォルト選択 */										//MIK
+			::SendMessage( hwndWork, CB_SETCURSEL, (WPARAM)m_Types.m_nKeyWordSetIdx2 + 1, 0 );	//MIK
+		}																						//MIK
+	}																							//MIK
+	//MIK END
+
 	/* 色をつける文字種類のリスト */
 	hwndWork = ::GetDlgItem( hwndDlg, IDC_LIST_COLORS );
 	::SendMessage( hwndWork, LB_RESETCONTENT, 0, 0 );  /* コンボボックスを空にする */
@@ -2099,6 +2120,18 @@ int CPropTypes::GetData_p3_new( HWND hwndDlg )
 		m_Types.m_nKeyWordSetIdx = nIdx - 1;
 	
 	}
+
+	//MIK START 2000.12.01 second keyword
+	/* セット名コンボボックスの値セット */					//MIK
+	hwndWork = ::GetDlgItem( hwndDlg, IDC_COMBO_SET2 );		//MIK
+	nIdx = ::SendMessage( hwndWork, CB_GETCURSEL, 0, 0 );	//MIK
+	if( CB_ERR == nIdx ||									//MIK
+		0 == nIdx ){										//MIK
+		m_Types.m_nKeyWordSetIdx2 = -1;						//MIK
+	}else{													//MIK
+		m_Types.m_nKeyWordSetIdx2 = nIdx - 1;				//MIK								
+	}														//MIK
+	//MIK END
 
 	/* 行番号区切り　0=なし 1=縦線 2=任意 */
 	if( ::IsDlgButtonChecked( hwndDlg, IDC_RADIO_LINETERMTYPE0 ) ){

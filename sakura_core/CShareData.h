@@ -146,11 +146,12 @@ struct PRINTSETTING {
 #define COLORIDX_EOF			10	/* EOF記号 */
 #define COLORIDX_SEARCH			11	/* 検索文字列 */
 #define COLORIDX_KEYWORD		12	/* 強調キーワード */
-#define COLORIDX_COMMENT		13	/* コメント */
-#define COLORIDX_SSTRING		14	/* シングルクォーテーション文字列 */
-#define COLORIDX_WSTRING		15	/* ダブルクォーテーション文字列 */
-#define COLORIDX_URL			16	/* URL */
-#define COLORIDX_LAST			17
+#define COLORIDX_KEYWORD2		13	/* 第２強調キーワード */				//MIK ADD
+#define COLORIDX_COMMENT		14	/* コメント */							//MIK
+#define COLORIDX_SSTRING		15	/* シングルクォーテーション文字列 */	//MIK
+#define COLORIDX_WSTRING		16	/* ダブルクォーテーション文字列 */		//MIK
+#define COLORIDX_URL			17	/* URL */								//MIK
+#define COLORIDX_LAST			18											//MIK
 //	To Here Sept. 18, 2000
 
 /* 色設定 */
@@ -213,6 +214,7 @@ struct Types {
 //	COLORREF			m_colorCCPPKEYWORD;				/* 強調キーワードの色 */
 //	COLORREF			m_colorCCPPKEYWORDBACK;			/* 強調キーワード背景の色 */
 	int					m_nKeyWordSetIdx;				/* キーワードセット */
+	int					m_nKeyWordSetIdx2;				/* キーワード2セット */	//MIK
 //	COLORREF			m_colorCOMMENT;					/* コメント色 */
 //	COLORREF			m_colorCOMMENTBACK;				/* コメント背景の色 */
 //	COLORREF			m_colorSSTRING;					/* シングルクォーテーション文字列色 */

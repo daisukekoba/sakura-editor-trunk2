@@ -28,7 +28,7 @@ struct ARRHEAD {
 
 //	共有メモリのバージョン 1～unsinged intの最大値
 //	共有メモリの形式を変更したときはここも修正すること
-const unsigned int uShareDataVersion = 4;
+const unsigned int uShareDataVersion = 5;
 
 
 CShareData::~CShareData()
@@ -762,6 +762,7 @@ tt 時刻マーカー。「 AM 」「 PM 」「午前」「午後」など。
 		m_pShareData->m_Types[nIdx].m_nLineSpace = 1;			/* 行間のすきま */
 		m_pShareData->m_Types[nIdx].m_nTabSpace = 4;			/* TABの文字数 */
 		m_pShareData->m_Types[nIdx].m_nKeyWordSetIdx = -1;				/* キーワードセット */
+		m_pShareData->m_Types[nIdx].m_nKeyWordSetIdx2 = -1;				/* キーワード2セット */	//MIK
 		strcpy( m_pShareData->m_Types[nIdx].m_szLineComment, "" );			/* 行コメントデリミタ */
 		strcpy( m_pShareData->m_Types[nIdx].m_szLineComment2, "" );			/* 行コメントデリミタ2 */
 		strcpy( m_pShareData->m_Types[nIdx].m_szBlockCommentFrom, "" );		/* ブロックコメントデリミタ(From) */
@@ -857,6 +858,7 @@ tt 時刻マーカー。「 AM 」「 PM 」「午前」「午後」など。
 			"EOF記号",            TRUE, FALSE, FALSE, RGB( 0, 255, 255 ), RGB( 0, 0, 0 ),
 			"検索文字列",         TRUE , FALSE, FALSE, RGB( 0, 0, 0 ), RGB( 255, 255, 0 ),
 			"強調キーワード",     TRUE , FALSE, FALSE, RGB( 0, 0, 255 ), RGB( 255, 251, 240 ),
+			"第２強調キーワード", TRUE , FALSE, FALSE, RGB( 0, 0, 255 ), RGB( 255, 251, 240 ),	//MIK
 			"コメント",           TRUE , FALSE, FALSE, RGB( 0, 128, 0 ), RGB( 255, 251, 240 ),
 		//Sept. 4, 2000 JEPRO　シングルクォーテーション文字列に色を割り当てるが色分け表示はしない
 		//Oct. 17, 2000 JEPRO 色分け表示するように変更(最初のFALSE→TRUE)
@@ -933,6 +935,7 @@ tt 時刻マーカー。「 AM 」「 PM 」「午前」「午後」など。
 			m_pShareData->m_Types[nIdx].m_nIdx = nIdx;
 			strcpy( m_pShareData->m_Types[nIdx].m_szTypeName, pszTypeNameArr[nIdx] );	/* タイプ属性：名称 */
 			strcpy( m_pShareData->m_Types[nIdx].m_szTypeExts, pszTypeExts[nIdx] );		/* タイプ属性：拡張子リスト */
+			m_pShareData->m_Types[nIdx].m_nKeyWordSetIdx2 = -1;	//MIK
 		}
 
 		

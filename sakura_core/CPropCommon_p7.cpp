@@ -226,7 +226,8 @@ BOOL CPropCommon::DispatchEvent_p7(
 					/* 削除対象のセットを使用しているファイルタイプを列挙 */
 					strcpy( pszLabel, "" );
 					for( i = 0; i < MAX_TYPES; ++i ){
-						if( nIndex1 == m_Types[i].m_nKeyWordSetIdx ){
+						if( nIndex1 == m_Types[i].m_nKeyWordSetIdx
+						||  nIndex1 == m_Types[i].m_nKeyWordSetIdx2 ){	//MIK
 							strcat( pszLabel, "・" );
 							strcat( pszLabel, m_Types[i].m_szTypeName );
 							strcat( pszLabel, "(" );
@@ -247,6 +248,9 @@ BOOL CPropCommon::DispatchEvent_p7(
 						if( nIndex1 == m_Types[i].m_nKeyWordSetIdx ){
 							m_Types[i].m_nKeyWordSetIdx = -1;
 						}
+						if( nIndex1 == m_Types[i].m_nKeyWordSetIdx2 ){	//MIK
+							m_Types[i].m_nKeyWordSetIdx2 = -1;			//MIK
+						}												//MIK
 					}
 					/* ｎ番目のセットを削除 */
 					m_CKeyWordSetMgr.DelKeyWordSet( m_CKeyWordSetMgr.m_nCurrentKeyWordSetIdx );
@@ -254,7 +258,8 @@ BOOL CPropCommon::DispatchEvent_p7(
 					SetData_p7( hwndDlg );
 					return TRUE;
 				case IDC_CHECK_KEYWORDCASE:	/* キーワードの英大文字小文字区別 */
-					m_CKeyWordSetMgr.m_nKEYWORDCASEArr[ m_CKeyWordSetMgr.m_nCurrentKeyWordSetIdx ] = ::IsDlgButtonChecked( hwndDlg, IDC_CHECK_KEYWORDCASE );
+//					m_CKeyWordSetMgr.m_nKEYWORDCASEArr[ m_CKeyWordSetMgr.m_nCurrentKeyWordSetIdx ] = ::IsDlgButtonChecked( hwndDlg, IDC_CHECK_KEYWORDCASE );	//MIK 2000.12.01 case sense
+					m_CKeyWordSetMgr.SetKeyWordCase( m_CKeyWordSetMgr.m_nCurrentKeyWordSetIdx, ::IsDlgButtonChecked( hwndDlg, IDC_CHECK_KEYWORDCASE ) );		//MIK 2000.12.01 case sense
 					return TRUE;
 				case IDC_BUTTON_ADDKEYWORD:	/* キーワード追加 */
 					/* ｎ番目のセットのキーワードの数を返す */
@@ -569,7 +574,8 @@ void CPropCommon::SetData_p7_KeyWordSet( HWND hwndDlg, int nIdx )
 	/* キーワードの英大文字小文字区別 */
 //	if( TRUE == m_CKeyWordSetMgr.m_ppcKeyWordSetArr[nIdx]->m_nKEYWORDCASE ){
 //	if( TRUE == m_CKeyWordSetMgr.m_cKeyWordSetArr[nIdx].m_nKEYWORDCASE ){
-	if( TRUE == m_CKeyWordSetMgr.m_nKEYWORDCASEArr[nIdx] ){
+//	if( TRUE == m_CKeyWordSetMgr.m_nKEYWORDCASEArr[nIdx] ){		//MIK 2000.12.01 case sense
+	if( TRUE == m_CKeyWordSetMgr.GetKeyWordCase(nIdx) ){		//MIK 2000.12.01 case sense
 		::CheckDlgButton( hwndDlg, IDC_CHECK_KEYWORDCASE, TRUE );
 	}else{
 		::CheckDlgButton( hwndDlg, IDC_CHECK_KEYWORDCASE, FALSE );
