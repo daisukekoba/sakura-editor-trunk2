@@ -825,6 +825,10 @@ tt 時刻マーカー。「 AM 」「 PM 」「午前」「午後」など。
 		strcpy( m_pShareData->m_Types[nIdx].m_szLineComment2, "" );		/* 行コメントデリミタ2 */
 		strcpy( m_pShareData->m_Types[nIdx].m_szBlockCommentFrom, "" );	/* ブロックコメントデリミタ(From) */
 		strcpy( m_pShareData->m_Types[nIdx].m_szBlockCommentTo, "" );	/* ブロックコメントデリミタ(To) */
+//#ifdef COMPILE_BLOCK_COMMENT2	//@@@ 2001.03.10 by MIK
+		strcpy( m_pShareData->m_Types[nIdx].m_szBlockCommentFrom2, "" );	/* ブロックコメントデリミタ(From) */
+		strcpy( m_pShareData->m_Types[nIdx].m_szBlockCommentTo2, "" );	/* ブロックコメントデリミタ(To) */
+//#endif
 		m_pShareData->m_Types[nIdx].m_nStringType = 0;					/* 文字列区切り記号エスケープ方法 0=[\"][\'] 1=[""][''] */
 		strcpy( m_pShareData->m_Types[nIdx].m_szIndentChars, "" );		/* その他のインデント対象文字 */
 
@@ -1104,6 +1108,10 @@ tt 時刻マーカー。「 AM 」「 PM 」「午前」「午後」など。
 		strcpy( m_pShareData->m_Types[10].m_szLineComment, "//" );			/* 行コメントデリミタ */				//Nov. 5, 2000 JEPRO 追加
 		strcpy( m_pShareData->m_Types[10].m_szBlockCommentFrom, "{" );		/* ブロックコメントデリミタ(From) */	//Nov. 5, 2000 JEPRO 追加
 		strcpy( m_pShareData->m_Types[10].m_szBlockCommentTo, "}" );		/* ブロックコメントデリミタ(To) */		//Nov. 5, 2000 JEPRO 追加
+//#ifdef COMPILE_BLOCK_COMMENT2	//@@@ 2001.03.10 by MIK
+		strcpy( m_pShareData->m_Types[10].m_szBlockCommentFrom2, "(*" );	/* ブロックコメントデリミタ(From) */
+		strcpy( m_pShareData->m_Types[10].m_szBlockCommentTo2, "*)" );		/* ブロックコメントデリミタ(To) */
+//#endif
 		m_pShareData->m_Types[10].m_nStringType = 1;						/* 文字列区切り記号エスケープ方法  0=[\"][\'] 1=[""][''] */	//Nov. 5, 2000 JEPRO 追加
 		m_pShareData->m_Types[10].m_nKeyWordSetIdx = 5;						/* キーワードセット */
 

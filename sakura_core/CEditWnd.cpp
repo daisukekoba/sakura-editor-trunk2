@@ -4734,6 +4734,10 @@ void CEditWnd::OnChangePrintSetting( void )
 		""/*m_cEditDoc.GetDocumentAttribute().m_szLineComment2*/,		/* 行コメントデリミタ2 */
 		""/*m_cEditDoc.GetDocumentAttribute().m_szBlockCommentFrom*/,	/* ブロックコメントデリミタ(From) */
 		""/*m_cEditDoc.GetDocumentAttribute().m_szBlockCommentTo*/,		/* ブロックコメントデリミタ(To) */
+//#ifdef COMPILE_BLOCK_COMMENT2	//@@@ 2001.03.10 by MIK
+		""/*m_cEditDoc.GetDocumentAttribute().m_szBlockCommentFrom2*/,	/* ブロックコメントデリミタ(From) */
+		""/*m_cEditDoc.GetDocumentAttribute().m_szBlockCommentTo2*/,	/* ブロックコメントデリミタ(To) */
+//#endif
 		0/*m_cEditDoc.GetDocumentAttribute().m_nStringType*/,			/* 文字列区切り記号エスケープ方法  0=[\"][\'] 1=[""][''] */
 		TRUE,
 		NULL,/*hwndProgress*/

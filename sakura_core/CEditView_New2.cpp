@@ -52,6 +52,9 @@ void CEditView::SetCurrentColor( HDC hdc, int nCOMMENTMODE )
 		break;
 	case 1:	/* 行コメントである */
 	case 2:	/* ブロックコメントである */
+//#ifdef	COMPILE_BLOCK_COMMENT2	//@@@ 2001.03.10 by MIK
+	case 20:	/* ブロックコメントである */	//@@@ 2001.03.10 by MIK
+//#endif
 		nColorIdx = COLORIDX_COMMENT;
 //		if( m_pcEditDoc->GetDocumentAttribute().m_ColorInfoArr[COLORIDX_COMMENT].m_bDisp ){	/* コメントを表示する */
 //			colText = m_pcEditDoc->GetDocumentAttribute().m_ColorInfoArr[COLORIDX_COMMENT].m_colTEXT;	/* コメント色 */

@@ -120,6 +120,10 @@ const DWORD p_helpids2[] = {	//11400
 	IDC_COMBO_SET2,					11431,	//キーワードセット２
 	IDC_EDIT_BLOCKCOMMENT_FROM,		11440,	//ブロックコメント開始
 	IDC_EDIT_BLOCKCOMMENT_TO,		11441,	//ブロックコメント終了
+//#ifdef COMPILE_BLOCK_COMMENT2	//@@@ 2001.03.10 by MIK
+	IDC_EDIT_BLOCKCOMMENT_FROM2,	11440,	//ブロックコメント開始
+	IDC_EDIT_BLOCKCOMMENT_TO2,		11441,	//ブロックコメント終了
+//#endif
 	IDC_EDIT_LINECOMMENT,			11442,	//行コメント（１）
 	IDC_EDIT_LINECOMMENT2,			11443,	//行コメント（２）
 	IDC_EDIT3,						11444,	//位置編集１
@@ -2110,11 +2114,19 @@ void CPropTypes::SetData_p3_new( HWND hwndDlg )
 	::SendMessage( ::GetDlgItem( hwndDlg, IDC_EDIT_LINECOMMENT2 )		, EM_LIMITTEXT, (WPARAM)(sizeof( m_Types.m_szLineComment2 ) - 1 ), 0 );
 	::SendMessage( ::GetDlgItem( hwndDlg, IDC_EDIT_BLOCKCOMMENT_FROM )	, EM_LIMITTEXT, (WPARAM)(sizeof( m_Types.m_szBlockCommentFrom ) - 1 ), 0 );
 	::SendMessage( ::GetDlgItem( hwndDlg, IDC_EDIT_BLOCKCOMMENT_TO )	, EM_LIMITTEXT, (WPARAM)(sizeof( m_Types.m_szBlockCommentTo ) - 1 ), 0 );
+//#ifdef COMPILE_BLOCK_COMMENT2	//@@@ 2001.03.10 by MIK
+	::SendMessage( ::GetDlgItem( hwndDlg, IDC_EDIT_BLOCKCOMMENT_FROM2 )	, EM_LIMITTEXT, (WPARAM)(sizeof( m_Types.m_szBlockCommentFrom2 ) - 1 ), 0 );
+	::SendMessage( ::GetDlgItem( hwndDlg, IDC_EDIT_BLOCKCOMMENT_TO2 )	, EM_LIMITTEXT, (WPARAM)(sizeof( m_Types.m_szBlockCommentTo2 ) - 1 ), 0 );
+//#endif
 
 	::SetDlgItemText( hwndDlg, IDC_EDIT_LINECOMMENT			, m_Types.m_szLineComment );		/* 行コメントデリミタ */
 	::SetDlgItemText( hwndDlg, IDC_EDIT_LINECOMMENT2		, m_Types.m_szLineComment2 );		/* 行コメントデリミタ2 */
 	::SetDlgItemText( hwndDlg, IDC_EDIT_BLOCKCOMMENT_FROM	, m_Types.m_szBlockCommentFrom );	/* ブロックコメントデリミタ(From) */
 	::SetDlgItemText( hwndDlg, IDC_EDIT_BLOCKCOMMENT_TO		, m_Types.m_szBlockCommentTo );		/* ブロックコメントデリミタ(To) */
+//#ifdef COMPILE_BLOCK_COMMENT2	//@@@ 2001.03.10 by MIK
+	::SetDlgItemText( hwndDlg, IDC_EDIT_BLOCKCOMMENT_FROM2	, m_Types.m_szBlockCommentFrom2 );	/* ブロックコメントデリミタ(From) */
+	::SetDlgItemText( hwndDlg, IDC_EDIT_BLOCKCOMMENT_TO2	, m_Types.m_szBlockCommentTo2 );	/* ブロックコメントデリミタ(To) */
+//#endif
 
 	if( 0 == m_Types.m_nStringType ){	/* 文字列区切り記号エスケープ方法  0=[\"][\'] 1=[""][''] */
 		::CheckDlgButton( hwndDlg, IDC_RADIO_ESCAPETYPE_1, TRUE );
@@ -2229,6 +2241,10 @@ int CPropTypes::GetData_p3_new( HWND hwndDlg )
 	::GetDlgItemText( hwndDlg, IDC_EDIT_LINECOMMENT2		, m_Types.m_szLineComment2		, sizeof( m_Types.m_szLineComment2 ) );		/* 行コメントデリミタ2 */
 	::GetDlgItemText( hwndDlg, IDC_EDIT_BLOCKCOMMENT_FROM	, m_Types.m_szBlockCommentFrom	, sizeof( m_Types.m_szBlockCommentFrom ) );	/* ブロックコメントデリミタ(From) */
 	::GetDlgItemText( hwndDlg, IDC_EDIT_BLOCKCOMMENT_TO		, m_Types.m_szBlockCommentTo	, sizeof( m_Types.m_szBlockCommentTo ) );	/* ブロックコメントデリミタ(To) */
+//#ifdef COMPILE_BLOCK_COMMENT2	//@@@ 2001.03.10 by MIK
+	::GetDlgItemText( hwndDlg, IDC_EDIT_BLOCKCOMMENT_FROM2	, m_Types.m_szBlockCommentFrom2	, sizeof( m_Types.m_szBlockCommentFrom2 ) );	/* ブロックコメントデリミタ(From) */
+	::GetDlgItemText( hwndDlg, IDC_EDIT_BLOCKCOMMENT_TO2	, m_Types.m_szBlockCommentTo2	, sizeof( m_Types.m_szBlockCommentTo2 ) );	/* ブロックコメントデリミタ(To) */
+//#endif
 
 	/* 文字列区切り記号エスケープ方法  0=[\"][\'] 1=[""][''] */
 	if( ::IsDlgButtonChecked( hwndDlg, IDC_RADIO_ESCAPETYPE_1 ) ){

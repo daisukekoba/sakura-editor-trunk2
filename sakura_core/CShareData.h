@@ -230,6 +230,10 @@ struct Types {
 	char				m_szLineComment[16];			/* 行コメントデリミタ */
 	char				m_szBlockCommentFrom[16];		/* ブロックコメントデリミタ(From) */
 	char				m_szBlockCommentTo[16];			/* ブロックコメントデリミタ(To) */
+//#ifdef COMPILE_BLOCK_COMMENT2	//@@@ 2001.03.10 by MIK
+	char				m_szBlockCommentFrom2[16];		/* ブロックコメントデリミタ(From) */ //@@@ 2001.03.10 by MIK
+	char				m_szBlockCommentTo2[16];		/* ブロックコメントデリミタ(To) */ //@@@ 2001.03.10 by MIK
+//#endif
 	int					m_nStringType;					/* 文字列区切り記号エスケープ方法  0=[\"][\'] 1=[""][''] */
 	char				m_szIndentChars[64];			/* その他のインデント対象文字 */
 //	int					m_nKEYWORDCASE;					/* キーワードの英大文字小文字区別 */

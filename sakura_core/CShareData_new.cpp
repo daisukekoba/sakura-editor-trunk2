@@ -810,6 +810,12 @@ BOOL CShareData::ShareData_IO( BOOL bRead )
 		MY_RegVal_IO( bRead, hkReg, "szBlockCommentFrom"	, REGCNV_SZ2SZ, (BYTE *)/*&*/m_pShareData->m_Types[i].m_szBlockCommentFrom, 0 );
 //		strcpy( szKeyName, "szBlockCommentTo" );
 		MY_RegVal_IO( bRead, hkReg, "szBlockCommentTo"		, REGCNV_SZ2SZ, (BYTE *)/*&*/m_pShareData->m_Types[i].m_szBlockCommentTo, 0 );
+//#ifdef COMPILE_BLOCK_COMMENT2	//@@@ 2001.03.10 by MIK
+//		strcpy( szKeyName, "szBlockCommentFrom2" );
+		MY_RegVal_IO( bRead, hkReg, "szBlockCommentFrom2"	, REGCNV_SZ2SZ, (BYTE *)/*&*/m_pShareData->m_Types[i].m_szBlockCommentFrom2, 0 );
+//		strcpy( szKeyName, "szBlockCommentTo2" );
+		MY_RegVal_IO( bRead, hkReg, "szBlockCommentTo2"		, REGCNV_SZ2SZ, (BYTE *)/*&*/m_pShareData->m_Types[i].m_szBlockCommentTo2, 0 );
+//#endif
 //		strcpy( szKeyName, "szIndentChars" );
 		MY_RegVal_IO( bRead, hkReg, "szIndentChars"			, REGCNV_SZ2SZ, (BYTE *)/*&*/m_pShareData->m_Types[i].m_szIndentChars, 0 );
 //		strcpy( szKeyName, "cLineTermChar" );
@@ -1623,6 +1629,12 @@ BOOL CShareData::ShareData_IO_2( BOOL bRead )
 		cProfile.IOProfileData( bRead, pszSecName, "szBlockCommentFrom"	, REGCNV_SZ2SZ, (char*)/*&*/m_pShareData->m_Types[i].m_szBlockCommentFrom, 0 );
 //		strcpy( szKeyName, "szBlockCommentTo" );
 		cProfile.IOProfileData( bRead, pszSecName, "szBlockCommentTo"	, REGCNV_SZ2SZ, (char*)/*&*/m_pShareData->m_Types[i].m_szBlockCommentTo, 0 );
+//#ifdef COMPILE_BLOCK_COMMENT2	//@@@ 2001.03.10 by MIK
+//		strcpy( szKeyName, "szBlockCommentFrom2" );
+		cProfile.IOProfileData( bRead, pszSecName, "szBlockCommentFrom2", REGCNV_SZ2SZ, (char*)/*&*/m_pShareData->m_Types[i].m_szBlockCommentFrom2, 0 );
+//		strcpy( szKeyName, "szBlockCommentTo2" );
+		cProfile.IOProfileData( bRead, pszSecName, "szBlockCommentTo2"	, REGCNV_SZ2SZ, (char*)/*&*/m_pShareData->m_Types[i].m_szBlockCommentTo2, 0 );
+//#endif
 //		strcpy( szKeyName, "szIndentChars" );
 		cProfile.IOProfileData( bRead, pszSecName, "szIndentChars"		, REGCNV_SZ2SZ, (char*)/*&*/m_pShareData->m_Types[i].m_szIndentChars, 0 );
 //		strcpy( szKeyName, "cLineTermChar" );

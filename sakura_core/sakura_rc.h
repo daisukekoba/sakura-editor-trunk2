@@ -149,6 +149,7 @@
 #define IDC_BUTTON_DELKEYWORD           1087
 #define IDC_EDIT_EXTHTMLHELP            1087
 #define IDC_EDIT_TFORM                  1087
+#define IDC_EDIT_BLOCKCOMMENT_FROM2     1087
 #define IDC_CHECK_BACKUP_MONTH          1088
 #define IDC_BUTTON3                     1088
 #define IDC_BUTTON_INSERTSEPARATOR      1088
@@ -192,6 +193,7 @@
 #define IDC_LIST_FUNC                   1112
 #define IDC_EDIT_SMTPSERVER2            1112
 #define IDC_EDIT_MARGINRX               1112
+#define IDC_EDIT_BLOCKCOMMENT_TO2       1112
 #define IDC_COMBO_FUNCKIND              1113
 #define IDC_EDIT_SMTPPORT2              1113
 #define IDC_EDIT_DANSPACE               1113

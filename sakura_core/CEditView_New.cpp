@@ -627,6 +627,46 @@ searchnext:;
 							}
 						}
 						i = i;
+//#ifdef COMPILE_BLOCK_COMMENT2	//@@@ 2001.03.10 by MIK
+					}else
+					if( TypeDataPtr->m_ColorInfoArr[COLORIDX_COMMENT].m_bDisp && (
+						NULL != TypeDataPtr->m_szBlockCommentFrom2 &&	/* ブロックコメントデリミタ(From) */
+						'\0' != TypeDataPtr->m_szBlockCommentFrom2[0] &&
+						NULL != TypeDataPtr->m_szBlockCommentTo2 &&		/* ブロックコメントデリミタ(To) */
+						'\0' != TypeDataPtr->m_szBlockCommentTo2[0]  &&
+						nPos <= nLineLen - (int)lstrlen( TypeDataPtr->m_szBlockCommentFrom2 ) &&	/* ブロックコメントデリミタ(From) */
+						0 == memicmp( &pLine[nPos], TypeDataPtr->m_szBlockCommentFrom2, (int)lstrlen( TypeDataPtr->m_szBlockCommentFrom2 ) )
+					) ){
+						if( y/* + nLineHeight*/ >= m_nViewAlignTop ){
+							/* テキスト表示 */
+							nX += DispText( hdc, x + nX * ( nCharWidth ), y, &pLine[nBgn], nPos - nBgn );
+						}
+						nBgn = nPos;
+						nCOMMENTMODE = 20;	/* ブロックコメントである */
+//						if( TypeDataPtr->m_bDispCOMMENT ){	/* コメントを表示する */
+							/* 現在の色を指定 */
+							if( !bSearchStringMode ){
+								SetCurrentColor( hdc, nCOMMENTMODE );
+							}
+//						}
+						/* この物理行にブロックコメントの終端があるか */
+						int i;
+						nCOMMENTEND = nLineLen;
+						for( i = nPos + (int)lstrlen( TypeDataPtr->m_szBlockCommentFrom2 ); i <= nLineLen - (int)lstrlen( TypeDataPtr->m_szBlockCommentTo2 ); ++i ){
+							nCharChars_2 = CMemory::MemCharNext( (const char *)pLine, nLineLen, (const char *)&pLine[i] ) - (const char *)&pLine[i];
+							if( 0 == nCharChars_2 ){
+								nCharChars_2 = 1;
+							}
+							if( 0 == memicmp( &pLine[i], TypeDataPtr->m_szBlockCommentTo2, (int)lstrlen( TypeDataPtr->m_szBlockCommentTo2 ) ) ){
+								nCOMMENTEND = i + (int)lstrlen( TypeDataPtr->m_szBlockCommentTo2 );
+								break;
+							}
+							if( 2 == nCharChars_2 ){
+								++i;
+							}
+						}
+						i = i;
+//#endif
 					}else
 					if( pLine[nPos] == '\'' &&
 						TypeDataPtr->m_ColorInfoArr[COLORIDX_SSTRING].m_bDisp  /* シングルクォーテーション文字列を表示する */
@@ -894,6 +934,41 @@ searchnext:;
 						goto SEARCH_START;
 					}
 					break;
+//#ifdef	COMPILE_BLOCK_COMMENT2	//@@@ 2001.03.10 by MIK
+				case 20:	/* ブロックコメントである */
+					if( 0 == nCOMMENTEND ){
+						/* この物理行にブロックコメントの終端があるか */
+						int i;
+						nCOMMENTEND = nLineLen;
+						for( i = nPos/* + (int)lstrlen( TypeDataPtr->m_szBlockCommentFrom2 )*/; i <= nLineLen - (int)lstrlen( TypeDataPtr->m_szBlockCommentTo2 ); ++i ){
+							nCharChars_2 = CMemory::MemCharNext( (const char *)pLine, nLineLen, (const char *)&pLine[i] ) - (const char *)&pLine[i];
+							if( 0 == nCharChars_2 ){
+								nCharChars_2 = 1;
+							}
+							if( 0 == memicmp( &pLine[i], TypeDataPtr->m_szBlockCommentTo2, (int)lstrlen( TypeDataPtr->m_szBlockCommentTo2 ) ) ){
+								nCOMMENTEND = i + (int)lstrlen( TypeDataPtr->m_szBlockCommentTo2 );
+								break;
+							}
+							if( 2 == nCharChars_2 ){
+								++i;
+							}
+						}
+					}else
+					if( nPos == nCOMMENTEND ){
+						if( y/* + nLineHeight*/ >= m_nViewAlignTop ){
+							/* テキスト表示 */
+							nX += DispText( hdc, x + nX * ( nCharWidth ), y, &pLine[nBgn], nPos - nBgn );
+						}
+						nBgn = nPos;
+						nCOMMENTMODE = 0;
+						/* 現在の色を指定 */
+						if( !bSearchStringMode ){
+							SetCurrentColor( hdc, nCOMMENTMODE );
+						}
+						goto SEARCH_START;
+					}
+					break;
+//#endif
 				case 3:	/* シングルクォーテーション文字列である */
 					if( 0 == nCOMMENTEND ){
 						/* シングルクォーテーション文字列の終端があるか */

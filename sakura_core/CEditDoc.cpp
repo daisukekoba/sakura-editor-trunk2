@@ -92,6 +92,10 @@ CEditDoc::CEditDoc() :
 		ref.m_szLineComment2,		/* 行コメントデリミタ2 */
 		ref.m_szBlockCommentFrom,	/* ブロックコメントデリミタ(From) */
 		ref.m_szBlockCommentTo,		/* ブロックコメントデリミタ(To) */
+//#ifdef COMPILE_BLOCK_COMMENT2	//@@@ 2001.03.10 by MIK
+		ref.m_szBlockCommentFrom2,	/* ブロックコメントデリミタ(From) */
+		ref.m_szBlockCommentTo2,	/* ブロックコメントデリミタ(To) */
+//#endif
 		ref.m_nStringType,			/* 文字列区切り記号エスケープ方法  0=[\"][\'] 1=[""][''] */
 		TRUE,
 		NULL,/*hwndProgress*/
@@ -630,6 +634,10 @@ BOOL CEditDoc::FileRead(
 			ref.m_szLineComment2,		/* 行コメントデリミタ2 */
 			ref.m_szBlockCommentFrom,	/* ブロックコメントデリミタ(From) */
 			ref.m_szBlockCommentTo,		/* ブロックコメントデリミタ(To) */
+//#ifdef COMPILE_BLOCK_COMMENT2	//@@@ 2001.03.10 by MIK
+			ref.m_szBlockCommentFrom2,	/* ブロックコメントデリミタ(From) */
+			ref.m_szBlockCommentTo2,	/* ブロックコメントデリミタ(To) */
+//#endif
 			ref.m_nStringType,			/* 文字列区切り記号エスケープ方法  0=[\"][\'] 1=[""][''] */
 			TRUE,
 			hwndProgress,
@@ -834,6 +842,10 @@ BOOL CEditDoc::FileWrite( const char* pszPath, enumEOLType cEolType )
 			ref.m_szLineComment2,		/* 行コメントデリミタ2 */
 			ref.m_szBlockCommentFrom,	/* ブロックコメントデリミタ(From) */
 			ref.m_szBlockCommentTo,		/* ブロックコメントデリミタ(To) */
+//#ifdef COMPILE_BLOCK_COMMENT2	//@@@ 2001.03.10 by MIK
+			ref.m_szBlockCommentFrom2,	/* ブロックコメントデリミタ(From) */
+			ref.m_szBlockCommentTo2,	/* ブロックコメントデリミタ(To) */
+//#endif
 			ref.m_nStringType,			/* 文字列区切り記号エスケープ方法  0=[\"][\'] 1=[""][''] */
 			TRUE,
 			hwndProgress,
@@ -3081,6 +3093,10 @@ void CEditDoc::OnChangeSetting( void )
 		ref.m_szLineComment2,		/* 行コメントデリミタ2 */
 		ref.m_szBlockCommentFrom,	/* ブロックコメントデリミタ(From) */
 		ref.m_szBlockCommentTo,		/* ブロックコメントデリミタ(To) */
+//#ifdef COMPILE_BLOCK_COMMENT2	//@@@ 2001.03.10 by MIK
+		ref.m_szBlockCommentFrom2,	/* ブロックコメントデリミタ(From) */
+		ref.m_szBlockCommentTo2,	/* ブロックコメントデリミタ(To) */
+//#endif
 		ref.m_nStringType,			/* 文字列区切り記号エスケープ方法  0=[\"][\'] 1=[""][''] */
 		TRUE,
 		hwndProgress,
@@ -3321,6 +3337,10 @@ void CEditDoc::Init( void )
 		ref.m_szLineComment2,		/* 行コメントデリミタ2 */
 		ref.m_szBlockCommentFrom,	/* ブロックコメントデリミタ(From) */
 		ref.m_szBlockCommentTo,		/* ブロックコメントデリミタ(To) */
+//#ifdef COMPILE_BLOCK_COMMENT2	//@@@ 2001.03.10 by MIK
+		ref.m_szBlockCommentFrom2,	/* ブロックコメントデリミタ(From) */
+		ref.m_szBlockCommentTo2,	/* ブロックコメントデリミタ(To) */
+//#endif
 		ref.m_nStringType,			/* 文字列区切り記号エスケープ方法  0=[\"][\'] 1=[""][''] */
 		TRUE,
 		NULL,/*hwndProgress*/
