@@ -1713,6 +1713,24 @@ void CMemory::ToLower( void )
 			if( pBuf[i] == 0x82 && pBuf[i + 1] >= 0x60 && pBuf[i + 1] <= 0x79 ){
 				pBuf[i] = pBuf[i];
 				pBuf[i + 1] = pBuf[i + 1] + 0x21;
+//@@@ 2001.02.03 Start by MIK: ƒMƒŠƒVƒƒ•¶Žš•ÏŠ·
+			//‘å•¶Žš:0x839f`0x83b6
+			//¬•¶Žš:0x83bf`0x83d6
+			}else if( pBuf[i] == 0x83 && pBuf[i + 1] >= 0x9f && pBuf[i + 1] <= 0xb6 ){
+				pBuf[i] = pBuf[i];
+				pBuf[i + 1] = pBuf[i + 1] + 0x20;
+//@@@ 2001.02.03 End
+//@@@ 2001.02.03 Start by MIK: ƒƒVƒA•¶Žš•ÏŠ·
+			//‘å•¶Žš:0x8440`0x8460
+			//¬•¶Žš:0x8470`0x8491 0x847f‚ª‚È‚¢I
+			}else if( pBuf[i] == 0x84 && pBuf[i + 1] >= 0x40 && pBuf[i + 1] <= 0x60 ){
+				pBuf[i] = pBuf[i];
+				if( pBuf[i + 1] >= 0x4f ){
+					pBuf[i + 1] = pBuf[i + 1] + 0x31;
+				}else{
+					pBuf[i + 1] = pBuf[i + 1] + 0x30;
+				}
+//@@@ 2001.02.03 End
 			}
 		}
 		if( nCharChars > 0 ){
@@ -1745,6 +1763,24 @@ void CMemory::ToUpper( void )
 			if( pBuf[i] == 0x82 && pBuf[i + 1] >= 0x81 && pBuf[i + 1] <= 0x9a ){
 				pBuf[i] = pBuf[i];
 				pBuf[i + 1] = pBuf[i + 1] - 0x21;
+//@@@ 2001.02.03 Start by MIK: ƒMƒŠƒVƒƒ•¶Žš•ÏŠ·
+			//‘å•¶Žš:0x839f`0x83b6
+			//¬•¶Žš:0x83bf`0x83d6
+			}else if( pBuf[i] == 0x83 && pBuf[i + 1] >= 0xbf && pBuf[i + 1] <= 0xd6 ){
+				pBuf[i] = pBuf[i];
+				pBuf[i + 1] = pBuf[i + 1] - 0x20;
+//@@@ 2001.02.03 End
+//@@@ 2001.02.03 Start by MIK: ƒƒVƒA•¶Žš•ÏŠ·
+			//‘å•¶Žš:0x8440`0x8460
+			//¬•¶Žš:0x8470`0x8491 0x847f‚ª‚È‚¢I
+			}else if( pBuf[i] == 0x84 && pBuf[i + 1] >= 0x70 && pBuf[i + 1] <= 0x91 && pBuf[i + 1] != 0x7f ){
+				pBuf[i] = pBuf[i];
+				if( pBuf[i + 1] >= 0x7f ){
+					pBuf[i + 1] = pBuf[i + 1] - 0x31;
+				}else{
+					pBuf[i + 1] = pBuf[i + 1] - 0x30;
+				}
+//@@@ 2001.02.03 End
 			}
 		}
 		if( nCharChars > 0 ){

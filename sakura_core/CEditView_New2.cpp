@@ -664,6 +664,27 @@ void CEditView::DispRuler( HDC hdc )
 //
 //	戻り値: true : 成功 / false : 失敗
 //
+//@@@ 2001.02.03 Start by MIK: 全角文字の対括弧
+const struct ZENKAKKO_T{
+	char *sStr;
+	char *eStr;
+} zenkakkoarr[] = {
+	"【", "】",
+	"『", "』",
+	"「", "」",
+	"＜", "＞",
+	"≪", "≫",
+	"《", "》",
+	"（", "）",
+	"〈", "〉",
+	"｛", "｝",
+	"〔", "〕",
+	"［", "］",
+	"“", "”",
+	"〝", "〟",
+	NULL, NULL	//終端識別
+};
+//@@@ 全角文字の対括弧: End
 bool CEditView::SearchBracket( int LayoutX, int LayoutY, int* NewX, int* NewY )
 {
 	int len;	//	行の長さ
@@ -696,6 +717,23 @@ bool CEditView::SearchBracket( int LayoutX, int LayoutY, int* NewX, int* NewY )
 		case '}':	return SearchBracketBackward( PosX, PosY, NewX, NewY, '{', '}' );
 		case '>':	return SearchBracketBackward( PosX, PosY, NewX, NewY, '<', '>' );
 		}
+//@@@ 2001.02.03 Start by MIK: 全角文字の対括弧
+	}else if( nCharSize == 2 ){	// 2バイト文字
+		int i;
+		const struct ZENKAKKO_T *p;
+		p = zenkakkoarr;
+		for(i = 0; p->sStr != NULL; i++, p++)
+		{
+			if(strncmp(p->sStr, &cline[PosX], 2) == 0)
+			{
+				return SearchBracketForward2( PosX, PosY, NewX, NewY, p->sStr, p->eStr );
+			}
+			else if(strncmp(p->eStr, &cline[PosX], 2) == 0)
+			{
+				return SearchBracketBackward2( PosX, PosY, NewX, NewY, p->sStr, p->eStr );
+			}
+		}
+//@@@ 2001.02.03 End: 全角文字の対括弧
 	}
 
 	//	括弧が見つからなかったら，カーソルの直前の文字を調べる
@@ -724,6 +762,24 @@ bool CEditView::SearchBracket( int LayoutX, int LayoutY, int* NewX, int* NewY )
 		case '}':	return SearchBracketBackward( PosX, PosY, NewX, NewY, '{', '}' );
 		case '>':	return SearchBracketBackward( PosX, PosY, NewX, NewY, '<', '>' );
 		}
+//@@@ 2001.02.03 Start by MIK: 全角文字の対括弧
+	}else if( nCharSize == 2 ){	// 2バイト文字
+		int i;
+		const struct ZENKAKKO_T *p;
+		PosX = bPos - cline;
+		p = zenkakkoarr;
+		for(i = 0; p->sStr != NULL; i++, p++)
+		{
+			if(strncmp(p->sStr, &cline[PosX], 2) == 0)
+			{
+				return SearchBracketForward2( PosX, PosY, NewX, NewY, p->sStr, p->eStr );
+			}
+			else if(strncmp(p->eStr, &cline[PosX], 2) == 0)
+			{
+				return SearchBracketBackward2( PosX, PosY, NewX, NewY, p->sStr, p->eStr );
+			}
+		}
+//@@@ 2001.02.03 End: 全角文字の対括弧
 	}
 	return false;
 }
@@ -844,6 +900,127 @@ bool CEditView::SearchBracketBackward( int PosX, int PosY, int* NewX, int* NewY,
 
 	return false;
 }
+
+//@@@ 2001.02.03 Start by MIK: 全角対括弧の検索
+//	LayoutX, LayoutY: 検索開始点の物理座標
+//	NewX, NewY: 移動先のレイアウト座標
+//
+//	戻り値: true : 成功 / false : 失敗
+//
+bool CEditView::SearchBracketForward2( int   PosX,   int   PosY, 
+									   int*  NewX,   int*  NewY,
+									   char* upChar, char* dnChar )
+{
+	CDocLine* ci;
+
+	int len;
+	const char *cPos, *nPos;
+	char *cline, *lineend;
+	int level = 0;
+
+	//	初期位置の設定
+	ci = m_pcEditDoc->m_cDocLineMgr.GetLineInfo( PosY );
+	cline = ci->m_pLine->GetPtr( &len );
+	lineend = cline + len;
+	cPos = cline + PosX;
+
+	do {
+		while( cPos < lineend ){
+			nPos = CMemory::MemCharNext( cline, len, cPos );
+			if( nPos - cPos != 2 ){
+				//	skip
+				cPos = nPos;
+				continue;
+			}
+			if( strncmp(upChar, cPos, 2) == 0 ){
+				++level;
+			}
+			else if( strncmp(dnChar, cPos, 2) == 0 ){
+				--level;
+			}
+
+			if( level == 0 ){	//	見つかった！
+				PosX = cPos - cline;
+				m_pcEditDoc->m_cLayoutMgr.CaretPos_Phys2Log( PosX, PosY, NewX, NewY );
+				return true;
+			}
+			cPos = nPos;	//	次の文字へ
+		}
+
+		//	次の行へ
+		++PosY;
+		ci = ci->m_pNext;	//	次のアイテム
+		if( ci == NULL )
+			break;	//	終わりに達した
+
+		cline = ci->m_pLine->GetPtr( &len );
+		cPos = cline;
+		lineend = cline + len;
+	}while( cline != NULL );
+
+	return false;
+}
+//@@@ 2001.02.03 End
+
+//@@@ 2001.02.03 Start by MIK: 全角対括弧の検索
+//	LayoutX, LayoutY: 検索開始点の物理座標
+//	NewX, NewY: 移動先のレイアウト座標
+//
+//	戻り値: true : 成功 / false : 失敗
+//
+bool CEditView::SearchBracketBackward2( int   PosX,   int   PosY, 
+									    int*  NewX,   int*  NewY,
+									    char* dnChar, char* upChar )
+{
+	CDocLine* ci;
+
+	int len;
+	const char *cPos, *pPos;
+	char *cline, *lineend;
+	int level = 1;
+
+	//	初期位置の設定
+	ci = m_pcEditDoc->m_cDocLineMgr.GetLineInfo( PosY );
+	cline = ci->m_pLine->GetPtr( &len );
+	lineend = cline + len;
+	cPos = cline + PosX;
+
+	do {
+		while( cPos > cline ){
+			pPos = CMemory::MemCharPrev( cline, len, cPos );
+			if( cPos - pPos != 2 ){
+				//	skip
+				cPos = pPos;
+				continue;
+			}
+			if( strncmp(upChar, pPos, 2) == 0 ){
+				++level;
+			}
+			else if( strncmp(dnChar, pPos, 2) == 0 ){
+				--level;
+			}
+
+			if( level == 0 ){	//	見つかった！
+				PosX = pPos - cline;
+				m_pcEditDoc->m_cLayoutMgr.CaretPos_Phys2Log( PosX, PosY, NewX, NewY );
+				return true;
+			}
+			cPos = pPos;	//	次の文字へ
+		}
+
+		//	次の行へ
+		--PosY;
+		ci = ci->m_pPrev;	//	次のアイテム
+		if( ci == NULL )
+			break;	//	終わりに達した
+
+		cline = ci->m_pLine->GetPtr( &len );
+		cPos = cline + len;
+	}while( cline != NULL );
+
+	return false;
+}
+//@@@ 2001.02.03 End
 
 //	現在のカーソル行位置を履歴に登録する
 //

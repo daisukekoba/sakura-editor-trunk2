@@ -1933,7 +1933,7 @@ END
 
 VS_VERSION_INFO VERSIONINFO
  FILEVERSION 1,2,0,0
- PRODUCTVERSION 1,2,25,4
+ PRODUCTVERSION 1,2,26,0
  FILEFLAGSMASK 0x3fL
 #ifdef _DEBUG
  FILEFLAGS 0x21L
@@ -1958,7 +1958,7 @@ BEGIN
             VALUE "OriginalFilename", "sakura.exe\0"
             VALUE "PrivateBuild", "\0"
             VALUE "ProductName", "テキストエディタ SAKURA\0"
-            VALUE "ProductVersion", "1.2.25.4\0"
+            VALUE "ProductVersion", "1.2.26.0\0"
             VALUE "SpecialBuild", "\0"
         END
     END

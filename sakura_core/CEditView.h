@@ -110,6 +110,12 @@ public:
 						int upChar, int dnChar );	//	対括弧の前方検索
 	bool  SearchBracketBackward( int PosX, int PosY, int* NewX, int* NewY,
 									int dnChar, int upChar );
+//@@@ 2001.02.03 Start by MIK: 全角の対括弧
+	bool  SearchBracketForward2( int PosX, int PosY, int* NewX, int* NewY,
+						         char* upChar, char* dnChar );	//	対括弧の前方検索
+	bool  SearchBracketBackward2( int PosX, int PosY, int* NewX, int* NewY,
+								  char* dnChar, char* upChar );
+//@@@ 2001.02.03 End
 
 public: /* テスト用にアクセス属性を変更 */
 	CDropTarget*	m_pcDropTarget;
