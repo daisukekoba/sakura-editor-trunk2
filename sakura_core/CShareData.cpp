@@ -61,7 +61,8 @@ CShareData::~CShareData()
 /*!
 	CShareDataクラスを利用する前に必ず呼び出すこと。
 	
-	@return true 初期化成功 / false 初期化失敗
+	@retval true 初期化成功
+	@retval false 初期化失敗
 	
 	@note 既に存在する共有メモリのバージョンがこのエディタが使うものと
 	異なる場合は致命的エラーを防ぐためにfalseを返します。WinMain()
@@ -3355,7 +3356,8 @@ void CShareData::AddOPENFOLDERList( const char* pszFolder )
 	@param pszPath [in] 検索するファイル名
 	@param pfi [out] データが見つかったときにファイル情報を格納する領域。
 		呼び出し側で領域をあらかじめ用意する必要がある。
-	@return TRUE: 見つかった。pfiにファイル情報が格納されている。 / FALSE: 見つからなかった
+	@retval TRUE  ファイルが見つかった。pfiにファイル情報が格納されている。
+	@retval FALSE 指定されたファイルはMRU Listに無い。
 */
 BOOL CShareData::IsExistInMRUList( const char* pszPath, FileInfo* pfi )
 {

@@ -2813,7 +2813,9 @@ int CMemory::CheckKanjiCode_UTF7( const unsigned char* pBuf, int nBufLen, int* p
 				&& '+' == pBuf[i]
 				&& '-' == pBuf[i + 1]
 				){
-				nUTF7CodeNum++;
+				//	Apr. 1, 2001 genta
+				//	+のエンコードはUTF-7のポイント対象外とする
+				//	nUTF7CodeNum++;
 				++i;
 			}else
 			if( i < nBufLen - 2

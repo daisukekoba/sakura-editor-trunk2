@@ -1799,21 +1799,8 @@ void CEditDoc::DoFileUnLock( void )
 
 //	Mar. 15, 2000 genta
 //	From Here
-/* C/C++関数リスト作成 */
-/*
-	MODE一覧
-	0	通常
-	20	Single quotation文字列読み込み中
-	21	Double quotation文字列読み込み中
-	8	コメント読み込み中
-	1	単語読み込み中
-	2	記号列読み込み中
-	999	長過ぎる単語無視中
-
-	FuncIdの値の意味
-	10の位で目的別に使い分けている．C/C++用は10位が0
-	1: 宣言
-	2: 通常の関数 (追加文字列無し)
+/*!
+	スペースの判定
 */
 inline bool C_IsSpace( char c ){
 	return ('\t' == c ||
@@ -1822,6 +1809,10 @@ inline bool C_IsSpace( char c ){
 			  LF == c
 	);
 }
+
+/*!
+	関数に用いることができる文字かどうかの判定
+*/
 inline bool C_IsWordChar( char c ){
 	return ( '_' == c ||
 			 ':' == c ||
@@ -1833,6 +1824,54 @@ inline bool C_IsWordChar( char c ){
 }
 //	To Here
 
+//	From Here Apr. 1, 2001 genta
+/*!
+	特殊な関数名 "operator" かどうかを判定する。
+	
+	文字列が"operator"それ自身か、あるいは::の後ろにoperatorと続いて
+	終わっているときにoperatorと判定。
+
+	演算子の評価順序を保証するため2つのif文に分けてある
+
+	@param szStr 判定対象の文字列
+	@param nLen 文字列の長さ。
+	本質的には不要であるが、高速化のために既にある値を利用する。
+*/
+inline bool C_IsOperator( char* szStr, int nLen	)
+{
+	if( nLen >= 8 && szStr[ nLen - 1 ] == 'r' ){
+		if( nLen > 8 ?
+				strcmp( szStr + nLen - 9, ":operator" ) == 0 :	// メンバー関数による定義
+				strcmp( szStr, "operator" ) == 0	// friend関数による定義
+		 ){
+		 	return true;
+		}
+	}
+	return false;
+}
+//	To Here Apr. 1, 2001 genta
+
+
+/*!
+	@brief C/C++関数リスト作成
+
+	@par MODE一覧
+	- 0	通常
+	- 20	Single quotation文字列読み込み中
+	- 21	Double quotation文字列読み込み中
+	- 8	コメント読み込み中
+	- 1	単語読み込み中
+	- 2	記号列読み込み中
+	- 999	長過ぎる単語無視中
+
+	@par FuncIdの値の意味
+	10の位で目的別に使い分けている．C/C++用は10位が0
+	- 1: 宣言
+	- 2: 通常の関数 (追加文字列無し)
+	
+	@param pcFuncInfoArr [out] 関数一覧を返すためのクラス。
+	ここに関数のリストを登録する。
+*/
 void CEditDoc::MakeFuncList_C( CFuncInfoArr* pcFuncInfoArr )
 {
 	const char*	pLine;
@@ -1918,6 +1957,117 @@ void CEditDoc::MakeFuncList_C( CFuncInfoArr* pcFuncInfoArr )
 						szWord[nWordIdx + 1] = '\0';
 					}
 				}else{
+					//	From Here Mar. 31, 2001 genta
+					//	operatorキーワード(演算子overload)の対応
+					//	ただし、operatorキーワードの後ろにスペースが入っているとうまく動かない。
+					if( C_IsOperator( szWord, nWordIdx + 1 )){
+						//	operatorだ！
+						/*  overloadする演算子一覧
+							& && &=
+							| || |=
+							+ ++ +=
+							- -- -= -> ->*
+							* *=
+							/ /=
+							% %=
+							^ ^=
+							! !=
+							= ==
+							< <= << <<=
+							> >= >> >>=
+							()
+							[]
+							~
+							,
+						*/
+						int oplen = 0;	// 演算子本体部の文字列長
+						switch( pLine[i] ){
+						case '&': // no break
+						case '|': // no break
+						case '+':
+							oplen = 1;
+							if( i + 1 < nLineLen ){
+								if( pLine[ i + 1 ] == pLine[ i ] ||
+									pLine[ i + 1 ] == '=' )
+									oplen = 2;
+							}
+							break;
+						case '-':
+							oplen = 1;
+							if( i + 1 < nLineLen ){
+								if( pLine[ i + 1 ] == '-' ||
+									pLine[ i + 1 ] == '=' )
+									oplen = 2;
+								else if( pLine[ i + 1 ] == '>' ){
+									oplen = 2;
+									if( i + 2 < nLineLen ){
+										if( pLine[ i + 2 ] == '*' )
+											oplen = 3;
+									}
+								}
+							}
+							break;
+						case '*': // no break
+						case '/': // no break
+						case '%': // no break
+						case '^': // no break
+						case '!': // no break
+						case '=':
+							oplen = 1;
+							if( i + 1 < nLineLen ){
+								if( pLine[ i + 1 ] == '=' )
+									oplen = 2;
+							}
+							break;
+						case '<': // no break
+						case '>':
+							oplen = 1;
+							if( i + 1 < nLineLen ){
+								if( pLine[ i + 1 ] == pLine[ i ] ){
+									oplen = 2;
+									if( i + 2 < nLineLen ){
+										if( pLine[ i + 2 ] == '=' )
+											oplen = 3;
+									}
+								}
+								else if( pLine[ i + 1 ] == '=' )
+									oplen = 2;
+							}
+							break;
+						case '(':
+							if( i + 1 < nLineLen )
+								if( pLine[ i + 1 ] == /* 括弧対応対策 ( */ ')' )
+									oplen = 2;
+							break;
+						case '[':
+							if( i + 1 < nLineLen )
+								if( pLine[ i + 1 ] == /* 括弧対応対策 [ */ ']' )
+									oplen = 2;
+							break;
+						case '~': // no break
+						case ',':
+							oplen = 2;
+							break;
+						}
+						
+						//	oplen の長さだけキーワードに追加
+						for( ; oplen > 0 ; oplen--, i++ ){
+							++nWordIdx;
+							szWord[nWordIdx] = pLine[i];
+						}
+						szWord[nWordIdx + 1] = '\0';
+							// 記号列の処理を行う前は記号列のiは記号列の先頭を指していた。
+							// この時点でiは記号列の1つ後を指している
+
+							// operatorの後ろに不正な文字がある場合の動作
+							// ( で始まる場合はoperatorという関数と認識される
+							// それ以外の記号だと従来通り記号列がglobalのしたに現れる。
+
+							// 演算子が抜けている場合の動作
+							// 引数部が()の場合はそれが演算子と見なされるため、その行は関数定義と認識されない
+							// それ以外の場合はoperatorという関数と認識される							
+					}
+					//	To Here Mar. 31, 2001 genta
 					strcpy( szWordPrev, szWord );
 					nWordIdx = 0;
 					szWord[0] = '\0';
@@ -2116,6 +2266,16 @@ void CEditDoc::MakeFuncList_C( CFuncInfoArr* pcFuncInfoArr )
 								strcpy( szWord, szWordPrev );
 								nWordIdx = strlen( szWord );
 							}
+							//	From Here Apr. 1, 2001 genta
+							//	operator new/delete 演算子の対応
+							else if( C_IsOperator( szWordPrev, pos + 2 )){
+								//	スペースを入れて、前の文字列に続ける
+								szWordPrev[pos + 2] = ' ';
+								szWordPrev[pos + 3] = '\0';
+								strcpy( szWord, szWordPrev );
+								nWordIdx = strlen( szWord );
+							}
+							//	To Here Apr. 1, 2001 genta
 							else{
 								nWordIdx = 0;
 							}
@@ -3355,7 +3515,7 @@ void CEditDoc::Init( void )
 
 	/* 文字コード種別 */
 	m_nCharCode = 0;
-
+	
 	//	May 12, 2000
 	m_cNewLineCode.SetType( EOL_CRLF );
 
@@ -3370,13 +3530,16 @@ void CEditDoc::InitAllView( void )
 	m_nCommandExecNum = 0;	/* コマンド実行回数 */
 	/* 先頭へカーソルを移動 */
 	for( i = 0; i < 4; ++i ){
+		//	Apr. 1, 2001 genta
+		// 移動履歴の消去
+		m_cEditViewArr[i].m_cHistory->Flush();
+
 		/* 現在の選択範囲を非選択状態に戻す */
 		m_cEditViewArr[i].DisableSelectArea( FALSE );
 
 		m_cEditViewArr[i].OnChangeSetting();
 		m_cEditViewArr[i].MoveCursor( 0, 0, TRUE );
 	}
-
 
 	return;
 }

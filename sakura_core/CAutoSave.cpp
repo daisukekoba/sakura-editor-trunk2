@@ -4,6 +4,7 @@
 /*! @file
 	ファイルの自動保存
 	@author genta
+	@version $Revision$
 	@date 2000
 */
 //	Copyright (C) 2000, genta
@@ -45,8 +46,9 @@ void CPassiveTimer::Enable(bool flag)
 /*!
 	外部で定期に実行されるところから呼び出される関数。
 	呼び出されると経過時間をチェックする。
-	@return true: 所定時間を経過していたとき
-	@return false: 所定の時間に達していないとき
+	
+	@retval true 所定時間が経過した。このときは測定基準が自動的にリセットされる。
+	@retval false 所定の時間に達していない。
 */
 bool CPassiveTimer::CheckAction(void)
 {

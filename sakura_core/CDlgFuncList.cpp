@@ -15,7 +15,7 @@
 #include "CEditView.h"
 #include "funccode.h"		//Stonee, 2001/03/12
 
-/* ソート比較用プロシージャ */
+/*! ソート比較用プロシージャ */
 int CALLBACK _CompareFunc_( LPARAM lParam1, LPARAM lParam2, LPARAM lParamSort )
 {
 	CFuncInfo*		pcFuncInfo1;
@@ -104,7 +104,7 @@ void CDlgFuncList::ChangeView( LPARAM pcEditView )
 	return;
 }
 
-/* ダイアログデータの設定 */
+/*! ダイアログデータの設定 */
 void CDlgFuncList::SetData( void/*HWND hwndDlg*/ )
 {
 	int				i;
@@ -328,7 +328,7 @@ int CDlgFuncList::GetData( void )
 }
 
 
-/* ツリーコントロールの初期化：C++メソッドツリー */
+/*! ツリーコントロールの初期化：C++メソッドツリー */
 void CDlgFuncList::SetTreeCpp( HWND hwndDlg )
 {
 	int				i;
@@ -373,7 +373,10 @@ void CDlgFuncList::SetTreeCpp( HWND hwndDlg )
 
 		/* クラス名::メソッドの場合 */
 		if( NULL != ( pPos = strstr( pWork, "::" ) ) ){
-			pClassName = new char[pPos - pWork + 1 + 3 ];
+			//	Apr. 1, 2000 genta
+			//	追加文字列を全角にしたのでメモリもそれだけ必要
+			//	6 == strlen( "クラス" ), 1 == strlen( '\0' )
+			pClassName = new char[pPos - pWork + 6 + 1 ];
 			memcpy( pClassName, pWork, pPos - pWork );
 			strcpy( &pClassName[pPos - pWork], "クラス" );
 			pFuncName = new char[ lstrlen( pPos + lstrlen( "::" ) ) + 1 ];
@@ -589,7 +592,10 @@ void CDlgFuncList::SetTreeJava( HWND hwndDlg, BOOL bAddClass )
 			htiClass = TreeView_GetFirstVisible( hwndTree );
 			HTREEITEM htiParent = TVI_ROOT;
 			for( k = 0; k < nClassNest; ++k ){
-				pClassName = new char[ lstrlen( szClassArr[k] ) + 1 + 3 ];
+				//	Apr. 1, 2001 genta
+				//	追加文字列を全角にしたのでメモリもそれだけ必要
+				//	6 == strlen( "クラス" ), 1 == strlen( '\0' )
+				pClassName = new char[ lstrlen( szClassArr[k] ) + 1 + 6 ];
 				strcpy( pClassName, szClassArr[k] );
 				if( bAddClass ){
 					strcat( pClassName, "クラス" );

@@ -3,7 +3,9 @@
 //	CAutoSave.h
 /*!	@file
 	ƒtƒ@ƒCƒ‹‚ÌŽ©“®•Û‘¶
+
 	@author genta
+	@version $Revision$
 	@date 2000
 */
 //	Copyright (C) 2000, genta

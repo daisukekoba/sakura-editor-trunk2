@@ -2593,8 +2593,8 @@ void CEditWnd::InitMenu( HMENU hMenu, UINT uPos, BOOL fSystemMenu )
 
 			//From Here Sept. 20, 2000 JEPRO 名称CMMANDをCOMMANDに変更
 //			m_CMenuDrawer.MyAppendMenu( hMenu, MF_BYPOSITION | MF_STRING, F_EXECCMMAND, "外部コマンド実行(&X)" );
-//			m_CMenuDrawer.MyAppendMenu( hMenu, MF_BYPOSITION | MF_STRING, F_EXECCOMMAND, "外部コマンド実行(&X)" );	//Mar. 10, 2001 JEPRO 機能しないのでメニューから隠した(うまくグレイ表示にならないので)
-//			m_CMenuDrawer.MyAppendMenu( hMenu, MF_BYPOSITION | MF_SEPARATOR, 0, NULL );								//Mar. 10, 2001 上の変更にともないこれも隠した
+			m_CMenuDrawer.MyAppendMenu( hMenu, MF_BYPOSITION | MF_STRING, F_EXECCOMMAND, "外部コマンド実行(&X)" );	//Mar. 10, 2001 JEPRO 機能しないのでメニューから隠した	//Mar.21, 2001 JEPRO 標準出力しないで復活
+			m_CMenuDrawer.MyAppendMenu( hMenu, MF_BYPOSITION | MF_SEPARATOR, 0, NULL );
 			//To Here Sept. 20, 2000
 
 			//「カスタムメニュー」ポップアップ
