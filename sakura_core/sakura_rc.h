@@ -425,12 +425,12 @@
 #define FILEOPENORD1                    1538
 #define IDD_PROP1P6                     1539
 #define IDD_PROP_TOOLBAR                1539
-#define IDM_EXITALL                     4041	//Dec. 27, 2000 JEPRO killed
-#define IDM_HELP_CONTENTS               4044	//Nov. 25, 2000 JEPRO killed
-#define IDM_HELP_SEARCH                 4045	//Nov. 25, 2000 JEPRO killed
-#define IDM_ABOUT                       4046	//Dec. 24, 2000 JEPRO killed
+//#define IDM_EXITALL                     4041	//Dec. 27, 2000 JEPRO killed
+//#define IDM_HELP_CONTENTS               4044	//Nov. 25, 2000 JEPRO killed
+//#define IDM_HELP_SEARCH                 4045	//Nov. 25, 2000 JEPRO killed
+//#define IDM_ABOUT                       4046	//Dec. 24, 2000 JEPRO killed
 #define IDM_POPLAST                     4047
-#define IDM_TEST_CREATEKEYBINDLIST      4050	//Dec. 25, 2000 JEPRO killed
+//#define IDM_TEST_CREATEKEYBINDLIST      4050	//Dec. 25, 2000 JEPRO killed
 #define IDS_AUTHOR_PAGE                 4054
 #define IDS_AUTHOR_MAIL                 4055
 #define IDM_POPLAST2                    4064

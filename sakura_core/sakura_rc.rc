@@ -114,7 +114,7 @@ BEGIN
         END
         MENUITEM SEPARATOR
         MENUITEM "すべてのウィンドウを閉じる(&Q)", F_WIN_CLOSEALL
-        MENUITEM "テキストエディタの終了(&X)",  IDM_EXITALL
+        MENUITEM "テキストエディタの終了(&X)",  F_EXITALL
     END
 END
 
@@ -2402,15 +2402,15 @@ END
 
 STRINGTABLE DISCARDABLE 
 BEGIN
-    IDM_EXITALL             "テキストエディタの終了"
-    IDM_HELP_CONTENTS       "ヘルプ目次"
-    IDM_HELP_SEARCH         "ヘルプトピックの検索"
-    IDM_ABOUT               "バージョン情報"
+    F_EXITALL               "テキストエディタの終了"
+    F_HELP_CONTENTS         "ヘルプ目次"
+    F_HELP_SEARCH           "ヘルプトピックの検索"
+    F_ABOUT                 "バージョン情報"
 END
 
 STRINGTABLE DISCARDABLE 
 BEGIN
-    IDM_TEST_CREATEKEYBINDLIST "キー割り当て一覧をコピー"
+    F_CREATEKEYBINDLIST     "キー割り当て一覧をコピー"
     IDS_AUTHOR_PAGE         "http://hp.vector.co.jp/authors/VA016528/"
     IDS_AUTHOR_MAIL         "hippie@mcn.ne.jp"
 END
