@@ -167,14 +167,13 @@ CPropCommon::~CPropCommon()
 
 
 /* 初期化 */
-void CPropCommon::Create( HINSTANCE hInstApp, HWND hwndParent, CImageListMgr* cIcons, CSMacroMgr* Mmgr )
+void CPropCommon::Create( HINSTANCE hInstApp, HWND hwndParent, CImageListMgr* cIcons, CFuncLookup* lookup )
 {
 	m_hInstance = hInstApp;		/* アプリケーションインスタンスのハンドル */
 	m_hwndParent = hwndParent;	/* オーナーウィンドウのハンドル */
 	m_pcIcons = cIcons;
-	m_pcSMacroMgr = Mmgr;
-	
-	m_pcLookup.Init( m_hInstance, m_pcSMacroMgr );
+	m_pcLookup = lookup;	//	機能名・番号resolveクラス．
+
 	return;
 }
 

@@ -72,7 +72,7 @@ public:
 	CPropCommon();
 	~CPropCommon();
 	//	Sep. 29, 2001 genta マクロクラスを渡すように;
-	void Create( HINSTANCE, HWND, CImageListMgr*, CSMacroMgr* );	/* 初期化 */
+	void Create( HINSTANCE, HWND, CImageListMgr*, CFuncLookup* );	/* 初期化 */
 
 	/*
 	||  Attributes & Operations
@@ -94,8 +94,8 @@ public:
 	//	Oct. 16, 2000 genta
 	CImageListMgr*	m_pcIcons;	//	Image List
 	
-	//	Sep. 29, 2001 genta マクロ
-	CSMacroMgr*		m_pcSMacroMgr;
+	//	Oct. 2, 2001 genta 外部マクロ追加に伴う，対応部分の別クラス化
+	CFuncLookup*		m_pcLookup;
 
 	/*
 	|| ダイアログデータ
@@ -108,7 +108,6 @@ public:
 	CKeyWordSetMgr	m_CKeyWordSetMgr;
 	Types			m_Types[MAX_TYPES];
 	
-	CFuncLookup		m_pcLookup;
 protected:
 	/*
 	||  実装ヘルパ関数

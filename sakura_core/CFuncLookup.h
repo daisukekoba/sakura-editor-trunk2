@@ -30,12 +30,20 @@ public:
 		m_hInstance = hInst;
 	}
 
-	int Pos2FuncCode( int category, int position );
-	bool Pos2FuncName( int category, int position, char *ptr, int bufsize );
-	bool Funccode2Name( int funccode, char *ptr, int bufsize );
+	int Pos2FuncCode( int category, int position ) const;
+	bool Pos2FuncName( int category, int position, char *ptr, int bufsize ) const;
+	bool Funccode2Name( int funccode, char *ptr, int bufsize ) const ;
+	const char* Category2Name( int category ) const;
 
-	void SetCategory2Combo( HWND hComboBox );
-	void SetListItem( HWND hListBox, int category );
+	void SetCategory2Combo( HWND hComboBox ) const ;
+	void SetListItem( HWND hListBox, int category ) const;
+	
+	int GetCategoryCount(void) const {
+		return nsFuncCode::nFuncKindNum + 1;
+	}
+	
+	int GetItemCount(int category) const;
+
 
 private:
 	HINSTANCE m_hInstance;	//!< 文字列リソースを持つインスタンス

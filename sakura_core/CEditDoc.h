@@ -57,6 +57,7 @@ class CEditDoc;
 #include "CAutoSave.h"
 #include "CImageListMgr.h"
 #include "CSMacroMgr.h"
+#include "CFuncLookup.h"
 
 
 /*-----------------------------------------------------------------------
@@ -239,7 +240,9 @@ public: /* テスト用にアクセス属性を変更 */
 	int				m_nRefererLine;	/* 参照元行 折り返し無しの物理行位置 */
 	
 	//	Sep. 29, 2001 genta
-	CSMacroMgr*		m_pcSMacroMgr;	//	マクロ
+	CSMacroMgr*		m_pcSMacroMgr;	//!< マクロ
+	//	Oct. 2, 2001 genta
+	CFuncLookup		m_cFuncLookup;	//!< 機能名，機能番号などのresolve
 
 //	CDlgTest*		m_pcDlgTest;
 
