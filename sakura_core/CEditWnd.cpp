@@ -1195,7 +1195,7 @@ LRESULT CEditWnd::DispatchEvent(
 				::SetFocus( m_hwndPrintPreviewBar );
 			}
 		}
-
+		
 		return lRes;
 
 
