@@ -288,6 +288,7 @@ void CEditView::OnPaint( HDC hdc, PAINTSTRUCT *pPs, BOOL bUseMemoryDC )
  *  5: 強調キーワード１
  *  6: コントロールコード
  *  9: 半角数値
+ *  20: ブロックコメント２
  *  50: 強調キーワード２
  *  80: URL
  *  90: 検索
@@ -338,9 +339,11 @@ int CEditView::DispLineNew(
 	COLORREF				colTextColorOld;
 	COLORREF				colBkColorOld;
 	static char*			pszEOF = "[EOF]";
-//	static char*			pszTAB = ">       ";
-//	static char*			pszTAB = ">･･･････";
-	static char*			pszTAB = "^       ";
+//#ifndef COMPILE_TAB_VIEW  //@@@ 2001.03.16 by MIK
+// //	static char*			pszTAB = ">       ";
+// //	static char*			pszTAB = ">･･･････";
+//	static char*			pszTAB = "^       ";
+//#endif
 	static char*			pszSPACES = "        ";
 	static char*			pszZENSPACE	= "□";
 	static char*			pszWRAP	= "<";
@@ -1098,10 +1101,17 @@ searchnext:;
 										TypeDataPtr->m_ColorInfoArr[nColorIdx].m_bUnderLine
 									)
 								);
+//#ifdef COMPILE_TAB_VIEW  //@@@ 2001.03.16 by MIK
 								::ExtTextOut( hdc, x + nX * ( nCharWidth ), y, fuOptions,
-									&rcClip2, pszTAB,
+									&rcClip2, /*pszTAB*/ TypeDataPtr->m_szTabViewString,
 									( TypeDataPtr->m_nTabSpace - ( nX % TypeDataPtr->m_nTabSpace ) ),
 									 m_pnDx );
+//#else
+//								::ExtTextOut( hdc, x + nX * ( nCharWidth ), y, fuOptions,
+//									&rcClip2, pszTAB,
+//									( TypeDataPtr->m_nTabSpace - ( nX % TypeDataPtr->m_nTabSpace ) ),
+//									 m_pnDx );
+//#endif
 
 								::SelectObject( hdc, hFontOld );
 								::SetTextColor( hdc, colTextColorOld );

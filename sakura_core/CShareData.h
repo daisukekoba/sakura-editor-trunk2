@@ -194,6 +194,9 @@ struct Types {
 	int					m_nColmSpace;					/* 文字と文字の隙間 */
 	int					m_nLineSpace;					/* 行間のすきま */
 	int					m_nTabSpace;					/* TABの文字数 */
+//#ifdef COMPILE_TAB_VIEW  //@@@ 2001.03.16 by MIK
+	char				m_szTabViewString[9];			/* TAB表示文字列 */
+//#endif
 //	int					m_bDispLINE;					/* 行番号表示／非表示 */
 //	BOOL				m_bDispTAB;						/* タブ記号を表示する */
 //	BOOL				m_bDispZENSPACE;				/* 日本語空白を表示する */

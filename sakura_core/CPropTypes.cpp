@@ -98,6 +98,9 @@ const DWORD p_helpids1[] = {	//11300
 	IDC_EDIT_CHARSPACE,				11343,	//文字の隙間
 	IDC_EDIT_LINESPACE,				11344,	//行間の隙間
 	IDC_EDIT_INDENTCHARS,			11345,	//インデント対象文字
+//#ifdef COMPILE_TAB_VIEW  //@@@ 2001.03.16 by MIK
+	IDC_EDIT_TABVIEWSTRING,         11346,  //TAB表示文字列
+//#endif
 	IDC_SPIN_MAXLINELEN,			-1,
 	IDC_SPIN_CHARSPACE,				-1,
 	IDC_SPIN_LINESPACE,				-1,
@@ -616,6 +619,9 @@ BOOL CPropTypes::DispatchEvent_p1(
 		::SendMessage( ::GetDlgItem( hwndDlg, IDC_EDIT_TYPENAME ), EM_LIMITTEXT, (WPARAM)( sizeof( m_Types.m_szTypeName ) - 1 ), 0 );
 		::SendMessage( ::GetDlgItem( hwndDlg, IDC_EDIT_TYPEEXTS ), EM_LIMITTEXT, (WPARAM)( sizeof( m_Types.m_szTypeExts ) - 1 ), 0 );
 		::SendMessage( ::GetDlgItem( hwndDlg, IDC_EDIT_INDENTCHARS ), EM_LIMITTEXT, (WPARAM)( sizeof( m_Types.m_szIndentChars ) - 1 ), 0 );
+//#ifdef COMPILE_TAB_VIEW  //@@@ 2001.03.16 by MIK
+		::SendMessage( ::GetDlgItem( hwndDlg, IDC_EDIT_TABVIEWSTRING ), EM_LIMITTEXT, (WPARAM)( sizeof( m_Types.m_szTabViewString ) - 1 ), 0 );
+//#endif
 
 		if( 0 == m_Types.m_nIdx ){
 			::EnableWindow( ::GetDlgItem( hwndDlg, IDC_EDIT_TYPENAME ), FALSE );
@@ -809,6 +815,10 @@ void CPropTypes::SetData_p1( HWND hwndDlg )
 	}
 	::SendDlgItemMessage( hwndDlg, IDC_COMBO_TABSPACE, CB_SETCURSEL, (WPARAM)j, 0 );
 
+//#ifdef COMPILE_TAB_VIEW  //@@@ 2001.03.16 by MIK
+	/* TAB表示文字列 */
+	::SetDlgItemText( hwndDlg, IDC_EDIT_TABVIEWSTRING, m_Types.m_szTabViewString );
+//#endif
 
 	/* その他のインデント対象文字 */
 	::SetDlgItemText( hwndDlg, IDC_EDIT_INDENTCHARS, m_Types.m_szIndentChars );
@@ -882,8 +892,12 @@ void CPropTypes::SetData_p1( HWND hwndDlg )
 /* ダイアログデータの取得 p1 */
 int CPropTypes::GetData_p1( HWND hwndDlg )
 {
-	m_nPageNum = 0;
+//#ifdef COMPILE_TAB_VIEW  //@@@ 2001.03.16 by MIK
+	char szTab[8+1+1]; /* +1. happy */
+	int  i;
+//#endif
 
+	m_nPageNum = 0;
 	/* タイプ属性：名称 */
 	::GetDlgItemText( hwndDlg, IDC_EDIT_TYPENAME, m_Types.m_szTypeName, sizeof( m_Types.m_szTypeName ) );
 	/* タイプ属性：拡張子リスト */
@@ -927,6 +941,16 @@ int CPropTypes::GetData_p1( HWND hwndDlg )
 
 	/* TAB幅 */
 	m_Types.m_nTabSpace = ::GetDlgItemInt( hwndDlg, IDC_COMBO_TABSPACE, NULL, FALSE );
+
+//#ifdef COMPILE_TAB_VIEW  //@@@ 2001.03.16 by MIK
+	/* TAB表示文字列 */
+	::GetDlgItemText( hwndDlg, IDC_EDIT_TABVIEWSTRING, szTab, sizeof( szTab ) - 1 );
+	strcpy( m_Types.m_szTabViewString, "^       " );
+	for( i = 0; i < 8; i++ ){
+		if( (szTab[i] == '\0') || (szTab[i] < 0x20 || szTab[i] >= 0x7f) ) break;
+		m_Types.m_szTabViewString[i] = szTab[i];
+	}
+//#endif
 
 	/* アウトライン解析方法 */
 	HWND	hwndCombo;

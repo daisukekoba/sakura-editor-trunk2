@@ -24,7 +24,7 @@ struct ARRHEAD {
 
 //	共有メモリのバージョン 1～unsinged intの最大値
 //	共有メモリの形式を変更したときはここも修正すること
-const unsigned int uShareDataVersion = 7;
+const unsigned int uShareDataVersion = 8;
 
 
 CShareData::~CShareData()
@@ -820,7 +820,9 @@ tt 時刻マーカー。「 AM 」「 PM 」「午前」「午後」など。
 		m_pShareData->m_Types[nIdx].m_nTabSpace = 4;					/* TABの文字数 */
 		m_pShareData->m_Types[nIdx].m_nKeyWordSetIdx = -1;				/* キーワードセット */
 		m_pShareData->m_Types[nIdx].m_nKeyWordSetIdx2 = -1;				/* キーワードセット2 */	//Dec. 4, 2000, MIK
-
+//#ifdef COMPILE_TAB_VIEW  //@@@ 2001.03.16 by MIK
+		strcpy( m_pShareData->m_Types[nIdx].m_szTabViewString, "^       " );	/* TAB表示文字列 */
+//#endif
 		strcpy( m_pShareData->m_Types[nIdx].m_szLineComment, "" );		/* 行コメントデリミタ */
 		strcpy( m_pShareData->m_Types[nIdx].m_szLineComment2, "" );		/* 行コメントデリミタ2 */
 		strcpy( m_pShareData->m_Types[nIdx].m_szBlockCommentFrom, "" );	/* ブロックコメントデリミタ(From) */

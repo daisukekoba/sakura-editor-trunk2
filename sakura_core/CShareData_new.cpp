@@ -802,6 +802,25 @@ BOOL CShareData::ShareData_IO( BOOL bRead )
 		MY_RegVal_IO( bRead, hkReg, "szTypeName"			, REGCNV_SZ2SZ, (BYTE *)/*&*/m_pShareData->m_Types[i].m_szTypeName, 0 );
 //		strcpy( szKeyName, "szTypeExts" );
 		MY_RegVal_IO( bRead, hkReg, "szTypeExts"			, REGCNV_SZ2SZ, (BYTE *)/*&*/m_pShareData->m_Types[i].m_szTypeExts, 0 );
+//#ifdef COMPILE_TAB_VIEW  //@@@ 2001.03.16 by MIK
+		{
+			/* TAB表示文字列：前後で正当性をチェック */
+			int  i;
+			char szTab[9];
+//			strcpy( szKeyName, "szTabViewString" );
+			strcpy( szTab, "^       " );
+			for( i = 0; i < 8; i++ ){
+				if( (m_pShareData->m_Types[i].m_szTabViewString[i] == '\0') || (m_pShareData->m_Types[i].m_szTabViewString[i] < 0x20 || m_pShareData->m_Types[i].m_szTabViewString[i] >= 0x7f) ) break;
+				szTab[i] = m_pShareData->m_Types[i].m_szTabViewString[i];
+			}
+			MY_RegVal_IO( bRead, hkReg, "szTabViewString"		, REGCNV_SZ2SZ, (BYTE *)/*&*/szTab, 0 );
+			strcpy( m_pShareData->m_Types[i].m_szTabViewString, "^       " );
+			for( i = 0; i < 8; i++ ){
+				if( (szTab[i] == '\0') || (szTab[i] < 0x20 || szTab[i] >= 0x7f) ) break;
+				m_pShareData->m_Types[i].m_szTabViewString[i] = szTab[i];
+			}
+		}
+//#endif
 //		strcpy( szKeyName, "szLineComment" );
 		MY_RegVal_IO( bRead, hkReg, "szLineComment"			, REGCNV_SZ2SZ, (BYTE *)/*&*/m_pShareData->m_Types[i].m_szLineComment, 0 );
 //		strcpy( szKeyName, "szLineComment2" );
@@ -1621,6 +1640,10 @@ BOOL CShareData::ShareData_IO_2( BOOL bRead )
 		cProfile.IOProfileData( bRead, pszSecName, "szTypeName"			, REGCNV_SZ2SZ, (char*)/*&*/m_pShareData->m_Types[i].m_szTypeName, 0 );
 //		strcpy( szKeyName, "szTypeExts" );
 		cProfile.IOProfileData( bRead, pszSecName, "szTypeExts"			, REGCNV_SZ2SZ, (char*)/*&*/m_pShareData->m_Types[i].m_szTypeExts, 0 );
+//#ifdef COMPILE_TAB_VIEW  //@@@ 2001.03.16 by MIK
+//		strcpy( szKeyName, "szTabViewString" );
+		cProfile.IOProfileData( bRead, pszSecName, "szTabViewString"	, REGCNV_SZ2SZ, (char*)/*&*/m_pShareData->m_Types[i].m_szTabViewString, 0 );
+//#endif
 //		strcpy( szKeyName, "szLineComment" );
 		cProfile.IOProfileData( bRead, pszSecName, "szLineComment"		, REGCNV_SZ2SZ, (char*)/*&*/m_pShareData->m_Types[i].m_szLineComment, 0 );
 //		strcpy( szKeyName, "szLineComment2" );
