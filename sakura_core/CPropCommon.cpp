@@ -173,6 +173,8 @@ void CPropCommon::Create( HINSTANCE hInstApp, HWND hwndParent, CImageListMgr* cI
 	m_hwndParent = hwndParent;	/* オーナーウィンドウのハンドル */
 	m_pcIcons = cIcons;
 	m_pcSMacroMgr = Mmgr;
+	
+	m_pcLookup.Init( m_hInstance, m_pcSMacroMgr );
 	return;
 }
 

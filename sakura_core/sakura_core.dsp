@@ -250,6 +250,10 @@ SOURCE=.\CFuncKeyWnd.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=.\CFuncLookup.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=.\CHokanMgr.cpp
 # End Source File
 # Begin Source File
@@ -576,6 +580,10 @@ SOURCE=.\CFuncInfoArr.h
 # Begin Source File
 
 SOURCE=.\CFuncKeyWnd.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\CFuncLookup.h
 # End Source File
 # Begin Source File
 

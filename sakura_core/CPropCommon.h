@@ -36,6 +36,7 @@ class CPropCommon;
 #include "CImageListMgr.h"
 #include "sakura_rc.h"
 #include "CSMacroMgr.h"
+#include "CFuncLookup.h"
 
 #define ID_PAGENUM_ZENPAN	0	//Oct. 25, 2000 JEPRO ZENPAN1Å®ZENPAN Ç…ïœçX
 #define ID_PAGENUM_WIN		1	//Oct. 25, 2000 JEPRO  5Å® 1 Ç…ïœçX
@@ -106,6 +107,8 @@ public:
 
 	CKeyWordSetMgr	m_CKeyWordSetMgr;
 	Types			m_Types[MAX_TYPES];
+	
+	CFuncLookup		m_pcLookup;
 protected:
 	/*
 	||  é¿ëïÉwÉãÉpä÷êî

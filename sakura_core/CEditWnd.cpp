@@ -2615,7 +2615,7 @@ void CEditWnd::InitMenu( HMENU hMenu, UINT uPos, BOOL fSystemMenu )
 			
 			for( i = 0; i < MAX_CUSTMACRO; ++i ){
 				MacroRec *mp = &m_pShareData->m_MacroTable[i];
-				if( mp->m_bEnabled && mp->m_szFile[0] ){
+				if( mp->IsEnabled() && mp->m_szFile[0] ){
 					if(  mp->m_szName[0] ){
 						m_CMenuDrawer.MyAppendMenu( hMenuPopUp, MF_BYPOSITION | MF_STRING, F_USERMACRO_0 + i, mp->m_szName );
 					}

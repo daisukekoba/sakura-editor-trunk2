@@ -2,14 +2,13 @@
 /*!	@file
 	キーボードマクロ(直接実行用)
 
-	@author Norio Nakatani
 	@author genta
 	
 	@date Sep. 29, 2001
 	$Revision$
 */
 /*
-	Copyright (C) 1998-2001, Norio Nakatani
+	Copyright (C) 2001, genta
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -86,17 +85,17 @@ public:
 	//	登録インターフェース
 	//! 有効・無効の切り替え
 	void Enable(int idx, bool state){
-		if( idx < 0 || MAX_CUSTMACRO <= idx )
+		if( 0 <= idx || idx < MAX_CUSTMACRO )
 			m_pShareData->m_MacroTable[idx].Enable( state );
 	}
 	bool IsEnabled(int idx) const {
-		return ( idx < 0 || MAX_CUSTMACRO <= idx ) ?
+		return ( 0 <= idx || idx < MAX_CUSTMACRO ) ?
 		m_pShareData->m_MacroTable[idx].IsEnabled() : false;
 	}
 	
-	//!	表示する名前の設定
+	//!	表示する名前の取得
 	const char* GetTitle(int idx) const {
-		return ( idx < 0 || MAX_CUSTMACRO <= idx ) ?
+		return ( 0 <= idx || idx < MAX_CUSTMACRO ) ?
 			( m_pShareData->m_MacroTable[idx].m_szName[0] == '\0' ?
 				m_pShareData->m_MacroTable[idx].m_szFile : 
 				m_pShareData->m_MacroTable[idx].m_szName)
@@ -108,16 +107,19 @@ public:
 	
 	//!	表示名の取得
 	const char* GetName(int idx) const {
-		return ( idx < 0 || MAX_CUSTMACRO <= idx ) ?
+		return ( 0 <= idx || idx < MAX_CUSTMACRO ) ?
 		m_pShareData->m_MacroTable[idx].m_szName : NULL;
 	}
 	
 	//!	ファイル名の設定
 	BOOL SetFile(int idx, const char *);
 	
-	//!	ファイル名の取得
-	const char* GetFile(int idx, const char *) const {
-		return ( idx < 0 || MAX_CUSTMACRO <= idx ) ?
+	/*!	@brief ファイル名の取得
+	
+		@param idx [in] マクロ番号
+	*/
+	const char* GetFile(int idx) const {
+		return ( 0 <= idx || idx < MAX_CUSTMACRO ) ?
 		m_pShareData->m_MacroTable[idx].m_szFile : NULL;
 	}
 

@@ -135,7 +135,8 @@ BOOL CEditView::HandleCommand(
 		m_bExecutingKeyMacro = TRUE;
 		if( !m_pcEditDoc->m_pcSMacroMgr->Exec( m_hInstance, this, nCommand - F_USERMACRO_0 )){
 			::MYMESSAGEBOX( m_hwndParent,	MB_OK | MB_ICONINFORMATION, GSTR_APPNAME,
-				"マクロ %d の実行に失敗しました。", nCommand - F_USERMACRO_0
+				"マクロ %d (%s) の実行に失敗しました。", nCommand - F_USERMACRO_0,
+				m_pcEditDoc->m_pcSMacroMgr->GetFile( nCommand - F_USERMACRO_0 )
 			);
 		}
 		m_bExecutingKeyMacro = FALSE;

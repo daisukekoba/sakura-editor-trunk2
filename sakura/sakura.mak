@@ -68,6 +68,7 @@ OBJS =\
 	$(SRCDIR)\CFuncInfo.obj \
 	$(SRCDIR)\CFuncInfoArr.obj \
 	$(SRCDIR)\CFuncKeyWnd.obj \
+	$(SRCDIR)\CFuncLookup.obj \
 	$(SRCDIR)\CHokanMgr.obj \
 	$(SRCDIR)\CHtmlHelp.obj \
 	$(SRCDIR)\CImageListMgr.obj \
