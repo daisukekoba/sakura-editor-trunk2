@@ -67,8 +67,8 @@ void CDlgFind::SetData( void )
 	*****************************/
 	if( CJre::IsExist() ){	// jre.dllがあるかどうかを判定
 		CJre	cJre;
+		WORD	wJreVersion;
 		char	szMsg[256];
-		int		wJreVersion;
 		cJre.Init();
 		/* JRE32.DLLのバージョン */
 		wJreVersion = cJre.GetVersion();
@@ -91,7 +91,7 @@ void CDlgFind::SetData( void )
 	for( i = 0; i < m_pShareData->m_nSEARCHKEYArrNum; ++i ){
 		::SendMessage( hwndCombo, CB_ADDSTRING, 0, (LPARAM)m_pShareData->m_szSEARCHKEYArr[i] );
 	}
-	/* 大文字と小文字を区別する */
+	/* 英大文字と英小文字を区別する */
 	::CheckDlgButton( m_hWnd, IDC_CHK_LOHICASE, m_bLoHiCase );
 //	/* 一致する単語のみ検索する */
 //	::CheckDlgButton( m_hWnd, IDC_CHK_WORDONLY, m_bWordOnly );
@@ -189,7 +189,7 @@ int CDlgFind::GetData( void )
 
 BOOL CDlgFind::OnBnClicked( int wID )
 {
-	int	nRet;
+	int			nRet;
 	CEditView*	pcEditView = (CEditView*)m_lParam;
 	switch( wID ){
 	case IDC_BUTTON_HELP:
@@ -201,8 +201,6 @@ BOOL CDlgFind::OnBnClicked( int wID )
 		if( ::IsDlgButtonChecked( m_hWnd, IDC_CHK_REGULAREXP ) ){
 			/* CJreクラスの初期化 */
 			CJre	cJre;
-			char	szMsg[256];
-			WORD	wJreVersion;
 			cJre.Init();
 			if( FALSE == CJre::IsExist() ){
 				/* JRE32.DLLのバージョン */
@@ -211,6 +209,10 @@ BOOL CDlgFind::OnBnClicked( int wID )
 				::MessageBox( m_hWnd, "jre32.dllが見つかりません。\n正規表現を利用するにはjre32.dllが必要です。\n", "情報", MB_OK | MB_ICONEXCLAMATION );
 				::CheckDlgButton( m_hWnd, IDC_CHK_REGULAREXP, 0 );
 			}else{
+				CJre	cJre;
+				WORD	wJreVersion;
+				char	szMsg[256];
+				cJre.Init();
 				/* JRE32.DLLのバージョン */
 				wJreVersion = cJre.GetVersion();
 				wsprintf( szMsg, "jre32.dll Ver%x.%x", wJreVersion / 0x100, wJreVersion % 0x100 );
@@ -226,7 +228,7 @@ BOOL CDlgFind::OnBnClicked( int wID )
 			::CheckDlgButton( m_hWnd, IDC_CHK_LOHICASE, 0 );
 		}
 		break;
-	case IDC_BUTTON1:	/* 上検索 */
+	case IDC_BUTTON_SEARCHPREV:	/* 上検索 */	//Feb. 13, 2001 JEPRO ボタン名を[IDC_BUTTON1]→[IDC_BUTTON_SERACHPREV]に変更
 		/* ダイアログデータの取得 */
 		nRet = GetData();
 		if( 0 < nRet ){
@@ -248,7 +250,7 @@ BOOL CDlgFind::OnBnClicked( int wID )
 			CloseDialog( 0 );
 		}
 		return TRUE;
-	case IDOK:			/* 下検索 */
+	case IDC_BUTTON_SEARCHNEXT:		/* 下検索 */	//Feb. 13, 2001 JEPRO ボタン名を[IDOK]→[IDC_BUTTON_SERACHNEXT]に変更
 		/* ダイアログデータの取得 */
 		nRet = GetData();
 		if( 0 < nRet ){

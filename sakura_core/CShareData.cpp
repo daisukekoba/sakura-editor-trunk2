@@ -270,7 +270,7 @@ bool CShareData::Init( void )
 			{ VK_LEFT,"←",F_LEFT, F_LEFT_SEL/*F_GOLINETOP*/, F_WORDLEFT, F_WORDLEFT_SEL, F_BEGIN_BOX, 0, 0, 0 },
 			//Oct. 7, 2000 JEPRO	Shift+Ctrl+Alt+↑に「縦方向に最大化」を追加
 			{ VK_UP,"↑",F_UP, F_UP_SEL, F_UP2, F_UP2_SEL, F_BEGIN_BOX, 0, 0, F_MAXIMIZE_V },
-			//2001.02.10 by MIK Shift+Ctrl+Alt+→「横方向に最大化」を追加
+			//2001.02.10 by MIK Shift+Ctrl+Alt+→に「横方向に最大化」を追加
 			{ VK_RIGHT,"→",F_RIGHT, F_RIGHT_SEL/*F_GOLINEEND*/, F_WORDRIGHT, F_WORDRIGHT_SEL, F_BEGIN_BOX, 0, 0, F_MAXIMIZE_H },
 			//Sept. 14, 2000 JEPRO
 			//	Ctrl+↓に割り当てられていた「右クリックメニュー」を「カーソル下移動(２行ごと)」に変更
@@ -325,7 +325,8 @@ bool CShareData::Init( void )
 			//Jan. 13, 2001 JEPRO	Ctrl+B に「ブラウズ」を追加
 			{ 'B', "B",0, 0, F_BROWSE, 0, 0, 0, 0, 0 },
 			//Jan. 16, 2001 JEPRO	SHift+Ctrl+C に「.hと同名の.c(なければ.cpp)を開く」を追加
-			{ 'C', "C",0, 0, F_COPY, F_OPENCCPP, 0, 0, 0, 0 },
+			//Feb. 07, 2001 JEPRO	SHift+Ctrl+C を「.hと同名の.c(なければ.cpp)を開く」→「同名のC/C++ヘッダ(ソース)を開く」に変更
+			{ 'C', "C",0, 0, F_COPY, F_OPEN_HfromtoC, 0, 0, 0, 0 },
 			//Jan. 16, 2001 JEPRO	Ctrl+D に「単語を切り取り」, Shift+Ctrl+D に「単語を削除」を追加
 			{ 'D', "D",0, 0, F_WordCut, F_WordDelete, 0, 0, 0, 0 },
 			//Oct. 7, 2000 JEPRO	Ctrl+Alt+E に「重ねて表示」を追加
@@ -333,9 +334,10 @@ bool CShareData::Init( void )
 			{ 'E', "E",0, 0, F_CUT_LINE, F_DELETE_LINE, 0, 0, F_CASCADE, 0 },
 			{ 'F', "F",0, 0, F_SEARCH_DIALOG, 0, 0, 0, 0, 0 },
 			{ 'G', "G",0, 0, F_GREP, 0, 0, 0, 0, 0 },
-			//Oct. 7, 2000 JEPRO	Ctrl+Alt+H に「上下に並べて表示」を追加
+			//Oct. 07, 2000 JEPRO	Ctrl+Alt+H に「上下に並べて表示」を追加
 			//Jan. 16, 2001 JEPRO	Ctrl+H を「カーソル前を削除」→「カーソル行をウィンドウ中央へ」に変更し	Shift+Ctrl+H に「.cまたは.cppと同名の.hを開く」を追加
-			{ 'H', "H",0, 0, F_CURLINECENTER, F_OPENINCLUDEFILE, 0, 0, F_TILE_V, 0 },
+			//Feb. 07, 2001 JEPRO	SHift+Ctrl+H を「.cまたは.cppと同名の.hを開く」→「同名のC/C++ヘッダ(ソース)を開く」に変更
+			{ 'H', "H",0, 0, F_CURLINECENTER, F_OPEN_HfromtoC, 0, 0, F_TILE_V, 0 },
 			//Jan. 21, 2001	JEPRO	Ctrl+I に「行の二重化」を追加
 			{ 'I', "I",0, 0, F_DUPLICATELINE, 0, 0, 0, 0, 0 },
 			{ 'J', "J",0, 0, F_JUMP, 0, 0, 0, 0, 0 },
@@ -561,8 +563,8 @@ bool CShareData::Init( void )
 		m_pShareData->m_Common.m_nToolBarButtonIdxArr[++i] = 268;	//現在のウィンドウ幅で折り返し	//Sept. 16, 2000 JEPRO 42→39に変更	//Oct. 25, 2000 39→268
 //		m_pShareData->m_Common.m_nToolBarButtonIdxArr[++i] = 0;
 
-//		m_pShareData->m_Common.m_nToolBarButtonIdxArr[++i] = 12;	//.cまたは.cppと同名の.hを開く
-//		m_pShareData->m_Common.m_nToolBarButtonIdxArr[++i] = 13;	//.hと同名の.c(なければ.cpp)を開く
+//		m_pShareData->m_Common.m_nToolBarButtonIdxArr[++i] = 12;	//同名のC/C++ヘッダファイルを開く	//Feb. 9, 2001 jepro「.cまたは.cppと同名の.hを開く」から変更
+//		m_pShareData->m_Common.m_nToolBarButtonIdxArr[++i] = 13;	//同名のC/C++ソースファイルを開く	//Feb. 9, 2001 jepro「.hと同名の.c(なければ.cpp)を開く」から変更
 
 //		m_pShareData->m_Common.m_nToolBarButtonIdxArr[++i] = 277;	//キーマクロの記録開始／終了	//Sept. 16, 2000 JEPRO 55→68に変更	//Oct. 25, 2000 68→277	//Dec. 24, 2000 外した
 //		m_pShareData->m_Common.m_nToolBarButtonIdxArr[++i] = 280;	//キーマクロの実行	//Sept. 16, 2000 JEPRO 58→71に変更	//Oct. 25, 2000 71→280	//Dec. 24, 2000 外した
@@ -973,9 +975,9 @@ tt 時刻マーカー。「 AM 」「 PM 」「午前」「午後」など。
 		};
 		static char* pszTypeExts[] = {
 			"",
-			"txt,doc,1st,ps",	//Nov. 15, 2000 JEPRO PostScriptファイルも読めるようにする //Jan. 12, 2001 JEPRO readme.1st も読めるようにする
+			"txt,doc,1st,err,ps",	//Nov. 15, 2000 JEPRO PostScriptファイルも読めるようにする //Jan. 12, 2001 JEPRO readme.1st も読めるようにする //Feb. 12, 2001 JEPRO .err エラーメッセージ
 //			"c,cpp,cxx,h",
-			"c,cpp,cxx,h,rc,dsw,dsp,dep,mak",	//Oct. 31, 2000 JEPRO VC++の生成するテキストファイルも読めるようにする
+			"c,cpp,cxx,cc,cp,c++,h,hpp,hxx,hh,hp,h++,rc,dsw,dsp,dep,mak",	//Oct. 31, 2000 JEPRO VC++の生成するテキストファイルも読めるようにする	//Feb. 7, 2001 JEPRO .cc/cp/c++/.hpp/hxx/hh/hp/h++を追加
 //			"html,htm,shtml",
 			"html,htm,shtml,plg",	//Oct. 31, 2000 JEPRO VC++の生成するテキストファイルも読み込めるようにする
 			"sql,plsql",

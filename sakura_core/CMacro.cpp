@@ -34,10 +34,11 @@ MacroFuncInfo m_MacroFuncInfoArr[] =
 //	F_PRINT_DIALOG				, "PrintDialog",		//印刷ダイアログ
 	F_PRINT_PREVIEW				, "PrintPreview",		//印刷プレビュー
 	F_PRINT_PAGESETUP			, "PrintPageSetup",		//印刷ページ設定	//Sept. 14, 2000 jepro 「印刷のページレイアウトの設定」から変更
+	F_OPEN_HfromtoC				, "OpenHfromtoC",		//同名のC/C++ヘッダ(ソース)を開く	//Feb. 7, 2001 JEPRO 追加
+	F_OPEN_HHPP					, "OpenHHpp",			//同名のC/C++ヘッダファイルを開く	//Feb. 9, 2001 jepro「.cまたは.cppと同名の.hを開く」から変更
+	F_OPEN_CCPP					, "OpenCCpp",			//同名のC/C++ソースファイルを開く	//Feb. 9, 2001 jepro「.hと同名の.c(なければ.cpp)を開く」から変更
 	F_ACTIVATE_SQLPLUS			, "ActivateSQLPLUS",	/* Oracle SQL*Plusをアクティブ表示 */
 	F_PLSQL_COMPILE_ON_SQLPLUS	, "ExecSQLPLUS",		/* Oracle SQL*Plusで実行 */
-	F_OPENINCLUDEFILE			, "OpenIncludeFile",	//.cまたは.cppと同名の.hを開く
-	F_OPENCCPP					, "OpenCpp",			//.hと同名の.c(なければ.cpp)を開く
 	F_BROWSE					, "Browse",				//ブラウズ
 	F_PROPERTY_FILE				, "PropertyFile",		//ファイルのプロパティ
 	F_EXITALL					, "ExitAll",			//テキストエディタの全終了	//Dec. 27, 2000 JEPRO 追加
@@ -329,10 +330,11 @@ BOOL CMacro::CanFuncIsKeyMacro( int nFuncID )
 //	case F_PRINT_DIALOG				://印刷ダイアログ
 //	case F_PRINT_PREVIEW			://印刷プレビュー
 //	case F_PRINT_PAGESETUP			://印刷ページ設定	//Sept. 14, 2000 jepro 「印刷のページレイアウトの設定」から変更
+//	case F_OPEN_HfromtoC:			://同名のC/C++ヘッダ(ソース)を開く	//Feb. 9, 2001 JEPRO 追加
+//	case F_OPEN_HHPP				://同名のC/C++ヘッダファイルを開く	//Feb. 9, 2001 jepro「.cまたは.cppと同名の.hを開く」から変更
+//	case F_OPEN_CCPP				://同名のC/C++ソースファイルを開く	//Feb. 9, 2001 jepro「.hと同名の.c(なければ.cpp)を開く」から変更
 //	case F_ACTIVATE_SQLPLUS			:/* Oracle SQL*Plusをアクティブ表示 */	
 //	case F_PLSQL_COMPILE_ON_SQLPLUS	:/* Oracle SQL*Plusで実行 */	//Sept. 17, 2000 jepro 説明の「コンパイル」を「実行」に統一
-//	case F_OPENINCLUDEFILE			://.cまたは.cppと同名の.hを開く
-//	case F_OPENCCPP					://.hと同名の.c(なければ.cpp)を開く
 ///	case F_BROWSE					://ブラウズ
 //	case F_PROPERTY_FILE			://ファイルのプロパティ
 //	case F_EXITALL					://テキストエディタの全終了	//Dec. 27, 2000 JEPRO 追加

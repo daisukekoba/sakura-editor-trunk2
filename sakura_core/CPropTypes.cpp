@@ -67,9 +67,9 @@ WNDPROC	m_wpColorListProc;
 #define STR_COLORDATA_HEAD_LEN	32
 #define STR_COLORDATA_HEAD		"テキストエディタ 色設定ファイル\x1a"
 
-//#define STR_COLORDATA_HEAD2		" テキストエディタ色設定 Ver2"
-#define STR_COLORDATA_HEAD21	" テキストエディタ色設定 Ver2.1"	//Nov. 2, 2000 JEPRO 変更 [注]. 0.3.9.0:ur3β10以降、設定項目の番号を入れ替えたため
-//#define STR_COLORDATA_HEAD3		" テキストエディタ色設定 Ver3"		//Jan. 15, 2001 Stonee  色設定Ver3ドラフト(設定ファイルのキーを連番→文字列に)
+//#define STR_COLORDATA_HEAD2	" テキストエディタ色設定 Ver2"
+//#define STR_COLORDATA_HEAD21	" テキストエディタ色設定 Ver2.1"	//Nov. 2, 2000 JEPRO 変更 [注]. 0.3.9.0:ur3β10以降、設定項目の番号を入れ替えたため
+#define STR_COLORDATA_HEAD3		" テキストエディタ色設定 Ver3"		//Jan. 15, 2001 Stonee  色設定Ver3ドラフト(設定ファイルのキーを連番→文字列に)	//Feb. 11, 2001 JEPRO 有効にした
 #define STR_COLORDATA_SECTION	"SakuraColor"
 
 #define BOOL2STR( b )			TRUE==(b)?"TRUE":"FALSE"
@@ -1506,10 +1506,10 @@ void CPropTypes::p3_Import_Colors( HWND hwndDlg )
 		char	szWork[256];
 		int		nWorkLen;
 //		wsprintf( szWork, "//%s\r\n", STR_COLORDATA_HEAD2 );
-#ifdef STR_COLORDATA_HEAD3
-		wsprintf( szWork, "//%s\r\n", STR_COLORDATA_HEAD3 );	//Jan. 15, 2001 Stonee
-#else
+#ifndef STR_COLORDATA_HEAD3
 		wsprintf( szWork, "//%s\r\n", STR_COLORDATA_HEAD21 );	//Nov. 2, 2000 JEPRO 変更 [注]. 0.3.9.0:ur3β10以降、設定項目の番号を入れ替えたため
+#else
+		wsprintf( szWork, "//%s\r\n", STR_COLORDATA_HEAD3 );	//Jan. 15, 2001 Stonee
 #endif
 		nWorkLen = strlen( szWork );
 		if( nWorkLen == (int)_lread( hFile, pHeader, nWorkLen ) &&
@@ -1531,14 +1531,14 @@ void CPropTypes::p3_Import_Colors( HWND hwndDlg )
 //				"・UR1.2.24.0 (2000/12/04) 以降で使っていた場合は\n"
 //				"  (1) 一行目に書いてある Ver2 (or 2.1) を Ver3 と書き換え、CI をすべて C に縮める\n"
 //				"  (2) (1)に加えて、インデックス番号を( )内の文字列に変更:\n"
-//				"      00(TXT), 01(RUL), 02(UND), 03(LNO), 04(MOD), 05(TAB), 06(ZEN), 07(CTL), 08(CAR),\n"
+//				"      00(TXT), 01(RUL), 02(UND), 03(LNO), 04(MOD), 05(TAB), 06(ZEN), 07(CTL), 08(EOL),\n"
 //				"      09(RAP), 10(EOF), 11(FND), 12(KW1), 13(KW2), 14(CMT), 15(SQT), 16(WQT), 17(URL)\n\n"
 //				"・ur3β10 (2000/09/28)～UR1.2.23.0 (2000/11/29) で使っていた場合は\n"
 //				"  (3) (1)に加えて、インデックス番号を( )内の文字列に変更:\n"
-//				"      00(TXT), 01(RUL), 02(UND), 03(LNO), 04(MOD), 05(TAB), 06(ZEN), 07(CTL), 08(CAR),\n"
+//				"      00(TXT), 01(RUL), 02(UND), 03(LNO), 04(MOD), 05(TAB), 06(ZEN), 07(CTL), 08(EOL),\n"
 //				"      09(RAP), 10(EOF), 11(FND), 12(KW1), 13(CMT), 14(SQT), 15(WQT), 16(URL)\n\n"
 //				"  (4) (1)に加えて、番号を( )内の文字列に変更:\n"
-//				"      00(TXT), 01(LNO), 02(CAR), 03(TAB), 04(ZEN), 05(EOF), 06(KW1), 07(CMT), 08(SQT),\n"
+//				"      00(TXT), 01(LNO), 02(EOL), 03(TAB), 04(ZEN), 05(EOF), 06(KW1), 07(CMT), 08(SQT),\n"
 //				"      09(WQT), 10(UND), 11(RAP), 12(CTL), 13(URL), 14(FND), 15(MOD), 16(RUL)\n\n"
 // To Here Jan. 20, 2001
 // From Here Jan. 21, 2001 JEPRO
@@ -1547,13 +1547,13 @@ void CPropTypes::p3_Import_Colors( HWND hwndDlg )
 				"・UR1.2.24.0 (00/12/04) 以降で使っていた場合は\n"
 				"  (1) 一行目を Ver3 と書き換え、CI をすべて C に縮める\n"
 				"  (2) (1)の後、番号を( )内の文字列に変更:\n"
-				"      00(TXT), 01(RUL), 02(UND), 03(LNO), 04(MOD), 05(TAB), 06(ZEN), 07(CTL), 08(CAR),\n"
+				"      00(TXT), 01(RUL), 02(UND), 03(LNO), 04(MOD), 05(TAB), 06(ZEN), 07(CTL), 08(EOL),\n"
 				"      09(RAP), 10(EOF), 11(FND), 12(KW1), 13(KW2), 14(CMT), 15(SQT), 16(WQT), 17(URL)\n\n"
 				"・ur3β10 (00/09/28)～UR1.2.23.0 (00/11/29) で使っていた場合は\n"
 				"  (3) (1)の後、00-12 までは(2)と同じ  13(CMT), 14(SQT), 15(WQT), 16(URL)\n\n"
 				"・ur3β9 (00/09/26) 以前で使っていた場合は\n"
 				"  (4) (1)の後、(2)と同様:\n"
-				"      00(TXT), 01(LNO), 02(CAR), 03(TAB), 04(ZEN), 05(EOF), 06(KW1), 07(CMT), 08(SQT),\n"
+				"      00(TXT), 01(LNO), 02(EOL), 03(TAB), 04(ZEN), 05(EOF), 06(KW1), 07(CMT), 08(SQT),\n"
 				"      09(WQT), 10(UND), 11(RAP), 12(CTL), 13(URL), 14(FND), 15(MOD), 16(RUL)\n\n"
 // To Here Jan. 21, 2001
 #else
@@ -1676,10 +1676,10 @@ void CPropTypes::p3_Export_Colors( HWND hwndDlg )
 	/* 色設定 I/O */
 	CShareData::IO_ColorSet( &cProfile, FALSE, STR_COLORDATA_SECTION, m_Types.m_ColorInfoArr );
 //	cProfile.WriteProfile( szPath, STR_COLORDATA_HEAD2 );
-#ifdef STR_COLORDATA_HEAD3
-	cProfile.WriteProfile( szPath, STR_COLORDATA_HEAD3 );	//Jan. 15, 2001 Stonee
-#else
+#ifndef STR_COLORDATA_HEAD3
 	cProfile.WriteProfile( szPath, STR_COLORDATA_HEAD21 );	//Nov. 2, 2000 JEPRO 変更 [注]. 0.3.9.0:ur3β10以降、設定項目の番号を入れ替えたため
+#else
+	cProfile.WriteProfile( szPath, STR_COLORDATA_HEAD3 );	//Jan. 15, 2001 Stonee
 #endif
 	return;
 }

@@ -20,6 +20,7 @@
 //#define REGCNV_INT2SZ		1
 //#define REGCNV_SZ2SZ		2
 //#define REGCNV_CHAR2SZ	3
+#define STR_COLORDATA_HEAD3		" テキストエディタ色設定 Ver3"	//Jan. 15, 2001 Stonee  色設定Ver3ドラフト(設定ファイルのキーを連番→文字列に)	//Feb. 11, 2001 JEPRO 有効にした
 
 // added by Stonee, 2001/01/12, 2001/01/15
 // iniの色設定を番号でなく文字列で書き出す。
@@ -33,7 +34,7 @@ static char* colorIDXKeyName[] =
 	"TAB",		//5
 	"ZEN",		//6
 	"CTL",		//7
-	"CAR",		//8
+	"EOL",		//8
 	"RAP",		//9
 	"EOF",		//10
 	"FND",		//11
@@ -1791,8 +1792,11 @@ void CShareData::IO_ColorSet( CProfile* pcProfile, BOOL bRead, const char* pszSe
 	int		j;
 	for( j = 0; j < COLORIDX_LAST; ++j ){
 		static const char* pszForm = "%d,%d,%06x,%06x,%d";
+#ifndef STR_COLORDATA_HEAD3
 		wsprintf( szKeyName, "CI[%02d]", j );
-//		wsprintf( szKeyName, "C[%s]", colorIDXKeyName[j] );	//Stonee, 2001/01/12, 2001/01/15
+#else
+		wsprintf( szKeyName, "C[%s]", colorIDXKeyName[j] );	//Stonee, 2001/01/12, 2001/01/15
+#endif
 		if( bRead ){
 			if( TRUE == pcProfile->IOProfileData( bRead, pszSecName, szKeyName, REGCNV_SZ2SZ, (char*)szKeyData, 0 ) ){
 				pColorInfoArr[j].m_bUnderLine = FALSE;

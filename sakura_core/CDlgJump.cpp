@@ -317,5 +317,6 @@ int CDlgJump::GetData( void )
 	return TRUE;
 }
 
+
 /*[EOF]*/
 

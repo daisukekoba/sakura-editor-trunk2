@@ -69,7 +69,7 @@ BOOL CDlgGrep::OnInitDialog( HWND hwndDlg, WPARAM wParam, LPARAM lParam )
 {
 	m_hWnd = hwndDlg;
 
-	/* ユーザーがコンボ ボックスのエディット コントロールに入力できるテキストの長さを制限する */
+	/* ユーザーがコンボボックスのエディット コントロールに入力できるテキストの長さを制限する */
 	::SendMessage( ::GetDlgItem( m_hWnd, IDC_COMBO_TEXT ), CB_LIMITTEXT, (WPARAM)_MAX_PATH - 1, 0 );
 	::SendMessage( ::GetDlgItem( m_hWnd, IDC_COMBO_FILE ), CB_LIMITTEXT, (WPARAM)_MAX_PATH - 1, 0 );
 	::SendMessage( ::GetDlgItem( m_hWnd, IDC_COMBO_FOLDER ), CB_LIMITTEXT, (WPARAM)_MAX_PATH - 1, 0 );
@@ -94,6 +94,7 @@ BOOL CDlgGrep::OnInitDialog( HWND hwndDlg, WPARAM wParam, LPARAM lParam )
 //	CreateSizeBox();
 	return CDialog::OnInitDialog( hwndDlg, wParam, lParam );
 }
+
 
 
 
@@ -155,13 +156,12 @@ BOOL CDlgGrep::OnBnClicked( int wID )
 			if( FALSE == CJre::IsExist() ){
 				/* JRE32.DLLのバージョン */
 				::SetDlgItemText( m_hWnd, IDC_STATIC_JRE32VER, "" );
-
 				::MessageBeep( MB_ICONEXCLAMATION );
 				::MessageBox( m_hWnd, "jre32.dllが見つかりません。\n正規表現を利用するにはjre32.dllが必要です。\n", "情報", MB_OK | MB_ICONEXCLAMATION );
 				::CheckDlgButton( m_hWnd, IDC_CHK_REGULAREXP, 0 );
 			}else{
 				CJre	cJre;
-				int		wJreVersion;
+				WORD	wJreVersion;
 				char	szMsg[256];
 				cJre.Init();
 				/* JRE32.DLLのバージョン */
@@ -223,6 +223,19 @@ void CDlgGrep::SetData( void )
 //	m_hWnd = hwndDlg;	/* このダイアログのハンドル */
 
 	m_pShareData = m_cShareData.GetShareData( NULL, NULL );
+
+//From Here Feb. 9, 2001 JEPRO 追加
+	if( CJre::IsExist() ){	// jre.dllがあるかどうかを判定
+		CJre	cJre;
+		WORD	wJreVersion;
+		char	szMsg[256];
+		cJre.Init();
+		/* JRE32.DLLのバージョン */
+		wJreVersion = cJre.GetVersion();
+		::wsprintf( szMsg, "jre32.dll Ver%x.%x", wJreVersion / 0x100, wJreVersion % 0x100 );
+		::SetDlgItemText( m_hWnd, IDC_STATIC_JRE32VER, szMsg );
+	}
+//To Here Feb. 9, 2001
 
 	/* 検索文字列 */
 	::SetDlgItemText( m_hWnd, IDC_COMBO_TEXT, m_szText );
@@ -315,14 +328,15 @@ void CDlgGrep::SetData( void )
 			::MessageBox( m_hWnd, "jre32.dllが見つかりません。\n正規表現を利用するにはjre32.dllが必要です。\n", "情報", MB_OK | MB_ICONEXCLAMATION );
 			::CheckDlgButton( m_hWnd, IDC_CHK_REGULAREXP, 0 );
 		}else{
-			/* JRE32.DLLのバージョン */
-			int		wJreVersion;
-			char	szMsg[256];
-
-			wJreVersion = cJre.GetVersion();
-			wsprintf( szMsg, "jre32.dll Ver%x.%x", wJreVersion / 0x100, wJreVersion % 0x100 );
-			::SetDlgItemText( m_hWnd, IDC_STATIC_JRE32VER, szMsg );
-
+//From Here Feb. 9, 2001 JEPRO コメントアウト
+//			/* JRE32.DLLのバージョン */
+//			WORD	wJreVersion;
+//			char	szMsg[256];
+//
+//			wJreVersion = cJre.GetVersion();
+//			wsprintf( szMsg, "jre32.dll Ver%x.%x", wJreVersion / 0x100, wJreVersion % 0x100 );
+//			::SetDlgItemText( m_hWnd, IDC_STATIC_JRE32VER, szMsg );
+//To Here Feb. 9, 2001
 			/* 英大文字と英小文字を区別する */
 			::CheckDlgButton( m_hWnd, IDC_CHK_LOHICASE, 1 );
 			::EnableWindow( ::GetDlgItem( m_hWnd, IDC_CHK_LOHICASE ), FALSE );
@@ -467,11 +481,11 @@ int CDlgGrep::GetData( void )
 			}
 			if( i < m_pShareData->m_nSEARCHKEYArrNum ){
 				for( j = i; j > 0; j-- ){
-					strcpy( m_pShareData->m_szSEARCHKEYArr[j], m_pShareData->m_szSEARCHKEYArr[j - 1] ); 
+					strcpy( m_pShareData->m_szSEARCHKEYArr[j], m_pShareData->m_szSEARCHKEYArr[j - 1] );
 				}
 			}else{
 				for( j = MAX_SEARCHKEY - 1; j > 0; j-- ){
-					strcpy( m_pShareData->m_szSEARCHKEYArr[j], m_pShareData->m_szSEARCHKEYArr[j - 1] ); 
+					strcpy( m_pShareData->m_szSEARCHKEYArr[j], m_pShareData->m_szSEARCHKEYArr[j - 1] );
 				}
 				++m_pShareData->m_nSEARCHKEYArrNum;
 				if( m_pShareData->m_nSEARCHKEYArrNum > MAX_SEARCHKEY ){
@@ -491,11 +505,11 @@ int CDlgGrep::GetData( void )
 		}
 		if( i < m_pShareData->m_nGREPFILEArrNum ){
 			for( j = i; j > 0; j-- ){
-				strcpy( m_pShareData->m_szGREPFILEArr[j], m_pShareData->m_szGREPFILEArr[j - 1] ); 
+				strcpy( m_pShareData->m_szGREPFILEArr[j], m_pShareData->m_szGREPFILEArr[j - 1] );
 			}
 		}else{
 			for( j = MAX_GREPFILE - 1; j > 0; j-- ){
-				strcpy( m_pShareData->m_szGREPFILEArr[j], m_pShareData->m_szGREPFILEArr[j - 1] ); 
+				strcpy( m_pShareData->m_szGREPFILEArr[j], m_pShareData->m_szGREPFILEArr[j - 1] );
 			}
 			++m_pShareData->m_nGREPFILEArrNum;
 			if( m_pShareData->m_nGREPFILEArrNum > MAX_GREPFILE ){
@@ -514,11 +528,11 @@ int CDlgGrep::GetData( void )
 		}
 		if( i < m_pShareData->m_nGREPFOLDERArrNum ){
 			for( j = i; j > 0; j-- ){
-				strcpy( m_pShareData->m_szGREPFOLDERArr[j], m_pShareData->m_szGREPFOLDERArr[j - 1] ); 
+				strcpy( m_pShareData->m_szGREPFOLDERArr[j], m_pShareData->m_szGREPFOLDERArr[j - 1] );
 			}
 		}else{
 			for( j = MAX_GREPFOLDER - 1; j > 0; j-- ){
-				strcpy( m_pShareData->m_szGREPFOLDERArr[j], m_pShareData->m_szGREPFOLDERArr[j - 1] ); 
+				strcpy( m_pShareData->m_szGREPFOLDERArr[j], m_pShareData->m_szGREPFOLDERArr[j - 1] );
 			}
 			++m_pShareData->m_nGREPFOLDERArrNum;
 			if( m_pShareData->m_nGREPFOLDERArrNum > MAX_GREPFOLDER ){

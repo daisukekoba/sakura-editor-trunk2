@@ -91,13 +91,13 @@ CShareData::CShareData()
 /* 13 */		F_PRINT						, TBSTATE_ENABLED, TBSTYLE_BUTTON, 0, 0,	//印刷
 /* 14 */		F_PRINT_PREVIEW				, TBSTATE_ENABLED, TBSTYLE_BUTTON, 0, 0,	//印刷プレビュー
 /* 15 */		F_PRINT_PAGESETUP			, TBSTATE_ENABLED, TBSTYLE_BUTTON, 0, 0,	//印刷ページ設定	//Sept. 21, 2000 JEPRO 追加
-/* 16 */		F_OPENINCLUDEFILE			, TBSTATE_ENABLED, TBSTYLE_BUTTON, 0, 0,	//.cまたは.cppと同名の.hを開く
-/* 17 */		F_OPENCCPP					, TBSTATE_ENABLED, TBSTYLE_BUTTON, 0, 0,	//.hと同名の.c(なければ.cpp)を開く
-/* 18 */		F_ACTIVATE_SQLPLUS			, TBSTATE_ENABLED, TBSTYLE_BUTTON, 0, 0,	//Oracle SQL*Plusをアクティブ表示 */	//Sept. 20, 2000 JEPRO 追加
-/* 19 */		F_PLSQL_COMPILE_ON_SQLPLUS	, TBSTATE_ENABLED, TBSTYLE_BUTTON, 0, 0,	//Oracle SQL*Plusで実行 */	//Sept. 17, 2000 jepro 説明の「コンパイル」を「実行」に統一
-/* 20 */		F_BROWSE					, TBSTATE_ENABLED, TBSTYLE_BUTTON, 0, 0,	//ブラウズ
-/* 21 */		F_PROPERTY_FILE				, TBSTATE_ENABLED, TBSTYLE_BUTTON, 0, 0,	//ファイルのプロパティ//Sept. 16, 2000 JEPRO mytool1.bmpにあった「ファイルのプロパティ」アイコンをIDB_MYTOOLにコピー
-/* 22 */		F_DISABLE	, TBSTATE_ENABLED, TBSTYLE_BUTTON, 0, 0,	//ダミー
+/* 16 */		F_OPEN_HfromtoC				, TBSTATE_ENABLED, TBSTYLE_BUTTON, 0, 0,	//同名のC/C++ヘッダ(ソース)を開く	//Feb. 7, 2001 JEPRO 追加
+/* 17 */		F_OPEN_HHPP					, TBSTATE_ENABLED, TBSTYLE_BUTTON, 0, 0,	//同名のC/C++ヘッダファイルを開く	//Feb. 9, 2001 jepro「.cまたは.cppと同名の.hを開く」から変更
+/* 18 */		F_OPEN_CCPP					, TBSTATE_ENABLED, TBSTYLE_BUTTON, 0, 0,	//同名のC/C++ソースファイルを開く	//Feb. 9, 2001 jepro「.hと同名の.c(なければ.cpp)を開く」から変更
+/* 19 */		F_ACTIVATE_SQLPLUS			, TBSTATE_ENABLED, TBSTYLE_BUTTON, 0, 0,	//Oracle SQL*Plusをアクティブ表示 */	//Sept. 20, 2000 JEPRO 追加
+/* 20 */		F_PLSQL_COMPILE_ON_SQLPLUS	, TBSTATE_ENABLED, TBSTYLE_BUTTON, 0, 0,	//Oracle SQL*Plusで実行 */	//Sept. 17, 2000 jepro 説明の「コンパイル」を「実行」に統一
+/* 21 */		F_BROWSE					, TBSTATE_ENABLED, TBSTYLE_BUTTON, 0, 0,	//ブラウズ
+/* 22 */		F_PROPERTY_FILE				, TBSTATE_ENABLED, TBSTYLE_BUTTON, 0, 0,	//ファイルのプロパティ//Sept. 16, 2000 JEPRO mytool1.bmpにあった「ファイルのプロパティ」アイコンをIDB_MYTOOLにコピー
 /* 23 */		F_DISABLE	, TBSTATE_ENABLED, TBSTYLE_BUTTON, 0, 0,	//ダミー
 /* 24 */		F_DISABLE	, TBSTATE_ENABLED, TBSTYLE_BUTTON, 0, 0,	//ダミー
 /* 25 */		F_DISABLE	, TBSTATE_ENABLED, TBSTYLE_BUTTON, 0, 0,	//ダミー

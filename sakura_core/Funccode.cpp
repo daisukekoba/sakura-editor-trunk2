@@ -57,8 +57,9 @@ const int pnFuncList_File[] = {	//Oct. 16, 2000 JEPRO 変数名変更(List5→List_Fil
 	F_PRINT      		,	//印刷
 	F_PRINT_PREVIEW		,	//印刷プレビュー
 	F_PRINT_PAGESETUP	,	//印刷ページ設定	//Sept. 14, 2000 jepro 「印刷のページレイアウトの設定」から変更
-	F_OPENINCLUDEFILE	,	//.cまたは.cppと同名の.hを開く
-	F_OPENCCPP			,	//.hと同名の.c(なければ.cpp)を開く
+	F_OPEN_HfromtoC		,	//同名のC/C++ヘッダ(ソース)を開く	//Feb. 7, 2001 JEPRO 追加
+	F_OPEN_HHPP			,	//同名のC/C++ヘッダファイルを開く	//Feb. 9, 2001 jepro「.cまたは.cppと同名の.hを開く」から変更
+	F_OPEN_CCPP			,	//同名のC/C++ソースファイルを開く	//Feb. 9, 2001 jepro「.hと同名の.c(なければ.cpp)を開く」から変更
 	F_ACTIVATE_SQLPLUS			,	/* Oracle SQL*Plusをアクティブ表示 */	//Sept. 20, 2000 「コンパイル」JEPRO アクティブ表示を上に移動した
 	F_PLSQL_COMPILE_ON_SQLPLUS	,	/* Oracle SQL*Plusで実行 */	//Sept. 20, 2000 jepro 説明の「コンパイル」を「実行」に統一
 	F_WINCLOSE			,	//ウィンドウを閉じる	//Oct.17,2000 コマンド本家は「ウィンドウ系」

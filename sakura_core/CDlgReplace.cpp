@@ -27,7 +27,7 @@ CDlgReplace::CDlgReplace()
 	return;
 }
 
-/* モーダルダイアログの表示 */
+/* モードレスダイアログの表示 */
 HWND CDlgReplace::DoModeless( HINSTANCE hInstance, HWND hwndParent, LPARAM lParam, BOOL bSelected )
 {
 	m_bRegularExp = m_pShareData->m_Common.m_bRegularExp;			/* 1==正規表現 */
@@ -38,7 +38,6 @@ HWND CDlgReplace::DoModeless( HINSTANCE hInstance, HWND hwndParent, LPARAM lPara
 	m_bSelected = bSelected;
 	return CDialog::DoModeless( hInstance, hwndParent, IDD_REPLACE, lParam, SW_SHOW );
 }
-
 
 /* モードレス時：置換・検索対象となるビューの変更 */
 void CDlgReplace::ChangeView( LPARAM pcEditView )
@@ -121,10 +120,6 @@ int CDlgReplace::GetData( void )
 	CMemory*	pcmWork;
 	CJre		cJre;
 
-	/* 置換 ダイアログを自動的に閉じる */
-	m_pShareData->m_Common.m_bAutoCloseDlgReplace = ::IsDlgButtonChecked( m_hWnd, IDC_CHECK_bAutoCloseDlgReplace );
-
-
 	/* 英大文字と英小文字を区別する */
 	m_bLoHiCase = ::IsDlgButtonChecked( m_hWnd, IDC_CHK_LOHICASE );
 //	/* 一致する単語のみ検索する */
@@ -142,13 +137,13 @@ int CDlgReplace::GetData( void )
 	m_pShareData->m_Common.m_bSelectedArea = m_bSelectedArea;		/* 選択範囲内置換 */
 	m_pShareData->m_Common.m_bNOTIFYNOTFOUND = m_bNOTIFYNOTFOUND;	/* 検索／置換  見つからないときメッセージを表示 */
 
-
 	/* 検索文字列 */
 	::GetDlgItemText( m_hWnd, IDC_COMBO_TEXT, m_szText, _MAX_PATH - 1 );
 	/* 置換後文字列 */
 	::GetDlgItemText( m_hWnd, IDC_COMBO_TEXT2, m_szText2, _MAX_PATH - 1 );
 
-
+	/* 置換 ダイアログを自動的に閉じる */
+	m_pShareData->m_Common.m_bAutoCloseDlgReplace = ::IsDlgButtonChecked( m_hWnd, IDC_CHECK_bAutoCloseDlgReplace );
 
 	if( 0 < lstrlen( m_szText ) ){
 		/* 正規表現？ */
@@ -192,8 +187,6 @@ int CDlgReplace::GetData( void )
 		strcpy( m_pShareData->m_szSEARCHKEYArr[0], pcmWork->GetPtr( NULL ) );
 		delete pcmWork;
 
-
-
 		/* 置換後文字列 */
 		pcmWork = new CMemory( m_szText2, lstrlen( m_szText2 ) );
 		for( i = 0; i < m_pShareData->m_nREPLACEKEYArrNum; ++i ){
@@ -225,13 +218,15 @@ int CDlgReplace::GetData( void )
 }
 
 
+
+
 BOOL CDlgReplace::OnInitDialog( HWND hwndDlg, WPARAM wParam, LPARAM lParam )
 {
 	m_hWnd = hwndDlg;
 	if( CJre::IsExist() ){	// jre.dllがあるかどうかを判定
 		CJre	cJre;
-		char	szMsg[256];
 		WORD	wJreVersion;
+		char	szMsg[256];
 		cJre.Init();
 		/* JRE32.DLLのバージョン */
 		wJreVersion = cJre.GetVersion();
@@ -268,11 +263,6 @@ BOOL CDlgReplace::OnInitDialog( HWND hwndDlg, WPARAM wParam, LPARAM lParam )
 
 
 
-
-
-
-
-
 BOOL CDlgReplace::OnBnClicked( int wID )
 {
 	CEditView*	pcEditView = (CEditView*)m_lParam;
@@ -303,15 +293,13 @@ BOOL CDlgReplace::OnBnClicked( int wID )
 			if( FALSE == CJre::IsExist() ){
 				/* JRE32.DLLのバージョン */
 				::SetDlgItemText( m_hWnd, IDC_STATIC_JRE32VER, "" );
-
 				::MessageBeep( MB_ICONEXCLAMATION );
 				::MessageBox( m_hWnd, "jre32.dllが見つかりません。\n正規表現を利用するにはjre32.dllが必要です。\n", "情報", MB_OK | MB_ICONEXCLAMATION );
 				::CheckDlgButton( m_hWnd, IDC_CHK_REGULAREXP, 0 );
-
 			}else{
 				CJre	cJre;
-				char	szMsg[256];
 				WORD	wJreVersion;
+				char	szMsg[256];
 				cJre.Init();
 				/* JRE32.DLLのバージョン */
 				wJreVersion = cJre.GetVersion();
@@ -364,14 +352,14 @@ BOOL CDlgReplace::OnBnClicked( int wID )
 			::MYMESSAGEBOX( m_hWnd, MB_OK , GSTR_APPNAME,
 				"文字列を指定してください。"
 			);
-		}		
+		}
 		return TRUE;
 
 	case IDC_BUTTON_REPALCE:	/* 置換 */
 		if( 0 < GetData() ){
 			/* カーソル左移動 */
 			pcEditView->HandleCommand( F_LEFT, TRUE, 0, 0, 0, 0 );
-			
+
 			/* テキスト選択解除 */
 			/* 現在の選択範囲を非選択状態に戻す */
 			pcEditView->DisableSelectArea( TRUE );
@@ -398,7 +386,7 @@ BOOL CDlgReplace::OnBnClicked( int wID )
 	case IDC_BUTTON_REPALCEALL:
 		if( 0 < GetData() ){
 
-			
+
 			/* 表示処理ON/OFF */
 			BOOL bDisplayUpdate = FALSE;
 
@@ -451,9 +439,9 @@ BOOL CDlgReplace::OnBnClicked( int wID )
 //						if( msg.message == WM_QUIT ){
 //							return -1;
 //						}
-//						if( !IsDialogMessage(hwndCancel, &msg)) {
-//							::TranslateMessage(&msg);
-//							::DispatchMessage(&msg);
+//						if( !IsDialogMessage (hwndCancel, &msg ) ){
+//							::TranslateMessage( &msg );
+//							::DispatchMessage( &msg );
 //						}
 //					}
 //				}
@@ -467,7 +455,7 @@ BOOL CDlgReplace::OnBnClicked( int wID )
 					_itoa( nReplaceNum, szLabel, 10 );
 					::SendMessage( hwndStatic, WM_SETTEXT, 0, (LPARAM)(const char*)szLabel );
 				}
-				
+
 //#ifdef _DEBUG
 //				{
 //					CRunningTimer* pcRunningTimer = new CRunningTimer( (const char*)"F_INSTEXT" );

@@ -1965,8 +1965,9 @@ void CEditWnd::InitMenu( HMENU hMenu, UINT uPos, BOOL fSystemMenu )
 
 			// 「ファイル操作」ポップアップメニュー
 			hMenuPopUp = ::CreateMenu();
-			m_CMenuDrawer.MyAppendMenu( hMenuPopUp, MF_BYPOSITION | MF_STRING, F_OPENINCLUDEFILE			, ".cまたは.cppと同名の.hを開く(&H)" );		//Sept. 11, 2000 JEPRO キャプションとアクセスキー変更(I→H)
-			m_CMenuDrawer.MyAppendMenu( hMenuPopUp, MF_BYPOSITION | MF_STRING, F_OPENCCPP					, ".hと同名の.c(なければ.cpp)を開く(&C)" );	//Sept. 11, 2000 JEPRO キャプションとアクセスキー変更(J→C)
+			m_CMenuDrawer.MyAppendMenu( hMenuPopUp, MF_BYPOSITION | MF_STRING, F_OPEN_HfromtoC				, "同名のC/C++ヘッダ(ソース)を開く(&C)" );	//Feb. 7, 2001 JEPRO 追加
+//			m_CMenuDrawer.MyAppendMenu( hMenuPopUp, MF_BYPOSITION | MF_STRING, F_OPEN_HHPP					, "同名のC/C++ヘッダファイルを開く(&H)" );	//Sept. 11, 2000 JEPRO キャプションとアクセスキー変更(I→H)	//Feb. 9, 2001 jepro「.cまたは.cppと同名の.hを開く」から変更 & 統合
+//			m_CMenuDrawer.MyAppendMenu( hMenuPopUp, MF_BYPOSITION | MF_STRING, F_OPEN_CCPP					, "同名のC/C++ソースファイルを開く(&C)" );	//Sept. 11, 2000 JEPRO キャプションとアクセスキー変更(J→C)	//Feb. 9, 2001 jepro「.hと同名の.c(なければ.cpp)を開く」から変更 & 統合
 			m_CMenuDrawer.MyAppendMenu( hMenuPopUp, MF_BYPOSITION | MF_SEPARATOR, 0, NULL );
 			m_CMenuDrawer.MyAppendMenu( hMenuPopUp, MF_BYPOSITION | MF_STRING, F_ACTIVATE_SQLPLUS			, "SQL*Plusをアクティブ表示(&A)" );	//Sept. 11, 2000 JEPRO アクセスキー付与	説明の「アクティブ化」を「アクティブ表示」に統一
 			m_CMenuDrawer.MyAppendMenu( hMenuPopUp, MF_BYPOSITION | MF_STRING, F_PLSQL_COMPILE_ON_SQLPLUS	, "SQL*Plusで実行(&X)" );			//Sept. 11, 2000 JEPRO アクセスキー付与
@@ -2596,7 +2597,7 @@ void CEditWnd::InitMenu( HMENU hMenu, UINT uPos, BOOL fSystemMenu )
 			m_CMenuDrawer.MyAppendMenu( hMenu, MF_BYPOSITION | MF_STRING, F_TILE_H			, "左右に並べて表示(&T)" );	//Oct. 7, 2000 JEPRO アクセスキー変更(H→T)
 			m_CMenuDrawer.MyAppendMenu( hMenu, MF_BYPOSITION | MF_SEPARATOR, 0, NULL );	/* セパレータ */
 			m_CMenuDrawer.MyAppendMenu( hMenu, MF_BYPOSITION | MF_STRING, F_MAXIMIZE_V		, "縦方向に最大化(&X)" );	//Sept. 13, 2000 JEPRO アクセスキー付与
-			m_CMenuDrawer.MyAppendMenu( hMenu, MF_BYPOSITION | MF_STRING, F_MAXIMIZE_H		, "横方向に最大化" );		//2001.02.10 by MIK
+			m_CMenuDrawer.MyAppendMenu( hMenu, MF_BYPOSITION | MF_STRING, F_MAXIMIZE_H		, "横方向に最大化(&Y)" );	//2001.02.10 by MIK
 			m_CMenuDrawer.MyAppendMenu( hMenu, MF_BYPOSITION | MF_STRING, F_MINIMIZE_ALL	, "すべて最小化(&M)" );		//Sept. 17, 2000 jepro 説明の「全て」を「すべて」に統一
 			m_CMenuDrawer.MyAppendMenu( hMenu, MF_BYPOSITION | MF_SEPARATOR, 0, NULL );	/* セパレータ */				//Oct. 22, 2000 JEPRO 下の「再描画」復活に伴いセパレータを追加
 			m_CMenuDrawer.MyAppendMenu( hMenu, MF_BYPOSITION | MF_STRING, F_REDRAW			, "再描画(&R)" );			//Oct. 22, 2000 JEPRO コメントアウトされていたのを復活させた
@@ -3220,13 +3221,14 @@ int CEditWnd::IsFuncEnable( CEditDoc* pcEditDoc, DLLSHAREDATA*	pShareData, int n
 			return FALSE;
 		}
 
-	case F_PROPERTY_FILE:
 	case F_COPYPATH:
 	case F_COPYTAG:
-	case F_BROWSE:						//ブラウズ
+	case F_OPEN_HfromtoC:				//同名のC/C++ヘッダ(ソース)を開く	//Feb. 7, 2001 JEPRO 追加
+	case F_OPEN_HHPP:					//同名のC/C++ヘッダファイルを開く	//Feb. 9, 2001 jepro「.cまたは.cppと同名の.hを開く」から変更
+	case F_OPEN_CCPP:					//同名のC/C++ソースファイルを開く	//Feb. 9, 2001 jepro「.hと同名の.c(なければ.cpp)を開く」から変更
 	case F_PLSQL_COMPILE_ON_SQLPLUS:	/* Oracle SQL*Plusで実行 */
-	case F_OPENINCLUDEFILE:				//.cまたは.cppと同名の.hを開く
-	case F_OPENCCPP:					//.hと同名の.c(なければ.cpp)を開く
+	case F_BROWSE:						//ブラウズ
+	case F_PROPERTY_FILE:
 		/* 現在編集中のファイルのパス名をクリップボードにコピーできるか */
 //		if( 0 < lstrlen( pcEditDoc->m_szFilePath ) ){
 		if( '\0' != pcEditDoc->m_szFilePath[0] ){
@@ -3259,19 +3261,19 @@ int CEditWnd::IsFuncEnable( CEditDoc* pcEditDoc, DLLSHAREDATA*	pShareData, int n
 //		}else{
 //			return FALSE;
 //		}
-//	case F_OPENINCLUDEFILE:	/* .cまたは.cppと同名の.hを開く */
-//		if( pcEditDoc->m_cEditViewArr[pcEditDoc->m_nActivePaneIndex].HandleCommand( F_OPENINCLUDEFILE, FALSE, (LPARAM)TRUE, 0, 0, 0 ) ){
+//	case F_OPEN_HHPP:		/* 同名のC/C++ヘッダファイルを開く */
+//		if( pcEditDoc->m_cEditViewArr[pcEditDoc->m_nActivePaneIndex].HandleCommand( F_OPEN_HHPP, FALSE, (LPARAM)TRUE, 0, 0, 0 ) ){
 //			return TRUE;
 //		}else{
 //			return FALSE;
 //		}
-// 	case F_OPENCCPP:	/* .hと同名の.c(なければ.cpp)を開く */
-//		if( pcEditDoc->m_cEditViewArr[pcEditDoc->m_nActivePaneIndex].HandleCommand( F_OPENCCPP, FALSE, (LPARAM)TRUE, 0, 0, 0 ) ){
+// 	case F_OPEN_CCPP:		/* 同名のC/C++ソースファイルを開く */
+//		if( pcEditDoc->m_cEditViewArr[pcEditDoc->m_nActivePaneIndex].HandleCommand( F_OPEN_CCPP, FALSE, (LPARAM)TRUE, 0, 0, 0 ) ){
 //			return TRUE;
 //		}else{
 //			return FALSE;
 //		}
-//	case F_OUTLINE:	/* C/C++関数一覧 */
+//	case F_OUTLINE:			/* C/C++関数一覧 */
 //		if( pcEditDoc->m_cEditViewArr[pcEditDoc->m_nActivePaneIndex].HandleCommand( F_OUTLINE, FALSE, (LPARAM)TRUE, 0, 0, 0 ) ){
 //			return TRUE;
 //		}else{
@@ -3326,8 +3328,9 @@ int CEditWnd::FuncID_To_HelpContextID( int nFuncID )
 	case F_PRINT:				return 0;			//印刷				//Sept. 14, 2000 jepro 「印刷のページレイアウトの設定」から変更
 	case F_PRINT_PREVIEW:		return 120;			//印刷プレビュー
 	case F_PRINT_PAGESETUP:		return 122;			//印刷ページ設定	//Sept. 14, 2000 jepro 「印刷のページレイアウトの設定」から変更
-	case F_OPENINCLUDEFILE:		return 24;			//.cまたは.cppと同名の.hを開く
-	case F_OPENCCPP:			return 26;			//.hと同名の.c(なければ.cpp)を開く
+	case F_OPEN_HfromtoC:		return 0;			//同名のC/C++ヘッダ(ソース)を開く	//Feb. 7, 2001 JEPRO 追加
+	case F_OPEN_HHPP:			return 24;			//同名のC/C++ヘッダファイルを開く	//Feb. 9, 2001 jepro「.cまたは.cppと同名の.hを開く」から変更
+	case F_OPEN_CCPP:			return 26;			//同名のC/C++ソースファイルを開く	//Feb. 9, 2001 jepro「.hと同名の.c(なければ.cpp)を開く」から変更
 	case F_ACTIVATE_SQLPLUS:	return 132;			/* Oracle SQL*Plusをアクティブ表示 */
 	case F_PLSQL_COMPILE_ON_SQLPLUS:	return 27;	/* Oracle SQL*Plusで実行 */
 	case F_BROWSE:				return 121;			//ブラウズ
@@ -3556,7 +3559,7 @@ int CEditWnd::FuncID_To_HelpContextID( int nFuncID )
 	case F_TILE_V:			return 140;	//上下に並べて表示
 	case F_TILE_H:			return 139;	//左右に並べて表示
 	case F_MAXIMIZE_V:		return 141;	//縦方向に最大化
-	case F_MAXIMIZE_H:		return 0;	//横方向に最大化 //2001.02.10 by MIK
+	case F_MAXIMIZE_H:		return 0;	//横方向に最大化	//2001.02.10 by MIK
 	case F_MINIMIZE_ALL:	return 96;	//すべて最小化	//Sept. 17, 2000 jepro 説明の「全て」を「すべて」に統一
 //	case F_REDRAW:			return ;	//再描画
 	case F_WIN_OUTPUT:		return 0;	//アウトプットウィンドウ表示
