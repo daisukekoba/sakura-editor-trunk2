@@ -1,5 +1,10 @@
 //	$Id$
 //	Copyright (C) 1998-2000, Norio Nakatani
+/*! @file
+	共通設定－「ファイル」プロパティシート
+
+	@author Norio Nakatani
+*/
 
 #include "CPropCommon.h"
 
@@ -25,12 +30,12 @@ const DWORD p_helpids[] = {	//01310
 //@@@ 2001.02.04 End
 
 
-/* p2 メッセージ処理 */
+/*! ファイルページ メッセージ処理 */
 BOOL CPropCommon::DispatchEvent_p2(
-    HWND	hwndDlg,	// handle to dialog box
-    UINT	uMsg,	// message
-    WPARAM	wParam,	// first message parameter
-    LPARAM	lParam 	// second message parameter
+    HWND	hwndDlg,	//!< handle to dialog box
+    UINT	uMsg,	//!< message
+    WPARAM	wParam,	//!< first message parameter
+    LPARAM	lParam 	//!< second message parameter
 )
 {
 	WORD		wNotifyCode;
@@ -104,6 +109,29 @@ BOOL CPropCommon::DispatchEvent_p2(
 			}
 			::SetDlgItemInt( hwndDlg, IDC_EDIT_nDropFileNumMax, nVal, FALSE );
 			return TRUE;
+//@@@ 2001.03.21 Start by MIK
+			/*NOTREACHED*/
+			break;
+		case IDC_SPIN_AUTOBACKUP_INTERVAL:
+			/* バックアップ間隔 */
+			nVal = ::GetDlgItemInt( hwndDlg, IDC_EDIT_AUTOBACKUP_INTERVAL, NULL, FALSE );
+			if( pMNUD->iDelta < 0 ){
+				++nVal;
+			}else
+			if( pMNUD->iDelta > 0 ){
+				--nVal;
+			}
+			if( nVal < 1 ){
+				nVal = 1;
+			}
+			if( nVal > 35791 ){
+				nVal = 35791;
+			}
+			::SetDlgItemInt( hwndDlg, IDC_EDIT_AUTOBACKUP_INTERVAL, nVal, FALSE );
+			return TRUE;
+			/*NOTREACHED*/
+			break;
+//@@@ 2001.03.21 End by MIK
 		}
 //****	To Here Sept. 21, 2000 JEPRO ダイアログ要素にスピンを入れるのでWM_NOTIFYをコメントアウトにしその下に修正を置いた
 		
@@ -146,7 +174,14 @@ BOOL CPropCommon::DispatchEvent_p2(
 
 
 
-/* ダイアログデータの設定 p2 */
+/*! ファイルページ: ダイアログデータの設定
+	共有メモリからデータを読み出して各コントロールに値を設定する。
+
+	@par バックアップ世代数が妥当な値かどうかのチェックも行う。不適切な値の時は
+	最も近い適切な値を設定する。
+
+	@param hwndDlg プロパティページのWindow Handle
+*/
 void CPropCommon::SetData_p2( HWND hwndDlg )
 {
 	/*--- p2 ---*/
@@ -198,11 +233,15 @@ void CPropCommon::SetData_p2( HWND hwndDlg )
 	return;
 }
 
+/*! ファイルページ ダイアログデータの取得
+	ダイアログボックスに設定されたデータを共有メモリに反映させる
+	
+	@par バックアップ世代数が妥当な値かどうかのチェックも行う。不適切な値の時は
+	最も近い適切な値を設定する。
 
-
-
-
-/* ダイアログデータの取得 p2 */
+	@param hwndDlg プロパティページのWindow Handle
+	@return 常にTRUE
+*/
 int CPropCommon::GetData_p2( HWND hwndDlg )
 {
 	m_nPageNum = ID_PAGENUM_FILE;
@@ -242,11 +281,11 @@ int CPropCommon::GetData_p2( HWND hwndDlg )
 	m_Common.EnableAutoBackup( ::IsDlgButtonChecked( hwndDlg, IDC_CHECK_AUTOSAVE ) == TRUE );
 
 	//	自動保存間隔の取得
-	char szNumBuf[6];
+	char szNumBuf[/*6*/ 7];	//@@@ 2001.03.21 by MIK
 	int	 nN;
 	char *pDigit;
 
-	::GetDlgItemText( hwndDlg, IDC_EDIT_AUTOBACKUP_INTERVAL, szNumBuf, 5 );
+	::GetDlgItemText( hwndDlg, IDC_EDIT_AUTOBACKUP_INTERVAL, szNumBuf, /*5*/ 6 );	//@@@ 2001.03.21 by MIK
 
 	for( nN = 0, pDigit = szNumBuf; *pDigit != '\0'; pDigit++ ){
 		if( '0' <= *pDigit && *pDigit <= '9' ){
@@ -270,8 +309,11 @@ int CPropCommon::GetData_p2( HWND hwndDlg )
 }
 
 //	From Here Aug. 21, 2000 genta
-//	チェック状態に応じてダイアログボックス要素のEnable/Disableを
-//	適切に設定する
+/*!	チェック状態に応じてダイアログボックス要素のEnable/Disableを
+	適切に設定する
+	
+	@param hwndDlg プロパティシートのWindow Handle
+*/
 void CPropCommon::EnableFilePropInput(HWND hwndDlg)
 {
 
@@ -300,10 +342,12 @@ void CPropCommon::EnableFilePropInput(HWND hwndDlg)
 		::EnableWindow( ::GetDlgItem( hwndDlg, IDC_EDIT_AUTOBACKUP_INTERVAL ), TRUE );
 		::EnableWindow( ::GetDlgItem( hwndDlg, IDC_LABEL_AUTOSAVE ), TRUE );
 		::EnableWindow( ::GetDlgItem( hwndDlg, IDC_LABEL_AUTOSAVE2 ), TRUE );	// added Sept. 6, JEPRO 自動保存にしたときだけEnableになるように変更
+		::EnableWindow( ::GetDlgItem( hwndDlg, IDC_SPIN_AUTOBACKUP_INTERVAL ), TRUE );	//@@@ 2001.03.21 by MIK
 	}else{
 		::EnableWindow( ::GetDlgItem( hwndDlg, IDC_EDIT_AUTOBACKUP_INTERVAL ), FALSE );
 		::EnableWindow( ::GetDlgItem( hwndDlg, IDC_LABEL_AUTOSAVE ), FALSE );
 		::EnableWindow( ::GetDlgItem( hwndDlg, IDC_LABEL_AUTOSAVE2 ), FALSE );	// added Sept. 6, JEPRO	同上
+		::EnableWindow( ::GetDlgItem( hwndDlg, IDC_SPIN_AUTOBACKUP_INTERVAL ), FALSE );	//@@@ 2001.03.21 by MIK
 	}
 }
 //	To Here Aug. 21, 2000 genta

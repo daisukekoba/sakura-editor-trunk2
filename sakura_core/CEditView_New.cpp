@@ -5,7 +5,10 @@
 
 	CREATE: 1998/12/8
 ************************************************************************/
-
+/*! @file
+	@author Norio Nakatani
+	@date Dec. 8, 1998
+*/
 //#include <stdio.h>
 #include <stdlib.h>
 #include <time.h>
@@ -25,7 +28,10 @@
 #include "etc_uty.h"
 #include "CJre.h"
 
-/* フォントを選ぶ */
+/*! フォントを選ぶ
+	@param bFat TRUEで太字
+	@param bUnderLine TRUEでアンダーライン
+*/
 HFONT CEditView::ChooseFontHandle( BOOL bFat, BOOL bUnderLine )
 {
 	if( bFat ){	/* 太字か */
@@ -277,27 +283,26 @@ void CEditView::OnPaint( HDC hdc, PAINTSTRUCT *pPs, BOOL bUseMemoryDC )
 
 
 
-
-/* //@@@ 2001.02.17 Start by MIK
- * nCOMMENTMODE
- *  0: 通常
- *  1: 行コメント
- *  2: ブロックコメント
- *  3: シングルコーテーション
- *  4: ダブルコーテーション
- *  5: 強調キーワード１
- *  6: コントロールコード
- *  9: 半角数値
- *  20: ブロックコメント２
- *  50: 強調キーワード２
- *  80: URL
- *  90: 検索
+//@@@ 2001.02.17 Start by MIK
+/*! 行のテキスト／選択状態の描画
+   @par nCOMMENTMODE 
+   関数内部で状態遷移のために使われる変数nCOMMENTMODEと状態の関係。
+   
+ - 0: 通常
+ - 1: 行コメント
+ - 2: ブロックコメント
+ - 3: シングルコーテーション
+ - 4: ダブルコーテーション
+ - 5: 強調キーワード１
+ - 6: コントロールコード
+ - 9: 半角数値
+ - 20: ブロックコメント２
+ - 50: 強調キーワード２
+ - 80: URL
+ - 90: 検索
+ 
  */
 //@@@ 2001.02.17 End by MIK
-
-
-
-/* 行のテキスト／選択状態の描画 New */
 int CEditView::DispLineNew(
 		HDC						hdc,
 		const CLayout*			pcLayout,
@@ -1543,15 +1548,20 @@ end_of_func:;
 }
 
 //	May 23, 2000 genta
-//	画面描画補助関数
-/*
-	行末の改行マークを改行コードによって書き分ける（メイン
+/*! 画面描画補助関数: 
+	行末の改行マークを改行コードによって書き分ける（メイン）
 
-	hdc: HDC
-	hPen: 描画に使うペン
-	nPosX, nPosY: 描画座標
-	nWidth, nHeight: 描画エリアのサイズ
-	cEol: 行末コード種別
+	@param hdc Device Context Handle
+	@param hPen 描画に使うペン
+	@param nPosX 描画座標X
+	@param nPosY 描画座標Y
+	@param nWidth  描画エリアのサイズX
+	@param nHeight 描画エリアのサイズY
+	@param cEol 行末コード種別
+	@param bBold TRUE: 太字
+	
+	@note bBoldがTRUEの時は横に1ドットずらして重ね書きを行うが、
+	あまり太く見えない。
 */
 void CEditView::DrawEOL( HDC hdc, HANDLE hPen, int nPosX, int nPosY, int nWidth, int nHeight, CEOL cEol, int bBold )
 {

@@ -8,6 +8,13 @@
 	CREATE: 1998/5/26  新規作成
 ************************************************************************/
 
+/*! @file
+	プロセス間共有データへのアクセス
+	
+	@author Norio Nakatani
+	@date May. 26, 1998
+*/
+
 //#include <stdio.h>
 #include <io.h>
 #include "CShareData.h"
@@ -22,11 +29,23 @@ struct ARRHEAD {
 	int		nItemNum;
 };
 
-//	共有メモリのバージョン 1～unsinged intの最大値
-//	共有メモリの形式を変更したときはここも修正すること
+//!	共有メモリのバージョン
+/*!
+	共有メモリのバージョン番号。共有メモリの形式を変更したときはここを1増やす。
+	
+	この値は共有メモリのバージョンフィールドに格納され、異なる構造の共有メモリを
+	使うエディタが同時に起動しないようにする。
+	
+	設定可能な値は 1～unsinged intの最大値
+	
+	@sa Init()
+*/
 const unsigned int uShareDataVersion = 8;
 
-
+/*!
+	共有メモリ領域がある場合はプロセスのアドレス空間から､ 
+	すでにマップされているファイル ビューをアンマップする。
+*/
 CShareData::~CShareData()
 {
 	if( NULL != m_pShareData ){
@@ -38,8 +57,16 @@ CShareData::~CShareData()
 }
 
 
-/* CShareDataクラスの初期化処理 */
-/* CShareDataクラスを利用する前に必ず呼び出してください */
+//! CShareDataクラスの初期化処理
+/*!
+	CShareDataクラスを利用する前に必ず呼び出すこと。
+	
+	@return true 初期化成功 / false 初期化失敗
+	
+	@note 既に存在する共有メモリのバージョンがこのエディタが使うものと
+	異なる場合は致命的エラーを防ぐためにfalseを返します。WinMain()
+	でInit()に失敗するとメッセージを出してエディタの起動を中止します。
+*/
 bool CShareData::Init( void )
 {
 	int		i;

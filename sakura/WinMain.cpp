@@ -6,7 +6,13 @@
 	UPDATE:
 	CREATE: 1998/3/13
 ************************************************************************/
-
+/*!
+	@file
+	MAIN
+	
+	@author Norio Nakatani
+	@date Mar. 13, 1998
+*/
 #include <windows.h>
 //#include <stdio.h>
 //#include <io.h>
@@ -59,12 +65,21 @@ int WINAPI WinMain( HINSTANCE, HINSTANCE, LPSTR, int );
 
 
 
-
+/*!
+	Windows Entry point
+	
+	1つ目のエディタプロセスの場合は、このプロセスはコントロールプロセスと
+	なり、新しいエディタプロセスを起動する。そうでないときはエディタプロセス
+	となる。
+	
+	コントロールプロセスはCEditAppクラスのインスタンスを作り、エディタ
+	プロセスはCEditWndクラスのインスタンスを作る。
+*/
 int WINAPI WinMain(
-	HINSTANCE	hInstance,		// handle to current instance
-	HINSTANCE	hPrevInstance,	// handle to previous instance
-	LPSTR		lpCmdLine,		// pointer to command line
-	int			nCmdShow		// show state of window
+	HINSTANCE	hInstance,		//!< handle to current instance
+	HINSTANCE	hPrevInstance,	//!< handle to previous instance
+	LPSTR		lpCmdLine,		//!< pointer to command line
+	int			nCmdShow		//!< show state of window
 )
 {
 

@@ -1528,8 +1528,16 @@ BOOL BlockingHook( HWND hwndDlgCancel )
 
 
 
-// 機能番号に応じてヘルプトピック番号を返す
-//		Stonee, 2001/02/23
+//! 機能番号に応じてヘルプトピック番号を返す
+/*!
+	@author Stonee
+	@date	2001/02/23
+	@param nFuncID 機能番号
+	@return ヘルプトピック番号。該当IDが無い場合には0を返す。
+	
+	内容はcase文の羅列。
+	
+*/
 int FuncID_To_HelpContextID( int nFuncID )
 {
 	switch( nFuncID ){
