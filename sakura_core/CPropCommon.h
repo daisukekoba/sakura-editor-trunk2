@@ -260,7 +260,8 @@ protected:
 	BOOL DispatchEvent_PROP_Macro( HWND, UINT, WPARAM, LPARAM );
 	void SetData_PROP_Macro( HWND );//!<ダイアログデータの設定 Macro
 	int GetData_PROP_Macro( HWND );//!<ダイアログデータの取得 Macro
-	void InitDialog_PROP_Macro( HWND hwndDlg );
+	void InitDialog_PROP_Macro( HWND hwndDlg );//!< Macroページの初期化
+	void SetMacro2List( HWND hwndDlg );//!< Macroデータの設定
 	//	To Here Jun. 2, 2001 genta
 
 	void p7_Edit_List_KeyWord( HWND, HWND );	/* p7:リスト中で選択されているキーワードを編集する */

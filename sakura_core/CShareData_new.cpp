@@ -1833,9 +1833,10 @@ BOOL CShareData::ShareData_IO_2( BOOL bRead )
 		pszSecName = "Macro";
 		
 		for( i = 0; i < MAX_CUSTMACRO; ++i ){
-			wsprintf( szKeyName, "Flag[%03d]", i );
-			cProfile.IOProfileData( bRead, pszSecName, szKeyName, REGCNV_INT2SZ,
-				(char*)&m_pShareData->m_MacroTable[i].m_bEnabled, FALSE );
+			//	Oct. 4, 2001 genta ‚ ‚Ü‚èˆÓ–¡‚ª‚È‚³‚»‚¤‚È‚Ì‚Åíœ
+//			wsprintf( szKeyName, "Flag[%03d]", i );
+//			cProfile.IOProfileData( bRead, pszSecName, szKeyName, REGCNV_INT2SZ,
+//				(char*)&m_pShareData->m_MacroTable[i].m_bEnabled, FALSE );
 			wsprintf( szKeyName, "Name[%03d]", i );
 			cProfile.IOProfileData( bRead, pszSecName, szKeyName, REGCNV_SZ2SZ,
 				(char*)m_pShareData->m_MacroTable[i].m_szName, MACRONAME_MAX - 1 );

@@ -83,11 +83,12 @@ public:
 	BOOL Exec( HINSTANCE hInstance, CEditView* pViewClass, int idx );
 	
 	//	登録インターフェース
-	//! 有効・無効の切り替え
-	void Enable(int idx, bool state){
-		if( 0 <= idx || idx < MAX_CUSTMACRO )
-			m_pShareData->m_MacroTable[idx].Enable( state );
-	}
+	//  有効・無効の切り替え
+	// Oct. 4, 2001 deleted by genta
+//	void Enable(int idx, bool state){
+//		if( 0 <= idx || idx < MAX_CUSTMACRO )
+//			m_pShareData->m_MacroTable[idx].Enable( state );
+//	}
 	bool IsEnabled(int idx) const {
 		return ( 0 <= idx || idx < MAX_CUSTMACRO ) ?
 		m_pShareData->m_MacroTable[idx].IsEnabled() : false;

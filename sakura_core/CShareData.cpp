@@ -55,7 +55,7 @@ struct ARRHEAD {
 
 	@sa Init()
 */
-const unsigned int uShareDataVersion = 14;
+const unsigned int uShareDataVersion = 15;
 
 /*!
 	共有メモリ領域がある場合はプロセスのアドレス空間から､
@@ -3638,7 +3638,7 @@ tt 時刻マーカー。「 AM 」「 PM 」「午前」「午後」など。
 		//	Macro登録の初期化
 		MacroRec *mptr = m_pShareData->m_MacroTable;
 		for( i = 0; i < MAX_CUSTMACRO; ++i, ++mptr ){
-			mptr->m_bEnabled = FALSE;
+		//	mptr->m_bEnabled = FALSE;	// Oct 4. 2001 deleted by genta
 			mptr->m_szName[0] = '\0';
 			mptr->m_szFile[0] = '\0';
 		}

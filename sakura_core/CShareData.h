@@ -296,12 +296,14 @@ const int MACRONAME_MAX = 64;
 
 //! マクロ情報
 struct MacroRec {
-	int		m_bEnabled;	//!< 有効/無効フラグ
+//	int		m_bEnabled;	//!< 有効/無効フラグ	// Oct. 4, 2001 deleted by genta
 	char	m_szName[MACRONAME_MAX];	//<! 表示名
 	char	m_szFile[_MAX_PATH+1];	//<! ファイル名(ディレクトリを含まない)
 	
-	bool IsEnabled() const { return m_bEnabled & 1; }
-	void Enable(bool f){ m_bEnabled = f ? (m_bEnabled | 1) : (m_bEnabled & ~1); }
+//	bool IsEnabled() const { return m_bEnabled & 1; }
+	bool IsEnabled() const { return m_szFile[0] != '\0'; }
+	// Oct. 4, 2001 deleted by genta
+//	void Enable(bool f){ m_bEnabled = f ? (m_bEnabled | 1) : (m_bEnabled & ~1); }
 };
 //	To Here Sep. 14, 2001 genta
 

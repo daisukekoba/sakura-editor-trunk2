@@ -98,6 +98,19 @@ BOOL CPropCommon::DispatchEvent_PROP_Macro( HWND hwndDlg, UINT uMsg, WPARAM wPar
 		wID = LOWORD(wParam);			/* 項目ID､ コントロールID､ またはアクセラレータID */
 		hwndCtl = (HWND) lParam;		/* コントロールのハンドル */
 
+		switch( wNotifyCode ){
+		/* ボタン／チェックボックスがクリックされた */
+		case BN_CLICKED:
+			switch( wID ){
+			case IDC_MACRODIRREF:	// マクロディレクトリ参照
+				break;
+			case IDC_MACRO_REG:		// マクロ設定
+				SetMacro2List( hwndDlg );
+				break;
+			}
+			break;
+		}
+
 		break;
 //@@@ 2001.02.04 Start by MIK: Popup Help
 	case WM_HELP:
@@ -125,6 +138,7 @@ void CPropCommon::SetData_PROP_Macro( HWND hwndDlg )
 	int index;
 	LVITEM sItem;
 
+	//	マクロデータ
 	HWND hListView = ::GetDlgItem( hwndDlg, IDC_MACROLIST );
 	
 	for( index = 0; index < MAX_CUSTMACRO; ++index ){
@@ -143,6 +157,9 @@ void CPropCommon::SetData_PROP_Macro( HWND hwndDlg )
 		ListView_SetItem( hListView, &sItem );
 	}
 	
+	//	マクロディレクトリ
+	::SetDlgItemText( hwndDlg, IDC_MACRODIR, m_pShareData->m_szMACROFOLDER );
+	
 	return;
 }
 
@@ -159,6 +176,7 @@ int CPropCommon::GetData_PROP_Macro( HWND hwndDlg )
 	int index;
 	LVITEM sItem;
 
+	//	マクロデータ
 	HWND hListView = ::GetDlgItem( hwndDlg, IDC_MACROLIST );
 
 	for( index = 0; index < MAX_CUSTMACRO; ++index ){
@@ -178,6 +196,9 @@ int CPropCommon::GetData_PROP_Macro( HWND hwndDlg )
 		sItem.pszText = m_pShareData->m_MacroTable[index].m_szFile;
 		ListView_GetItem( hListView, &sItem );
 	}
+
+	//	マクロディレクトリ
+	::GetDlgItemText( hwndDlg, IDC_MACRODIR, m_pShareData->m_szMACROFOLDER, _MAX_PATH );
 
 	return TRUE;
 }
@@ -235,6 +256,61 @@ void CPropCommon::InitDialog_PROP_Macro( HWND hwndDlg )
 		sItem.lParam = pos;
 		ListView_InsertItem( hListView, &sItem );
 	}
+	
+	// 登録先指定 ComboBoxの初期化
+	HWND hNumCombo = ::GetDlgItem( hwndDlg, IDC_COMBO_MACROID );
+	for( pos = 0; pos < MAX_CUSTMACRO ; ++pos ){
+		char buf[10];
+		wsprintf( buf, "%d", pos );
+		int result = ::SendMessage( hNumCombo, CB_ADDSTRING, (WPARAM)0, (LPARAM)buf );
+		if( result == CB_ERR ){
+			::MessageBox( hwndDlg, "PropComMacro::InitDlg::AddMacroId", "バグ報告お願い", MB_OK );
+			return;	//	よくわからんけど失敗した
+		}
+		else if( result == CB_ERRSPACE ){
+			::MessageBox( hwndDlg, "PropComMacro::InitDlg::AddMacroId/InsufficientSpace",
+				"バグ報告お願い", MB_OK );
+			return;	//	よくわからんけど失敗した
+		}
+	}
+	::SendMessage( hNumCombo, CB_SETCURSEL, (WPARAM)0, (LPARAM)0 );
 }
 
+void CPropCommon::SetMacro2List( HWND hwndDlg )
+{
+	int index;
+	LVITEM sItem;
+	char buf[256];
+	
+	HWND hListView = ::GetDlgItem( hwndDlg, IDC_MACROLIST );
+	HWND hNum = ::GetDlgItem( hwndDlg, IDC_COMBO_MACROID );
+
+	//	設定先取得
+	index = ::SendMessage( hNum, CB_GETCURSEL, 0, 0 );
+	if( index == CB_ERR ){
+		::MessageBox( hwndDlg, "PropComMacro::SetMacro2List::GetCurSel",
+			"バグ報告お願い", MB_OK );
+		return;	//	よくわからんけど失敗した
+	}
+
+	// マクロ名
+	memset( &sItem, 0, sizeof( sItem ));
+	sItem.iItem = index;
+	sItem.mask = LVIF_TEXT;
+	sItem.iSubItem = 1;
+	
+	::GetDlgItemText( hwndDlg, IDC_MACRONAME, buf, MACRONAME_MAX );
+	sItem.pszText = buf;
+	ListView_SetItem( hListView, &sItem );
+
+	// ファイル名
+	memset( &sItem, 0, sizeof( sItem ));
+	sItem.iItem = index;
+	sItem.mask = LVIF_TEXT;
+	sItem.iSubItem = 2;
+
+	::GetDlgItemText( hwndDlg, IDC_MACROPATH, buf, _MAX_PATH );
+	sItem.pszText = buf;
+	ListView_SetItem( hListView, &sItem );
+}
 /*[EOF]*/
