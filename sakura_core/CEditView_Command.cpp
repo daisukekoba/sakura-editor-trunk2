@@ -660,8 +660,8 @@ int CEditView::Command_LEFT( int bSelect, BOOL bRepeat )
 						break;
 					}
 					if( pLine[i] == TAB ){
-						nCharChars = m_pShareData->m_Types[m_pcEditDoc->m_nSettingType].m_nTabSpace
-						 - ( nPosX % m_pShareData->m_Types[m_pcEditDoc->m_nSettingType].m_nTabSpace );
+						nCharChars = m_pcEditDoc->GetDocumentAttribute().m_nTabSpace
+						 - ( nPosX % m_pcEditDoc->GetDocumentAttribute().m_nTabSpace );
 						++i;
 					}else{
 						nCharChars = CMemory::MemCharNext( pLine, nLineLen, &pLine[i] ) - &pLine[i];
@@ -685,8 +685,8 @@ int CEditView::Command_LEFT( int bSelect, BOOL bRepeat )
 			nPosX = 0;
 			for( i = 0; i < nLineLen; ){
 				if( pLine[i] == TAB ){
-					nCharChars = m_pShareData->m_Types[m_pcEditDoc->m_nSettingType].m_nTabSpace
-					 - ( nPosX % m_pShareData->m_Types[m_pcEditDoc->m_nSettingType].m_nTabSpace );
+					nCharChars = m_pcEditDoc->GetDocumentAttribute().m_nTabSpace
+					 - ( nPosX % m_pcEditDoc->GetDocumentAttribute().m_nTabSpace );
 					++i;
 				}else{
 					nCharChars = CMemory::MemCharNext( pLine, nLineLen, &pLine[i] ) - &pLine[i];
@@ -799,8 +799,8 @@ void CEditView::Command_RIGHT( int bSelect, int bIgnoreCurrentSelection, BOOL bR
 				break;
 			}
 			if( pLine[i] == TAB ){
-				nCharChars = m_pShareData->m_Types[m_pcEditDoc->m_nSettingType].m_nTabSpace
-				 - ( nPosX % m_pShareData->m_Types[m_pcEditDoc->m_nSettingType].m_nTabSpace );
+				nCharChars = m_pcEditDoc->GetDocumentAttribute().m_nTabSpace
+				 - ( nPosX % m_pcEditDoc->GetDocumentAttribute().m_nTabSpace );
 				++i;
 			}else{
 				nCharChars = CMemory::MemCharNext( pLine, nLineLen, &pLine[i] ) - &pLine[i];
@@ -856,7 +856,7 @@ void CEditView::Command_RIGHT( int bSelect, int bIgnoreCurrentSelection, BOOL bR
 				}
 			}
 		}
-		if( nPosX >= m_pShareData->m_Types[m_pcEditDoc->m_nSettingType].m_nMaxLineSize ){
+		if( nPosX >= m_pcEditDoc->GetDocumentAttribute().m_nMaxLineSize ){
 			nPosX = 0;
 			++nPosY;
 		}
@@ -1058,8 +1058,8 @@ void CEditView::Command_GOLINEEND( int bSelect, int bIgnoreCurrentSelection )
 			break;
 		}
 		if( pLine[i] == TAB ){
-			nCharChars = m_pShareData->m_Types[m_pcEditDoc->m_nSettingType].m_nTabSpace
-			 - ( nPosX % m_pShareData->m_Types[m_pcEditDoc->m_nSettingType].m_nTabSpace );
+			nCharChars = m_pcEditDoc->GetDocumentAttribute().m_nTabSpace
+			 - ( nPosX % m_pcEditDoc->GetDocumentAttribute().m_nTabSpace );
 			++i;
 		}else{
 			nCharChars = CMemory::MemCharNext( pLine, nLineLen, &pLine[i] ) - &pLine[i];
@@ -1515,20 +1515,20 @@ void CEditView::Command_DELETE_BACK( void )
 			/* 補完対象ワードリストを調べる */
 			poWin.x = m_nViewAlignLeft
 					 + (m_nCaretPosX - m_nViewLeftCol)
-					  * ( m_nCharWidth + m_pShareData->m_Types[m_pcEditDoc->m_nSettingType].m_nColmSpace );
+					  * ( m_nCharWidth + m_pcEditDoc->GetDocumentAttribute().m_nColmSpace );
 			poWin.y = m_nViewAlignTop
 					  + (m_nCaretPosY - m_nViewTopLine)
-					   * ( m_pShareData->m_Types[m_pcEditDoc->m_nSettingType].m_nLineSpace + m_nCharHeight );
+					   * ( m_pcEditDoc->GetDocumentAttribute().m_nLineSpace + m_nCharHeight );
 			::ClientToScreen( m_hWnd, &poWin );
 			poWin.x -= ( 
 				cmemData.GetLength()
-				 * ( m_nCharWidth + m_pShareData->m_Types[m_pcEditDoc->m_nSettingType].m_nColmSpace ) 
+				 * ( m_nCharWidth + m_pcEditDoc->GetDocumentAttribute().m_nColmSpace ) 
 			);
 			if( 0 < m_pcEditDoc->m_cHokanMgr.Search( 
 //t				m_hFont_HAN, 
 				&poWin, 
 				m_nCharHeight,
-				m_nCharWidth + m_pShareData->m_Types[m_pcEditDoc->m_nSettingType].m_nColmSpace,
+				m_nCharWidth + m_pcEditDoc->GetDocumentAttribute().m_nColmSpace,
 				cmemData.GetPtr( NULL ),
 //t				(void*)this,
 				m_pShareData->m_Common.m_szHokanFile
@@ -2782,13 +2782,13 @@ void CEditView::Command_CHAR( char cChar )
 						
 						/* その他のインデント文字 */
 						if( 0 < nCharChars 
-						 && 0 < (int)lstrlen( m_pShareData->m_Types[m_pcEditDoc->m_nSettingType].m_szIndentChars ) 
+						 && 0 < (int)lstrlen( m_pcEditDoc->GetDocumentAttribute().m_szIndentChars ) 
 						){
 							memcpy( szCurrent, &pLine[nPos], nCharChars );
 							szCurrent[nCharChars] = '\0';
 							/* その他のインデント対象文字 */
 							if( NULL != strstr( 
-								m_pShareData->m_Types[m_pcEditDoc->m_nSettingType].m_szIndentChars, 
+								m_pcEditDoc->GetDocumentAttribute().m_szIndentChars, 
 								szCurrent 
 							) ){
 								goto end_of_for;
@@ -2910,7 +2910,7 @@ void CEditView::Command_CHAR( char cChar )
 
 
 	/* スマートインデント */
-	if( SMARTINDENT_CPP == m_pShareData->m_Types[m_pcEditDoc->m_nSettingType].m_nSmartIndent ){	/* スマートインデント種別 */
+	if( SMARTINDENT_CPP == m_pcEditDoc->GetDocumentAttribute().m_nSmartIndent ){	/* スマートインデント種別 */
 		/* C/C++スマートインデント処理 */
 		SmartIndent_CPP( cChar );
 	}
@@ -2926,20 +2926,20 @@ void CEditView::Command_CHAR( char cChar )
 			/* 補完対象ワードリストを調べる */
 			poWin.x = m_nViewAlignLeft
 					 + (m_nCaretPosX - m_nViewLeftCol)
-					  * ( m_nCharWidth + m_pShareData->m_Types[m_pcEditDoc->m_nSettingType].m_nColmSpace );
+					  * ( m_nCharWidth + m_pcEditDoc->GetDocumentAttribute().m_nColmSpace );
 			poWin.y = m_nViewAlignTop
 					  + (m_nCaretPosY - m_nViewTopLine)
-					   * ( m_pShareData->m_Types[m_pcEditDoc->m_nSettingType].m_nLineSpace + m_nCharHeight );
+					   * ( m_pcEditDoc->GetDocumentAttribute().m_nLineSpace + m_nCharHeight );
 			::ClientToScreen( m_hWnd, &poWin );
 			poWin.x -= ( 
 				cmemData.GetLength()
-				 * ( m_nCharWidth + m_pShareData->m_Types[m_pcEditDoc->m_nSettingType].m_nColmSpace ) 
+				 * ( m_nCharWidth + m_pcEditDoc->GetDocumentAttribute().m_nColmSpace ) 
 			);
 			if( 0 < m_pcEditDoc->m_cHokanMgr.Search( 
 //t				m_hFont_HAN, 
 				&poWin, 
 				m_nCharHeight,
-				m_nCharWidth + m_pShareData->m_Types[m_pcEditDoc->m_nSettingType].m_nColmSpace,
+				m_nCharWidth + m_pcEditDoc->GetDocumentAttribute().m_nColmSpace,
 				cmemData.GetPtr( NULL ),
 //t				(void*)this,
 				m_pShareData->m_Common.m_szHokanFile
@@ -3066,20 +3066,20 @@ void CEditView::Command_IME_CHAR( WORD wChar )
 			/* 補完対象ワードリストを調べる */
 			poWin.x = m_nViewAlignLeft
 					 + (m_nCaretPosX - m_nViewLeftCol)
-					  * ( m_nCharWidth + m_pShareData->m_Types[m_pcEditDoc->m_nSettingType].m_nColmSpace );
+					  * ( m_nCharWidth + m_pcEditDoc->GetDocumentAttribute().m_nColmSpace );
 			poWin.y = m_nViewAlignTop
 					 + (m_nCaretPosY - m_nViewTopLine)
-					  * ( m_pShareData->m_Types[m_pcEditDoc->m_nSettingType].m_nLineSpace + m_nCharHeight );
+					  * ( m_pcEditDoc->GetDocumentAttribute().m_nLineSpace + m_nCharHeight );
 			::ClientToScreen( m_hWnd, &poWin );
 			poWin.x -= ( 
 				cmemData.GetLength()
-				 * ( m_nCharWidth + m_pShareData->m_Types[m_pcEditDoc->m_nSettingType].m_nColmSpace ) 
+				 * ( m_nCharWidth + m_pcEditDoc->GetDocumentAttribute().m_nColmSpace ) 
 			);
 			if( 0 < m_pcEditDoc->m_cHokanMgr.Search( 
 //t				m_hFont_HAN, 
 				&poWin, 
 				m_nCharHeight,
-				m_nCharWidth + m_pShareData->m_Types[m_pcEditDoc->m_nSettingType].m_nColmSpace,
+				m_nCharWidth + m_pcEditDoc->GetDocumentAttribute().m_nColmSpace,
 				cmemData.GetPtr( NULL ),
 //t				(void*)this,
 				m_pShareData->m_Common.m_szHokanFile
@@ -3336,13 +3336,13 @@ void CEditView::Command_SEARCH_PREV( BOOL bReDraw, HWND hwndParent )
 		MoveCursor( nColmFrom, nLineFrom, bReDraw );
 		m_nCaretPosX_Prev = m_nCaretPosX;
 #if 0
-		if( m_pShareData->m_Types[m_pcEditDoc->m_nSettingType].m_ColorInfoArr[COLORIDX_UNDERLINE].m_bDisp && -1 != m_nOldUnderLineY ){
+		if( m_pcEditDoc->GetDocumentAttribute().m_ColorInfoArr[COLORIDX_UNDERLINE].m_bDisp && -1 != m_nOldUnderLineY ){
 			/* カーソル行アンダーラインの消去 */
 			HPEN	hPen;
 			HPEN	hPenOld;
 			HDC		hdc;
 			hdc = ::GetDC( m_hWnd );
-			hPen = ::CreatePen( PS_SOLID, 0, m_pShareData->m_Types[m_pcEditDoc->m_nSettingType].m_ColorInfoArr[COLORIDX_TEXT].m_colBACK );
+			hPen = ::CreatePen( PS_SOLID, 0, m_pcEditDoc->GetDocumentAttribute().m_ColorInfoArr[COLORIDX_TEXT].m_colBACK );
 			hPenOld = (HPEN)::SelectObject( hdc, hPen ); 
 			::MoveToEx( 
 				hdc, 
@@ -4079,7 +4079,7 @@ void CEditView::Command_JUMP( void )
 //	m_pcEditDoc->m_cDlgJump.Create( m_hInstance, m_hWnd, (void *)m_pcEditDoc );
 	if( !m_pcEditDoc->m_cDlgJump.DoModal(
 		m_hInstance, m_hWnd, (LPARAM)m_pcEditDoc,
-		m_pShareData->m_Types[m_pcEditDoc->m_nSettingType].m_bLineNumIsCRLF	/* 行番号の表示 FALSE=折り返し単位／TRUE=改行単位 */
+		m_pcEditDoc->GetDocumentAttribute().m_bLineNumIsCRLF	/* 行番号の表示 FALSE=折り返し単位／TRUE=改行単位 */
 //		&m_pcEditDoc->m_hwndActiveDialog	/* アクティブな子ダイアログ */
 	) ){
 		::MessageBeep( MB_ICONHAND );
@@ -4139,7 +4139,7 @@ void CEditView::Command_JUMP( void )
 	nCurrentLine = m_pcEditDoc->m_cDlgJump.m_nPLSQL_E2 - 1;
 	nLineCount = m_pcEditDoc->m_cDlgJump.m_nPLSQL_E1 - 1;
 	/* 行番号の表示 FALSE=折り返し単位／TRUE=改行単位 */
-	if( FALSE == m_pShareData->m_Types[m_pcEditDoc->m_nSettingType].m_bLineNumIsCRLF ){
+	if( FALSE == m_pcEditDoc->GetDocumentAttribute().m_bLineNumIsCRLF ){
 		/*
 		  カーソル位置変換
 		  レイアウト位置(行頭からの表示桁位置、折り返しあり行位置)
@@ -4335,7 +4335,7 @@ void CEditView::Command_OPTION( void )
 /* タイプ別設定 */
 void CEditView::Command_OPTION_TYPE( void )
 {
-	m_pcEditDoc->OpenPropertySheetTypes( -1, m_pcEditDoc->m_nSettingType );
+	m_pcEditDoc->OpenPropertySheetTypes( -1, m_pcEditDoc->GetDocumentType() );
 
 	return;
 }
@@ -4748,7 +4748,7 @@ BOOL CEditView::Command_FUNCLIST( BOOL bCheckOnly )
 	cFuncInfoArr.Empty();
 
 	/* タイプ別に設定されたアウトライン解析方法 */
-	nListType = m_pShareData->m_Types[m_pcEditDoc->m_nSettingType].m_nDefaultOutline;
+	nListType = m_pcEditDoc->GetDocumentAttribute().m_nDefaultOutline;
 	switch( nListType ){
 //	case OUTLINE_C:			m_pcEditDoc->MakeFuncList_C( &cFuncInfoArr );break;
 	case OUTLINE_CPP:		
@@ -4781,7 +4781,7 @@ BOOL CEditView::Command_FUNCLIST( BOOL bCheckOnly )
 //		&cFuncInfoArr, 
 //		m_nCaretPosY + 1, 
 //		nListType, 
-//		m_pShareData->m_Types[m_pcEditDoc->m_nSettingType].m_bLineNumIsCRLF	/* 行番号の表示 FALSE=折り返し単位／TRUE=改行単位 */
+//		m_pcEditDoc->GetDocumentAttribute().m_bLineNumIsCRLF	/* 行番号の表示 FALSE=折り返し単位／TRUE=改行単位 */
 //	);
 
 //	/* アウトライン　ダイアログをモーダルにするか */
@@ -4823,7 +4823,7 @@ BOOL CEditView::Command_FUNCLIST( BOOL bCheckOnly )
 				&cFuncInfoArr, 
 				m_nCaretPosY + 1, 
 				nListType, 
-				m_pShareData->m_Types[m_pcEditDoc->m_nSettingType].m_bLineNumIsCRLF	/* 行番号の表示 FALSE=折り返し単位／TRUE=改行単位 */
+				m_pcEditDoc->GetDocumentAttribute().m_bLineNumIsCRLF	/* 行番号の表示 FALSE=折り返し単位／TRUE=改行単位 */
 			);
 		}else{
 			/* アクティブにする */
@@ -5998,16 +5998,16 @@ void CEditView::Command_UNINDENT( char cChar )
 						if( SPACE != pLine[i] ){
 							break;
 						}
-//						if( i >= m_pShareData->m_Types[m_pcEditDoc->m_nSettingType].m_nTabSpace - 1 ){
-						if( i >= m_pShareData->m_Types[m_pcEditDoc->m_nSettingType].m_nTabSpace ){
+//						if( i >= m_pcEditDoc->GetDocumentAttribute().m_nTabSpace - 1 ){
+						if( i >= m_pcEditDoc->GetDocumentAttribute().m_nTabSpace ){
 							break;
 						}
 					}
-//					if( i < m_pShareData->m_Types[m_pcEditDoc->m_nSettingType].m_nTabSpace - 1 ){
+//					if( i < m_pcEditDoc->GetDocumentAttribute().m_nTabSpace - 1 ){
 					if( 0 == i ){
 						continue;
 					}
-//					nDelLen = m_pShareData->m_Types[m_pcEditDoc->m_nSettingType].m_nTabSpace;
+//					nDelLen = m_pcEditDoc->GetDocumentAttribute().m_nTabSpace;
 					nDelLen = i;
 				}
 			}else{
@@ -7051,7 +7051,7 @@ void CEditView::Command_TYPE_LIST( void )
 	CDlgTypeList	cDlgTypeList;
 	int				nSettingType;
 //	cDlgTypeList.Create( m_hInstance, m_hWnd );
-	nSettingType = m_pcEditDoc->m_nSettingType;
+	nSettingType = m_pcEditDoc->GetDocumentType();
 	if( cDlgTypeList.DoModal( m_hInstance, m_hWnd, &nSettingType ) ){
 		/* タイプ別設定 */
 		m_pcEditDoc->OpenPropertySheetTypes( -1, nSettingType );
@@ -7381,20 +7381,20 @@ retry:;
 		/* 補完対象ワードリストを調べる */
 		poWin.x = m_nViewAlignLeft
 				 + (m_nCaretPosX - m_nViewLeftCol)
-				  * ( m_nCharWidth + m_pShareData->m_Types[m_pcEditDoc->m_nSettingType].m_nColmSpace );
+				  * ( m_nCharWidth + m_pcEditDoc->GetDocumentAttribute().m_nColmSpace );
 		poWin.y = m_nViewAlignTop
 				 + (m_nCaretPosY - m_nViewTopLine)
-				  * ( m_pShareData->m_Types[m_pcEditDoc->m_nSettingType].m_nLineSpace + m_nCharHeight );
+				  * ( m_pcEditDoc->GetDocumentAttribute().m_nLineSpace + m_nCharHeight );
 		::ClientToScreen( m_hWnd, &poWin );
 		poWin.x -= ( 
 			cmemData.GetLength()
-			 * ( m_nCharWidth + m_pShareData->m_Types[m_pcEditDoc->m_nSettingType].m_nColmSpace ) 
+			 * ( m_nCharWidth + m_pcEditDoc->GetDocumentAttribute().m_nColmSpace ) 
 		);
 		if( 0 < m_pcEditDoc->m_cHokanMgr.Search( 
 //t			m_hFont_HAN, 
 			&poWin, 
 			m_nCharHeight,
-			m_nCharWidth + m_pShareData->m_Types[m_pcEditDoc->m_nSettingType].m_nColmSpace,
+			m_nCharWidth + m_pcEditDoc->GetDocumentAttribute().m_nColmSpace,
 			cmemData.GetPtr( NULL ),
 //t			(void*)this,
 			m_pShareData->m_Common.m_szHokanFile
@@ -7872,7 +7872,7 @@ void CEditView::Command_WRAPWINDOWWIDTH( void )	//	Oct. 7, 2000 JEPRO WRAPWINDIW
 		::MessageBeep( MB_ICONHAND );
 		return;
 	}
-	m_pShareData->m_Types[m_pcEditDoc->m_nSettingType].m_nMaxLineSize = m_nViewColNum;
+	m_pcEditDoc->GetDocumentAttribute().m_nMaxLineSize = m_nViewColNum;
 
 	m_pcEditDoc->OnChangeSetting();	/* ビューに設定変更を反映させる */
 

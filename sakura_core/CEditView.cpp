@@ -387,7 +387,7 @@ CEditView::CEditView() : m_cHistory(new CAutoMarkMgr)
 	m_nViewAlignTop = m_nTopYohaku;		/* 表示域の上端座標 */
 	/* ルーラー表示 */
 //	if( m_pShareData->m_Common.m_bRulerDisp ){
-//	if( m_pShareData->m_Types[m_pcEditDoc->m_nSettingType].m_ColorInfoArr[COLORIDX_RULER].m_bDisp ){
+//	if( m_pcEditDoc->GetDocumentAttribute().m_ColorInfoArr[COLORIDX_RULER].m_bDisp ){
 		m_nViewAlignTop += m_pShareData->m_Common.m_nRulerHeight;	/* ルーラー高さ */
 //	}
 	m_nViewCx = 0;				/* 表示域の幅 */
@@ -504,7 +504,7 @@ BOOL CEditView::Create(
 	m_nViewAlignTop = m_nTopYohaku;		/* 表示域の上端座標 */
 	/* ルーラー表示 */
 //	if( m_pShareData->m_Common.m_bRulerDisp ){
-	if( m_pShareData->m_Types[m_pcEditDoc->m_nSettingType].m_ColorInfoArr[COLORIDX_RULER].m_bDisp ){
+	if( m_pcEditDoc->GetDocumentAttribute().m_ColorInfoArr[COLORIDX_RULER].m_bDisp ){
 		m_nViewAlignTop += m_pShareData->m_Common.m_nRulerHeight;	/* ルーラー高さ */
 	}
 
@@ -1098,8 +1098,8 @@ void CEditView::OnSize( int cx, int cy )
 
 	m_nViewCx = cx - nCxVScroll - m_nViewAlignLeft;	/* 表示域の幅 */
 	m_nViewCy = cy - ((NULL != m_hwndHScrollBar)?nCyHScroll:0) - m_nViewAlignTop;	/* 表示域の高さ */
-	m_nViewColNum = m_nViewCx / ( m_nCharWidth  + m_pShareData->m_Types[m_pcEditDoc->m_nSettingType].m_nColmSpace );	/* 表示域の桁数 */
-	m_nViewRowNum = m_nViewCy / ( m_nCharHeight + m_pShareData->m_Types[m_pcEditDoc->m_nSettingType].m_nLineSpace );	/* 表示域の行数 */
+	m_nViewColNum = m_nViewCx / ( m_nCharWidth  + m_pcEditDoc->GetDocumentAttribute().m_nColmSpace );	/* 表示域の桁数 */
+	m_nViewRowNum = m_nViewCy / ( m_nCharHeight + m_pcEditDoc->GetDocumentAttribute().m_nLineSpace );	/* 表示域の行数 */
 	
 //1999.12.1 仕様変更
 //	/* ウィンドウリサイズ時にキャレット位置へスクロール */
@@ -1140,7 +1140,7 @@ void CEditView::OnSize( int cx, int cy )
 //		::MessageBeep( MB_ICONHAND );
 //		return;
 //	}
-//	m_pShareData->m_Types[m_pcEditDoc->m_nSettingType].m_nMaxLineSize = m_nViewColNum - 1;
+//	m_pcEditDoc->GetDocumentAttribute().m_nMaxLineSize = m_nViewColNum - 1;
 //
 //	m_pcEditDoc->OnChangeSetting();	/* ビューに設定変更を反映させる */
 //
@@ -1203,7 +1203,7 @@ void CEditView::ShowEditCaret( void )
 		if( m_pShareData->m_Common.m_bIsINSMode ){
 			nCaretWidth = 2;
 		}else{
-			nCaretWidth = ( m_nCharWidth + m_pShareData->m_Types[m_pcEditDoc->m_nSettingType].m_nColmSpace );
+			nCaretWidth = ( m_nCharWidth + m_pcEditDoc->GetDocumentAttribute().m_nColmSpace );
 			pLine = m_pcEditDoc->m_cLayoutMgr.GetLineStr2( m_nCaretPosY, &nLineLen, &pcLayout );
 			if( NULL != pLine ){
 				/* 指定された桁に対応する行のデータ内の位置を調べる */
@@ -1211,11 +1211,11 @@ void CEditView::ShowEditCaret( void )
 				if( nIdxFrom >= nLineLen ||
 					pLine[nIdxFrom] == CR || pLine[nIdxFrom] == LF ||
 					pLine[nIdxFrom] == TAB ){
-					nCaretWidth = ( m_nCharWidth + m_pShareData->m_Types[m_pcEditDoc->m_nSettingType].m_nColmSpace );
+					nCaretWidth = ( m_nCharWidth + m_pcEditDoc->GetDocumentAttribute().m_nColmSpace );
 				}else{
 					nCharChars = CMemory::MemCharNext( pLine, nLineLen, &pLine[nIdxFrom] ) - &pLine[nIdxFrom];
 					if( 0 < nCharChars ){
-						nCaretWidth = ( m_nCharWidth + m_pShareData->m_Types[m_pcEditDoc->m_nSettingType].m_nColmSpace ) * nCharChars;
+						nCaretWidth = ( m_nCharWidth + m_pcEditDoc->GetDocumentAttribute().m_nColmSpace ) * nCharChars;
 					}
 				}
 			}
@@ -1227,7 +1227,7 @@ void CEditView::ShowEditCaret( void )
 		}else{
 			nCaretHeight = m_nCharHeight;			/* キャレットの高さ */
 		}
-		nCaretWidth = ( m_nCharWidth + m_pShareData->m_Types[m_pcEditDoc->m_nSettingType].m_nColmSpace );
+		nCaretWidth = ( m_nCharWidth + m_pcEditDoc->GetDocumentAttribute().m_nColmSpace );
 		pLine = m_pcEditDoc->m_cLayoutMgr.GetLineStr2( m_nCaretPosY, &nLineLen, &pcLayout );
 		if( NULL != pLine ){
 			/* 指定された桁に対応する行のデータ内の位置を調べる */
@@ -1235,11 +1235,11 @@ void CEditView::ShowEditCaret( void )
 			if( nIdxFrom >= nLineLen ||
 				pLine[nIdxFrom] == CR || pLine[nIdxFrom] == LF ||
 				pLine[nIdxFrom] == TAB ){
-				nCaretWidth = ( m_nCharWidth + m_pShareData->m_Types[m_pcEditDoc->m_nSettingType].m_nColmSpace );
+				nCaretWidth = ( m_nCharWidth + m_pcEditDoc->GetDocumentAttribute().m_nColmSpace );
 			}else{
 				nCharChars = CMemory::MemCharNext( pLine, nLineLen, &pLine[nIdxFrom] ) - &pLine[nIdxFrom];
 				if( 0 < nCharChars ){
-					nCaretWidth = ( m_nCharWidth + m_pShareData->m_Types[m_pcEditDoc->m_nSettingType].m_nColmSpace ) * nCharChars;
+					nCaretWidth = ( m_nCharWidth + m_pcEditDoc->GetDocumentAttribute().m_nColmSpace ) * nCharChars;
 				}
 			}
 		}
@@ -1262,11 +1262,11 @@ void CEditView::ShowEditCaret( void )
 	hdc = ::GetDC( m_hWnd );
 	if( m_nCaretWidth == 0 ){	/* キャレットがなかった場合 */
 		
-//		if( m_pShareData->m_Types[m_pcEditDoc->m_nSettingType].m_ColorInfoArr[COLORIDX_UNDERLINE].m_bDisp && !IsTextSelecting() ){
+//		if( m_pcEditDoc->GetDocumentAttribute().m_ColorInfoArr[COLORIDX_UNDERLINE].m_bDisp && !IsTextSelecting() ){
 //			/* カーソル行アンダーラインの描画 */
-//			hPen = ::CreatePen( PS_SOLID, 0, m_pShareData->m_Types[m_pcEditDoc->m_nSettingType].m_ColorInfoArr[COLORIDX_UNDERLINE].m_colTEXT );
+//			hPen = ::CreatePen( PS_SOLID, 0, m_pcEditDoc->GetDocumentAttribute().m_ColorInfoArr[COLORIDX_UNDERLINE].m_colTEXT );
 //			hPenOld = (HPEN)::SelectObject( hdc, hPen ); 
-//			m_nOldUnderLineY = m_nViewAlignTop  + (m_nCaretPosY - m_nViewTopLine) * ( m_pShareData->m_Types[m_pcEditDoc->m_nSettingType].m_nLineSpace + m_nCharHeight ) + m_nCharHeight;
+//			m_nOldUnderLineY = m_nViewAlignTop  + (m_nCaretPosY - m_nViewTopLine) * ( m_pcEditDoc->GetDocumentAttribute().m_nLineSpace + m_nCharHeight ) + m_nCharHeight;
 //			::MoveToEx( 
 //				hdc, 
 //				m_nViewAlignLeft, 
@@ -1286,8 +1286,8 @@ void CEditView::ShowEditCaret( void )
 		::CreateCaret( m_hWnd, (HBITMAP)NULL, nCaretWidth, nCaretHeight );
 		/* キャレットの位置を調整 */
 		::SetCaretPos(
-			m_nViewAlignLeft + (m_nCaretPosX - m_nViewLeftCol) * ( m_nCharWidth + m_pShareData->m_Types[m_pcEditDoc->m_nSettingType].m_nColmSpace ) ,
-			m_nViewAlignTop  + (m_nCaretPosY - m_nViewTopLine) * ( m_pShareData->m_Types[m_pcEditDoc->m_nSettingType].m_nLineSpace + m_nCharHeight ) + m_nCharHeight - nCaretHeight
+			m_nViewAlignLeft + (m_nCaretPosX - m_nViewLeftCol) * ( m_nCharWidth + m_pcEditDoc->GetDocumentAttribute().m_nColmSpace ) ,
+			m_nViewAlignTop  + (m_nCaretPosY - m_nViewTopLine) * ( m_pcEditDoc->GetDocumentAttribute().m_nLineSpace + m_nCharHeight ) + m_nCharHeight - nCaretHeight
 		);
 		/* キャレットの表示 */
 		::ShowCaret( m_hWnd );
@@ -1298,9 +1298,9 @@ void CEditView::ShowEditCaret( void )
 			/* 現在のキャレットを削除 */
 			::DestroyCaret();
 
-//			if( m_pShareData->m_Types[m_pcEditDoc->m_nSettingType].m_ColorInfoArr[COLORIDX_UNDERLINE].m_bDisp && -1 != m_nOldUnderLineY ){
+//			if( m_pcEditDoc->GetDocumentAttribute().m_ColorInfoArr[COLORIDX_UNDERLINE].m_bDisp && -1 != m_nOldUnderLineY ){
 //				/* カーソル行アンダーラインの消去 */
-//				hPen = ::CreatePen( PS_SOLID, 0, m_pShareData->m_Types[m_pcEditDoc->m_nSettingType].m_ColorInfoArr[COLORIDX_TEXT].m_colBACK );
+//				hPen = ::CreatePen( PS_SOLID, 0, m_pcEditDoc->GetDocumentAttribute().m_ColorInfoArr[COLORIDX_TEXT].m_colBACK );
 //				hPenOld = (HPEN)::SelectObject( hdc, hPen ); 
 //				::MoveToEx( 
 //					hdc, 
@@ -1318,11 +1318,11 @@ void CEditView::ShowEditCaret( void )
 //				m_nOldUnderLineY = -1;
 //			}
 
-//			if( m_pShareData->m_Types[m_pcEditDoc->m_nSettingType].m_ColorInfoArr[COLORIDX_UNDERLINE].m_bDisp && !IsTextSelecting() ){
+//			if( m_pcEditDoc->GetDocumentAttribute().m_ColorInfoArr[COLORIDX_UNDERLINE].m_bDisp && !IsTextSelecting() ){
 //				/* カーソル行アンダーラインの描画 */
-//				hPen = ::CreatePen( PS_SOLID, 0, m_pShareData->m_Types[m_pcEditDoc->m_nSettingType].m_ColorInfoArr[COLORIDX_UNDERLINE].m_colTEXT );
+//				hPen = ::CreatePen( PS_SOLID, 0, m_pcEditDoc->GetDocumentAttribute().m_ColorInfoArr[COLORIDX_UNDERLINE].m_colTEXT );
 //				hPenOld = (HPEN)::SelectObject( hdc, hPen ); 
-//				m_nOldUnderLineY = m_nViewAlignTop  + (m_nCaretPosY - m_nViewTopLine) * ( m_pShareData->m_Types[m_pcEditDoc->m_nSettingType].m_nLineSpace + m_nCharHeight ) + m_nCharHeight;
+//				m_nOldUnderLineY = m_nViewAlignTop  + (m_nCaretPosY - m_nViewTopLine) * ( m_pcEditDoc->GetDocumentAttribute().m_nLineSpace + m_nCharHeight ) + m_nCharHeight;
 //				::MoveToEx( 
 //					hdc, 
 //					m_nViewAlignLeft, 
@@ -1342,8 +1342,8 @@ void CEditView::ShowEditCaret( void )
 			::CreateCaret( m_hWnd, (HBITMAP)NULL, nCaretWidth, nCaretHeight );
 			/* キャレットの位置を調整 */
 			::SetCaretPos(
-				m_nViewAlignLeft + (m_nCaretPosX - m_nViewLeftCol) * ( m_nCharWidth + m_pShareData->m_Types[m_pcEditDoc->m_nSettingType].m_nColmSpace ) ,
-				m_nViewAlignTop  + (m_nCaretPosY - m_nViewTopLine) * ( m_pShareData->m_Types[m_pcEditDoc->m_nSettingType].m_nLineSpace + m_nCharHeight ) + m_nCharHeight - nCaretHeight
+				m_nViewAlignLeft + (m_nCaretPosX - m_nViewLeftCol) * ( m_nCharWidth + m_pcEditDoc->GetDocumentAttribute().m_nColmSpace ) ,
+				m_nViewAlignTop  + (m_nCaretPosY - m_nViewTopLine) * ( m_pcEditDoc->GetDocumentAttribute().m_nLineSpace + m_nCharHeight ) + m_nCharHeight - nCaretHeight
 			);
 			/* キャレットの表示 */
 			::ShowCaret( m_hWnd );
@@ -1352,9 +1352,9 @@ void CEditView::ShowEditCaret( void )
 			/* キャレットを隠す */
 			::HideCaret( m_hWnd );
 
-//			if( m_pShareData->m_Types[m_pcEditDoc->m_nSettingType].m_ColorInfoArr[COLORIDX_UNDERLINE].m_bDisp && -1 != m_nOldUnderLineY ){
+//			if( m_pcEditDoc->GetDocumentAttribute().m_ColorInfoArr[COLORIDX_UNDERLINE].m_bDisp && -1 != m_nOldUnderLineY ){
 //				/* カーソル行アンダーラインの消去 */
-//				hPen = ::CreatePen( PS_SOLID, 0, m_pShareData->m_Types[m_pcEditDoc->m_nSettingType].m_ColorInfoArr[COLORIDX_TEXT].m_colBACK );
+//				hPen = ::CreatePen( PS_SOLID, 0, m_pcEditDoc->GetDocumentAttribute().m_ColorInfoArr[COLORIDX_TEXT].m_colBACK );
 //				hPenOld = (HPEN)::SelectObject( hdc, hPen ); 
 //				::MoveToEx( 
 //					hdc, 
@@ -1372,11 +1372,11 @@ void CEditView::ShowEditCaret( void )
 //				m_nOldUnderLineY = -1;
 //			}
 
-//			if( m_pShareData->m_Types[m_pcEditDoc->m_nSettingType].m_ColorInfoArr[COLORIDX_UNDERLINE].m_bDisp && !IsTextSelecting() ){
+//			if( m_pcEditDoc->GetDocumentAttribute().m_ColorInfoArr[COLORIDX_UNDERLINE].m_bDisp && !IsTextSelecting() ){
 //				/* カーソル行アンダーラインの描画 */
-//				hPen = ::CreatePen( PS_SOLID, 0, m_pShareData->m_Types[m_pcEditDoc->m_nSettingType].m_ColorInfoArr[COLORIDX_UNDERLINE].m_colTEXT );
+//				hPen = ::CreatePen( PS_SOLID, 0, m_pcEditDoc->GetDocumentAttribute().m_ColorInfoArr[COLORIDX_UNDERLINE].m_colTEXT );
 //				hPenOld = (HPEN)::SelectObject( hdc, hPen ); 
-//				m_nOldUnderLineY = m_nViewAlignTop  + (m_nCaretPosY - m_nViewTopLine) * ( m_pShareData->m_Types[m_pcEditDoc->m_nSettingType].m_nLineSpace + m_nCharHeight ) + m_nCharHeight;
+//				m_nOldUnderLineY = m_nViewAlignTop  + (m_nCaretPosY - m_nViewTopLine) * ( m_pcEditDoc->GetDocumentAttribute().m_nLineSpace + m_nCharHeight ) + m_nCharHeight;
 //				::MoveToEx( 
 //					hdc, 
 //					m_nViewAlignLeft, 
@@ -1394,8 +1394,8 @@ void CEditView::ShowEditCaret( void )
 			
 			/* キャレットの位置を調整 */
 			::SetCaretPos(
-				m_nViewAlignLeft + (m_nCaretPosX - m_nViewLeftCol) * ( m_nCharWidth + m_pShareData->m_Types[m_pcEditDoc->m_nSettingType].m_nColmSpace ) ,
-				m_nViewAlignTop  + (m_nCaretPosY - m_nViewTopLine) * ( m_pShareData->m_Types[m_pcEditDoc->m_nSettingType].m_nLineSpace + m_nCharHeight ) + m_nCharHeight - nCaretHeight
+				m_nViewAlignLeft + (m_nCaretPosX - m_nViewLeftCol) * ( m_nCharWidth + m_pcEditDoc->GetDocumentAttribute().m_nColmSpace ) ,
+				m_nViewAlignTop  + (m_nCaretPosY - m_nViewTopLine) * ( m_pcEditDoc->GetDocumentAttribute().m_nLineSpace + m_nCharHeight ) + m_nCharHeight - nCaretHeight
 			);
 			/* キャレットの表示 */
 			::ShowCaret( m_hWnd );
@@ -2146,10 +2146,10 @@ void CEditView::DrawSelectArea( void )
 		if( rcOld.bottom > m_nViewTopLine + m_nViewRowNum ){
 			rcOld.bottom = m_nViewTopLine + m_nViewRowNum;
 		}
-		rcOld.left   = (m_nViewAlignLeft - m_nViewLeftCol * ( m_nCharWidth + m_pShareData->m_Types[m_pcEditDoc->m_nSettingType].m_nColmSpace )) + rcOld.left  * ( m_nCharWidth + m_pShareData->m_Types[m_pcEditDoc->m_nSettingType].m_nColmSpace );
-		rcOld.right  = (m_nViewAlignLeft - m_nViewLeftCol * ( m_nCharWidth + m_pShareData->m_Types[m_pcEditDoc->m_nSettingType].m_nColmSpace )) + rcOld.right * ( m_nCharWidth + m_pShareData->m_Types[m_pcEditDoc->m_nSettingType].m_nColmSpace );
-		rcOld.top    = ( rcOld.top - m_nViewTopLine ) * ( m_nCharHeight + m_pShareData->m_Types[m_pcEditDoc->m_nSettingType].m_nLineSpace ) + m_nViewAlignTop;
-		rcOld.bottom = ( rcOld.bottom + 1 - m_nViewTopLine ) * ( m_nCharHeight + m_pShareData->m_Types[m_pcEditDoc->m_nSettingType].m_nLineSpace ) + m_nViewAlignTop;
+		rcOld.left   = (m_nViewAlignLeft - m_nViewLeftCol * ( m_nCharWidth + m_pcEditDoc->GetDocumentAttribute().m_nColmSpace )) + rcOld.left  * ( m_nCharWidth + m_pcEditDoc->GetDocumentAttribute().m_nColmSpace );
+		rcOld.right  = (m_nViewAlignLeft - m_nViewLeftCol * ( m_nCharWidth + m_pcEditDoc->GetDocumentAttribute().m_nColmSpace )) + rcOld.right * ( m_nCharWidth + m_pcEditDoc->GetDocumentAttribute().m_nColmSpace );
+		rcOld.top    = ( rcOld.top - m_nViewTopLine ) * ( m_nCharHeight + m_pcEditDoc->GetDocumentAttribute().m_nLineSpace ) + m_nViewAlignTop;
+		rcOld.bottom = ( rcOld.bottom + 1 - m_nViewTopLine ) * ( m_nCharHeight + m_pcEditDoc->GetDocumentAttribute().m_nLineSpace ) + m_nViewAlignTop;
 		hrgnOld = ::CreateRectRgnIndirect( &rcOld );
 		
 		/* ２点を対角とする矩形を求める */
@@ -2175,10 +2175,10 @@ void CEditView::DrawSelectArea( void )
 		if( rcNew.bottom > m_nViewTopLine + m_nViewRowNum ){
 			rcNew.bottom = m_nViewTopLine + m_nViewRowNum;
 		}
-		rcNew.left   = (m_nViewAlignLeft - m_nViewLeftCol * ( m_nCharWidth + m_pShareData->m_Types[m_pcEditDoc->m_nSettingType].m_nColmSpace )) + rcNew.left  * ( m_nCharWidth + m_pShareData->m_Types[m_pcEditDoc->m_nSettingType].m_nColmSpace );
-		rcNew.right  = (m_nViewAlignLeft - m_nViewLeftCol * ( m_nCharWidth + m_pShareData->m_Types[m_pcEditDoc->m_nSettingType].m_nColmSpace )) + rcNew.right * ( m_nCharWidth + m_pShareData->m_Types[m_pcEditDoc->m_nSettingType].m_nColmSpace );
-		rcNew.top    = ( rcNew.top - m_nViewTopLine ) * ( m_nCharHeight + m_pShareData->m_Types[m_pcEditDoc->m_nSettingType].m_nLineSpace ) + m_nViewAlignTop;
-		rcNew.bottom = ( rcNew.bottom + 1 - m_nViewTopLine ) * ( m_nCharHeight + m_pShareData->m_Types[m_pcEditDoc->m_nSettingType].m_nLineSpace ) + m_nViewAlignTop;
+		rcNew.left   = (m_nViewAlignLeft - m_nViewLeftCol * ( m_nCharWidth + m_pcEditDoc->GetDocumentAttribute().m_nColmSpace )) + rcNew.left  * ( m_nCharWidth + m_pcEditDoc->GetDocumentAttribute().m_nColmSpace );
+		rcNew.right  = (m_nViewAlignLeft - m_nViewLeftCol * ( m_nCharWidth + m_pcEditDoc->GetDocumentAttribute().m_nColmSpace )) + rcNew.right * ( m_nCharWidth + m_pcEditDoc->GetDocumentAttribute().m_nColmSpace );
+		rcNew.top    = ( rcNew.top - m_nViewTopLine ) * ( m_nCharHeight + m_pcEditDoc->GetDocumentAttribute().m_nLineSpace ) + m_nViewAlignTop;
+		rcNew.bottom = ( rcNew.bottom + 1 - m_nViewTopLine ) * ( m_nCharHeight + m_pcEditDoc->GetDocumentAttribute().m_nLineSpace ) + m_nViewAlignTop;
 		hrgnNew = ::CreateRectRgnIndirect( &rcNew );
 
 		/* ::CombineRgn()の結果を受け取るために、適当なリージョンを作る */
@@ -2324,7 +2324,7 @@ void CEditView::DrawSelectAreaLine(
 			break;
 		}
 		if( pLine[i] == TAB ){
-			nCharChars = m_pShareData->m_Types[m_pcEditDoc->m_nSettingType].m_nTabSpace - ( nPosX % m_pShareData->m_Types[m_pcEditDoc->m_nSettingType].m_nTabSpace );
+			nCharChars = m_pcEditDoc->GetDocumentAttribute().m_nTabSpace - ( nPosX % m_pcEditDoc->GetDocumentAttribute().m_nTabSpace );
 			++i;
 		}else{
 			nCharChars = CMemory::MemCharNext( pLine, nLineLen, &pLine[i] ) - &pLine[i];
@@ -2358,10 +2358,10 @@ void CEditView::DrawSelectAreaLine(
 	if(	nSelectTo < m_nViewLeftCol ){
 		nSelectTo = m_nViewLeftCol;
 	}
-	rcClip.left   = (m_nViewAlignLeft - m_nViewLeftCol * ( m_nCharWidth + m_pShareData->m_Types[m_pcEditDoc->m_nSettingType].m_nColmSpace )) + nSelectFrom * ( m_nCharWidth + m_pShareData->m_Types[m_pcEditDoc->m_nSettingType].m_nColmSpace );
-	rcClip.right  = (m_nViewAlignLeft - m_nViewLeftCol * ( m_nCharWidth + m_pShareData->m_Types[m_pcEditDoc->m_nSettingType].m_nColmSpace )) + nSelectTo   * ( m_nCharWidth + m_pShareData->m_Types[m_pcEditDoc->m_nSettingType].m_nColmSpace );
-	rcClip.top    = ( nLineNum - m_nViewTopLine ) * ( m_nCharHeight + m_pShareData->m_Types[m_pcEditDoc->m_nSettingType].m_nLineSpace ) + m_nViewAlignTop;
-	rcClip.bottom = rcClip.top + m_nCharHeight + m_pShareData->m_Types[m_pcEditDoc->m_nSettingType].m_nLineSpace;
+	rcClip.left   = (m_nViewAlignLeft - m_nViewLeftCol * ( m_nCharWidth + m_pcEditDoc->GetDocumentAttribute().m_nColmSpace )) + nSelectFrom * ( m_nCharWidth + m_pcEditDoc->GetDocumentAttribute().m_nColmSpace );
+	rcClip.right  = (m_nViewAlignLeft - m_nViewLeftCol * ( m_nCharWidth + m_pcEditDoc->GetDocumentAttribute().m_nColmSpace )) + nSelectTo   * ( m_nCharWidth + m_pcEditDoc->GetDocumentAttribute().m_nColmSpace );
+	rcClip.top    = ( nLineNum - m_nViewTopLine ) * ( m_nCharHeight + m_pcEditDoc->GetDocumentAttribute().m_nLineSpace ) + m_nViewAlignTop;
+	rcClip.bottom = rcClip.top + m_nCharHeight + m_pcEditDoc->GetDocumentAttribute().m_nLineSpace;
 	if( rcClip.right - rcClip.left > 3000 ){
 		rcClip.right = rcClip.left + 3000;
 	}
@@ -2444,17 +2444,17 @@ void CEditView::SetFont( void )
 
 
 // 行の高さを2の倍数にする
-//	if( ( m_nCharHeight + m_pShareData->m_Types[m_pcEditDoc->m_nSettingType].m_nLineSpace ) % 2 ){
+//	if( ( m_nCharHeight + m_pcEditDoc->GetDocumentAttribute().m_nLineSpace ) % 2 ){
 //		++m_nCharHeight;
 //	}
 
-	m_nViewColNum = m_nViewCx / ( m_nCharWidth  + m_pShareData->m_Types[m_pcEditDoc->m_nSettingType].m_nColmSpace );		/* 表示域の桁数 */
-	m_nViewRowNum = m_nViewCy / ( m_nCharHeight + m_pShareData->m_Types[m_pcEditDoc->m_nSettingType].m_nLineSpace );	/* 表示域の行数 */
+	m_nViewColNum = m_nViewCx / ( m_nCharWidth  + m_pcEditDoc->GetDocumentAttribute().m_nColmSpace );		/* 表示域の桁数 */
+	m_nViewRowNum = m_nViewCy / ( m_nCharHeight + m_pcEditDoc->GetDocumentAttribute().m_nLineSpace );	/* 表示域の行数 */
 	/* 行番号表示に必要な幅を設定 */
 	DetectWidthOfLineNumberArea( FALSE );
 	/* 文字列描画用文字幅配列 */
 	for( i = 0; i < ( sizeof(m_pnDx) / sizeof(m_pnDx[0]) ); ++i ){
-		m_pnDx[i] = ( m_nCharWidth + m_pShareData->m_Types[m_pcEditDoc->m_nSettingType].m_nColmSpace );
+		m_pnDx[i] = ( m_nCharWidth + m_pcEditDoc->GetDocumentAttribute().m_nColmSpace );
 	}
 	::SelectObject( hdc, hFontOld );
 	::ReleaseDC( m_hWnd, hdc );
@@ -2475,7 +2475,7 @@ int CEditView::DetectWidthOfLineNumberArea_calculate( void )
 	int				i;
 	int				nAllLines;
 	int				nWork;
-	if( m_pShareData->m_Types[m_pcEditDoc->m_nSettingType].m_bLineNumIsCRLF ){	/* 行番号の表示 FALSE=折り返し単位／TRUE=改行単位 */
+	if( m_pcEditDoc->GetDocumentAttribute().m_bLineNumIsCRLF ){	/* 行番号の表示 FALSE=折り返し単位／TRUE=改行単位 */
 		nAllLines = m_pcEditDoc->m_cDocLineMgr.GetLineCount();
 	}else{
 		nAllLines = m_pcEditDoc->m_cLayoutMgr.GetLineCount();
@@ -2511,10 +2511,10 @@ BOOL CEditView::DetectWidthOfLineNumberArea( BOOL bRedraw )
 	int				nCxVScroll;
 	RECT			rc;
 
-	if( m_pShareData->m_Types[m_pcEditDoc->m_nSettingType].m_ColorInfoArr[COLORIDX_GYOU].m_bDisp ){
+	if( m_pcEditDoc->GetDocumentAttribute().m_ColorInfoArr[COLORIDX_GYOU].m_bDisp ){
 		/* 行番号表示に必要な桁数を計算 */
 		i = DetectWidthOfLineNumberArea_calculate();
-		m_nViewAlignLeftNew = ( m_nCharWidth + m_pShareData->m_Types[m_pcEditDoc->m_nSettingType].m_nColmSpace ) * (i + 1);		/* 表示域の左端座標 */
+		m_nViewAlignLeftNew = ( m_nCharWidth + m_pcEditDoc->GetDocumentAttribute().m_nColmSpace ) * (i + 1);		/* 表示域の左端座標 */
 		m_nViewAlignLeftCols = i + 1;
 	}else{
 		m_nViewAlignLeftNew = 8;
@@ -2586,7 +2586,7 @@ void CEditView::AdjustScrollBars( void )
 		si.fMask = SIF_ALL;
 
 //@@		::GetScrollInfo( m_hwndHScrollBar, SB_CTL, &si );
-//@@		if( si.nMax == m_pShareData->m_Types[m_pcEditDoc->m_nSettingType].m_nMaxLineSize - 1
+//@@		if( si.nMax == m_pcEditDoc->GetDocumentAttribute().m_nMaxLineSize - 1
 //@@		 && si.nPage == (UINT)m_nViewColNum
 //@@		 && si.nPos  == m_nViewLeftCol
 //@@	   /*&& si.nTrackPos == 1*/ ){
@@ -2595,7 +2595,7 @@ void CEditView::AdjustScrollBars( void )
 			si.cbSize = sizeof( si );
 			si.fMask = SIF_ALL;
 			si.nMin  = 0;
-			si.nMax  = m_pShareData->m_Types[m_pcEditDoc->m_nSettingType].m_nMaxLineSize - 1;	/* 折り返し文字数 */
+			si.nMax  = m_pcEditDoc->GetDocumentAttribute().m_nMaxLineSize - 1;	/* 折り返し文字数 */
 			si.nPage = m_nViewColNum;		/* 表示域の桁数 */
 			si.nPos  = m_nViewLeftCol;		/* 表示域の一番左の桁(0開始) */
 			si.nTrackPos = 1;
@@ -2659,7 +2659,7 @@ int CEditView::MoveCursor( int nWk_CaretPosX, int nWk_CaretPosY, BOOL bDraw, int
 	nScrollColNum = 0;
 	nScrollMarginRight = 4;
 	nScrollMarginLeft = 4;
-	if( m_pShareData->m_Types[m_pcEditDoc->m_nSettingType].m_nMaxLineSize > m_nViewColNum &&
+	if( m_pcEditDoc->GetDocumentAttribute().m_nMaxLineSize > m_nViewColNum &&
 		nWk_CaretPosX > m_nViewLeftCol + m_nViewColNum - nScrollMarginRight ){
 		nScrollColNum =
 			( m_nViewLeftCol + m_nViewColNum - nScrollMarginRight ) - nWk_CaretPosX;
@@ -2724,38 +2724,38 @@ int CEditView::MoveCursor( int nWk_CaretPosX, int nWk_CaretPosY, BOOL bDraw, int
 			if( nScrollRowNum > 0 ){
 				rcScrol.bottom =
 					m_nViewCy + m_nViewAlignTop -
-					nScrollRowNum * ( m_pShareData->m_Types[m_pcEditDoc->m_nSettingType].m_nLineSpace + m_nCharHeight );
+					nScrollRowNum * ( m_pcEditDoc->GetDocumentAttribute().m_nLineSpace + m_nCharHeight );
 				m_nViewTopLine -= nScrollRowNum;
 				rcClip.left = 0;
 				rcClip.right = m_nViewCx + m_nViewAlignLeft;
 				rcClip.top = m_nViewAlignTop;
 				rcClip.bottom =
-					m_nViewAlignTop + nScrollRowNum * ( m_pShareData->m_Types[m_pcEditDoc->m_nSettingType].m_nLineSpace + m_nCharHeight );
+					m_nViewAlignTop + nScrollRowNum * ( m_pcEditDoc->GetDocumentAttribute().m_nLineSpace + m_nCharHeight );
 			}else
 			if( nScrollRowNum < 0 ){
 				rcScrol.top =
-					m_nViewAlignTop - nScrollRowNum * ( m_pShareData->m_Types[m_pcEditDoc->m_nSettingType].m_nLineSpace + m_nCharHeight );
+					m_nViewAlignTop - nScrollRowNum * ( m_pcEditDoc->GetDocumentAttribute().m_nLineSpace + m_nCharHeight );
 				m_nViewTopLine -= nScrollRowNum;
 				rcClip.left = 0;
 				rcClip.right = m_nViewCx + m_nViewAlignLeft;
 				rcClip.top =
 					m_nViewCy + m_nViewAlignTop +
-					nScrollRowNum * ( m_pShareData->m_Types[m_pcEditDoc->m_nSettingType].m_nLineSpace + m_nCharHeight );
+					nScrollRowNum * ( m_pcEditDoc->GetDocumentAttribute().m_nLineSpace + m_nCharHeight );
 				rcClip.bottom = m_nViewCy + m_nViewAlignTop;
 			}
 			if( nScrollColNum > 0 ){
 				rcScrol.left = m_nViewAlignLeft;
 				rcScrol.right =
-					m_nViewCx + m_nViewAlignLeft - nScrollColNum * ( m_nCharWidth + m_pShareData->m_Types[m_pcEditDoc->m_nSettingType].m_nColmSpace );
+					m_nViewCx + m_nViewAlignLeft - nScrollColNum * ( m_nCharWidth + m_pcEditDoc->GetDocumentAttribute().m_nColmSpace );
 				rcClip2.left = m_nViewAlignLeft;
-				rcClip2.right = m_nViewAlignLeft + nScrollColNum * ( m_nCharWidth + m_pShareData->m_Types[m_pcEditDoc->m_nSettingType].m_nColmSpace );
+				rcClip2.right = m_nViewAlignLeft + nScrollColNum * ( m_nCharWidth + m_pcEditDoc->GetDocumentAttribute().m_nColmSpace );
 				rcClip2.top = m_nViewAlignTop;
 				rcClip2.bottom = m_nViewCy + m_nViewAlignTop;
 			}else
 			if( nScrollColNum < 0 ){
-				rcScrol.left = m_nViewAlignLeft - nScrollColNum * ( m_nCharWidth + m_pShareData->m_Types[m_pcEditDoc->m_nSettingType].m_nColmSpace );
+				rcScrol.left = m_nViewAlignLeft - nScrollColNum * ( m_nCharWidth + m_pcEditDoc->GetDocumentAttribute().m_nColmSpace );
 				rcClip2.left =
-					m_nViewCx + m_nViewAlignLeft + nScrollColNum * ( m_nCharWidth + m_pShareData->m_Types[m_pcEditDoc->m_nSettingType].m_nColmSpace );
+					m_nViewCx + m_nViewAlignLeft + nScrollColNum * ( m_nCharWidth + m_pcEditDoc->GetDocumentAttribute().m_nColmSpace );
 				rcClip2.right = m_nViewCx + m_nViewAlignLeft;
 				rcClip2.top = m_nViewAlignTop;
 				rcClip2.bottom = m_nViewCy + m_nViewAlignTop;
@@ -2763,15 +2763,15 @@ int CEditView::MoveCursor( int nWk_CaretPosX, int nWk_CaretPosY, BOOL bDraw, int
 			if( m_bDrawSWITCH ){
 //				::ScrollWindow(
 //					m_hWnd,	/* スクロールするウィンドウのハンドル */
-//					nScrollColNum * ( m_nCharWidth + m_pShareData->m_Types[m_pcEditDoc->m_nSettingType].m_nColmSpace ),	/* 水平スクロール量	*/
-//					nScrollRowNum * ( m_pShareData->m_Types[m_pcEditDoc->m_nSettingType].m_nLineSpace + m_nCharHeight ),	/* 垂直スクロール量 */
+//					nScrollColNum * ( m_nCharWidth + m_pcEditDoc->GetDocumentAttribute().m_nColmSpace ),	/* 水平スクロール量	*/
+//					nScrollRowNum * ( m_pcEditDoc->GetDocumentAttribute().m_nLineSpace + m_nCharHeight ),	/* 垂直スクロール量 */
 //					&rcScrol,	/* スクロール長方形の構造体のアドレス */
 //					NULL		/* クリッピング長方形の構造体のアドレス */
 //				);
 				::ScrollWindowEx( 
 					m_hWnd, 
-					nScrollColNum * ( m_nCharWidth + m_pShareData->m_Types[m_pcEditDoc->m_nSettingType].m_nColmSpace ),	/* 水平スクロール量	*/
-					nScrollRowNum * ( m_pShareData->m_Types[m_pcEditDoc->m_nSettingType].m_nLineSpace + m_nCharHeight ),	/* 垂直スクロール量 */
+					nScrollColNum * ( m_nCharWidth + m_pcEditDoc->GetDocumentAttribute().m_nColmSpace ),	/* 水平スクロール量	*/
+					nScrollRowNum * ( m_pcEditDoc->GetDocumentAttribute().m_nLineSpace + m_nCharHeight ),	/* 垂直スクロール量 */
 					&rcScrol,	/* スクロール長方形の構造体のアドレス */
 					NULL, NULL , NULL, SW_ERASE | SW_INVALIDATE 
 				);
@@ -2953,8 +2953,8 @@ int CEditView::MoveCursorToPoint( int xPos, int yPos )
 	int			nPosX;
 	int			nScrollRowNum = 0;
 	const CLayout*	pcLayout;
-	nNewX = m_nViewLeftCol + (xPos - m_nViewAlignLeft) / ( m_nCharWidth + m_pShareData->m_Types[m_pcEditDoc->m_nSettingType].m_nColmSpace );
-	nNewY = m_nViewTopLine + (yPos - m_nViewAlignTop) / ( m_nCharHeight + m_pShareData->m_Types[m_pcEditDoc->m_nSettingType].m_nLineSpace );
+	nNewX = m_nViewLeftCol + (xPos - m_nViewAlignLeft) / ( m_nCharWidth + m_pcEditDoc->GetDocumentAttribute().m_nColmSpace );
+	nNewY = m_nViewTopLine + (yPos - m_nViewAlignTop) / ( m_nCharHeight + m_pcEditDoc->GetDocumentAttribute().m_nLineSpace );
 	if( 0 > nNewY ){
 		nNewY = 0;
 	}
@@ -3003,7 +3003,7 @@ int CEditView::MoveCursorToPoint( int xPos, int yPos )
 				break;
 			}
 			if( pLine[i] == TAB ){
-				nCharChars = m_pShareData->m_Types[m_pcEditDoc->m_nSettingType].m_nTabSpace - ( nPosX % m_pShareData->m_Types[m_pcEditDoc->m_nSettingType].m_nTabSpace );
+				nCharChars = m_pcEditDoc->GetDocumentAttribute().m_nTabSpace - ( nPosX % m_pcEditDoc->GetDocumentAttribute().m_nTabSpace );
 				if( nPosX + nCharChars > nNewX ){
 					break;
 				}
@@ -3034,8 +3034,8 @@ int CEditView::MoveCursorToPoint( int xPos, int yPos )
 					if( nPosX < 0 ){
 						nPosX = 0;
 					}else
-					if( nPosX > m_pShareData->m_Types[m_pcEditDoc->m_nSettingType].m_nMaxLineSize ){	/* 折り返し文字数 */
-						nPosX = m_pShareData->m_Types[m_pcEditDoc->m_nSettingType].m_nMaxLineSize;
+					if( nPosX > m_pcEditDoc->GetDocumentAttribute().m_nMaxLineSize ){	/* 折り返し文字数 */
+						nPosX = m_pcEditDoc->GetDocumentAttribute().m_nMaxLineSize;
 					}
 				}
 			}
@@ -3082,14 +3082,14 @@ void CEditView::OnLBUTTONDOWN( WPARAM fwKeys, int xPos , int yPos )
 	nCaretPosY_Old = m_nCaretPosY;
 	
 	/* 現在のマウスカーソル位置→レイアウト位置 */
-	int nNewX = m_nViewLeftCol + (xPos - m_nViewAlignLeft) / ( m_nCharWidth + m_pShareData->m_Types[m_pcEditDoc->m_nSettingType].m_nColmSpace );
-	int nNewY = m_nViewTopLine + (yPos - m_nViewAlignTop) / ( m_nCharHeight + m_pShareData->m_Types[m_pcEditDoc->m_nSettingType].m_nLineSpace );
+	int nNewX = m_nViewLeftCol + (xPos - m_nViewAlignLeft) / ( m_nCharWidth + m_pcEditDoc->GetDocumentAttribute().m_nColmSpace );
+	int nNewY = m_nViewTopLine + (yPos - m_nViewAlignTop) / ( m_nCharHeight + m_pcEditDoc->GetDocumentAttribute().m_nLineSpace );
 //	MYTRACE( "OnLBUTTONDOWN() nNewX=%d nNewY=%d\n", nNewX, nNewY );
 
 	if( TRUE == m_pShareData->m_Common.m_bUseOLE_DragDrop ){	/* OLEによるDrag&Dropを使う */
 		if( m_pShareData->m_Common.m_bUseOLE_DropSource ){	/* OLEによるDrag元にするか */
 			/* 行選択エリアをドラッグした */
-			if( xPos < m_nViewAlignLeft - ( m_nCharWidth + m_pShareData->m_Types[m_pcEditDoc->m_nSettingType].m_nColmSpace ) ){
+			if( xPos < m_nViewAlignLeft - ( m_nCharWidth + m_pcEditDoc->GetDocumentAttribute().m_nColmSpace ) ){
 				goto normal_action;
 			}
 			/* 指定カーソル位置が選択エリア内にあるか */
@@ -3131,7 +3131,7 @@ normal_action:;
 				MoveCursorToPoint( xPos, yPos );
 			}else
 			if( xPos < m_nViewAlignLeft ){
-				MoveCursorToPoint( m_nViewAlignLeft - m_nViewLeftCol * ( m_nCharWidth + m_pShareData->m_Types[m_pcEditDoc->m_nSettingType].m_nColmSpace ), yPos );
+				MoveCursorToPoint( m_nViewAlignLeft - m_nViewLeftCol * ( m_nCharWidth + m_pcEditDoc->GetDocumentAttribute().m_nColmSpace ), yPos );
 			}else{
 				return;
 			}
@@ -3205,7 +3205,7 @@ normal_action:;
 					MoveCursorToPoint( xPos, yPos );
 				}else
 				if( xPos < m_nViewAlignLeft ){
-					MoveCursorToPoint( m_nViewAlignLeft - m_nViewLeftCol * ( m_nCharWidth + m_pShareData->m_Types[m_pcEditDoc->m_nSettingType].m_nColmSpace ), yPos );
+					MoveCursorToPoint( m_nViewAlignLeft - m_nViewLeftCol * ( m_nCharWidth + m_pcEditDoc->GetDocumentAttribute().m_nColmSpace ), yPos );
 				}
 			}
 		}else{
@@ -3219,7 +3219,7 @@ normal_action:;
 					MoveCursorToPoint( xPos, yPos );
 				}else
 				if( xPos < m_nViewAlignLeft ){
-					MoveCursorToPoint( m_nViewAlignLeft - m_nViewLeftCol * ( m_nCharWidth + m_pShareData->m_Types[m_pcEditDoc->m_nSettingType].m_nColmSpace ), yPos );
+					MoveCursorToPoint( m_nViewAlignLeft - m_nViewLeftCol * ( m_nCharWidth + m_pcEditDoc->GetDocumentAttribute().m_nColmSpace ), yPos );
 				}
 			}
 			/* 現在のカーソル位置から選択を開始する */
@@ -3497,8 +3497,8 @@ BOOL CEditView::IsCurrentPositionURL(
 void CEditView::OnRBUTTONDOWN( WPARAM fwKeys, int xPos , int yPos )
 {
 	/* 現在のマウスカーソル位置→レイアウト位置 */
-	int nNewX = m_nViewLeftCol + (xPos - m_nViewAlignLeft) / ( m_nCharWidth + m_pShareData->m_Types[m_pcEditDoc->m_nSettingType].m_nColmSpace );
-	int nNewY = m_nViewTopLine + (yPos - m_nViewAlignTop) / ( m_nCharHeight + m_pShareData->m_Types[m_pcEditDoc->m_nSettingType].m_nLineSpace );
+	int nNewX = m_nViewLeftCol + (xPos - m_nViewAlignLeft) / ( m_nCharWidth + m_pcEditDoc->GetDocumentAttribute().m_nColmSpace );
+	int nNewY = m_nViewTopLine + (yPos - m_nViewAlignTop) / ( m_nCharHeight + m_pcEditDoc->GetDocumentAttribute().m_nLineSpace );
 	/* 指定カーソル位置が選択エリア内にあるか */
 	if( 0 == IsCurrentPositionSelected( 
 		nNewX,		// カーソル位置X
@@ -3666,7 +3666,7 @@ VOID CEditView::OnTimer(
 //		rc.top += m_nViewAlignTop;
 		RECT rc2;
 		rc2 = rc;
-		rc2.bottom = rc.top + m_nViewAlignTop + ( m_pShareData->m_Types[m_pcEditDoc->m_nSettingType].m_nLineSpace + m_nCharHeight );
+		rc2.bottom = rc.top + m_nViewAlignTop + ( m_pcEditDoc->GetDocumentAttribute().m_nLineSpace + m_nCharHeight );
 		if( PtInRect( &rc2, po ) 
 		 && 0 < m_nViewTopLine
 		){
@@ -3674,7 +3674,7 @@ VOID CEditView::OnTimer(
 			return;
 		}
 		rc2 = rc;
-		rc2.top = rc.bottom - ( m_pShareData->m_Types[m_pcEditDoc->m_nSettingType].m_nLineSpace + m_nCharHeight );
+		rc2.top = rc.bottom - ( m_pcEditDoc->GetDocumentAttribute().m_nLineSpace + m_nCharHeight );
 		if( PtInRect( &rc2, po ) 
 			&& m_pcEditDoc->m_cLayoutMgr.GetLineCount() > m_nViewTopLine + m_nViewRowNum
 		){
@@ -3749,8 +3749,8 @@ void CEditView::OnMOUSEMOVE( WPARAM fwKeys, int xPos , int yPos )
 			m_dwTipTimer = ::GetTickCount();	/* 辞書Tip起動タイマー */
 		}
 		/* 現在のマウスカーソル位置→レイアウト位置 */
-		int nNewX = m_nViewLeftCol + (xPos - m_nViewAlignLeft) / ( m_nCharWidth + m_pShareData->m_Types[m_pcEditDoc->m_nSettingType].m_nColmSpace );
-		int nNewY = m_nViewTopLine + (yPos - m_nViewAlignTop) / ( m_nCharHeight + m_pShareData->m_Types[m_pcEditDoc->m_nSettingType].m_nLineSpace );
+		int nNewX = m_nViewLeftCol + (xPos - m_nViewAlignLeft) / ( m_nCharWidth + m_pcEditDoc->GetDocumentAttribute().m_nColmSpace );
+		int nNewY = m_nViewTopLine + (yPos - m_nViewAlignTop) / ( m_nCharHeight + m_pcEditDoc->GetDocumentAttribute().m_nLineSpace );
 		int			nUrlLine;	// URLの行(折り返し単位)
 		int			nUrlIdxBgn;	// URLの位置(行頭からのバイト位置)
 		int			nUrlLen;	// URLの長さ(バイト数)
@@ -3808,7 +3808,7 @@ void CEditView::OnMOUSEMOVE( WPARAM fwKeys, int xPos , int yPos )
 	}else{
 		/* 座標指定によるカーソル移動 */
 		if( xPos < m_nViewAlignLeft && m_bBeginLineSelect ){
-			nScrollRowNum = MoveCursorToPoint( m_nViewAlignLeft - m_nViewLeftCol * ( m_nCharWidth + m_pShareData->m_Types[m_pcEditDoc->m_nSettingType].m_nColmSpace ) , yPos + ( m_nCharHeight + m_pShareData->m_Types[m_pcEditDoc->m_nSettingType].m_nLineSpace ) );
+			nScrollRowNum = MoveCursorToPoint( m_nViewAlignLeft - m_nViewLeftCol * ( m_nCharWidth + m_pcEditDoc->GetDocumentAttribute().m_nColmSpace ) , yPos + ( m_nCharHeight + m_pcEditDoc->GetDocumentAttribute().m_nLineSpace ) );
 		}else{
 			nScrollRowNum = MoveCursorToPoint( xPos , yPos );
 		}
@@ -4032,15 +4032,15 @@ void CEditView::DisableSelectArea( BOOL bDraw )
 	m_bBeginWordSelect = FALSE;		/* 単語単位選択中 */
 
 
-//	if( m_pShareData->m_Types[m_pcEditDoc->m_nSettingType].m_ColorInfoArr[COLORIDX_UNDERLINE].m_bDisp ){
+//	if( m_pcEditDoc->GetDocumentAttribute().m_ColorInfoArr[COLORIDX_UNDERLINE].m_bDisp ){
 //		/* カーソル行アンダーラインの描画 */
 //		HDC		hdc;
 //		HPEN	hPen;
 //		HPEN	hPenOld;
 //		hdc = ::GetDC( m_hWnd );
-//		hPen = ::CreatePen( PS_SOLID, 0, m_pShareData->m_Types[m_pcEditDoc->m_nSettingType].m_ColorInfoArr[COLORIDX_UNDERLINE].m_colTEXT );
+//		hPen = ::CreatePen( PS_SOLID, 0, m_pcEditDoc->GetDocumentAttribute().m_ColorInfoArr[COLORIDX_UNDERLINE].m_colTEXT );
 //		hPenOld = (HPEN)::SelectObject( hdc, hPen ); 
-//		m_nOldUnderLineY = m_nViewAlignTop  + (m_nCaretPosY - m_nViewTopLine) * ( m_pShareData->m_Types[m_pcEditDoc->m_nSettingType].m_nLineSpace + m_nCharHeight ) + m_nCharHeight;
+//		m_nOldUnderLineY = m_nViewAlignTop  + (m_nCaretPosY - m_nViewTopLine) * ( m_pcEditDoc->GetDocumentAttribute().m_nLineSpace + m_nCharHeight ) + m_nCharHeight;
 //		::MoveToEx( 
 //			hdc, 
 //			m_nViewAlignLeft, 
@@ -4366,7 +4366,7 @@ int CEditView::Cursor_UPDOWN( int nMoveLines, int bSelect )
 				/* 改行で終わっているか */
 				if( ( EOL_NONE != pcLayout->m_cEol.GetLen() ) 
 //				if( ( pLine[ nLineLen - 1 ] == '\n' || pLine[ nLineLen - 1 ] == '\r' )
-				 || nLineCols >= m_pShareData->m_Types[m_pcEditDoc->m_nSettingType].m_nMaxLineSize
+				 || nLineCols >= m_pcEditDoc->GetDocumentAttribute().m_nMaxLineSize
 				){
 					if( bSelect ){
 						if( !IsTextSelected() ){	/* テキストが選択されているか */
@@ -4424,7 +4424,7 @@ int CEditView::Cursor_UPDOWN( int nMoveLines, int bSelect )
 			break;
 		}
 		if( pLine[i] == TAB ){
-			nCharChars = m_pShareData->m_Types[m_pcEditDoc->m_nSettingType].m_nTabSpace - ( nPosX % m_pShareData->m_Types[m_pcEditDoc->m_nSettingType].m_nTabSpace );
+			nCharChars = m_pcEditDoc->GetDocumentAttribute().m_nTabSpace - ( nPosX % m_pcEditDoc->GetDocumentAttribute().m_nTabSpace );
 			if( nPosX + nCharChars > m_nCaretPosX_Prev ){
 				break;
 			}
@@ -4459,12 +4459,12 @@ int CEditView::Cursor_UPDOWN( int nMoveLines, int bSelect )
 	}
 	nScrollLines = MoveCursor( nPosX, m_nCaretPosY + nMoveLines, TRUE );
 	if( bSelect ){
-//		if( m_pShareData->m_Types[m_pcEditDoc->m_nSettingType].m_ColorInfoArr[COLORIDX_UNDERLINE].m_bDisp && !IsTextSelected() && -1 != m_nOldUnderLineY ){
+//		if( m_pcEditDoc->GetDocumentAttribute().m_ColorInfoArr[COLORIDX_UNDERLINE].m_bDisp && !IsTextSelected() && -1 != m_nOldUnderLineY ){
 //			HDC			hdc;
 //			HPEN		hPen, hPenOld;
 //			hdc = ::GetDC( m_hWnd );
 //			/* カーソル行アンダーラインの消去 */
-//			hPen = ::CreatePen( PS_SOLID, 0, m_pShareData->m_Types[m_pcEditDoc->m_nSettingType].m_ColorInfoArr[COLORIDX_TEXT].m_colBACK );
+//			hPen = ::CreatePen( PS_SOLID, 0, m_pcEditDoc->GetDocumentAttribute().m_ColorInfoArr[COLORIDX_TEXT].m_colBACK );
 //			hPenOld = (HPEN)::SelectObject( hdc, hPen ); 
 //			::MoveToEx( 
 //				hdc, 
@@ -4535,38 +4535,38 @@ void CEditView::ScrollAtV( int nPos )
 		if( nScrollRowNum > 0 ){
 			rcScrol.bottom =
 				m_nViewCy + m_nViewAlignTop -
-				nScrollRowNum * ( m_pShareData->m_Types[m_pcEditDoc->m_nSettingType].m_nLineSpace + m_nCharHeight );
+				nScrollRowNum * ( m_pcEditDoc->GetDocumentAttribute().m_nLineSpace + m_nCharHeight );
 			m_nViewTopLine = nPos;
 			rcClip.left = 0;
 			rcClip.right = m_nViewCx + m_nViewAlignLeft;
 			rcClip.top = m_nViewAlignTop;
 			rcClip.bottom =
-				m_nViewAlignTop + nScrollRowNum * ( m_pShareData->m_Types[m_pcEditDoc->m_nSettingType].m_nLineSpace + m_nCharHeight );
+				m_nViewAlignTop + nScrollRowNum * ( m_pcEditDoc->GetDocumentAttribute().m_nLineSpace + m_nCharHeight );
 		}else
 		if( nScrollRowNum < 0 ){
 			rcScrol.top =
-				m_nViewAlignTop - nScrollRowNum * ( m_pShareData->m_Types[m_pcEditDoc->m_nSettingType].m_nLineSpace + m_nCharHeight );
+				m_nViewAlignTop - nScrollRowNum * ( m_pcEditDoc->GetDocumentAttribute().m_nLineSpace + m_nCharHeight );
 			m_nViewTopLine = nPos;
 			rcClip.left = 0;
 			rcClip.right = m_nViewCx + m_nViewAlignLeft;
 			rcClip.top =
 				m_nViewCy + m_nViewAlignTop +
-				nScrollRowNum * ( m_pShareData->m_Types[m_pcEditDoc->m_nSettingType].m_nLineSpace + m_nCharHeight );
+				nScrollRowNum * ( m_pcEditDoc->GetDocumentAttribute().m_nLineSpace + m_nCharHeight );
 			rcClip.bottom = m_nViewCy + m_nViewAlignTop;
 		}
 //		if( nScrollColNum > 0 ){
 //			rcScrol.left = m_nViewAlignLeft;
 //			rcScrol.right =
-//				m_nViewCx + m_nViewAlignLeft - nScrollColNum * ( m_nCharWidth + m_pShareData->m_Types[m_pcEditDoc->m_nSettingType].m_nColmSpace );
+//				m_nViewCx + m_nViewAlignLeft - nScrollColNum * ( m_nCharWidth + m_pcEditDoc->GetDocumentAttribute().m_nColmSpace );
 //			rcClip2.left = m_nViewAlignLeft;
-//			rcClip2.right = m_nViewAlignLeft + nScrollColNum * ( m_nCharWidth + m_pShareData->m_Types[m_pcEditDoc->m_nSettingType].m_nColmSpace );
+//			rcClip2.right = m_nViewAlignLeft + nScrollColNum * ( m_nCharWidth + m_pcEditDoc->GetDocumentAttribute().m_nColmSpace );
 //			rcClip2.top = m_nViewAlignTop;
 //			rcClip2.bottom = m_nViewCy + m_nViewAlignTop;
 //		}else
 //		if( nScrollColNum < 0 ){
-//			rcScrol.left = m_nViewAlignLeft - nScrollColNum * ( m_nCharWidth + m_pShareData->m_Types[m_pcEditDoc->m_nSettingType].m_nColmSpace );
+//			rcScrol.left = m_nViewAlignLeft - nScrollColNum * ( m_nCharWidth + m_pcEditDoc->GetDocumentAttribute().m_nColmSpace );
 //			rcClip2.left =
-//				m_nViewCx + m_nViewAlignLeft + nScrollColNum * ( m_nCharWidth + m_pShareData->m_Types[m_pcEditDoc->m_nSettingType].m_nColmSpace );
+//				m_nViewCx + m_nViewAlignLeft + nScrollColNum * ( m_nCharWidth + m_pcEditDoc->GetDocumentAttribute().m_nColmSpace );
 //			rcClip2.right = m_nViewCx + m_nViewAlignLeft;
 //			rcClip2.top = m_nViewAlignTop;
 //			rcClip2.bottom = m_nViewCy + m_nViewAlignTop;
@@ -4574,15 +4574,15 @@ void CEditView::ScrollAtV( int nPos )
 		if( m_bDrawSWITCH ){
 //			::ScrollWindow(
 //				m_hWnd,	/* スクロールするウィンドウのハンドル */
-//				0/*nScrollColNum * ( m_nCharWidth + m_pShareData->m_Types[m_pcEditDoc->m_nSettingType].m_nColmSpace )*/,	/* 水平スクロール量	*/
-//				nScrollRowNum * ( m_pShareData->m_Types[m_pcEditDoc->m_nSettingType].m_nLineSpace + m_nCharHeight ),	/* 垂直スクロール量 */
+//				0/*nScrollColNum * ( m_nCharWidth + m_pcEditDoc->GetDocumentAttribute().m_nColmSpace )*/,	/* 水平スクロール量	*/
+//				nScrollRowNum * ( m_pcEditDoc->GetDocumentAttribute().m_nLineSpace + m_nCharHeight ),	/* 垂直スクロール量 */
 //				&rcScrol,	/* スクロール長方形の構造体のアドレス */
 //				NULL		/* クリッピング長方形の構造体のアドレス */
 //			);
 			::ScrollWindowEx( 
 				m_hWnd, 
 				0,	/* 水平スクロール量	*/
-				nScrollRowNum * ( m_pShareData->m_Types[m_pcEditDoc->m_nSettingType].m_nLineSpace + m_nCharHeight ),	/* 垂直スクロール量 */
+				nScrollRowNum * ( m_pcEditDoc->GetDocumentAttribute().m_nLineSpace + m_nCharHeight ),	/* 垂直スクロール量 */
 				&rcScrol,	/* スクロール長方形の構造体のアドレス */
 				NULL, NULL , NULL, SW_ERASE | SW_INVALIDATE 
 			);
@@ -4625,8 +4625,8 @@ void CEditView::ScrollAtH( int nPos )
 	if( nPos < 0 ){
 		nPos = 0;
 	}else
-	if( m_pShareData->m_Types[m_pcEditDoc->m_nSettingType].m_nMaxLineSize - m_nViewRowNum < nPos ){
-		nPos = m_pShareData->m_Types[m_pcEditDoc->m_nSettingType].m_nMaxLineSize - m_nViewRowNum;
+	if( m_pcEditDoc->GetDocumentAttribute().m_nMaxLineSize - m_nViewRowNum < nPos ){
+		nPos = m_pcEditDoc->GetDocumentAttribute().m_nMaxLineSize - m_nViewRowNum;
 	}
 	if( m_nViewLeftCol == nPos ){
 		return;
@@ -4659,38 +4659,38 @@ void CEditView::ScrollAtH( int nPos )
 //		if( nScrollRowNum > 0 ){
 //			rcScrol.bottom =
 //				m_nViewCy + m_nViewAlignTop -
-//				nScrollRowNum * ( m_pShareData->m_Types[m_pcEditDoc->m_nSettingType].m_nLineSpace + m_nCharHeight );
+//				nScrollRowNum * ( m_pcEditDoc->GetDocumentAttribute().m_nLineSpace + m_nCharHeight );
 //			m_nViewTopLine -= nScrollRowNum;
 //			rcClip.left = 0;
 //			rcClip.right = m_nViewCx + m_nViewAlignLeft;
 //			rcClip.top = m_nViewAlignTop;
 //			rcClip.bottom =
-//				m_nViewAlignTop + nScrollRowNum * ( m_pShareData->m_Types[m_pcEditDoc->m_nSettingType].m_nLineSpace + m_nCharHeight );
+//				m_nViewAlignTop + nScrollRowNum * ( m_pcEditDoc->GetDocumentAttribute().m_nLineSpace + m_nCharHeight );
 //		}else
 //		if( nScrollRowNum < 0 ){
 //			rcScrol.top =
-//				m_nViewAlignTop - nScrollRowNum * ( m_pShareData->m_Types[m_pcEditDoc->m_nSettingType].m_nLineSpace + m_nCharHeight );
+//				m_nViewAlignTop - nScrollRowNum * ( m_pcEditDoc->GetDocumentAttribute().m_nLineSpace + m_nCharHeight );
 //			m_nViewTopLine -= nScrollRowNum;
 //			rcClip.left = 0;
 //			rcClip.right = m_nViewCx + m_nViewAlignLeft;
 //			rcClip.top =
 //				m_nViewCy + m_nViewAlignTop +
-//				nScrollRowNum * ( m_pShareData->m_Types[m_pcEditDoc->m_nSettingType].m_nLineSpace + m_nCharHeight );
+//				nScrollRowNum * ( m_pcEditDoc->GetDocumentAttribute().m_nLineSpace + m_nCharHeight );
 //			rcClip.bottom = m_nViewCy + m_nViewAlignTop;
 //		}
 		if( nScrollColNum > 0 ){
 			rcScrol.left = m_nViewAlignLeft;
 			rcScrol.right =
-				m_nViewCx + m_nViewAlignLeft - nScrollColNum * ( m_nCharWidth + m_pShareData->m_Types[m_pcEditDoc->m_nSettingType].m_nColmSpace );
+				m_nViewCx + m_nViewAlignLeft - nScrollColNum * ( m_nCharWidth + m_pcEditDoc->GetDocumentAttribute().m_nColmSpace );
 			rcClip2.left = m_nViewAlignLeft;
-			rcClip2.right = m_nViewAlignLeft + nScrollColNum * ( m_nCharWidth + m_pShareData->m_Types[m_pcEditDoc->m_nSettingType].m_nColmSpace );
+			rcClip2.right = m_nViewAlignLeft + nScrollColNum * ( m_nCharWidth + m_pcEditDoc->GetDocumentAttribute().m_nColmSpace );
 			rcClip2.top = m_nViewAlignTop;
 			rcClip2.bottom = m_nViewCy + m_nViewAlignTop;
 		}else
 		if( nScrollColNum < 0 ){
-			rcScrol.left = m_nViewAlignLeft - nScrollColNum * ( m_nCharWidth + m_pShareData->m_Types[m_pcEditDoc->m_nSettingType].m_nColmSpace );
+			rcScrol.left = m_nViewAlignLeft - nScrollColNum * ( m_nCharWidth + m_pcEditDoc->GetDocumentAttribute().m_nColmSpace );
 			rcClip2.left =
-				m_nViewCx + m_nViewAlignLeft + nScrollColNum * ( m_nCharWidth + m_pShareData->m_Types[m_pcEditDoc->m_nSettingType].m_nColmSpace );
+				m_nViewCx + m_nViewAlignLeft + nScrollColNum * ( m_nCharWidth + m_pcEditDoc->GetDocumentAttribute().m_nColmSpace );
 			rcClip2.right = m_nViewCx + m_nViewAlignLeft;
 			rcClip2.top = m_nViewAlignTop;
 			rcClip2.bottom = m_nViewCy + m_nViewAlignTop;
@@ -4699,14 +4699,14 @@ void CEditView::ScrollAtH( int nPos )
 		if( m_bDrawSWITCH ){
 //			::ScrollWindow(
 //				m_hWnd,	/* スクロールするウィンドウのハンドル */
-//				nScrollColNum * ( m_nCharWidth + m_pShareData->m_Types[m_pcEditDoc->m_nSettingType].m_nColmSpace ),	/* 水平スクロール量	*/
-//				0/*nScrollRowNum * ( m_pShareData->m_Types[m_pcEditDoc->m_nSettingType].m_nLineSpace + m_nCharHeight )*/,	/* 垂直スクロール量 */
+//				nScrollColNum * ( m_nCharWidth + m_pcEditDoc->GetDocumentAttribute().m_nColmSpace ),	/* 水平スクロール量	*/
+//				0/*nScrollRowNum * ( m_pcEditDoc->GetDocumentAttribute().m_nLineSpace + m_nCharHeight )*/,	/* 垂直スクロール量 */
 //				&rcScrol,	/* スクロール長方形の構造体のアドレス */
 //				NULL		/* クリッピング長方形の構造体のアドレス */
 //			);
 			::ScrollWindowEx( 
 				m_hWnd, 
-				nScrollColNum * ( m_nCharWidth + m_pShareData->m_Types[m_pcEditDoc->m_nSettingType].m_nColmSpace ),	/* 水平スクロール量	*/
+				nScrollColNum * ( m_nCharWidth + m_pcEditDoc->GetDocumentAttribute().m_nColmSpace ),	/* 水平スクロール量	*/
 				0,	/* 垂直スクロール量 */
 				&rcScrol,	/* スクロール長方形の構造体のアドレス */
 				NULL, NULL , NULL, SW_ERASE | SW_INVALIDATE 
@@ -5285,9 +5285,7 @@ void CEditView::ConvMemory( CMemory* pCMemory, int nFuncCode )
 	case F_CODECNV_AUTO2SJIS:  pCMemory->AUTOToSJIS();break;	/* 自動判別→SJISコード変換 */
 	case F_TABTOSPACE:
 		pCMemory->TABToSPACE( 
-			m_pShareData->m_Types[
-				m_pcEditDoc->m_nSettingType
-			].m_nTabSpace 
+			m_pcEditDoc->GetDocumentAttribute().m_nTabSpace 
 		);break;	/* TAB→空白 */
 
 	}
@@ -5314,7 +5312,7 @@ int CEditView::LineColmnToIndex( const char* pLine, int nLineLen, int nColmn )
 //	*pnLineAllColLen = 0;
 	for( i = 0; i < nLineLen; ){
 		if( pLine[i] == TAB ){
-			nCharChars = m_pShareData->m_Types[m_pcEditDoc->m_nSettingType].m_nTabSpace - ( nPosX % m_pShareData->m_Types[m_pcEditDoc->m_nSettingType].m_nTabSpace );
+			nCharChars = m_pcEditDoc->GetDocumentAttribute().m_nTabSpace - ( nPosX % m_pcEditDoc->GetDocumentAttribute().m_nTabSpace );
 			if( nPosX + nCharChars > nColmn ){
 				break;
 			}
@@ -5361,7 +5359,7 @@ int CEditView::LineColmnToIndex2( const char* pLine, int nLineLen, int nColmn, i
 //			bEOL = TRUE;
 //		}
 		if( pLine[i] == TAB ){
-			nCharChars = m_pShareData->m_Types[m_pcEditDoc->m_nSettingType].m_nTabSpace - ( nPosX % m_pShareData->m_Types[m_pcEditDoc->m_nSettingType].m_nTabSpace );
+			nCharChars = m_pcEditDoc->GetDocumentAttribute().m_nTabSpace - ( nPosX % m_pcEditDoc->GetDocumentAttribute().m_nTabSpace );
 			if( nPosX + nCharChars > nColmn ){
 				break;
 			}
@@ -5403,7 +5401,7 @@ int CEditView::LineIndexToColmn( const char* pLine, int nLineLen, int nIndex )
 			break;
 		}
 		if( pLine[i] == TAB ){
-			nCharChars = m_pShareData->m_Types[m_pcEditDoc->m_nSettingType].m_nTabSpace - ( nPosX % m_pShareData->m_Types[m_pcEditDoc->m_nSettingType].m_nTabSpace );
+			nCharChars = m_pcEditDoc->GetDocumentAttribute().m_nTabSpace - ( nPosX % m_pcEditDoc->GetDocumentAttribute().m_nTabSpace );
 			++i;
 		}else{
 			nCharChars = CMemory::MemCharNext( pLine, nLineLen, &pLine[i] ) - &pLine[i];
@@ -5805,7 +5803,7 @@ void CEditView::OnChangeSetting( void )
 	m_nViewAlignTop = m_nTopYohaku;		/* 表示域の上端座標 */
 	/* ルーラー表示 */
 //	if( m_pShareData->m_Common.m_bRulerDisp ){
-	if( m_pShareData->m_Types[m_pcEditDoc->m_nSettingType].m_ColorInfoArr[COLORIDX_RULER].m_bDisp ){
+	if( m_pcEditDoc->GetDocumentAttribute().m_ColorInfoArr[COLORIDX_RULER].m_bDisp ){
 		m_nViewAlignTop += m_pShareData->m_Common.m_nRulerHeight;	/* ルーラー高さ */
 	}
 
@@ -6204,7 +6202,7 @@ DWORD CEditView::DoGrep(
 	if( 0 < lstrlen( szKey ) ){
 		CMemory cmemWork2;
 		cmemWork2.SetDataSz( szKey );
-		if(	m_pShareData->m_Types[m_pcEditDoc->m_nSettingType].m_nStringType == 0 ){	/* 文字列区切り記号エスケープ方法　0=[\"][\'] 1=[""][''] */
+		if(	m_pcEditDoc->GetDocumentAttribute().m_nStringType == 0 ){	/* 文字列区切り記号エスケープ方法　0=[\"][\'] 1=[""][''] */
 			cmemWork2.Replace( "\\", "\\\\" );
 			cmemWork2.Replace( "\'", "\\\'" );
 			cmemWork2.Replace( "\"", "\\\"" );
@@ -6224,7 +6222,7 @@ DWORD CEditView::DoGrep(
 
 	cmemMessage.AppendSz( "検索対象   " );
 	cmemWork.SetDataSz( szFile );
-	if(	m_pShareData->m_Types[m_pcEditDoc->m_nSettingType].m_nStringType == 0 ){	/* 文字列区切り記号エスケープ方法　0=[\"][\'] 1=[""][''] */
+	if(	m_pcEditDoc->GetDocumentAttribute().m_nStringType == 0 ){	/* 文字列区切り記号エスケープ方法　0=[\"][\'] 1=[""][''] */
 	}else{
 	}
 	cmemMessage += cmemWork;
@@ -6235,7 +6233,7 @@ DWORD CEditView::DoGrep(
 	cmemMessage.AppendSz( "\r\n" );
 	cmemMessage.AppendSz( "フォルダ   " );
 	cmemWork.SetDataSz( szPath );
-	if(	m_pShareData->m_Types[m_pcEditDoc->m_nSettingType].m_nStringType == 0 ){	/* 文字列区切り記号エスケープ方法　0=[\"][\'] 1=[""][''] */
+	if(	m_pcEditDoc->GetDocumentAttribute().m_nStringType == 0 ){	/* 文字列区切り記号エスケープ方法　0=[\"][\'] 1=[""][''] */
 	}else{
 	}
 	cmemMessage += cmemWork;
@@ -7760,14 +7758,14 @@ void CEditView::GetCurrentTextForSearch( CMemory& cmemCurText )
 /* カーソル行アンダーラインのON */
 void CEditView::CaretUnderLineON( BOOL bDraw )
 {
-	if( FALSE == m_pShareData->m_Types[m_pcEditDoc->m_nSettingType].m_ColorInfoArr[COLORIDX_UNDERLINE].m_bDisp ){
+	if( FALSE == m_pcEditDoc->GetDocumentAttribute().m_ColorInfoArr[COLORIDX_UNDERLINE].m_bDisp ){
 		return;
 	}
 
 	if( IsTextSelected() ){	/* テキストが選択されているか */
 		return;
 	}
-	m_nOldUnderLineY = m_nViewAlignTop  + (m_nCaretPosY - m_nViewTopLine) * ( m_pShareData->m_Types[m_pcEditDoc->m_nSettingType].m_nLineSpace + m_nCharHeight ) + m_nCharHeight;
+	m_nOldUnderLineY = m_nViewAlignTop  + (m_nCaretPosY - m_nViewTopLine) * ( m_pcEditDoc->GetDocumentAttribute().m_nLineSpace + m_nCharHeight ) + m_nCharHeight;
 	if( -1 == m_nOldUnderLineY ){
 		m_nOldUnderLineY = -2;		
 	}
@@ -7782,7 +7780,7 @@ void CEditView::CaretUnderLineON( BOOL bDraw )
 		HDC		hdc;
 		HPEN	hPen, hPenOld;
 		hdc = ::GetDC( m_hWnd );
-		hPen = ::CreatePen( PS_SOLID, 0, m_pShareData->m_Types[m_pcEditDoc->m_nSettingType].m_ColorInfoArr[COLORIDX_UNDERLINE].m_colTEXT );
+		hPen = ::CreatePen( PS_SOLID, 0, m_pcEditDoc->GetDocumentAttribute().m_ColorInfoArr[COLORIDX_UNDERLINE].m_colTEXT );
 		hPenOld = (HPEN)::SelectObject( hdc, hPen ); 
 		::MoveToEx( 
 			hdc, 
@@ -7808,7 +7806,7 @@ void CEditView::CaretUnderLineON( BOOL bDraw )
 /* カーソル行アンダーラインのOFF */
 void CEditView::CaretUnderLineOFF( BOOL bDraw )
 {
-	if( FALSE == m_pShareData->m_Types[m_pcEditDoc->m_nSettingType].m_ColorInfoArr[COLORIDX_UNDERLINE].m_bDisp ){
+	if( FALSE == m_pcEditDoc->GetDocumentAttribute().m_ColorInfoArr[COLORIDX_UNDERLINE].m_bDisp ){
 		return;
 	}
 
@@ -7828,7 +7826,7 @@ void CEditView::CaretUnderLineOFF( BOOL bDraw )
 			HDC		hdc;
 			HPEN	hPen, hPenOld;
 			hdc = ::GetDC( m_hWnd );
-			hPen = ::CreatePen( PS_SOLID, 0, m_pShareData->m_Types[m_pcEditDoc->m_nSettingType].m_ColorInfoArr[COLORIDX_TEXT].m_colBACK );
+			hPen = ::CreatePen( PS_SOLID, 0, m_pcEditDoc->GetDocumentAttribute().m_ColorInfoArr[COLORIDX_TEXT].m_colBACK );
 			hPenOld = (HPEN)::SelectObject( hdc, hPen ); 
 			::MoveToEx( 
 				hdc, 

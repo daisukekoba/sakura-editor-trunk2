@@ -61,7 +61,7 @@ void CEditView::OnPaint( HDC hdc, PAINTSTRUCT *pPs, BOOL bUseMemoryDC )
 	::HideCaret( m_hWnd );
 
 	//	May 9, 2000 genta
-	Types	*TypeDataPtr = &(m_pShareData->m_Types[m_pcEditDoc->m_nSettingType]);
+	Types	*TypeDataPtr = &(m_pcEditDoc->GetDocumentAttribute());
 
 	
 	int				i;
@@ -299,7 +299,7 @@ int CEditView::DispLineNew(
 	CRunningTimer cRunningTimer( (const char*)"CEditView::DispLineNew" );
 #endif
 	//	May 9, 2000 genta
-	Types	*TypeDataPtr = &(m_pShareData->m_Types[m_pcEditDoc->m_nSettingType]);
+	Types	*TypeDataPtr = &(m_pcEditDoc->GetDocumentAttribute());
 
 	int						nLineNumOrg = nLineNum;
 	const unsigned char*	pLine;

@@ -68,7 +68,7 @@ void CDlgProperty::SetData( void )
 	cmemProp.AppendSz( "\r\n" );
 
 	cmemProp.AppendSz( "設定のタイプ　" );
-	cmemProp.AppendSz( m_pShareData->m_Types[pCEditDoc->m_nSettingType].m_szTypeName );
+	cmemProp.AppendSz( pCEditDoc->GetDocumentAttribute().m_szTypeName );
 	cmemProp.AppendSz( "\r\n" );
 
 	cmemProp.AppendSz( "文字コード　" );

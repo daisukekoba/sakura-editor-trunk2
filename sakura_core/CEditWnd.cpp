@@ -3704,8 +3704,7 @@ void CEditWnd::PrintPreviewModeONOFF( void )
 		/* 現在の印刷設定 */
 		m_pPrintSetting = 
 			&m_pShareData->m_PrintSettingArr[
-				m_pShareData->m_Types[m_cEditDoc.m_nSettingType
-			].m_nCurrentPrintSetting];
+				m_cEditDoc.GetDocumentAttribute().m_nCurrentPrintSetting];
 		/* 現在のデフォルトプリンタの情報を取得 */
 		BOOL bRes;
 		bRes = CPrint::GetDefaultPrinterInfo( &m_pPrintSetting->m_mdmDevMode );
@@ -4515,7 +4514,7 @@ void CEditWnd::Print_DrawLine(
 						);
 						nPosX += ( i - nBgn );
 					}
-					nPosX += ( m_pShareData->m_Types[m_cEditDoc.m_nSettingType].m_nTabSpace - nPosX % m_pShareData->m_Types[m_cEditDoc.m_nSettingType].m_nTabSpace );
+					nPosX += ( m_cEditDoc.GetDocumentAttribute().m_nTabSpace - nPosX % m_cEditDoc.GetDocumentAttribute().m_nTabSpace );
 					nBgn = i + 1;
 				}else{
 				}
@@ -4538,7 +4537,7 @@ void CEditWnd::Print_DrawLine(
 				nBgn = i;
 				nMode = 1;
 				if( TAB == pLine[i] ){
-					nPosX += ( m_pShareData->m_Types[m_cEditDoc.m_nSettingType].m_nTabSpace - nPosX % m_pShareData->m_Types[m_cEditDoc.m_nSettingType].m_nTabSpace );
+					nPosX += ( m_cEditDoc.GetDocumentAttribute().m_nTabSpace - nPosX % m_cEditDoc.GetDocumentAttribute().m_nTabSpace );
 					nBgn = i + 1;
 				}else{
 				}
@@ -4557,7 +4556,7 @@ void CEditWnd::Print_DrawLine(
 					);
 					nPosX += ( i - nBgn );
 				}
-//				nPosX += ( m_pShareData->m_Types[m_cEditDoc.m_nSettingType].m_nTabSpace - nPosX % m_pShareData->m_Types[m_cEditDoc.m_nSettingType].m_nTabSpace );
+//				nPosX += ( m_cEditDoc.GetDocumentAttribute().m_nTabSpace - nPosX % m_cEditDoc.GetDocumentAttribute().m_nTabSpace );
 				nBgn = i;
 				nMode = 2;
 			}else{
@@ -4650,7 +4649,7 @@ void CEditWnd::DrawPageText(
 			/* 行番号を表示するか */
 			if( m_pPrintSetting->m_bPrintLineNumber ){
 				/* 行番号の表示 FALSE=折り返し単位／TRUE=改行単位 */
-				if( m_pShareData->m_Types[m_cEditDoc.m_nSettingType].m_bLineNumIsCRLF ){
+				if( m_cEditDoc.GetDocumentAttribute().m_bLineNumIsCRLF ){
 					/* 論理行番号表示モード */
 //					pcLayout = m_CLayoutMgr_Print.GetLineData( nLineNum );
 					pcLayout = m_CLayoutMgr_Print.Search( nLineNum );
@@ -4666,9 +4665,9 @@ void CEditWnd::DrawPageText(
 		//		/* 行番号表示に必要な桁数を計算 */
 		//		m_nPreview_LineNumberColmns = m_cEditDoc.m_cEditViewArr[0].DetectWidthOfLineNumberArea_calculate();
 				/* 行番号区切り　0=なし 1=縦線 2=任意 */
-				if( 2 == m_pShareData->m_Types[m_cEditDoc.m_nSettingType].m_nLineTermType ){
+				if( 2 == m_cEditDoc.GetDocumentAttribute().m_nLineTermType ){
 					char szLineTerm[2];
-					wsprintf( szLineTerm, "%c", m_pShareData->m_Types[m_cEditDoc.m_nSettingType].m_cLineTermChar );	/* 行番号区切り文字 */
+					wsprintf( szLineTerm, "%c", m_cEditDoc.GetDocumentAttribute().m_cLineTermChar );	/* 行番号区切り文字 */
 					strcat( szLineNum, szLineTerm );
 				}else{
 					strcat( szLineNum, " " );
@@ -4684,7 +4683,7 @@ void CEditWnd::DrawPageText(
 					szLineNum, nLineCols, m_pnDx 
 				);
 				/* 行番号区切り　0=なし 1=縦線 2=任意 */
-				if( 1 == m_pShareData->m_Types[m_cEditDoc.m_nSettingType].m_nLineTermType ){
+				if( 1 == m_cEditDoc.GetDocumentAttribute().m_nLineTermType ){
 //					HPEN	hPen, hPenOld;
 					::MoveToEx( hdc, 
 //						m_nViewAlignLeft - 4, 
@@ -4879,18 +4878,18 @@ void CEditWnd::OnChangePrintSetting( void )
 
 	/* 印刷用のレイアウト情報の変更 */
 	m_CLayoutMgr_Print.SetLayoutInfo(
-		m_bPreview_EnableColms/*m_pShareData->m_Types[m_cEditDoc.m_nSettingType].m_nMaxLineSize*/,
-		m_pPrintSetting->m_bPrintWordWrap/*FALSE*//*TRUE*//*m_pShareData->m_Types[m_cEditDoc.m_nSettingType].m_bWordWrap*/,	/* 英文ワードラップをする */
-		m_pShareData->m_Types[m_cEditDoc.m_nSettingType].m_nTabSpace,
-		""/*m_pShareData->m_Types[m_cEditDoc.m_nSettingType].m_szLineComment*/,		/* 行コメントデリミタ */
-		""/*m_pShareData->m_Types[m_cEditDoc.m_nSettingType].m_szLineComment2*/,		/* 行コメントデリミタ2 */
-		""/*m_pShareData->m_Types[m_cEditDoc.m_nSettingType].m_szBlockCommentFrom*/,	/* ブロックコメントデリミタ(From) */
-		""/*m_pShareData->m_Types[m_cEditDoc.m_nSettingType].m_szBlockCommentTo*/,	/* ブロックコメントデリミタ(To) */
-		0/*m_pShareData->m_Types[m_cEditDoc.m_nSettingType].m_nStringType*/,		/* 文字列区切り記号エスケープ方法　0=[\"][\'] 1=[""][''] */
+		m_bPreview_EnableColms/*m_cEditDoc.GetDocumentAttribute().m_nMaxLineSize*/,
+		m_pPrintSetting->m_bPrintWordWrap/*FALSE*//*TRUE*//*m_cEditDoc.GetDocumentAttribute().m_bWordWrap*/,	/* 英文ワードラップをする */
+		m_cEditDoc.GetDocumentAttribute().m_nTabSpace,
+		""/*m_cEditDoc.GetDocumentAttribute().m_szLineComment*/,		/* 行コメントデリミタ */
+		""/*m_cEditDoc.GetDocumentAttribute().m_szLineComment2*/,		/* 行コメントデリミタ2 */
+		""/*m_cEditDoc.GetDocumentAttribute().m_szBlockCommentFrom*/,	/* ブロックコメントデリミタ(From) */
+		""/*m_cEditDoc.GetDocumentAttribute().m_szBlockCommentTo*/,	/* ブロックコメントデリミタ(To) */
+		0/*m_cEditDoc.GetDocumentAttribute().m_nStringType*/,		/* 文字列区切り記号エスケープ方法　0=[\"][\'] 1=[""][''] */
 		TRUE,
 		NULL,/*hwndProgress*/
-		FALSE/*m_pShareData->m_Types[m_cEditDoc.m_nSettingType].m_ColorInfoArr[COLORIDX_SSTRING].m_bDisp*/,	/* シングルクォーテーション文字列を表示する */
-		FALSE/*m_pShareData->m_Types[m_cEditDoc.m_nSettingType].m_ColorInfoArr[COLORIDX_WSTRING].m_bDisp*/	/* ダブルクォーテーション文字列を表示する */
+		FALSE/*m_cEditDoc.GetDocumentAttribute().m_ColorInfoArr[COLORIDX_SSTRING].m_bDisp*/,	/* シングルクォーテーション文字列を表示する */
+		FALSE/*m_cEditDoc.GetDocumentAttribute().m_ColorInfoArr[COLORIDX_WSTRING].m_bDisp*/	/* ダブルクォーテーション文字列を表示する */
 	);
 	m_nAllPageNum = m_CLayoutMgr_Print.GetLineCount() / ( m_bPreview_EnableLines * m_pPrintSetting->m_nPrintDansuu );		/* 全ページ数 */
 	if( 0 < m_CLayoutMgr_Print.GetLineCount() % ( m_bPreview_EnableLines * m_pPrintSetting->m_nPrintDansuu ) ){
@@ -5258,7 +5257,7 @@ BOOL CEditWnd::OnPrintPageSetting( void )
 	}
 	
 //	cDlgPrintSetting.Create( m_hInstance, m_hWnd );
-	nCurrentPrintSetting = m_pShareData->m_Types[m_cEditDoc.m_nSettingType].m_nCurrentPrintSetting;
+	nCurrentPrintSetting = m_cEditDoc.GetDocumentAttribute().m_nCurrentPrintSetting;
 	bRes = cDlgPrintSetting.DoModal(
 		m_hInstance, 
 		m_hwndPrintPreviewBar/*m_hWnd*/, 
@@ -5269,13 +5268,11 @@ BOOL CEditWnd::OnPrintPageSetting( void )
 	if( TRUE == bRes ){
 		/* 現在選択されているページ設定の番号が変更されたか */
 		if( nCurrentPrintSetting != 
-			m_pShareData->m_Types[m_cEditDoc.m_nSettingType].m_nCurrentPrintSetting 
+			m_pShareData->m_Types[m_cEditDoc.GetDocumentType()].m_nCurrentPrintSetting 
 		){
 //			/* 変更フラグ(タイプ別設定) */
 //			m_pShareData->m_nTypesModifyArr[m_cEditDoc.m_nSettingType] = TRUE;
-			m_pShareData->m_Types[
-				m_cEditDoc.m_nSettingType
-			].m_nCurrentPrintSetting = nCurrentPrintSetting;
+			m_cEditDoc.GetDocumentAttribute().m_nCurrentPrintSetting = nCurrentPrintSetting;
 		}
 
 //		/* それぞれのページ設定の内容が変更されたか */
@@ -5299,7 +5296,7 @@ BOOL CEditWnd::OnPrintPageSetting( void )
 //		}
 
 		/* 現在の印刷設定 */
-		m_pPrintSetting = &m_pShareData->m_PrintSettingArr[m_pShareData->m_Types[m_cEditDoc.m_nSettingType].m_nCurrentPrintSetting];
+		m_pPrintSetting = &m_pShareData->m_PrintSettingArr[m_cEditDoc.GetDocumentAttribute().m_nCurrentPrintSetting];
 		
 		m_pPrintSetting->m_mdmDevMode.dmPaperSize = m_pPrintSetting->m_nPrintPaperSize;
 		m_pPrintSetting->m_mdmDevMode.dmOrientation = m_pPrintSetting->m_nPrintPaperOrientation;

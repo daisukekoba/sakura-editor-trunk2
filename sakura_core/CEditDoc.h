@@ -113,7 +113,24 @@ public:
 	//	Nov. 20, 2000 genta
 	void SetImeMode(int mode);	//	IME状態の設定
 
+	//	Nov. 23,  2000 genta
+	void SetDocumentType(int type)	//	文書種別の設定
+	{
+		m_nSettingType = type;
+	}
+	int GetDocumentType(void) const	//	文書種別の読み出し
+	{
+		return m_nSettingType;
+	}
+	Types& GetDocumentAttribute(void) const	//	設定された文書情報への参照を返す
+	{
+		return m_pShareData->m_Types[m_nSettingType];
+	}
+
+
 protected:
+	int				m_nSettingType;
+
 public: /* テスト用にアクセス属性を変更 */
 	/* 補完 */
 	CHokanMgr		m_cHokanMgr;
@@ -166,7 +183,6 @@ public: /* テスト用にアクセス属性を変更 */
 
 	CShareData		m_cShareData;
 	DLLSHAREDATA*	m_pShareData;
-	int				m_nSettingType;
 
 	COpeBlk*		m_pcOpeBlk;			/* 操作ブロック */
 	BOOL			m_bDoing_UndoRedo;	/* アンドゥ・リドゥの実行中か */

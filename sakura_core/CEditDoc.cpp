@@ -56,7 +56,11 @@ CEditDoc::CEditDoc() :
 	strcpy( m_szGrepKey, "" );
 	/* 共有データ構造体のアドレスを返す */
 	m_cShareData.Init();
-	m_pShareData = m_cShareData.GetShareData( m_szFilePath, &m_nSettingType );
+
+	int doctype;
+	m_pShareData = m_cShareData.GetShareData( m_szFilePath, &doctype );
+	SetDocumentType( doctype );
+
 	/* OPENFILENAMEの初期化 */
 	memset( &m_ofn, 0, sizeof( OPENFILENAME ) );
 	m_ofn.lStructSize = sizeof( OPENFILENAME );
@@ -78,19 +82,20 @@ CEditDoc::CEditDoc() :
 	/* レイアウト管理情報の初期化 */
 	m_cLayoutMgr.Create( &m_cDocLineMgr ) ;
 	/* レイアウト情報の変更 */
+	Types& ref = GetDocumentAttribute();
 	m_cLayoutMgr.SetLayoutInfo(
-		m_pShareData->m_Types[m_nSettingType].m_nMaxLineSize,
-		m_pShareData->m_Types[m_nSettingType].m_bWordWrap,	/* 英文ワードラップをする */
-		m_pShareData->m_Types[m_nSettingType].m_nTabSpace,
-		m_pShareData->m_Types[m_nSettingType].m_szLineComment,		/* 行コメントデリミタ */
-		m_pShareData->m_Types[m_nSettingType].m_szLineComment2,		/* 行コメントデリミタ2 */
-		m_pShareData->m_Types[m_nSettingType].m_szBlockCommentFrom,	/* ブロックコメントデリミタ(From) */
-		m_pShareData->m_Types[m_nSettingType].m_szBlockCommentTo,	/* ブロックコメントデリミタ(To) */
-		m_pShareData->m_Types[m_nSettingType].m_nStringType,		/* 文字列区切り記号エスケープ方法　0=[\"][\'] 1=[""][''] */
+		ref.m_nMaxLineSize,
+		ref.m_bWordWrap,	/* 英文ワードラップをする */
+		ref.m_nTabSpace,
+		ref.m_szLineComment,		/* 行コメントデリミタ */
+		ref.m_szLineComment2,		/* 行コメントデリミタ2 */
+		ref.m_szBlockCommentFrom,	/* ブロックコメントデリミタ(From) */
+		ref.m_szBlockCommentTo,	/* ブロックコメントデリミタ(To) */
+		ref.m_nStringType,		/* 文字列区切り記号エスケープ方法　0=[\"][\'] 1=[""][''] */
 		TRUE,
 		NULL,/*hwndProgress*/
-		m_pShareData->m_Types[m_nSettingType].m_ColorInfoArr[COLORIDX_SSTRING].m_bDisp,	/* シングルクォーテーション文字列を表示する */
-		m_pShareData->m_Types[m_nSettingType].m_ColorInfoArr[COLORIDX_WSTRING].m_bDisp	/* ダブルクォーテーション文字列を表示する */
+		ref.m_ColorInfoArr[COLORIDX_SSTRING].m_bDisp,	/* シングルクォーテーション文字列を表示する */
+		ref.m_ColorInfoArr[COLORIDX_WSTRING].m_bDisp	/* ダブルクォーテーション文字列を表示する */
 	);
 //	MYTRACE( "CEditDoc::CEditDoc()おわり\n" );
 
@@ -578,7 +583,9 @@ BOOL CEditDoc::FileRead(
 	}
 
 	/* 共有データ構造体のアドレスを返す */
-	m_pShareData = m_cShareData.GetShareData( m_szFilePath, &m_nSettingType );
+	int doctype;
+	m_pShareData = m_cShareData.GetShareData( m_szFilePath, &doctype );
+	SetDocumentType( doctype );
 
 	/* ファイルが存在しない */
 	if( FALSE == bFileIsExist ){
@@ -615,27 +622,30 @@ BOOL CEditDoc::FileRead(
 	}
 
 	/* レイアウト情報の変更 */
-	m_cLayoutMgr.SetLayoutInfo(
-		m_pShareData->m_Types[m_nSettingType].m_nMaxLineSize,
-		m_pShareData->m_Types[m_nSettingType].m_bWordWrap,	/* 英文ワードラップをする */
-		m_pShareData->m_Types[m_nSettingType].m_nTabSpace,
-		m_pShareData->m_Types[m_nSettingType].m_szLineComment,		/* 行コメントデリミタ */
-		m_pShareData->m_Types[m_nSettingType].m_szLineComment2,		/* 行コメントデリミタ2 */
-		m_pShareData->m_Types[m_nSettingType].m_szBlockCommentFrom,	/* ブロックコメントデリミタ(From) */
-		m_pShareData->m_Types[m_nSettingType].m_szBlockCommentTo,	/* ブロックコメントデリミタ(To) */
-		m_pShareData->m_Types[m_nSettingType].m_nStringType,		/* 文字列区切り記号エスケープ方法　0=[\"][\'] 1=[""][''] */
-		TRUE,
-		hwndProgress,
-		m_pShareData->m_Types[m_nSettingType].m_ColorInfoArr[COLORIDX_SSTRING].m_bDisp,	/* シングルクォーテーション文字列を表示する */
-		m_pShareData->m_Types[m_nSettingType].m_ColorInfoArr[COLORIDX_WSTRING].m_bDisp	/* ダブルクォーテーション文字列を表示する */
-	);
+	{
+		Types& ref = GetDocumentAttribute();
+		m_cLayoutMgr.SetLayoutInfo(
+			ref.m_nMaxLineSize,
+			ref.m_bWordWrap,	/* 英文ワードラップをする */
+			ref.m_nTabSpace,
+			ref.m_szLineComment,		/* 行コメントデリミタ */
+			ref.m_szLineComment2,		/* 行コメントデリミタ2 */
+			ref.m_szBlockCommentFrom,	/* ブロックコメントデリミタ(From) */
+			ref.m_szBlockCommentTo,	/* ブロックコメントデリミタ(To) */
+			ref.m_nStringType,		/* 文字列区切り記号エスケープ方法　0=[\"][\'] 1=[""][''] */
+			TRUE,
+			hwndProgress,
+			ref.m_ColorInfoArr[COLORIDX_SSTRING].m_bDisp,	/* シングルクォーテーション文字列を表示する */
+			ref.m_ColorInfoArr[COLORIDX_WSTRING].m_bDisp	/* ダブルクォーテーション文字列を表示する */
+		);
+	}
 
 	/* 全ビューの初期化：ファイルオープン/クローズ時等に、ビューを初期化する */
 	InitAllView();
 
 	//	Nov. 20, 2000 genta
 	//	IME状態の設定
-	SetImeMode( m_pShareData->m_Types[m_nSettingType].m_nImeState );
+	SetImeMode( GetDocumentAttribute().m_nImeState );
 
 	if( bIsExistInMRU && m_pShareData->m_Common.GetRestoreCurPosition() ){
 //#ifdef _DEBUG
@@ -801,23 +811,25 @@ BOOL CEditDoc::FileWrite( const char* pszPath )
 		strcpy( m_szFilePath, szPath ); /* 現在編集中のファイルのパス */
 
 		/* 共有データ構造体のアドレスを返す */
-		m_pShareData = m_cShareData.GetShareData( m_szFilePath, &m_nSettingType );
-		
+		int doctype;
+		m_pShareData = m_cShareData.GetShareData( m_szFilePath, &doctype );
+		SetDocumentType( doctype );
 		
 		/* レイアウト情報の変更 */
+		Types& ref = GetDocumentAttribute();
 		m_cLayoutMgr.SetLayoutInfo(
-			m_pShareData->m_Types[m_nSettingType].m_nMaxLineSize,
-			m_pShareData->m_Types[m_nSettingType].m_bWordWrap,	/* 英文ワードラップをする */
-			m_pShareData->m_Types[m_nSettingType].m_nTabSpace,
-			m_pShareData->m_Types[m_nSettingType].m_szLineComment,		/* 行コメントデリミタ */
-			m_pShareData->m_Types[m_nSettingType].m_szLineComment2,		/* 行コメントデリミタ2 */
-			m_pShareData->m_Types[m_nSettingType].m_szBlockCommentFrom,	/* ブロックコメントデリミタ(From) */
-			m_pShareData->m_Types[m_nSettingType].m_szBlockCommentTo,	/* ブロックコメントデリミタ(To) */
-			m_pShareData->m_Types[m_nSettingType].m_nStringType,		/* 文字列区切り記号エスケープ方法　0=[\"][\'] 1=[""][''] */
+			ref.m_nMaxLineSize,
+			ref.m_bWordWrap,	/* 英文ワードラップをする */
+			ref.m_nTabSpace,
+			ref.m_szLineComment,		/* 行コメントデリミタ */
+			ref.m_szLineComment2,		/* 行コメントデリミタ2 */
+			ref.m_szBlockCommentFrom,	/* ブロックコメントデリミタ(From) */
+			ref.m_szBlockCommentTo,	/* ブロックコメントデリミタ(To) */
+			ref.m_nStringType,		/* 文字列区切り記号エスケープ方法　0=[\"][\'] 1=[""][''] */
 			TRUE,
 			hwndProgress,
-			m_pShareData->m_Types[m_nSettingType].m_ColorInfoArr[COLORIDX_SSTRING].m_bDisp,	/* シングルクォーテーション文字列を表示する */
-			m_pShareData->m_Types[m_nSettingType].m_ColorInfoArr[COLORIDX_WSTRING].m_bDisp	/* ダブルクォーテーション文字列を表示する */
+			ref.m_ColorInfoArr[COLORIDX_SSTRING].m_bDisp,	/* シングルクォーテーション文字列を表示する */
+			ref.m_ColorInfoArr[COLORIDX_WSTRING].m_bDisp	/* ダブルクォーテーション文字列を表示する */
 		);
 
 		/* 先頭へカーソルを移動 */
@@ -890,7 +902,7 @@ BOOL CEditDoc::OpenFileDialog(
 	ppszMRU = new char*[j + 1];
 	if( j > 0 ){
 		for( i = 0; i < j; ++i ){
-//			ppszMRU[i] = m_pShareData->m_Types[m_nSettingType].m_szMRUArr[i];
+//			ppszMRU[i] = GetDocumentAttribute().m_szMRUArr[i];
 			ppszMRU[i] = m_pShareData->m_fiMRUArr[i].m_szPath;
 		}
 	}
@@ -910,7 +922,7 @@ BOOL CEditDoc::OpenFileDialog(
 	ppszOPENFOLDER = new char*[j + 1];
 	if( j > 0 ){
 		for( i = 0; i < j; ++i ){
-//			ppszOPENFOLDER[i] = m_pShareData->m_Types[m_nSettingType].m_szOPENFOLDERArr[i];
+//			ppszOPENFOLDER[i] = GetDocumentAttribute().m_szOPENFOLDERArr[i];
 			ppszOPENFOLDER[i] = m_pShareData->m_szOPENFOLDERArr[i];
 		}
 	}
@@ -1023,7 +1035,7 @@ BOOL CEditDoc::SaveFileDialog( char* pszPath, int* pnCharCode )
 	ppszMRU = new char*[j + 1];
 	if( j > 0 ){
 		for( i = 0; i < j; ++i ){
-//			ppszMRU[i] = m_pShareData->m_Types[m_nSettingType].m_szMRUArr[i];
+//			ppszMRU[i] = GetDocumentAttribute().m_szMRUArr[i];
 			ppszMRU[i] = m_pShareData->m_fiMRUArr[i].m_szPath;
 		}
 	}
@@ -1044,7 +1056,7 @@ BOOL CEditDoc::SaveFileDialog( char* pszPath, int* pnCharCode )
 	ppszOPENFOLDER = new char*[j + 1];
 	if( j > 0 ){
 		for( i = 0; i < j; ++i ){
-//			ppszOPENFOLDER[i] = m_pShareData->m_Types[m_nSettingType].m_szOPENFOLDERArr[i];
+//			ppszOPENFOLDER[i] = GetDocumentAttribute().m_szOPENFOLDERArr[i];
 			ppszOPENFOLDER[i] = m_pShareData->m_szOPENFOLDERArr[i];
 		}
 	}
@@ -2997,8 +3009,9 @@ void CEditDoc::OnChangeSetting( void )
 		DoFileLock();
 	}
 	/* 共有データ構造体のアドレスを返す */
-	m_pShareData = m_cShareData.GetShareData( m_szFilePath, &m_nSettingType );
-
+	int doctype;
+	m_pShareData = m_cShareData.GetShareData( m_szFilePath, &doctype );
+	SetDocumentType( doctype );
 
 	/*
 	  カーソル位置変換
@@ -3018,19 +3031,20 @@ void CEditDoc::OnChangeSetting( void )
 	}
 
 	/* レイアウト情報の作成 */
+	Types& ref = GetDocumentAttribute();
 	m_cLayoutMgr.SetLayoutInfo(
-		m_pShareData->m_Types[m_nSettingType].m_nMaxLineSize,
-		m_pShareData->m_Types[m_nSettingType].m_bWordWrap,	/* 英文ワードラップをする */
-		m_pShareData->m_Types[m_nSettingType].m_nTabSpace,
-		m_pShareData->m_Types[m_nSettingType].m_szLineComment,		/* 行コメントデリミタ */
-		m_pShareData->m_Types[m_nSettingType].m_szLineComment2,		/* 行コメントデリミタ2 */
-		m_pShareData->m_Types[m_nSettingType].m_szBlockCommentFrom,	/* ブロックコメントデリミタ(From) */
-		m_pShareData->m_Types[m_nSettingType].m_szBlockCommentTo,	/* ブロックコメントデリミタ(To) */
-		m_pShareData->m_Types[m_nSettingType].m_nStringType,		/* 文字列区切り記号エスケープ方法　0=[\"][\'] 1=[""][''] */
+		ref.m_nMaxLineSize,
+		ref.m_bWordWrap,	/* 英文ワードラップをする */
+		ref.m_nTabSpace,
+		ref.m_szLineComment,		/* 行コメントデリミタ */
+		ref.m_szLineComment2,		/* 行コメントデリミタ2 */
+		ref.m_szBlockCommentFrom,	/* ブロックコメントデリミタ(From) */
+		ref.m_szBlockCommentTo,	/* ブロックコメントデリミタ(To) */
+		ref.m_nStringType,		/* 文字列区切り記号エスケープ方法　0=[\"][\'] 1=[""][''] */
 		TRUE,
 		hwndProgress,
-		m_pShareData->m_Types[m_nSettingType].m_ColorInfoArr[COLORIDX_SSTRING].m_bDisp,	/* シングルクォーテーション文字列を表示する */
-		m_pShareData->m_Types[m_nSettingType].m_ColorInfoArr[COLORIDX_WSTRING].m_bDisp	/* ダブルクォーテーション文字列を表示する */
+		ref.m_ColorInfoArr[COLORIDX_SSTRING].m_bDisp,	/* シングルクォーテーション文字列を表示する */
+		ref.m_ColorInfoArr[COLORIDX_WSTRING].m_bDisp	/* ダブルクォーテーション文字列を表示する */
 	); /* レイアウト情報の変更 */
 
 	/* ビューに設定変更を反映させる */
@@ -3210,6 +3224,8 @@ BOOL CEditDoc::OnFileClose( void )
 /* 既存データのクリア */
 void CEditDoc::Init( void )
 {
+	int types;
+
 	m_bReadOnly = FALSE;	/* 読み取り専用モード */
 	strcpy( m_szGrepKey, "" );
 	m_bGrepMode = FALSE; 	/* Grepモード */
@@ -3249,24 +3265,26 @@ void CEditDoc::Init( void )
 
 
 	/* 共有データ構造体のアドレスを返す */
-	m_pShareData = m_cShareData.GetShareData( m_szFilePath, &m_nSettingType );
+	m_pShareData = m_cShareData.GetShareData( m_szFilePath, &types );
+	int SetDocumentType( types );
 
 	/* レイアウト管理情報の初期化 */
-	//	m_cLayoutMgr.Create( &m_cDocLineMgr, m_pShareData->m_Types[m_nSettingType].m_nMaxLineSize, m_pShareData->m_Types[m_nSettingType].m_nTabSpace ) ;
+	//	m_cLayoutMgr.Create( &m_cDocLineMgr, GetDocumentAttribute().m_nMaxLineSize, GetDocumentAttribute().m_nTabSpace ) ;
 	/* レイアウト情報の変更 */
+	Types& ref = GetDocumentAttribute();
 	m_cLayoutMgr.SetLayoutInfo(
-		m_pShareData->m_Types[m_nSettingType].m_nMaxLineSize,
-		m_pShareData->m_Types[m_nSettingType].m_bWordWrap,	/* 英文ワードラップをする */
-		m_pShareData->m_Types[m_nSettingType].m_nTabSpace,
-		m_pShareData->m_Types[m_nSettingType].m_szLineComment,		/* 行コメントデリミタ */
-		m_pShareData->m_Types[m_nSettingType].m_szLineComment2,		/* 行コメントデリミタ2 */
-		m_pShareData->m_Types[m_nSettingType].m_szBlockCommentFrom,	/* ブロックコメントデリミタ(From) */
-		m_pShareData->m_Types[m_nSettingType].m_szBlockCommentTo,	/* ブロックコメントデリミタ(To) */
-		m_pShareData->m_Types[m_nSettingType].m_nStringType,		/* 文字列区切り記号エスケープ方法　0=[\"][\'] 1=[""][''] */
+		ref.m_nMaxLineSize,
+		ref.m_bWordWrap,	/* 英文ワードラップをする */
+		ref.m_nTabSpace,
+		ref.m_szLineComment,		/* 行コメントデリミタ */
+		ref.m_szLineComment2,		/* 行コメントデリミタ2 */
+		ref.m_szBlockCommentFrom,	/* ブロックコメントデリミタ(From) */
+		ref.m_szBlockCommentTo,	/* ブロックコメントデリミタ(To) */
+		ref.m_nStringType,		/* 文字列区切り記号エスケープ方法　0=[\"][\'] 1=[""][''] */
 		TRUE,
 		NULL,/*hwndProgress*/
-		m_pShareData->m_Types[m_nSettingType].m_ColorInfoArr[COLORIDX_SSTRING].m_bDisp,	/* シングルクォーテーション文字列を表示する */
-		m_pShareData->m_Types[m_nSettingType].m_ColorInfoArr[COLORIDX_WSTRING].m_bDisp	/* ダブルクォーテーション文字列を表示する */
+		ref.m_ColorInfoArr[COLORIDX_SSTRING].m_bDisp,	/* シングルクォーテーション文字列を表示する */
+		ref.m_ColorInfoArr[COLORIDX_WSTRING].m_bDisp	/* ダブルクォーテーション文字列を表示する */
 	);
 
 
