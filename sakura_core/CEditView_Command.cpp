@@ -7505,9 +7505,9 @@ void CEditView::Command_COPYLINESWITHLINENUMBER( void )
 
 
 
-+ ////キー割り当て一覧をクリップボードへコピー
-+ 	//Dec. 26, 2000 JEPRO ショートカット実行で死ぬ･･･
-+ 	//Jan. 24, 2001 JEPRO debug version (directed by genta)
+////キー割り当て一覧をクリップボードへコピー
+	//Dec. 26, 2000 JEPRO ショートカット実行で死ぬ･･･
+	//Jan. 24, 2001 JEPRO debug version (directed by genta)
 void CEditView::Command_CREATEKEYBINDLIST( void )
 {
 	CMemory		cMemKeyList;

@@ -1335,6 +1335,17 @@ void CEditView::ReplaceData_CEditView(
 #endif
 	);
 
+	//	Jan. 30, 2001 genta
+	//	再描画の時点でファイル更新フラグが適切になっていないといけないので
+	//	関数の末尾からここへ移動
+	/* 状態遷移 */
+	if( FALSE == m_bDoing_UndoRedo ){	/* アンドゥ・リドゥの実行中か */
+		m_pcEditDoc->m_bIsModified = TRUE;	/* 変更フラグ */
+		if( bRedraw ){
+			SetParentCaption();	/* 親ウィンドウのタイトルを更新 */
+		}
+	}
+
 	/* 現在の選択範囲を非選択状態に戻す */
 	DisableSelectArea( bRedraw );
 	
@@ -1358,7 +1369,8 @@ void CEditView::ReplaceData_CEditView(
 			PAINTSTRUCT ps;
 			hdc = ::GetDC( m_hWnd );
 			/* 再描画ヒント レイアウト行の増減 */
-			if( 0 < LRArg.nAddLineNum ){
+			//	Jan. 30, 2001 genta	貼り付けで行数が減る場合の考慮が抜けていた
+			if( 0 != LRArg.nAddLineNum ){
 				ps.rcPaint.left = 0;
 				ps.rcPaint.right = m_nViewAlignLeft + m_nViewCx;
 				ps.rcPaint.top = m_nViewAlignTop + (m_nCharHeight + m_pcEditDoc->GetDocumentAttribute().m_nLineSpace) * (m_nCaretPosY - m_nViewTopLine);
@@ -1484,13 +1496,10 @@ void CEditView::ReplaceData_CEditView(
 		ShowEditCaret();
 	}
 #endif
-	/* 状態遷移 */
-	if( FALSE == m_bDoing_UndoRedo ){	/* アンドゥ・リドゥの実行中か */
-		m_pcEditDoc->m_bIsModified = TRUE;	/* 変更フラグ */
-		if( bRedraw ){
-			SetParentCaption();	/* 親ウィンドウのタイトルを更新 */
-		}
-	}
+	//	Jan. 30, 2001 genta
+	//	ファイル全体の更新フラグが立っていないと各行の更新状態が表示されないので
+	//	フラグ更新処理を再描画より前に移動する
+
 //#ifdef _DEBUG
 //	gm_ProfileOutput = 1;
 //	delete pCRunningTimer;
