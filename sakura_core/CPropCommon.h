@@ -261,8 +261,14 @@ protected:
 	void SetData_PROP_Macro( HWND );//!<ダイアログデータの設定 Macro
 	int GetData_PROP_Macro( HWND );//!<ダイアログデータの取得 Macro
 	void InitDialog_PROP_Macro( HWND hwndDlg );//!< Macroページの初期化
-	void SetMacro2List( HWND hwndDlg );//!< Macroデータの設定
 	//	To Here Jun. 2, 2001 genta
+	void SetMacro2List_Macro( HWND hwndDlg );//!< Macroデータの設定
+	void SelectBaseDir_Macro( HWND hwndDlg );//!< Macroディレクトリの選択
+	void OnFileDropdown_Macro( HWND hwndDlg );//!< ファイルドロップダウンが開かれるとき
+	void CheckListPosition_Macro( HWND hwndDlg );//!< リストビューのFocus位置確認
+	static int CALLBACK DirCallback_Macro( HWND hwnd, UINT uMsg, LPARAM lParam, LPARAM lpData );
+	
+	int nLastPos_Macro; //!< 前回フォーカスのあった場所
 
 	void p7_Edit_List_KeyWord( HWND, HWND );	/* p7:リスト中で選択されているキーワードを編集する */
 	void p7_Delete_List_KeyWord( HWND , HWND );	/* p7:リスト中で選択されているキーワードを削除する */

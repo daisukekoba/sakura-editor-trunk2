@@ -29,6 +29,7 @@
 #include "CPropCommon.h"
 #include "memory.h"
 #include "stdlib.h"
+#include <Shlobj.h>
 
 //! Popup Help用ID
 //@@@ 2001.02.04 Start by MIK: Popup Help
@@ -78,8 +79,15 @@ BOOL CPropCommon::DispatchEvent_PROP_Macro( HWND hwndDlg, UINT uMsg, WPARAM wPar
 		idCtrl = (int)wParam;
 		pNMHDR = (NMHDR*)lParam;
 		pMNUD  = (NM_UPDOWN*)lParam;
-//		switch( idCtrl ){
-//		default:
+		switch( idCtrl ){
+		case IDC_MACROLIST:
+			switch( pNMHDR->code ){
+			case LVN_ITEMCHANGED:
+				CheckListPosition_Macro( hwndDlg );
+				break;
+			}
+			break;
+		default:
 			switch( pNMHDR->code ){
 			case PSN_HELP:
 				OnHelp( hwndDlg, IDD_PROP_MACRO );
@@ -90,7 +98,7 @@ BOOL CPropCommon::DispatchEvent_PROP_Macro( HWND hwndDlg, UINT uMsg, WPARAM wPar
 				return TRUE;
 			}
 			break;
-//		}
+		}
 		break;
 
 	case WM_COMMAND:
@@ -103,12 +111,19 @@ BOOL CPropCommon::DispatchEvent_PROP_Macro( HWND hwndDlg, UINT uMsg, WPARAM wPar
 		case BN_CLICKED:
 			switch( wID ){
 			case IDC_MACRODIRREF:	// マクロディレクトリ参照
+				SelectBaseDir_Macro( hwndDlg );
 				break;
 			case IDC_MACRO_REG:		// マクロ設定
-				SetMacro2List( hwndDlg );
+				SetMacro2List_Macro( hwndDlg );
 				break;
 			}
 			break;
+		case CBN_DROPDOWN:
+			switch( wID ){
+			case IDC_MACROPATH:
+				OnFileDropdown_Macro( hwndDlg );
+				break;
+			}
 		}
 
 		break;
@@ -159,7 +174,17 @@ void CPropCommon::SetData_PROP_Macro( HWND hwndDlg )
 	
 	//	マクロディレクトリ
 	::SetDlgItemText( hwndDlg, IDC_MACRODIR, m_pShareData->m_szMACROFOLDER );
+
+	nLastPos_Macro = -1;
 	
+	//	リストビューの行選択を可能にする．
+	//	IE 3.x以降が入っている場合のみ動作する．
+	//	これが無くても，番号部分しか選択できないだけで操作自体は可能．
+	DWORD dwStyle;
+	dwStyle = ListView_GetExtendedListViewStyle( hListView );
+	dwStyle |= LVS_EX_FULLROWSELECT;
+	ListView_SetExtendedListViewStyle( hListView, dwStyle );
+
 	return;
 }
 
@@ -276,7 +301,7 @@ void CPropCommon::InitDialog_PROP_Macro( HWND hwndDlg )
 	::SendMessage( hNumCombo, CB_SETCURSEL, (WPARAM)0, (LPARAM)0 );
 }
 
-void CPropCommon::SetMacro2List( HWND hwndDlg )
+void CPropCommon::SetMacro2List_Macro( HWND hwndDlg )
 {
 	int index;
 	LVITEM sItem;
@@ -313,4 +338,154 @@ void CPropCommon::SetMacro2List( HWND hwndDlg )
 	sItem.pszText = buf;
 	ListView_SetItem( hListView, &sItem );
 }
-/*[EOF]*/
+
+/*!
+	Macro格納用ディレクトリを選択する
+	
+	@param hwndDlg [in] ダイアログボックスのウィンドウハンドル
+*/
+void CPropCommon::SelectBaseDir_Macro( HWND hwndDlg )
+{
+
+	LPMALLOC pMalloc;
+	BROWSEINFO bi;
+	TCHAR szDir[MAX_PATH + 1]; // 追加する\\用に1足した
+	LPITEMIDLIST pidl;
+
+	char szInitial[MAX_PATH];
+
+	if( SHGetMalloc(&pMalloc) == E_FAIL ){
+		::MessageBox( hwndDlg, "PropComMacro::SelectBaseDir_Macro::SHGetMalloc",
+			"バグ報告お願い", MB_OK );
+		return;	//	よくわからんけど失敗した
+	}
+
+	::GetDlgItemText( hwndDlg, IDC_MACRODIR, szInitial, MAX_PATH );
+
+	ZeroMemory(&bi,sizeof(bi));
+	bi.hwndOwner = hwndDlg;	 // オーナーウィンドウハンドルを設定
+	bi.pidlRoot = NULL;
+	bi.pszDisplayName = szDir;
+	bi.lpszTitle = "Macroディレクトリの選択";
+	bi.ulFlags = BIF_RETURNONLYFSDIRS;
+	bi.lpfn = CPropCommon::DirCallback_Macro;
+	bi.lParam = (LPARAM)szInitial;	// 初期ディレクトリ
+
+	// フォルダの参照ダイアログボックスの表示
+	pidl = SHBrowseForFolder(&bi);
+
+	if (pidl)
+	{
+		if (SHGetPathFromIDList(pidl,szDir))
+		{
+			//	末尾に\\マークを追加する．
+			int pos = strlen( szDir );
+			if( szDir[ pos - 1 ] != '\\' ){
+				szDir[ pos ] = '\\';
+				szDir[ pos + 1 ] = '\0';
+			}
+			::SetDlgItemText( hwndDlg, IDC_MACRODIR, szDir );
+		}
+
+		// SHBrowseForFolder によって割り当てられた PIDL を解放
+		pMalloc->Free(pidl);
+	}
+
+	// Shell のアロケータを開放
+	pMalloc->Release();
+}
+
+/*!
+	フォルダ選択ダイアログボックス用Callback関数
+
+	SHBrowseForFolderの初期ディレクトリを指定するためのコールバック関数
+	
+	@param hwnd [in] ダイアログボックスのウィンドウハンドル
+	@param uMsg [in] 通知種別
+	@param lParam [in] 
+	@param lpData [in] BROWSEINFOで渡された値．
+					ここでは，初期ディレクトリへのポインタ(const char*)がキャストされて入っている．
+*/
+int CALLBACK CPropCommon::DirCallback_Macro( HWND hwnd, UINT uMsg, LPARAM lParam, LPARAM lpData )
+{
+	if( uMsg == BFFM_INITIALIZED ){	//	初期化完了
+		::SendMessage( hwnd, BFFM_SETSELECTION, TRUE, lpData);
+	}
+	return 0;
+}
+/*!
+	マクロファイル指定用コンボボックスのドロップダウンリストが開かれるときに，
+	指定ディレクトリのファイル一覧から候補を生成する．
+
+	@param hwndDlg [in] ダイアログボックスのウィンドウハンドル
+*/
+void CPropCommon::OnFileDropdown_Macro( HWND hwndDlg )
+{
+	char path[_MAX_PATH * 2 ];
+	WIN32_FIND_DATA wf;
+	HANDLE hFind;
+	HWND hCombo = ::GetDlgItem( hwndDlg, IDC_MACROPATH );
+
+	::GetDlgItemText( hwndDlg, IDC_MACRODIR, path, _MAX_PATH );
+	strcat( path, "*.mac" );
+
+	//	候補の初期化
+	::SendMessage( hCombo, CB_RESETCONTENT, (WPARAM)0, (LPARAM)0 );
+
+	//	ファイルの検索
+	hFind = FindFirstFile(path, &wf);
+
+	if (hFind == INVALID_HANDLE_VALUE) {
+		return;
+	}
+	
+	do {
+		//	コンボボックスに設定
+		int result = ::SendMessage( hCombo, CB_ADDSTRING, (WPARAM)0, (LPARAM)wf.cFileName );
+		if( result == CB_ERR || result == CB_ERRSPACE )
+			break;
+	} while( FindNextFile( hFind, &wf ));
+
+    FindClose(hFind);
+}
+
+void CPropCommon::CheckListPosition_Macro( HWND hwndDlg )
+{
+	HWND hListView = ::GetDlgItem( hwndDlg, IDC_MACROLIST );
+	HWND hNum = ::GetDlgItem( hwndDlg, IDC_COMBO_MACROID );
+	
+	//	現在のFocus取得
+	int current = ListView_GetNextItem( hListView, -1, LVNI_SELECTED);
+
+	if( current == -1 || current == nLastPos_Macro )
+		return;
+
+	nLastPos_Macro = current;
+	
+	//	初期値の設定
+	::SendMessage( hNum, CB_SETCURSEL, nLastPos_Macro, 0 );
+	
+	char buf[MAX_PATH + MACRONAME_MAX];	// MAX_PATHとMACRONAME_MAXの両方より大きい値
+	LVITEM sItem;
+
+	memset( &sItem, 0, sizeof( sItem ));
+	sItem.iItem = current;
+	sItem.mask = LVIF_TEXT;
+	sItem.iSubItem = 1;
+	sItem.pszText = buf;
+	sItem.cchTextMax = MACRONAME_MAX;
+
+	ListView_GetItem( hListView, &sItem );
+	::SetDlgItemText( hwndDlg, IDC_MACRONAME, buf );
+
+	memset( &sItem, 0, sizeof( sItem ));
+	sItem.iItem = current;
+	sItem.mask = LVIF_TEXT;
+	sItem.iSubItem = 2;
+	sItem.pszText = buf;
+	sItem.cchTextMax = MAX_PATH;
+
+	ListView_GetItem( hListView, &sItem );
+	::SetDlgItemText( hwndDlg, IDC_MACROPATH, buf );
+
+}
