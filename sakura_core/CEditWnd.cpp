@@ -27,7 +27,7 @@
 #include "global.h"
 #include "CDlgPrintSetting.h"
 #include "CDlgPrintPage.h"
-
+#include "funccode.h"		// Stonee, 2001/03/12
 
 #define IDT_TOOLBAR		456
 #define ID_TOOLBAR		100
@@ -3472,7 +3472,8 @@ BOOL CEditWnd::DispatchEvent_PPB(
 				/* ヘルプファイルのフルパスを返す */
 				::GetHelpFilePath( szHelpFile );
 				/* 印刷プレビューのヘルプ */
-				::WinHelp( hwndDlg, szHelpFile, HELP_CONTEXT, 120 );
+				//Stonee, 2001/03/12 第四引数を、機能番号からヘルプトピック番号を調べるようにした
+				::WinHelp( hwndDlg, szHelpFile, HELP_CONTEXT, ::FuncID_To_HelpContextID(F_PRINT_PREVIEW) );
 				::UpdateWindow( m_hwndPrintPreviewBar );
 				break;
 			case IDOK:

@@ -13,6 +13,7 @@
 #include "debug.h"
 #include "global.h"
 #include "CEditView.h"
+#include "funccode.h"		//Stonee, 2001/03/12
 
 /* ソート比較用プロシージャ */
 int CALLBACK _CompareFunc_( LPARAM lParam1, LPARAM lParam2, LPARAM lParamSort )
@@ -946,7 +947,8 @@ BOOL CDlgFuncList::OnBnClicked( int wID )
 	switch( wID ){
 	case IDC_BUTTON_HELP:
 		/* 「アウトライン解析」のヘルプ */
-		::WinHelp( m_hWnd, m_szHelpFile, HELP_CONTEXT, 64 );
+		//Stonee, 2001/03/12 第四引数を、機能番号からヘルプトピック番号を調べるようにした
+		::WinHelp( m_hWnd, m_szHelpFile, HELP_CONTEXT, ::FuncID_To_HelpContextID(F_OUTLINE) );
 		return TRUE;
 	case IDOK:
 		return OnJump();

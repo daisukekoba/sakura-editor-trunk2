@@ -13,6 +13,7 @@
 #include "CEditDoc.h"
 //#include "CEditView.h"	// Oct. 10, 2000 JEPRO added	//Oct. 10, 2000 JEPRO チェックボックスをボタン化すればこの行は必要？
 #include "global.h"
+#include "funccode.h"		// Stonee, 2001/03/12
 
 CDlgCompare::CDlgCompare()
 {
@@ -46,7 +47,8 @@ BOOL CDlgCompare::OnBnClicked( int wID )
 	switch( wID ){
 	case IDC_BUTTON_HELP:
 		/* 「内容比較」のヘルプ */
-		::WinHelp( m_hWnd, m_szHelpFile, HELP_CONTEXT, 116 );
+		//Stonee, 2001/03/12 第四引数を、機能番号からヘルプトピック番号を調べるようにした
+		::WinHelp( m_hWnd, m_szHelpFile, HELP_CONTEXT, ::FuncID_To_HelpContextID(F_COMPARE) );
 		return TRUE;
 //	From Here Oct. 10, 2000 JEPRO added  Ref. code はCDlgFind.cpp の OnBnClicked
 //	チェックボックスをボタン化してCDlgCompare.cppに直接書き込んでみたが失敗

@@ -4,8 +4,9 @@
 	Copyright (C) 1998-2000, Norio Nakatani
 ************************************************************************/
 #include "CDlgExec.h"
-//#include "funccode.h"
+#include "funccode.h"    //Stonee, 2001/03/12  コメントアウトされてたのを有効にした
 #include "sakura_rc.h"
+#include "etc_uty.h"     //Stonee, 2001/03/12
 
 CDlgExec::CDlgExec()
 {
@@ -105,7 +106,8 @@ BOOL CDlgExec::OnBnClicked( int wID )
 	//	To Here Sept. 12, 2000 うまくいかないので元に戻してある
 	case IDC_BUTTON_HELP:
 		/* 「検索」のヘルプ */
-		::WinHelp( m_hWnd, m_szHelpFile, HELP_CONTEXT, 103 );
+		//Stonee, 2001/03/12 第四引数を、機能番号からヘルプトピック番号を調べるようにした
+		::WinHelp( m_hWnd, m_szHelpFile, HELP_CONTEXT, ::FuncID_To_HelpContextID(F_EXECCOMMAND) );
 		break;
 	case IDOK:			/* 下検索 */
 		/* ダイアログデータの取得 */

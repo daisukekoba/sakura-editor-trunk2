@@ -12,6 +12,7 @@
 #include "etc_uty.h"
 #include "debug.h"
 #include "CEditDoc.h"
+#include "funccode.h"		// Stonee, 2001/03/12
 
 CDlgJump::CDlgJump()
 {
@@ -104,7 +105,8 @@ BOOL CDlgJump::OnBnClicked( int wID )
 	switch( wID ){
 	case IDC_BUTTON_HELP:
 		/* 「指定行へジャンプ」のヘルプ */
-		::WinHelp( m_hWnd, m_szHelpFile, HELP_CONTEXT, 63 );
+		//Stonee, 2001/03/12 第四引数を、機能番号からヘルプトピック番号を調べるようにした
+		::WinHelp( m_hWnd, m_szHelpFile, HELP_CONTEXT, ::FuncID_To_HelpContextID(F_JUMP) );
 		return TRUE;
 	case IDC_CHECK_PLSQL:		/* PL/SQLソースの有効行か */
 		if( BST_CHECKED == ::IsDlgButtonChecked( m_hWnd, IDC_CHECK_PLSQL ) ){

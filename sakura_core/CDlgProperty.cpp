@@ -11,6 +11,7 @@
 #include "debug.h"
 #include "CEditDoc.h"
 #include "etc_uty.h"
+#include "funccode.h"		// Stonee, 2001/03/12
 
 /* モーダルダイアログの表示 */
 int CDlgProperty::DoModal( HINSTANCE hInstance, HWND hwndParent, LPARAM lParam )
@@ -23,7 +24,8 @@ BOOL CDlgProperty::OnBnClicked( int wID )
 	switch( wID ){
 	case IDC_BUTTON_HELP:
 		/* 「ファイルのプロパティ」のヘルプ */
-		::WinHelp( m_hWnd, m_szHelpFile, HELP_CONTEXT, 22 );
+		//Stonee, 2001/03/12 第四引数を、機能番号からヘルプトピック番号を調べるようにした
+		::WinHelp( m_hWnd, m_szHelpFile, HELP_CONTEXT, ::FuncID_To_HelpContextID(F_PROPERTY_FILE) );
 		return TRUE;
 	case IDOK:			/* 下検索 */
 		/* ダイアログデータの取得 */

@@ -10,6 +10,7 @@
 #include "sakura_rc.h"
 #include "CJre.h"
 #include "CEditView.h"
+#include "etc_uty.h"    //Stonee, 2001/03/12
 
 CDlgFind::CDlgFind()
 {
@@ -192,7 +193,8 @@ BOOL CDlgFind::OnBnClicked( int wID )
 	switch( wID ){
 	case IDC_BUTTON_HELP:
 		/* 「検索」のヘルプ */
-		::WinHelp( m_hWnd, m_szHelpFile, HELP_CONTEXT, 59 );
+		//Stonee, 2001/03/12 第四引数を、機能番号からヘルプトピック番号を調べるようにした
+		::WinHelp( m_hWnd, m_szHelpFile, HELP_CONTEXT, F_SEARCH_DIALOG );
 		break;
 	case IDC_CHK_REGULAREXP:	/* 正規表現 */
 //		MYTRACE( "IDC_CHK_REGULAREXP ::IsDlgButtonChecked( m_hWnd, IDC_CHK_REGULAREXP ) = %d\n", ::IsDlgButtonChecked( m_hWnd, IDC_CHK_REGULAREXP ) );
