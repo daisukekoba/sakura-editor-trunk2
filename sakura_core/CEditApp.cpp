@@ -1250,7 +1250,9 @@ LRESULT CEditApp::DispatchEvent(
 		case WM_QUERYENDSESSION:
 			/* すべてのウィンドウを閉じる */	//Oct. 7, 2000 jepro 「編集ウィンドウの全終了」という説明を左記のように変更
 			if( CloseAllEditor() ){
-				DestroyWindow( hwnd );
+				//	Jan. 31, 2000 genta
+				//	この時点ではWindowsの終了が確定していないので常駐解除すべきではない．
+				//	DestroyWindow( hwnd );
 				return TRUE;
 			}else{
 				return FALSE;
@@ -1262,6 +1264,27 @@ LRESULT CEditApp::DispatchEvent(
 			}
 			return 0L;
 
+		//	From Here Jan. 31, 2000 genta	Windows終了時の後処理．
+		//	Windows終了時はWM_CLOSEが呼ばれない上，DestroyWindowを
+		//	呼び出す必要もない．また，メッセージループに戻らないので
+		//	メッセージループの後ろの処理をここで完了させる必要がある．
+		case WM_ENDSESSION:
+			//	もしWindowsの終了が中断されたのなら何もしない
+			if( wParam != TRUE )	return 0;
+
+			//	ホットキーの破棄
+			::UnregisterHotKey( m_hWnd, ID_HOTKEY_TRAYMENU );
+			
+			//	どうせExplorerも終了するのでトレイアイコンは処理しない．
+			
+			//	終了処理中に新しいウィンドウを作るのもいやな感じなので
+			//	オプションに関わらず終了ダイアログの表示は行わない
+			
+			//	共有データの保存(重要)
+			m_cShareData.SaveShareData();
+		
+			return 0;	//	もうこのプロセスに制御が戻ることはない
+		//	To Here Jan. 31, 2000 genta
 		case WM_DESTROY:
 			::UnregisterHotKey( m_hWnd, ID_HOTKEY_TRAYMENU );
 
