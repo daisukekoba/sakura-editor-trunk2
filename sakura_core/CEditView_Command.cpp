@@ -478,6 +478,7 @@ BOOL CEditView::HandleCommand(
 	case F_TILE_V:			Command_TILE_V();break;			//上下に並べて表示
 	case F_TILE_H:			Command_TILE_H();break;			//左右に並べて表示
 	case F_MAXIMIZE_V:		Command_MAXIMIZE_V();break;		//縦方向に最大化
+	case F_MAXIMIZE_H:		Command_MAXIMIZE_H();break;		//横方向に最大化 //2001.02.10 by MIK
 	case F_MINIMIZE_ALL:	Command_MINIMIZE_ALL();break;	/* すべて最小化 */	//	Sept. 17, 2000 jepro 説明の「全て」を「すべて」に統一
 	case F_REDRAW:			Command_REDRAW();break;			/* 再描画 */
 	case F_WIN_OUTPUT:		Command_WIN_OUTPUT();break;		//アウトプットウィンドウ表示
@@ -6911,6 +6912,29 @@ void CEditView::Command_MAXIMIZE_V( void )
 	return;
 }
 
+
+
+
+//2001.02.10 Start by MIK: 縦方向に最大化
+//横方向に最大化
+void CEditView::Command_MAXIMIZE_H( void )
+{
+	HWND	hwndFrame;
+	RECT	rcOrg;
+	RECT	rcDesktop;
+
+	hwndFrame = ::GetParent( m_hwndParent );
+	::GetWindowRect( hwndFrame, &rcOrg );
+	::SystemParametersInfo( SPI_GETWORKAREA, NULL, &rcDesktop, 0 );
+	::SetWindowPos(
+		hwndFrame, 0,
+		rcDesktop.left, rcOrg.top,
+		rcDesktop.right - rcDesktop.left, rcOrg.bottom - rcOrg.top,
+		SWP_NOOWNERZORDER | SWP_NOZORDER
+	);
+	return;
+}
+//2001.02.10 End: 縦方向に最大化
 
 
 

@@ -533,6 +533,7 @@ void ReplaceData_CEditView(
 	void Command_TILE_V( void );		/* 上下に並べて表示 */
 	void Command_TILE_H( void );		/* 左右に並べて表示 */
 	void Command_MAXIMIZE_V( void );	/* 縦方向に最大化 */
+	void Command_MAXIMIZE_H( void );	/* 横方向に最大化 */  //2001.02.10 by MIK
 	void Command_MINIMIZE_ALL( void );	/* すべて最小化 */
 	void Command_REDRAW( void );		/* 再描画 */
 	void Command_WIN_OUTPUT( void );	//アウトプットウィンドウ表示

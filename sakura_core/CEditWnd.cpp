@@ -2596,6 +2596,7 @@ void CEditWnd::InitMenu( HMENU hMenu, UINT uPos, BOOL fSystemMenu )
 			m_CMenuDrawer.MyAppendMenu( hMenu, MF_BYPOSITION | MF_STRING, F_TILE_H			, "左右に並べて表示(&T)" );	//Oct. 7, 2000 JEPRO アクセスキー変更(H→T)
 			m_CMenuDrawer.MyAppendMenu( hMenu, MF_BYPOSITION | MF_SEPARATOR, 0, NULL );	/* セパレータ */
 			m_CMenuDrawer.MyAppendMenu( hMenu, MF_BYPOSITION | MF_STRING, F_MAXIMIZE_V		, "縦方向に最大化(&X)" );	//Sept. 13, 2000 JEPRO アクセスキー付与
+			m_CMenuDrawer.MyAppendMenu( hMenu, MF_BYPOSITION | MF_STRING, F_MAXIMIZE_H		, "横方向に最大化" );		//2001.02.10 by MIK
 			m_CMenuDrawer.MyAppendMenu( hMenu, MF_BYPOSITION | MF_STRING, F_MINIMIZE_ALL	, "すべて最小化(&M)" );		//Sept. 17, 2000 jepro 説明の「全て」を「すべて」に統一
 			m_CMenuDrawer.MyAppendMenu( hMenu, MF_BYPOSITION | MF_SEPARATOR, 0, NULL );	/* セパレータ */				//Oct. 22, 2000 JEPRO 下の「再描画」復活に伴いセパレータを追加
 			m_CMenuDrawer.MyAppendMenu( hMenu, MF_BYPOSITION | MF_STRING, F_REDRAW			, "再描画(&R)" );			//Oct. 22, 2000 JEPRO コメントアウトされていたのを復活させた
@@ -3555,6 +3556,7 @@ int CEditWnd::FuncID_To_HelpContextID( int nFuncID )
 	case F_TILE_V:			return 140;	//上下に並べて表示
 	case F_TILE_H:			return 139;	//左右に並べて表示
 	case F_MAXIMIZE_V:		return 141;	//縦方向に最大化
+	case F_MAXIMIZE_H:		return 0;	//横方向に最大化 //2001.02.10 by MIK
 	case F_MINIMIZE_ALL:	return 96;	//すべて最小化	//Sept. 17, 2000 jepro 説明の「全て」を「すべて」に統一
 //	case F_REDRAW:			return ;	//再描画
 	case F_WIN_OUTPUT:		return 0;	//アウトプットウィンドウ表示

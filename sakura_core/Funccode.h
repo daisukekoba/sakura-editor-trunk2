@@ -281,6 +281,7 @@
 #define F_PREVWINDOW		31341	//前のウィンドウ
 #define F_MAXIMIZE_V		31350	//縦方向に最大化
 #define F_MINIMIZE_ALL		31351	//すべて最小化	//	Sept. 17, 2000 jepro 説明の「全て」を「すべて」に統一
+#define F_MAXIMIZE_H		31352	//横方向に最大化  //2001.02.10 by MIK
 #define F_REDRAW			31360	//再描画
 #define F_WIN_OUTPUT		31370	//アウトプットウィンドウ表示
 

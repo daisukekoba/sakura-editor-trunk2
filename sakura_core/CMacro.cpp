@@ -243,6 +243,7 @@ MacroFuncInfo m_MacroFuncInfoArr[] =
 	F_NEXTWINDOW				, "NextWindow",			//次のウィンドウ
 	F_PREVWINDOW				, "PrevWindow",			//前のウィンドウ
 	F_MAXIMIZE_V				, "MaximizeV",			//縦方向に最大化
+	F_MAXIMIZE_H				, "MaximizeH",			//横方向に最大化 //2001.02.10 by MIK
 	F_MINIMIZE_ALL				, "MinimizeAll",		//すべて最小化	//Sept. 17, 2000 jepro 説明の「全て」を「すべて」に統一
 	F_REDRAW					, "ReDraw",				//再描画
 	F_WIN_OUTPUT				, "ActivateWinOutput",	//アウトプットウィンドウ表示
