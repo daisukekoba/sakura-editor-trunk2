@@ -35,6 +35,96 @@ LRESULT CALLBACK CEditAppWndProc( HWND, UINT, WPARAM, LPARAM );
 
 CEditApp*	g_m_pCEditApp;
 
+//Stonee, 2001/03/21
+void CEditApp::DoGrep()
+{
+	CDlgGrep	cDlgGrep;
+	char*			pCmdLine;
+	char*			pOpt;
+  	int				nDataLen;
+	int				nRet;
+	CMemory			cmWork1;
+	CMemory			cmWork2;
+	CMemory			cmWork3;
+
+	/* Grep */
+	/*Grepダイアログの初期化１ */
+//	cDlgGrep.Create( m_hInstance, /*m_hWnd*/NULL );
+
+	strcpy( cDlgGrep.m_szText, m_pShareData->m_szSEARCHKEYArr[0] );
+
+	/* Grepダイアログの表示 */
+					nRet = cDlgGrep.DoModal( m_hInstance, /*m_hWnd*/NULL, "" );
+//					MYTRACE( "nRet=%d\n", nRet );
+					if( FALSE == nRet || m_hWnd == NULL ){
+						return;
+					}
+
+//					MYTRACE( "cDlgGrep.m_szText  =[%s]\n", cDlgGrep.m_szText   );
+//					MYTRACE( "cDlgGrep.m_szFile  =[%s]\n", cDlgGrep.m_szFile   );
+//					MYTRACE( "cDlgGrep.m_szFolder=[%s]\n", cDlgGrep.m_szFolder );
+
+					/*======= Grepの実行 =============*/
+					/* Grep結果ウィンドウの表示 */
+
+					pCmdLine = new char[1024];
+					pOpt = new char[64];
+
+					cmWork1.SetDataSz( cDlgGrep.m_szText );
+					cmWork2.SetDataSz( cDlgGrep.m_szFile );
+					cmWork3.SetDataSz( cDlgGrep.m_szFolder );
+					cmWork1.Replace( "\"", "\"\"" );
+					cmWork2.Replace( "\"", "\"\"" );
+					cmWork3.Replace( "\"", "\"\"" );
+
+					/*
+					|| -GREPMODE -GKEY="1" -GFILE="*.*;*.c;*.h" -GFOLDER="c:\" -GOPT=S
+					*/
+					wsprintf( pCmdLine, "-GREPMODE -GKEY=\"%s\" -GFILE=\"%s\" -GFOLDER=\"%s\"" ,
+						cmWork1.GetPtr( &nDataLen ),
+						cmWork2.GetPtr( &nDataLen ),
+						cmWork3.GetPtr( &nDataLen )
+					);
+
+					pOpt[0] = '\0';
+					if( cDlgGrep.m_bSubFolder ){			/* サブフォルダからも検索する */
+						strcat( pOpt, "S" );
+					}
+				//	if( m_bFromThisText ){					/* この編集中のテキストから検索する */
+				//
+				//	}
+					if( cDlgGrep.m_bLoHiCase ){				/* 英大文字と英小文字を区別する */
+						strcat( pOpt, "L" );
+					}
+					if( cDlgGrep.m_bRegularExp ){			/* 正規表現 */
+						strcat( pOpt, "R" );
+					}
+					if( cDlgGrep.m_bKanjiCode_AutoDetect ){	/* 文字コード自動判別 */
+						strcat( pOpt, "K" );
+					}
+					if( cDlgGrep.m_bGrepOutputLine ){		/* 行を出力するか該当部分だけ出力するか */
+						strcat( pOpt, "P" );
+					}
+
+					if( 1 == cDlgGrep.m_nGrepOutputStyle ){	/* Grep: 出力形式 */
+						strcat( pOpt, "1" );
+					}
+					if( 2 == cDlgGrep.m_nGrepOutputStyle ){	/* Grep: 出力形式 */
+						strcat( pOpt, "2" );
+					}
+
+
+					if( 0 < lstrlen( pOpt ) ){
+						strcat( pCmdLine, " -GOPT=" );
+						strcat( pCmdLine, pOpt );
+					}
+
+					/* 新規編集ウィンドウの追加 ver 0 */
+					CEditApp::OpenNewEditor( m_hInstance, m_pShareData->m_hwndTray, pCmdLine, 0, FALSE );
+
+					delete [] pCmdLine;
+					delete [] pOpt;
+}
 
 //	BOOL CALLBACK ExitingDlgProc(
 //	  HWND hwndDlg,	// handle to dialog box
@@ -198,6 +288,21 @@ HWND CEditApp::Create( HINSTANCE hInstance )
 	m_CMenuDrawer.Create( m_hInstance, m_hWnd, &m_hIcons );
 
 	if( NULL != m_hWnd ){
+		CreateTrayIcon( m_hWnd );
+	}else{
+	}
+//	::ShowWindow( m_hWnd, SW_SHOW );
+
+	/* Windows アクセラレータの作成 */
+//	m_CKeyBind.Create( m_hInstance );
+//	m_hAccel = m_CKeyBind.CreateAccerelator();
+	return m_hWnd;
+}
+
+//! タスクトレイにアイコンを登録する
+bool CEditApp::CreateTrayIcon( HWND hWnd )
+{
+	HICON hIcon;
 //		::SetWindowLong( m_hWnd, GWL_USERDATA, (LONG)this );
 		/* タスクトレイのアイコンを作る */
 		if( TRUE == m_pShareData->m_Common.m_bUseTaskTray ){	/* タスクトレイのアイコンを使う */
@@ -225,14 +330,7 @@ HWND CEditApp::Create( HINSTANCE hInstance )
 //To Here Jan. 12, 2001
 			m_bCreatedTrayIcon = TRUE;	/* トレイにアイコンを作った */
 		}
-	}else{
-	}
-//	::ShowWindow( m_hWnd, SW_SHOW );
-
-	/* Windows アクセラレータの作成 */
-//	m_CKeyBind.Create( m_hInstance );
-//	m_hAccel = m_CKeyBind.CreateAccerelator();
-	return m_hWnd;
+	return true;
 }
 
 
@@ -337,14 +435,14 @@ LRESULT CEditApp::DispatchEvent(
 //	char*			pData;
 //	char			szMemu[300];
 	HWND			hwndWork;
-	static CDlgGrep	cDlgGrep;
-	char*			pCmdLine;
-	char*			pOpt;
+	//static CDlgGrep	cDlgGrep;  //Stonee, 2001/03/21 Grepを多重起動したときエラーになるのでGrep部分を別関数にした
+	//char*			pCmdLine;
+	//char*			pOpt;
 	CMemory			cmWork1;
 	CMemory			cmWork2;
 	CMemory			cmWork3;
-	int				nDataLen;
-	int				nRet;
+	//int				nDataLen;
+	//int				nRet;
 	LPHELPINFO		lphi;
 //	HWND			hwndExitingDlg;
 
@@ -651,6 +749,13 @@ LRESULT CEditApp::DispatchEvent(
 
 			return 0L;
 
+// << 20010412 by aroka
+		case MYWM_CREATETASKBAR :
+			/* TaskTray Iconの再登録を要求するメッセージ．
+				Explorerが再起動したときに送出される．*/
+			CreateTrayIcon( m_hWnd ) ;
+// >> by aroka
+
 		case MYWM_NOTIFYICON:
 //			MYTRACE( "MYWM_NOTIFYICON\n" );
 			switch (lParam){
@@ -948,83 +1053,7 @@ LRESULT CEditApp::DispatchEvent(
 					break;
 				case F_GREP:
 					/* Grep */
-					/* Grepダイアログの初期化１ */
-//					cDlgGrep.Create( m_hInstance, /*m_hWnd*/NULL );
-
-					strcpy( cDlgGrep.m_szText, m_pShareData->m_szSEARCHKEYArr[0] );
-
-					/* Grepダイアログの表示 */
-					nRet = cDlgGrep.DoModal( m_hInstance, /*m_hWnd*/NULL, "" );
-//					MYTRACE( "nRet=%d\n", nRet );
-					if( FALSE == nRet || m_hWnd == NULL ){
-						break;;
-					}
-
-//					MYTRACE( "cDlgGrep.m_szText  =[%s]\n", cDlgGrep.m_szText   );
-//					MYTRACE( "cDlgGrep.m_szFile  =[%s]\n", cDlgGrep.m_szFile   );
-//					MYTRACE( "cDlgGrep.m_szFolder=[%s]\n", cDlgGrep.m_szFolder );
-
-					/*======= Grepの実行 =============*/
-					/* Grep結果ウィンドウの表示 */
-
-					pCmdLine = new char[1024];
-					pOpt = new char[64];
-
-					cmWork1.SetDataSz( cDlgGrep.m_szText );
-					cmWork2.SetDataSz( cDlgGrep.m_szFile );
-					cmWork3.SetDataSz( cDlgGrep.m_szFolder );
-					cmWork1.Replace( "\"", "\"\"" );
-					cmWork2.Replace( "\"", "\"\"" );
-					cmWork3.Replace( "\"", "\"\"" );
-
-					/*
-					|| -GREPMODE -GKEY="1" -GFILE="*.*;*.c;*.h" -GFOLDER="c:\" -GOPT=S
-					*/
-					wsprintf( pCmdLine, "-GREPMODE -GKEY=\"%s\" -GFILE=\"%s\" -GFOLDER=\"%s\"" ,
-						cmWork1.GetPtr( &nDataLen ),
-						cmWork2.GetPtr( &nDataLen ),
-						cmWork3.GetPtr( &nDataLen )
-					);
-
-					pOpt[0] = '\0';
-					if( cDlgGrep.m_bSubFolder ){			/* サブフォルダからも検索する */
-						strcat( pOpt, "S" );
-					}
-				//	if( m_bFromThisText ){					/* この編集中のテキストから検索する */
-				//
-				//	}
-					if( cDlgGrep.m_bLoHiCase ){				/* 英大文字と英小文字を区別する */
-						strcat( pOpt, "L" );
-					}
-					if( cDlgGrep.m_bRegularExp ){			/* 正規表現 */
-						strcat( pOpt, "R" );
-					}
-					if( cDlgGrep.m_bKanjiCode_AutoDetect ){	/* 文字コード自動判別 */
-						strcat( pOpt, "K" );
-					}
-					if( cDlgGrep.m_bGrepOutputLine ){		/* 行を出力するか該当部分だけ出力するか */
-						strcat( pOpt, "P" );
-					}
-
-					if( 1 == cDlgGrep.m_nGrepOutputStyle ){	/* Grep: 出力形式 */
-						strcat( pOpt, "1" );
-					}
-					if( 2 == cDlgGrep.m_nGrepOutputStyle ){	/* Grep: 出力形式 */
-						strcat( pOpt, "2" );
-					}
-
-
-					if( 0 < lstrlen( pOpt ) ){
-						strcat( pCmdLine, " -GOPT=" );
-						strcat( pCmdLine, pOpt );
-					}
-
-					/* 新規編集ウィンドウの追加 ver 0 */
-					CEditApp::OpenNewEditor( m_hInstance, m_pShareData->m_hwndTray, pCmdLine, 0, FALSE );
-
-					delete [] pCmdLine;
-					delete [] pOpt;
-
+					DoGrep();  //Stonee, 2001/03/21  Grepを別関数に
 					break;
 				case F_WIN_CLOSEALL:	//Oct. 17, 2000 JEPRO 名前を変更(F_FILECLOSEALL→F_WIN_CLOSEALL)
 					/* すべてのウィンドウを閉じる */	//Oct. 7, 2000 jepro 「編集ウィンドウの全終了」という説明を左記のように変更
@@ -2280,7 +2309,85 @@ int	CEditApp::CreatePopUpMenu_R( void )
 
 
 
+/*!
+	コマンドラインのチェックを行って、オプション番号と
+	引数がある場合はその先頭アドレスを返す。
+	CEditApp::ParseCommandLine()で使われる。
+	
+	@return オプションの番号。どれにも該当しないときは0を返す。
 
+	@author genta
+	@date Apr. 6, 2001
+*/
+int CEditApp::CheckCommandLine(
+	char*  str, //!< [in] 検証する文字列（先頭の-は含まない）
+	char** arg	//!< [out] 引数がある場合はその先頭へのポインタ
+)
+{
+
+	/*!
+		コマンドラインオプション解析用構造体配列
+	*/
+	struct _CmdLineOpt {
+		const char *opt;	//!< オプション文字列
+		int len;	//!< オプションの文字列長（計算を省くため）
+		int value;	//!< 変換後の値
+	};
+
+	/*!
+		コマンドラインオプション
+		後ろに引数を取らないもの
+	*/
+	static const _CmdLineOpt _COptWoA[] = {
+		"CODE", 4, 1001,
+		"R", 1, 1002,
+		"NOWIN", 5, 1003,
+		"GREPMODE", 8, 1100,
+		"DEBUGMODE", 9, 1999,
+		NULL, 0, 0
+	};
+
+	/*!
+		コマンドラインオプション
+		後ろに引数を取るもの
+	*/
+	static const _CmdLineOpt _COptWithA[] = {
+		"X", 1, 1,
+		"Y", 1, 2,
+		"VX", 2, 3,
+		"VY", 2, 4,
+		"GKEY", 4, 101,
+		"GFILE", 5, 102,
+		"GFOLDER", 7, 103,
+		"GOPT", 4, 104,
+		NULL, 0, 0
+	};
+	
+	const _CmdLineOpt *ptr;
+	int len = lstrlen( str );
+	
+	//	引数がある場合を先に確認
+	for( ptr = _COptWithA; ptr->opt != NULL; ptr++ ){
+		if( len >= ptr->len &&	//	長さが足りているか
+			//	オプション部分の長さチェック
+			( str[ptr->len] == '=' || str[ptr->len] == ':' ) &&
+			//	文字列の比較
+			memcmp( str, ptr->opt, ptr->len ) == 0 ){
+			*arg = str + ptr->len + 1;
+			return ptr->value;
+		}
+	}
+	
+	//	引数がない場合
+	for( ptr = _COptWoA; ptr->opt != NULL; ptr++ ){
+		if( len == ptr->len &&	//	長さチェック
+			//	文字列の比較
+			memcmp( str, ptr->opt, ptr->len ) == 0 ){
+			return ptr->value;
+		}
+	}
+	return 0;	//	該当無し
+}
 
 /*! コマンドラインの解析
 	
@@ -2329,8 +2436,8 @@ void CEditApp::ParseCommandLine(
 	int				nPos;
 	char*			pszToken;
 	CMemory			cmWork;
-	const char*		pszOpt;
-	int				nOptLen;
+	//const char*		pszOpt;	
+	//int				nOptLen;
 
 	bGrepMode = FALSE;
 	bGrepSubFolder = FALSE;
@@ -2419,91 +2526,53 @@ void CEditApp::ParseCommandLine(
 				strcpy( fi.m_szPath, pszToken );							/* ファイル名 */
 			}
 		}else{
-			pszOpt = "-X=";
-			nOptLen = lstrlen( pszOpt );
-			if( ( (int)lstrlen( pszToken ) > nOptLen ) && ( 0 == memcmp( pszOpt, pszToken, nOptLen ) ) ){
+			++pszToken;	//	先頭の'-'はskip
+			char *arg;
+			switch( CheckCommandLine( pszToken, &arg )){
+			case 1: //	X
 				/* 行桁指定を1開始にした */
-				fi.m_nX = atoi( pszToken + nOptLen ) - 1;
-				goto end_of_options;
-			}
-			pszOpt = "-Y=";
-			nOptLen = lstrlen( pszOpt );
-			if( ( (int)lstrlen( pszToken ) > nOptLen ) && ( 0 == memcmp( pszOpt, pszToken, nOptLen ) ) ){
+				fi.m_nX = atoi( arg ) - 1;
+				break;
+			case 2:	//	Y
+				fi.m_nY = atoi( arg ) - 1;
+				break;
+			case 3:	// VX
 				/* 行桁指定を1開始にした */
-				fi.m_nY = atoi( pszToken + nOptLen ) - 1;
-				goto end_of_options;
-			}
-			pszOpt = "-Y:";		//Mar.24, 2001 JEPRO '='はあまりよくない
-			nOptLen = lstrlen( pszOpt );
-			if( ( (int)lstrlen( pszToken ) > nOptLen ) && ( 0 == memcmp( pszOpt, pszToken, nOptLen ) ) ){
+				fi.m_nViewLeftCol = atoi( arg ) - 1;
+				break;
+			case 4:	//	VY
 				/* 行桁指定を1開始にした */
-				fi.m_nY = atoi( pszToken + nOptLen ) - 1;
-				goto end_of_options;
-			}
-			pszOpt = "-VX=";
-			nOptLen = lstrlen( pszOpt );
-			if( ( (int)lstrlen( pszToken ) > nOptLen ) && ( 0 == memcmp( pszOpt, pszToken, nOptLen ) ) ){
-				/* 行桁指定を1開始にした */
-				fi.m_nViewLeftCol = atoi( pszToken + nOptLen ) - 1;
-				goto end_of_options;
-			}
-			pszOpt = "-VY=";
-			nOptLen = lstrlen( pszOpt );
-			if( ( (int)lstrlen( pszToken ) > nOptLen ) && ( 0 == memcmp( pszOpt, pszToken, nOptLen ) ) ){
-				/* 行桁指定を1開始にした */
-				fi.m_nViewTopLine = atoi( pszToken + nOptLen ) - 1;
-				goto end_of_options;
-			}
-			pszOpt = "-CODE=";
-			nOptLen = lstrlen( pszOpt );
-			if( ( (int)lstrlen( pszToken ) > nOptLen ) && ( 0 == memcmp( pszOpt, pszToken, nOptLen ) ) ){
-				fi.m_nCharCode = atoi( pszToken + nOptLen );
-				goto end_of_options;
-			}
-			pszOpt = "-R";
-			nOptLen = lstrlen( pszOpt );
-			if( ( (int)lstrlen( pszToken ) == nOptLen ) && ( 0 == memcmp( pszOpt, pszToken, nOptLen ) ) ){
+				fi.m_nViewTopLine = atoi( arg ) - 1;
+				break;
+			case 1001:	//	CODE
+				fi.m_nCharCode = atoi( arg );
+				break;
+			case 1002:	//	R
 				bReadOnly = TRUE;
-				goto end_of_options;
-			}
-			pszOpt = "-NOWIN";
-			nOptLen = lstrlen( pszOpt );
-			if( ( (int)lstrlen( pszToken ) == nOptLen ) && ( 0 == memcmp( pszOpt, pszToken, nOptLen ) ) ){
+				break;
+			case 1003:	//	NOWIN
 				bNoWindow = TRUE;
-				goto end_of_options;
-			}
-			pszOpt = "-GREPMODE";
-			nOptLen = lstrlen( pszOpt );
-			if( ( (int)lstrlen( pszToken ) == nOptLen ) && ( 0 == memcmp( pszOpt, pszToken, nOptLen ) ) ){
+				break;
+			case 1100:	//	GREPMODE
 				bGrepMode = TRUE;
-				goto end_of_options;
-			}
-			pszOpt = "-GKEY=";
-			nOptLen = lstrlen( pszOpt );
-			if( ( (int)lstrlen( pszToken ) > nOptLen ) && ( 0 == memcmp( pszOpt, pszToken, nOptLen ) ) ){
-				cmGrepKey.SetData( &pszToken[nOptLen + 1],  lstrlen( pszToken ) - (nOptLen + 2) );
+				break;
+			case 101:	//	GKEY
+				//	前後の""を取り除く
+				cmGrepKey.SetData( arg + 1,  lstrlen( arg ) - 2 );
 				cmGrepKey.Replace( "\"\"", "\"" );
-				goto end_of_options;
-			}
-			pszOpt = "-GFILE=";
-			nOptLen = lstrlen( pszOpt );
-			if( ( (int)lstrlen( pszToken ) > nOptLen ) && ( 0 == memcmp( pszOpt, pszToken, nOptLen ) ) ){
-				cmGrepFile.SetData( &pszToken[nOptLen + 1],  lstrlen( pszToken ) - (nOptLen + 2) );
+				break;
+			case 102:	//	GFILE
+				//	前後の""を取り除く
+				cmGrepFile.SetData( arg + 1,  lstrlen( arg ) - 2 );
 				cmGrepFile.Replace( "\"\"", "\"" );
-				goto end_of_options;
-			}
-			pszOpt = "-GFOLDER=";
-			nOptLen = lstrlen( pszOpt );
-			if( ( (int)lstrlen( pszToken ) > nOptLen ) && ( 0 == memcmp( pszOpt, pszToken, nOptLen ) ) ){
-				cmGrepFolder.SetData( &pszToken[nOptLen + 1],  lstrlen( pszToken ) - (nOptLen + 2) );
+				break;
+			case 103:	//	GFOLDER
+				cmGrepFolder.SetData( arg + 1,  lstrlen( arg ) - 2 );
 				cmGrepFolder.Replace( "\"\"", "\"" );
-				goto end_of_options;
-			}
-			pszOpt = "-GOPT=";
-			nOptLen = lstrlen( pszOpt );
-			if( ( (int)lstrlen( pszToken ) > nOptLen ) && ( 0 == memcmp( pszOpt, pszToken, nOptLen ) ) ){
-				for( i = nOptLen; i < (int)lstrlen( pszToken ); ++i ){
-					switch( pszToken[i] ){
+				break;
+			case 104:	//	GOPT
+				for( ; *arg != '\0' ; ++arg ){
+					switch( *arg ){
 					case 'S':	/* サブフォルダからも検索する */
 						bGrepSubFolder = TRUE;	break;
 					case 'L':	/* 英大文字と英小文字を区別する */
@@ -2520,15 +2589,11 @@ void CEditApp::ParseCommandLine(
 						nGrepOutputStyle = 2;	break;
 					}
 				}
-				goto end_of_options;
-			}
-			pszOpt = "-DEBUGMODE";
-			nOptLen = lstrlen( pszOpt );
-			if( ( (int)lstrlen( pszToken ) == nOptLen ) && ( 0 == memcmp( pszOpt, pszToken, nOptLen ) ) ){
+				break;
+			case 1999:
 				bDebugMode = TRUE;
-				goto end_of_options;
+				break;
 			}
-			end_of_options:;
 		}
 		pszToken = my_strtok( pszCmdLineWork, nCmdLineWorkLen, &nPos, " " );
 	}

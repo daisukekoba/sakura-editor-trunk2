@@ -6364,6 +6364,10 @@ DWORD CEditView::DoGrep(
 		m_pcOpeBlk = NULL;
 	}
 
+	//	Apr. 13, 2001 genta
+	//	Grep実行後はファイルを変更無しの状態にする．
+	m_pcEditDoc->m_bIsModified = FALSE;
+	
 	m_pcEditDoc->m_bGrepRunning = FALSE;
 	m_bDoing_UndoRedo = FALSE;
 

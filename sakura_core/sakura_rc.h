@@ -48,6 +48,7 @@
 #define IDB_OPENED                      201
 #define IDB_OPENED_THIS                 202
 #define IDB_PRINTER                     203
+#define IDD_EXTCMD                      215
 #define IDC_CURSOR_COPYARROW            220
 #define IDC_CURSOR_HAND                 221
 #define IDC_CURSOR_MOVEARROW            222
@@ -56,6 +57,7 @@
 #define IDI_ICON_HANA                   232
 #define IDI_ICON_MOJI                   233
 #define IDI_ICON_GREP                   240
+#define IDC_HIDE                        1000
 #define IDC_CHK_LOHICASE                1006
 #define IDC_CHECK_DISPLINE              1007
 #define IDC_CHECK_INDENT                1009
@@ -454,12 +456,13 @@
 #define IDD_PROP_BACKUP                 5112
 #define IDD_OPERATIONRUNNING            5113
 #define IDD_PROP_KEYBIND1               5114
+#define IDC_EXECINFO                    -1
 
 // Next default values for new objects
 // 
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
-#define _APS_NEXT_RESOURCE_VALUE        215
+#define _APS_NEXT_RESOURCE_VALUE        216
 #define _APS_NEXT_COMMAND_VALUE         4072
 #define _APS_NEXT_CONTROL_VALUE         1389
 #define _APS_NEXT_SYMED_VALUE           101

@@ -1818,5 +1818,4 @@ int FuncID_To_HelpContextID( int nFuncID )
 	}
 }
 
-
 /* [EOF] */

@@ -500,7 +500,7 @@ BOOL CEditView::IsSeaechString( const char* pszData, int nDataLen, int nPos, int
 
 
 
-/* ルーラー描画 */
+/*! ルーラー描画 */
 void CEditView::DispRuler( HDC hdc )
 {
 
@@ -665,14 +665,8 @@ void CEditView::DispRuler( HDC hdc )
 }
 
 //======================================================================
-//	Jun. 16, 2000 genta
-//
-//	PosX, PosY: 検索開始点のレイアウト座標
-//	NewX, NewY: 移動先のレイアウト座標
-//
-//	戻り値: true : 成功 / false : 失敗
-//
 //@@@ 2001.02.03 Start by MIK: 全角文字の対括弧
+//! 全角括弧の対応表
 const struct ZENKAKKO_T{
 	char *sStr;
 	char *eStr;
@@ -693,6 +687,33 @@ const struct ZENKAKKO_T{
 	NULL, NULL	//終端識別
 };
 //@@@ 全角文字の対括弧: End
+//	Jun. 16, 2000 genta
+/*!
+	@brief 対括弧の検索
+	
+	カーソル位置の括弧に対応する括弧を探す。カーソル位置が括弧でない場合は
+	カーソルの後ろの文字が括弧かどうかを調べる。
+	
+	カーソルの前後いずれもが括弧でない場合は何もしない。
+	
+	括弧が半角か全角か、及び始まりか終わりかによってこれに続く4つの関数に
+	制御を移す。
+
+	@param LayoutX [in] 検索開始点の物理座標X
+	@param LayoutY [in] 検索開始点の物理座標Y
+	@param NewX [out] 移動先のレイアウト座標X
+	@param NewY [out] 移動先のレイアウト座標Y
+	@param upChar [in] 括弧の始まりの文字
+	@param dnChar [in] 括弧を閉じる文字列
+
+	@retval true 成功
+	@retval false 失敗
+
+	@author genta
+	@date Jun. 16, 2000 genta
+	@date Feb. 03, 2001 MIK 全角括弧に対応
+
+*/
 bool CEditView::SearchBracket( int LayoutX, int LayoutY, int* NewX, int* NewY )
 {
 	int len;	//	行の長さ
@@ -792,11 +813,21 @@ bool CEditView::SearchBracket( int LayoutX, int LayoutY, int* NewX, int* NewY )
 	return false;
 }
 
-//	LayoutX, LayoutY: 検索開始点の物理座標
-//	NewX, NewY: 移動先のレイアウト座標
-//
-//	戻り値: true : 成功 / false : 失敗
-//
+/*!
+	@brief 半角対括弧の検索:順方向
+
+	@author genta
+
+	@param LayoutX [in] 検索開始点の物理座標X
+	@param LayoutY [in] 検索開始点の物理座標Y
+	@param NewX [out] 移動先のレイアウト座標X
+	@param NewY [out] 移動先のレイアウト座標Y
+	@param upChar [in] 括弧の始まりの文字
+	@param dnChar [in] 括弧を閉じる文字列
+
+	@retval true 成功
+	@retval false 失敗
+*/
 bool CEditView::SearchBracketForward( int PosX, int PosY, int* NewX, int* NewY,
 									int upChar, int dnChar )
 {
@@ -851,11 +882,21 @@ bool CEditView::SearchBracketForward( int PosX, int PosY, int* NewX, int* NewY,
 	return false;
 }
 
-//	LayoutX, LayoutY: 検索開始点の物理座標
-//	NewX, NewY: 移動先のレイアウト座標
-//
-//	戻り値: true : 成功 / false : 失敗
-//
+/*!
+	@brief 半角対括弧の検索:逆方向
+
+	@author genta
+
+	@param LayoutX [in] 検索開始点の物理座標X
+	@param LayoutY [in] 検索開始点の物理座標Y
+	@param NewX [out] 移動先のレイアウト座標X
+	@param NewY [out] 移動先のレイアウト座標Y
+	@param upChar [in] 括弧の始まりの文字
+	@param dnChar [in] 括弧を閉じる文字列
+
+	@retval true 成功
+	@retval false 失敗
+*/
 bool CEditView::SearchBracketBackward( int PosX, int PosY, int* NewX, int* NewY,
 									int dnChar, int upChar )
 {
@@ -909,12 +950,22 @@ bool CEditView::SearchBracketBackward( int PosX, int PosY, int* NewX, int* NewY,
 	return false;
 }
 
-//@@@ 2001.02.03 Start by MIK: 全角対括弧の検索
-//	LayoutX, LayoutY: 検索開始点の物理座標
-//	NewX, NewY: 移動先のレイアウト座標
-//
-//	戻り値: true : 成功 / false : 失敗
-//
+//@@@ 2001.02.03 Start by MIK:
+/*!
+	@brief 全角対括弧の検索:順方向
+
+	@author MIK
+
+	@param LayoutX [in] 検索開始点の物理座標X
+	@param LayoutY [in] 検索開始点の物理座標Y
+	@param NewX [out] 移動先のレイアウト座標X
+	@param NewY [out] 移動先のレイアウト座標Y
+	@param upChar [in] 括弧の始まりの文字へのポインタ
+	@param dnChar [in] 括弧を閉じる文字列へのポインタ
+
+	@retval true 成功
+	@retval false 失敗
+*/
 bool CEditView::SearchBracketForward2( int   PosX,   int   PosY,
 									   int*  NewX,   int*  NewY,
 									   char* upChar, char* dnChar )
@@ -970,12 +1021,22 @@ bool CEditView::SearchBracketForward2( int   PosX,   int   PosY,
 }
 //@@@ 2001.02.03 End
 
-//@@@ 2001.02.03 Start by MIK: 全角対括弧の検索
-//	LayoutX, LayoutY: 検索開始点の物理座標
-//	NewX, NewY: 移動先のレイアウト座標
-//
-//	戻り値: true : 成功 / false : 失敗
-//
+//@@@ 2001.02.03 Start by MIK:
+/*!
+	@brief 全角対括弧の検索:逆方向
+	
+	@author MIK
+	
+	@param LayoutX [in] 検索開始点の物理座標X
+	@param LayoutY [in] 検索開始点の物理座標Y
+	@param NewX [out] 移動先のレイアウト座標X
+	@param NewY [out] 移動先のレイアウト座標Y
+	@param upChar [in] 括弧の始まりの文字へのポインタ
+	@param dnChar [in] 括弧を閉じる文字列へのポインタ
+
+	@retval true 成功
+	@retval false 失敗
+*/
 bool CEditView::SearchBracketBackward2( int   PosX,   int   PosY,
 									    int*  NewX,   int*  NewY,
 									    char* dnChar, char* upChar )
@@ -1030,9 +1091,7 @@ bool CEditView::SearchBracketBackward2( int   PosX,   int   PosY,
 }
 //@@@ 2001.02.03 End
 
-//	現在のカーソル行位置を履歴に登録する
-//
-//
+//!	現在のカーソル行位置を履歴に登録する
 void CEditView::AddCurrentLineToHistory( void )
 {
 	int PosX, PosY;	//	物理位置（改行単位の計算）
@@ -1042,10 +1101,6 @@ void CEditView::AddCurrentLineToHistory( void )
 	CMarkMgr::CMark m( PosX, PosY );
 	m_cHistory->Add( m );
 
-//	char buf[256];
-//	wsprintf( buf, "Line: %d, Ext: %d",m.GetLine(),m.GetExtra() );
-//	::MessageBox( NULL, buf, "Mark Add", MB_OK );
 }
-
 
 /* [EOF] */
