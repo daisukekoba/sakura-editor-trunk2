@@ -755,7 +755,7 @@ _RETURN_:;
 
 /* バッファ内容をファイルに書き出す (テスト用) */
 /* (注意) Windows用にコーディングしてある */
-int CDocLineMgr::WriteFile( const char* pszPath, HWND hWndParent, HWND hwndProgress, int nCharCode, FILETIME* pFileTime )
+int CDocLineMgr::WriteFile( const char* pszPath, HWND hWndParent, HWND hwndProgress, int nCharCode, FILETIME* pFileTime, CEOL cEol )
 {
 	const char*		pLine;
 //	char*			pLineUnicode;
@@ -840,7 +840,6 @@ int CDocLineMgr::WriteFile( const char* pszPath, HWND hWndParent, HWND hwndProgr
 //	pLine = GetFirstLinrStr( &nLineLen );
 	pCDocLine = m_pDocLineTop;
 
-
 //	while( NULL != pLine ){
 	while( NULL != pCDocLine ){
 		++nLineNumber;
@@ -919,12 +918,20 @@ int CDocLineMgr::WriteFile( const char* pszPath, HWND hWndParent, HWND hwndProgr
 //				cmemBuf.Append( gm_pszEolDataArr[EOL_LF], LEN_EOL_LF );
 //				break;
 			default:
+				//	From Here Feb. 8, 2001 genta 改行コード変換処理を追加
+				if( cEol == EOL_NONE ){
 // 1999.12.20
 //				/* 改行コードをCRLFに変換 */
 //				cmemBuf.Append( gm_pszEolDataArr[EOL_CRLF], LEN_EOL_CRLF );
-				/* 改行コードを変換しない */
-				cmemBuf.Append( pCDocLine->m_cEol.GetValue(), pCDocLine->m_cEol.GetLen() );
-				break;
+					/* 改行コードを変換しない */
+					cmemBuf.Append( pCDocLine->m_cEol.GetValue(), pCDocLine->m_cEol.GetLen() );
+					break;
+				}
+				else {
+					/* 改行コードを指定されたものに変換 */
+					cmemBuf.Append( cEol.GetValue(), cEol.GetLen() );
+				}
+				//	To Here Feb. 8, 2001 genta
 			}
 		}
 		if( 0 < cmemBuf.GetLength() ){

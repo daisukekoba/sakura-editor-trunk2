@@ -80,7 +80,8 @@ public:
 	int GetActivePane( void );	/* アクティブなペインを取得 */
 	BOOL SelectFont( LOGFONT* );
 	BOOL FileRead( /*const*/ char* , BOOL*, int, BOOL, BOOL );	/* ファイルを開く */
-	BOOL FileWrite( const char* );
+	//	Feb. 9, 2001 genta 引数追加
+	BOOL FileWrite( const char*, enumEOLType cEolType = EOL_NONE );
 	bool SaveFile(bool force_rename);	//	ファイルの保存（に伴ういろいろ）
 	BOOL MakeBackUp( void );	/* バックアップの作成 */
 	void SetParentCaption( BOOL = FALSE );	/* 親ウィンドウのタイトルを更新 */
@@ -91,7 +92,7 @@ public:
 	BOOL OpenFileDialog( HWND, const char*, char*, int*, BOOL* );	/* 「ファイルを開く」ダイアログ */
 	void OnChangeSetting( void );	/* ビューに設定変更を反映させる */
 	void SetReferer( HWND , int, int );	/* タグジャンプ元など参照元の情報を保持する */
-	BOOL SaveFileDialog( char*, int* );	/* 「ファイル名を付けて保存」ダイアログ */
+	BOOL SaveFileDialog( char*, int*, CEOL* pcEol = NULL );	/* 「ファイル名を付けて保存」ダイアログ */
 
 	void CheckFileTimeStamp( void );	/* ファイルのタイムスタンプのチェック処理 */
 	void ReloadCurrentFile( BOOL, BOOL );/* 同一ファイルの再オープン */

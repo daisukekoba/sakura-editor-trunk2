@@ -117,6 +117,7 @@ UINT APIENTRY OFNHookProc(
 	static HWND				hwndComboMRU;
 	static HWND				hwndComboOPENFOLDER;
 	static HWND				hwndComboCODES;
+	static HWND				hwndComboEOL;	//	Feb. 9, 2001 genta
 	static CDlgOpenFile*	pcDlgOpenFile;
 	int						i;
 	OFNOTIFY*				pofn;
@@ -154,6 +155,22 @@ UINT APIENTRY OFNHookProc(
 		"UTF-7"
 	};
 	int nCodeNameArrNum = sizeof( pCodeNameArr ) / sizeof( pCodeNameArr[0] );
+	//	From Here	Feb. 9, 2001 genta
+	int						nEolValueArr[] = {
+		EOL_NONE,
+		EOL_CRLF,
+		EOL_LF,
+		EOL_CR,
+	};
+	//	文字列はResource内に入れる
+	char*					pEolNameArr[] = {
+		"変換無し",
+		"CR+LF",
+		"LF(Unix)",
+		"CR(Mac)",
+	};
+	int nEolNameArrNum = sizeof( pEolNameArr ) / sizeof( pEolNameArr[0] );
+//	To Here	Feb. 9, 2001 genta
 	int	Controls[nControls] = {
 		stc3, stc2,		// The two label controls
 		edt1, cmb1,		// The edit control and the drop-down box
@@ -206,12 +223,32 @@ UINT APIENTRY OFNHookProc(
 		hwndComboCODES = ::GetDlgItem( hdlg, IDC_COMBO_CODE );
 		hwndComboMRU = ::GetDlgItem( hdlg, IDC_COMBO_MRU );	
 		hwndComboOPENFOLDER = ::GetDlgItem( hdlg, IDC_COMBO_OPENFOLDER );
+		hwndComboEOL = ::GetDlgItem( hdlg, IDC_COMBO_EOL );
 
 		/* コンボボックスのユーザー インターフェイスを拡張インターフェースにする */
 		::SendMessage( hwndComboCODES, CB_SETEXTENDEDUI, (WPARAM) (BOOL) TRUE, 0 );
 		::SendMessage( hwndComboMRU, CB_SETEXTENDEDUI, (WPARAM) (BOOL) TRUE, 0 );
 		::SendMessage( hwndComboOPENFOLDER, CB_SETEXTENDEDUI, (WPARAM) (BOOL) TRUE, 0 );
+		::SendMessage( hwndComboEOL, CB_SETEXTENDEDUI, (WPARAM) (BOOL) TRUE, 0 );
 
+		//	From Here Feb. 9, 2001 genta
+		//	改行コードの選択コンボボックス初期化
+		//	必要なときのみ利用する
+		if( pcDlgOpenFile->m_bUseEol ){
+			//	値の設定
+			for( i = 0; i < nEolNameArrNum; ++i ){
+				nIdx = ::SendMessage( hwndComboEOL, CB_ADDSTRING, 0, (LPARAM)pEolNameArr[i] );
+				::SendMessage( hwndComboEOL, CB_SETITEMDATA, nIdx, nEolValueArr[i] );
+			}
+			//	使うときは先頭の要素を選択状態にする
+			::SendMessage( hwndComboEOL, CB_SETCURSEL, (WPARAM)0, 0 );
+		}
+		else {
+			//	使わないときは隠す
+			::ShowWindow( ::GetDlgItem( hdlg, IDC_STATIC_EOL ), SW_HIDE );
+			::ShowWindow( hwndComboEOL, SW_HIDE );
+		}
+		//	To Here Feb. 9, 2001 genta
 
 		/* Explorerスタイルの「開く」ダイアログをフック */
 		m_wpOpenDialogProc = (WNDPROC) ::SetWindowLong( hwndOpenDlg, GWL_WNDPROC, (LONG) OFNHookProcMain );
@@ -374,6 +411,13 @@ UINT APIENTRY OFNHookProc(
 			lRes = ::SendMessage( hwndComboCODES, CB_GETITEMDATA, nIdx, 0 );
 //			lRes = ::SendMessage( hwndComboCODES, CB_GETCURSEL, 0, 0 );
 			pcDlgOpenFile->m_nCharCode = lRes;	/* 文字コード */
+			//	Feb. 9, 2001 genta
+			if( pcDlgOpenFile->m_bUseEol ){
+				nIdx = ::SendMessage( hwndComboEOL, CB_GETCURSEL, 0, 0 );
+				lRes = ::SendMessage( hwndComboEOL, CB_GETITEMDATA, nIdx, 0 );
+//			lRes = ::SendMessage( hwndComboCODES, CB_GETCURSEL, 0, 0 );
+				pcDlgOpenFile->m_cEol = (enumEOLType)lRes;	/* 文字コード */
+			}
 
 //			MYTRACE( "文字コード  lRes=%d\n", lRes );
 //			MYTRACE( "pofn->hdr.code=CDN_FILEOK        \n" );break;
@@ -786,6 +830,7 @@ BOOL CDlgOpenFile::DoModalOpenDlg( char* pszPath, int* pnCharCode, BOOL* pbReadO
 	
 	m_nCharCode = CODE_AUTODETECT;	/* 文字コード自動判別 */
 	m_nHelpTopicID = 15;
+	m_bUseEol = false;	//	Feb. 9, 2001 genta
 
 
 	if( ::GetOpenFileName( &m_ofn ) ){
@@ -834,7 +879,7 @@ BOOL CDlgOpenFile::DoModalOpenDlg( char* pszPath, int* pnCharCode, BOOL* pbReadO
 }
 
 /* 保存ダイアログ モーダルダイアログの表示 */
-BOOL CDlgOpenFile::DoModalSaveDlg( char* pszPath, int* pnCharCode )
+BOOL CDlgOpenFile::DoModalSaveDlg( char* pszPath, int* pnCharCode, CEOL* pcEol )
 {
 	m_bIsSaveDialog = TRUE;	/* 保存のダイアログか */
 	
@@ -885,7 +930,7 @@ BOOL CDlgOpenFile::DoModalSaveDlg( char* pszPath, int* pnCharCode )
 	m_ofn.Flags =
 		OFN_CREATEPROMPT | OFN_EXPLORER | OFN_FILEMUSTEXIST | OFN_HIDEREADONLY | OFN_OVERWRITEPROMPT
 		 /*| OFN_ENABLETEMPLATE | OFN_ENABLEHOOK*/ | OFN_SHOWHELP | OFN_ENABLESIZING;
-	if( NULL != pnCharCode ){
+	if( NULL != pnCharCode || NULL != pcEol ){
 		m_ofn.Flags = m_ofn.Flags | OFN_ENABLETEMPLATE | OFN_ENABLEHOOK;
 	}
 	m_ofn.nFileOffset = 0;
@@ -898,6 +943,15 @@ BOOL CDlgOpenFile::DoModalSaveDlg( char* pszPath, int* pnCharCode )
 	if( NULL != pnCharCode ){
 		m_nCharCode = *pnCharCode;
 	}
+	//	From Here Feb. 9, 2001 genta
+	if( NULL != pcEol ){
+		m_cEol = EOL_NONE;	//	初期値は「改行コードを保存」に固定
+		m_bUseEol = true;
+	}
+	else {
+		m_bUseEol = false;
+	}
+	//	To Here Feb. 9, 2001 genta
 	m_nHelpTopicID = 21;
 	if( ::GetSaveFileName( &m_ofn ) ){
 
@@ -905,6 +959,10 @@ BOOL CDlgOpenFile::DoModalSaveDlg( char* pszPath, int* pnCharCode )
 
 		if( NULL != pnCharCode ){
 			*pnCharCode = m_nCharCode;
+		}
+		//	Feb. 9, 2001 genta
+		if( m_bUseEol ){
+			*pcEol = m_cEol;
 		}
 		return TRUE;
 	}else{

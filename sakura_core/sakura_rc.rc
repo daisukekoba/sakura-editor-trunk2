@@ -1587,13 +1587,13 @@ BEGIN
     PUSHBUTTON      "キャンセル(&X)",IDCANCEL,135,24,50,14
 END
 
-IDD_FILEOPEN DIALOG DISCARDABLE  0, 0, 155, 125
+IDD_FILEOPEN DIALOG DISCARDABLE  0, 0, 228, 125
 STYLE DS_3DLOOK | DS_CONTROL | WS_CHILD | WS_VISIBLE | WS_CLIPSIBLINGS
 FONT 9, "ＭＳ Ｐゴシック"
 BEGIN
-    LTEXT           "",1119,0,0,155,65
+    LTEXT           "",1119,0,0,228,65
     LTEXT           "文字コードセット(&C)",IDC_STATIC,8,69,57,8
-    COMBOBOX        IDC_COMBO_CODE,67,67,85,126,CBS_DROPDOWNLIST | 
+    COMBOBOX        IDC_COMBO_CODE,67,67,57,126,CBS_DROPDOWNLIST | 
                     WS_VSCROLL | WS_TABSTOP
     LTEXT           "最近のファイル(&F)",IDC_STATIC,8,87,54,8
     COMBOBOX        IDC_COMBO_MRU,67,85,85,236,CBS_DROPDOWNLIST | 
@@ -1601,6 +1601,9 @@ BEGIN
     LTEXT           "最近のフォルダ(&D)",IDC_STATIC,8,105,55,8
     COMBOBOX        IDC_COMBO_OPENFOLDER,67,103,85,236,CBS_DROPDOWNLIST | 
                     CBS_SORT | WS_VSCROLL | WS_TABSTOP
+    LTEXT           "改行コード(&E)",IDC_STATIC_EOL,126,69,40,8
+    COMBOBOX        IDC_COMBO_EOL,169,67,57,126,CBS_DROPDOWNLIST | 
+                    WS_VSCROLL | WS_TABSTOP
 END
 
 
@@ -1983,7 +1986,7 @@ BEGIN
 
     "IDD_FILEOPEN", DIALOG
     BEGIN
-        RIGHTMARGIN, 84
+        RIGHTMARGIN, 220
         BOTTOMMARGIN, 120
     END
 END
@@ -2028,7 +2031,7 @@ END
 
 VS_VERSION_INFO VERSIONINFO
  FILEVERSION 1,2,0,0
- PRODUCTVERSION 1,2,27,0
+ PRODUCTVERSION 1,2,28,0
  FILEFLAGSMASK 0x3fL
 #ifdef _DEBUG
  FILEFLAGS 0x21L
@@ -2053,7 +2056,7 @@ BEGIN
             VALUE "OriginalFilename", "sakura.exe\0"
             VALUE "PrivateBuild", "\0"
             VALUE "ProductName", "テキストエディタ SAKURA\0"
-            VALUE "ProductVersion", "1.2.27.0\0"
+            VALUE "ProductVersion", "1.2.28.0\0"
             VALUE "SpecialBuild", "\0"
         END
     END

@@ -709,12 +709,15 @@ end_of_func:;
 
 
 /* pszPath == NULLの時、名前を付けて保存 */
-BOOL CEditDoc::FileWrite( const char* pszPath )
+//	Feb. 9, 2001 genta	改行コード用引数追加
+BOOL CEditDoc::FileWrite( const char* pszPath, enumEOLType cEolType )
 {
 	BOOL		bRet;
 	FileInfo	fi;
 	HWND		hwndProgress;
 	int			i;
+	//	Feb. 9, 2001 genta
+	CEOL	cEol( cEolType );
 
 	if( NULL != pszPath && m_bReadOnly ){	/* 読み取り専用モード */
 		::MessageBeep( MB_ICONHAND );
@@ -752,7 +755,7 @@ BOOL CEditDoc::FileWrite( const char* pszPath )
 		}
 
 		CWaitCursor cWaitCursor( m_hWnd );
-		if( FALSE == m_cDocLineMgr.WriteFile( pszPath, m_hWnd, hwndProgress, m_nCharCode, &m_FileTime ) ){
+		if( FALSE == m_cDocLineMgr.WriteFile( pszPath, m_hWnd, hwndProgress, m_nCharCode, &m_FileTime, EOL_NONE ) ){
 			bRet = FALSE;
 			goto end_of_func;
 		}
@@ -786,12 +789,14 @@ BOOL CEditDoc::FileWrite( const char* pszPath )
 		//	strcpy( szPath, m_szFilePath );
 		szPath[0] = '\0';
 
-		if( SaveFileDialog( szPath, &m_nCharCode ) ){
+		//	Feb. 9, 2001 genta
+		if( SaveFileDialog( szPath, &m_nCharCode, &cEol ) ){
 			if( m_pShareData->m_Common.m_bBackUp ){	/* バックアップの作成 */
 				MakeBackUp();
 			}
+
 			CWaitCursor cWaitCursor( m_hWnd );
-			if( FALSE == m_cDocLineMgr.WriteFile( szPath, m_hWnd, hwndProgress, m_nCharCode, &m_FileTime ) ){
+			if( FALSE == m_cDocLineMgr.WriteFile( szPath, m_hWnd, hwndProgress, m_nCharCode, &m_FileTime, cEol ) ){
 				bRet = FALSE;
 				goto end_of_func;
 			}
@@ -804,7 +809,13 @@ BOOL CEditDoc::FileWrite( const char* pszPath )
 			}
 			m_cEditViewArr[m_nActivePaneIndex].RedrawAll();
 
-		strcpy( m_szFilePath, szPath ); /* 現在編集中のファイルのパス */
+			strcpy( m_szFilePath, szPath ); /* 現在編集中のファイルのパス */
+			//	Feb. 9, 2001 genta
+			if( cEol != EOL_NONE ){
+				ReloadCurrentFile( CODE_AUTODETECT, FALSE );
+				return TRUE;
+				//	ファイルの制御などはFileReadで行われるはずなのでSKIP
+			}
 		}else{
 			bRet = FALSE;
 			goto end_of_func;
@@ -1015,12 +1026,14 @@ BOOL CEditDoc::OpenFileDialog(
 
 
 /* 「ファイル名を付けて保存」ダイアログ */
-BOOL CEditDoc::SaveFileDialog( char* pszPath, int* pnCharCode )
+//	Feb. 9, 2001 genta	改行コードを示す引数追加
+BOOL CEditDoc::SaveFileDialog( char* pszPath, int* pnCharCode, CEOL* pcEol )
 {
 	int		i;
 	int		j;
 	char**	ppszMRU;
 	char**	ppszOPENFOLDER;
+	BOOL	bret;
 
 	/* MRUリストのファイルのリスト */
 	ppszMRU = NULL;
@@ -1069,15 +1082,14 @@ BOOL CEditDoc::SaveFileDialog( char* pszPath, int* pnCharCode )
 	}else{
 		m_cDlgOpenFile.Create( m_hInstance, /*NULL*/m_hWnd, m_szDefaultWildCard, m_szFilePath, (const char **)ppszMRU, (const char **)ppszOPENFOLDER );
 	}
-	if( m_cDlgOpenFile.DoModalSaveDlg( pszPath, pnCharCode ) ){
-		delete [] ppszMRU;
-		delete [] ppszOPENFOLDER;
-		return TRUE;
+	if( m_cDlgOpenFile.DoModalSaveDlg( pszPath, pnCharCode, pcEol ) ){
+		bret = TRUE;
 	}else{
-		delete [] ppszMRU;
-		delete [] ppszOPENFOLDER;
-		return FALSE;
+		bret = FALSE;
 	}
+	delete [] ppszMRU;
+	delete [] ppszOPENFOLDER;
+	return bret;
 
 
 //	DWORD			dwError;
