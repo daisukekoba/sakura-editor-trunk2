@@ -28,9 +28,9 @@ struct TYPE_NAME {
 TYPE_NAME OlmArr[] = {
 //	OUTLINE_C,		"C",
 	{ OUTLINE_CPP,	"C/C++" },
-	{ OUTLINE_PLSQL,	"PL/SQL" },
+	{ OUTLINE_PLSQL,"PL/SQL" },
 	{ OUTLINE_JAVA,	"Java" },
-	{ OUTLINE_COBOL,	"COBOL" },
+	{ OUTLINE_COBOL,"COBOL" },
 	{ OUTLINE_PERL,	"Perl" },		//	Sep. 8, 2000 genta
 	{ OUTLINE_ASM,	"アセンブラ" },
 	{ OUTLINE_TEXT,	"テキスト" }
@@ -68,7 +68,8 @@ WNDPROC	m_wpColorListProc;
 #define STR_COLORDATA_HEAD_LEN  32
 #define STR_COLORDATA_HEAD      "テキストエディタ 色設定ファイル\x1a"
 
-#define	STR_COLORDATA_HEAD2		" テキストエディタ色設定 Ver2"
+//#define	STR_COLORDATA_HEAD2		" テキストエディタ色設定 Ver2"
+#define	STR_COLORDATA_HEAD21	 " テキストエディタ色設定 Ver2.1"	//Nov. 2, 2000 JEPRO 変更 [注]. 0.3.9.0:ur3β10以降、設定項目の番号を入れ替えたため
 #define	STR_COLORDATA_SECTION	"SakuraColor"
 
 #define BOOL2STR( b )           TRUE==(b)?"TRUE":"FALSE"
@@ -111,7 +112,6 @@ BOOL CALLBACK PropTypesP1Proc(
 		}
 	}
 }
-
 
 
 
@@ -863,7 +863,7 @@ int CPropTypes::GetData_p1( HWND hwndDlg )
 	hwndCombo = ::GetDlgItem( hwndDlg, IDC_COMBO_OUTLINES );
 	nSelPos = ::SendMessage( hwndCombo, CB_GETCURSEL, 0, 0 );
 	m_Types.m_nDefaultOutline = OlmArr[nSelPos].nMethod;	/* アウトライン解析方法 */
- 
+
 	/* スマートインデント種別 */
 //	HWND	hwndCombo;
 //	int		nSelPos;
@@ -875,7 +875,7 @@ int CPropTypes::GetData_p1( HWND hwndDlg )
 	hwndCombo = ::GetDlgItem( hwndDlg, IDC_COMBO_IMESTATE );
 	nSelPos = ::SendMessage( hwndCombo, CB_GETCURSEL, 0, 0 );
 	m_Types.m_nImeState = ImeStateArr[nSelPos].nMethod << 2;	//	IME入力モード
-	
+
 	hwndCombo = ::GetDlgItem( hwndDlg, IDC_COMBO_IMESWITCH );
 	nSelPos = ::SendMessage( hwndCombo, CB_GETCURSEL, 0, 0 );
 	m_Types.m_nImeState |= ImeSwitchArr[nSelPos].nMethod;	//	IME ON/OFF
@@ -886,17 +886,6 @@ int CPropTypes::GetData_p1( HWND hwndDlg )
 
 	return TRUE;
 }
-
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -935,7 +924,7 @@ int CPropTypes::GetData_p1( HWND hwndDlg )
 //			/* ボタン／チェックボックスがクリックされた */
 //			case BN_CLICKED:
 //				switch( wID ){
-//				case IDC_BUTTON_SAMEBKCOLOR:	/* すべて同じ背景色にする */	//	Sept. 17, 2000 jepro 説明の「全て」を「すべて」に統一
+//				case IDC_BUTTON_SAMEBKCOLOR:	/* すべて同じ背景色にする */	//Sept. 17, 2000 jepro 説明の「全て」を「すべて」に統一
 //					m_Types.m_colorCRLFBACK	=
 //					m_Types.m_colorGYOUBACK	=
 //					m_Types.m_colorTABBACK =
@@ -1232,7 +1221,7 @@ int CPropTypes::GetData_p1( HWND hwndDlg )
 //		/* EOFを表示する */
 //		::CheckDlgButton( hwndDlg, IDC_CHECK_DISPEOF, m_Types.m_bDispEOF );
 //
-//		/* 強調キーワードを表示するを表示する */
+//		/* 強調キーワードを表示する */
 //		::CheckDlgButton( hwndDlg, IDC_CHECK_KEYWORDCCPP, m_Types.m_bDispCCPPKEYWORD );
 //
 //		/* コメントを表示する */
@@ -1323,7 +1312,7 @@ int CPropTypes::GetData_p1( HWND hwndDlg )
 //		/* EOFを表示する */
 //		m_Types.m_bDispEOF = ::IsDlgButtonChecked( hwndDlg, IDC_CHECK_DISPEOF );
 //
-//		/* 強調キーワードを表示するを表示する */
+//		/* 強調キーワードを表示する */
 //		m_Types.m_bDispCCPPKEYWORD = ::IsDlgButtonChecked( hwndDlg, IDC_CHECK_KEYWORDCCPP );
 //
 //
@@ -1448,14 +1437,30 @@ void CPropTypes::p3_Import_Colors( HWND hwndDlg )
 		_llseek( hFile, 0, FILE_BEGIN );
 		char	szWork[256];
 		int		nWorkLen;
-		wsprintf( szWork, "//%s\r\n", STR_COLORDATA_HEAD2 );
+//		wsprintf( szWork, "//%s\r\n", STR_COLORDATA_HEAD2 );
+		wsprintf( szWork, "//%s\r\n", STR_COLORDATA_HEAD21 );	//Nov. 2, 2000 JEPRO 変更 [注]. 0.3.9.0:ur3β10以降、設定項目の番号を入れ替えたため
 		nWorkLen = strlen( szWork );
 		if( nWorkLen == (int)_lread( hFile, pHeader, nWorkLen ) &&
 			0 == memcmp( pHeader, szWork, nWorkLen )
 		){
 		}else{
 			::MYMESSAGEBOX(	hwndDlg, MB_OK | MB_ICONSTOP, GSTR_APPNAME,
-				"色設定ファイルの形式が違います。\n古い形式はサポートされなくなりました。\n%s", szPath
+//				"色設定ファイルの形式が違います。\n古い形式はサポートされなくなりました。\n%s", szPath
+//				Nov. 2, 2000 JEPRO 変更 [注]. 0.3.9.0:ur3β10以降、設定項目の番号を入れ替えたため
+//				Dec. 26, 2000 JEPRO UR1.2.24.0で強調キーワード2が入ってきたためCI[13]が追加された. それに伴い13番以降を1つづらした
+				"色設定ファイルの形式が違います。\n古い形式はサポートされなくなりました。\n%s\n\n"
+				"上記の色設定ファイルをエディタなどで確認してください。\n"
+				"もし一行目に\"色設定Ver2\"と書かれていて、かつ\n\n"
+				"・0.3.9.0 UR1.2.24.0以降で使っていた場合は\n"
+				"　(1) Ver2 を Ver2.1 と書き換える\n\n"
+				"・0.3.9.0:ur3β10～UR1.2.23.0で使っていた場合は\n"
+				"　(2) (1)に加えてCI[12]の次行にC[12]の設定をコピーしてCI[13]とし\n"
+				"      元のCI[13]以降の番号を1つづつ17までづらす\n\n"
+				"・0.3.9.0:ur3β9以前で使っていた場合は\n"
+				"　(3) (1)に加えてCIの[ ]内を順に\n"
+				"      00,17,10,01,16,03,04,12,02,11,05,15,06,08,09,14\n"
+				"      と書き換えた後、C[12]の設定をコピーしてCI[13]とする\n\n"
+				"以上のうち該当する手順を行い、別名保存してからインポートしてください。", szPath
 			);
 			_lclose( hFile );
 			return;
@@ -1558,7 +1563,8 @@ void CPropTypes::p3_Export_Colors( HWND hwndDlg )
 
 	/* 色設定 I/O */
 	CShareData::IO_ColorSet( &cProfile, FALSE, STR_COLORDATA_SECTION, m_Types.m_ColorInfoArr );
-	cProfile.WriteProfile( szPath, STR_COLORDATA_HEAD2 );
+//	cProfile.WriteProfile( szPath, STR_COLORDATA_HEAD2 );
+	cProfile.WriteProfile( szPath, STR_COLORDATA_HEAD21 );	//Nov. 2, 2000 JEPRO 変更 [注]. 0.3.9.0:ur3β10以降、設定項目の番号を入れ替えたため
 	return;
 }
 
@@ -2029,7 +2035,7 @@ void CPropTypes::SetData_p3_new( HWND hwndDlg )
 		for( i = 0; i < m_CKeyWordSetMgr.m_nKeyWordSetNum; ++i ){								//MIK
 			::SendMessage( hwndWork, CB_ADDSTRING, 0, (LPARAM) (LPCTSTR)m_CKeyWordSetMgr.GetTypeName( i ) );	//MIK
 		}																						//MIK
-		if( -1 == m_Types.m_nKeyWordSetIdx2 ){													//MIK	
+		if( -1 == m_Types.m_nKeyWordSetIdx2 ){													//MIK
 			/* セット名コンボボックスのデフォルト選択 */										//MIK
 			::SendMessage( hwndWork, CB_SETCURSEL, (WPARAM)0, 0 );								//MIK
 		}else{																					//MIK
@@ -2118,7 +2124,7 @@ int CPropTypes::GetData_p3_new( HWND hwndDlg )
 		m_Types.m_nKeyWordSetIdx = -1;
 	}else{
 		m_Types.m_nKeyWordSetIdx = nIdx - 1;
-	
+
 	}
 
 	//MIK START 2000.12.01 second keyword
@@ -2129,7 +2135,7 @@ int CPropTypes::GetData_p3_new( HWND hwndDlg )
 		0 == nIdx ){										//MIK
 		m_Types.m_nKeyWordSetIdx2 = -1;						//MIK
 	}else{													//MIK
-		m_Types.m_nKeyWordSetIdx2 = nIdx - 1;				//MIK								
+		m_Types.m_nKeyWordSetIdx2 = nIdx - 1;				//MIK
 	}														//MIK
 	//MIK END
 
@@ -2143,7 +2149,7 @@ int CPropTypes::GetData_p3_new( HWND hwndDlg )
 	if( ::IsDlgButtonChecked( hwndDlg, IDC_RADIO_LINETERMTYPE2 ) ){
 		m_Types.m_nLineTermType = 2;
 	}
-	
+
 
 	/* 行番号区切り文字 */
 	char	szLineTermChar[2];

@@ -35,7 +35,8 @@
 #endif
 #endif
 
-#define IS_KEYWORD_CHAR(c) ((c) == '#' || (c) == '$' || __iscsym( (c) ))
+//#define IS_KEYWORD_CHAR(c) ((c) == '#' || (c) == '$' || __iscsym( (c) ))
+#define IS_KEYWORD_CHAR(c) ((c) == '#'/*35*/ || (c) == '$'/*36*/ || (c) == '@'/*64*/ || (c) == '\\'/*92*/ || __iscsym( (c) ))	//Oct. 31, 2000 JEPRO TeX Keyword ‚Ì‚½‚ß‚É'\'‚ð’Ç‰Á //Nov. 9, 2000 JEPRO HSP Keyword ‚Ì‚½‚ß‚É'@'‚ð’Ç‰Á
 
 
 SAKURA_CORE_API extern const char* GSTR_APPNAME;

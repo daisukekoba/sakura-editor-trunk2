@@ -75,7 +75,7 @@ BOOL CKeyWordSetMgr::DelKeyWordSet( int nIdx )
 		m_nKeyWordNumArr[i] = m_nKeyWordNumArr[i + 1];
 		memcpy( m_szKeyWordArr[i], m_szKeyWordArr[i + 1], sizeof( m_szKeyWordArr[0] ) );
 		m_IsSorted[i] = m_IsSorted[i+1];	//MIK 2000.12.01 binary search
-	} 
+	}
 	m_nKeyWordSetNum--;
 	if( m_nKeyWordSetNum <= m_nCurrentKeyWordSetIdx ){
 		m_nCurrentKeyWordSetIdx = m_nKeyWordSetNum - 1;
@@ -191,7 +191,7 @@ BOOL CKeyWordSetMgr::DelKeyWord( int nIdx, int nIdx2 )
 	}
 	for( i = nIdx2; i < m_nKeyWordNumArr[nIdx] - 1; ++i ){
 		strcpy( m_szKeyWordArr[nIdx][i], m_szKeyWordArr[nIdx][i + 1] );
-	} 
+	}
 	m_nKeyWordNumArr[nIdx]--;
 	m_IsSorted[nIdx] = 0;	//MIK 2000.12.01 binary search
 	return TRUE;

@@ -986,7 +986,7 @@ int CPropCommon::DoPropertySheet( int nPageNum/*, int nActiveItem*/ )
     psp[nIdx].pszTemplate = MAKEINTRESOURCE( IDD_PROP_KEYWORD );
     psp[nIdx].pszIcon = NULL /*MAKEINTRESOURCE(IDI_BORDER)*/;
     psp[nIdx].pfnDlgProc = (DLGPROC)Prop1P7Proc;
-    psp[nIdx].pszTitle = "キーワード";
+    psp[nIdx].pszTitle = "強調キーワード";
     psp[nIdx].lParam = (LPARAM)this;
     psp[nIdx].pfnCallback = NULL;
 	nIdx++;
@@ -1014,7 +1014,6 @@ int CPropCommon::DoPropertySheet( int nPageNum/*, int nActiveItem*/ )
 //		psp[nIdx].lParam = (LPARAM)this;
 //		psp[nIdx].pfnCallback = NULL;
 //		nIdx++;
-
     memset( &psh, 0, sizeof(PROPSHEETHEADER) );
 	psh.dwSize = sizeof(PROPSHEETHEADER);
 // JEPROtest Sept. 30, 2000 共通設定の隠れ[適用]ボタンの正体はここ。行頭のコメントアウトを入れ替えてみればわかる
@@ -1317,8 +1316,8 @@ BOOL CPropCommon::DispatchEvent_p1(
 void CPropCommon::SetData_p1( HWND hwndDlg )
 {
 	BOOL	bRet;
-	static	int	nTabArr[] = { 2, 4, 8 };
-	static	int	nTabArrNum = sizeof(nTabArr) / sizeof(nTabArr[0]);
+//	static	int	nTabArr[] = { 2, 4, 8 };							//Nov. 3, 2000 JEPRO これは殺し忘れでしょう。(TAB設定はタイプ別設定に移動されている)
+//	static	int	nTabArrNum = sizeof(nTabArr) / sizeof(nTabArr[0]);	//Nov. 3, 2000 JEPRO これは殺し忘れでしょう。(TAB設定はタイプ別設定に移動されている)
 //	int		i, j;
 //	char	szWork[32];
 

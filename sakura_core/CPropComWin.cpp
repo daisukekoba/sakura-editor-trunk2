@@ -119,7 +119,7 @@ BOOL CPropCommon::DispatchEvent_PROP_WIN(
 			::SetDlgItemInt( hwndDlg, IDC_EDIT_nRulerBottomSpace, nVal, FALSE );
 			return TRUE;
 		}
-//****	To Here Sept. 21, 2000 JEPRO ダイアログ要素にスピンを入れるので以下のWM_NOTIFYをコメントアウトにし下に修正を置いた
+//****	To Here Sept. 21, 2000
 //	From Here Sept. 9, 2000 JEPRO
 	case WM_COMMAND:
 		wNotifyCode = HIWORD(wParam);	/* 通知コード */

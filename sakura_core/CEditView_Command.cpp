@@ -30,12 +30,17 @@
 #include <htmlhelp.h>
 #include "CRunningtimer.h"
 #include "CDlgExec.h"
+#include "CDlgAbout.h"	//Dec. 24, 2000 JEPRO 追加
+//#include "CKeyBind.h"	//Dec. 26, 2000 JEPRO 追加(キー一覧がうまく行かんので殺した)
+//#include "CEditDoc.h"	//Dec. 26, 2000 JEPRO 追加(キー一覧がうまく行かんので殺した)
+//#include "CEditWnd.h"	//Dec. 26, 2000 JEPRO 追加(キー一覧がうまく行かんので殺した)
+
 //#include "mailapi32_api.h"
 //#include "CDlgWords.h"
 
 
 //	BOOL CALLBACK SendingMailDialogProc(
-//	HWND hwndDlg,	/* ダイアログ ボックスのハンドル	*/
+//	HWND hwndDlg,	/* ダイアログ ボックスのハンドル */
 //	UINT uMsg,	/* メッセージ	*/
 //	WPARAM wParam,	/* 第1メッセージ パラメータ	*/
 //	LPARAM lParam	/* 第2メッセージ パラメータ	*/
@@ -201,11 +206,12 @@ BOOL CEditView::HandleCommand(
 		Command_PLSQL_COMPILE_ON_SQLPLUS();
 		break;
 	case F_BROWSE:				Command_BROWSE();break;					/* ブラウズ */
-	case F_PROPERTY_FILE:		Command_PROPERTY_FILE();break;	/* ファイルのプロパティのダイアログ */
+	case F_PROPERTY_FILE:		Command_PROPERTY_FILE();break;			/* ファイルのプロパティ */
+	case F_EXITALL:				Command_EXITALL();break;				/* テキストエディタの全終了 */	//Dec. 26, 2000 JEPRO 追加
 
 	/* 編集系 */
-	case F_UNDO:					Command_UNDO();break;/* 元に戻す(Undo) */
-	case F_REDO:					Command_REDO();break;/* やり直し(Redo) */
+	case F_UNDO:				Command_UNDO();break;/* 元に戻す(Undo) */
+	case F_REDO:				Command_REDO();break;/* やり直し(Redo) */
 	case F_DELETE:				Command_DELETE(); break;			//カーソル位置を削除
 	case F_DELETE_BACK:			Command_DELETE_BACK(); break;		//カーソルの前を削除
 	case F_WordDeleteToStart:	Command_WordDeleteToStart(); break;	//単語の左端まで削除
@@ -325,7 +331,7 @@ BOOL CEditView::HandleCommand(
 	case F_COPYLINES:				Command_COPYLINES();break;				//選択範囲内全行コピー
 	case F_COPYLINESASPASSAGE:		Command_COPYLINESASPASSAGE();break;		//選択範囲内全行引用符付きコピー
 	case F_COPYLINESWITHLINENUMBER:	Command_COPYLINESWITHLINENUMBER();break;	//選択範囲内全行行番号付きコピー
-//jeprotest	case F_CREATEKEYBINDLIST:		Command_CREATEKEYBINDLIST();break;	//キー割り当て一覧をコピー　//	added Sept. 15, 2000 JEPRO	Command_の作り方がわからないので殺してある
+	case F_CREATEKEYBINDLIST:		Command_CREATEKEYBINDLIST();break;	//キー割り当て一覧をコピー　//Sept. 15, 2000 JEPRO 追加 //Dec. 25, 2000 復活
 
 	/* 挿入系 */
 	case F_INS_DATE:				Command_INS_DATE();break;	//日付挿入
@@ -374,12 +380,12 @@ BOOL CEditView::HandleCommand(
 		}
 		Command_GREP();
 		break;
-	case F_JUMP:				Command_JUMP();break;		//指定行ヘジャンプ
-	case F_OUTLINE:				bRet = Command_FUNCLIST( (BOOL)lparam1 );break;	//アウトライン解析
-	case F_TAGJUMP:				Command_TAGJUMP();break;	/* タグジャンプ機能 */
-	case F_TAGJUMPBACK:			Command_TAGJUMPBACK();break;/* タグジャンプバック機能 */
-	case F_COMPARE:				Command_COMPARE();break;	/* ファイル内容比較 */
-	case F_BRACKETPAIR:	Command_BRACKETPAIR();	break;		//対括弧の検索
+	case F_JUMP:			Command_JUMP();break;		//指定行ヘジャンプ
+	case F_OUTLINE:			bRet = Command_FUNCLIST( (BOOL)lparam1 );break;	//アウトライン解析
+	case F_TAGJUMP:			Command_TAGJUMP();break;	/* タグジャンプ機能 */
+	case F_TAGJUMPBACK:		Command_TAGJUMPBACK();break;/* タグジャンプバック機能 */
+	case F_COMPARE:			Command_COMPARE();break;	/* ファイル内容比較 */
+	case F_BRACKETPAIR:		Command_BRACKETPAIR();	break;		//対括弧の検索
 
 	/* モード切り替え系 */
 	case F_CHGMOD_INS:		Command_CHGMOD_INS();break;		//挿入／上書きモード切り替え
@@ -480,16 +486,19 @@ BOOL CEditView::HandleCommand(
 	case F_WIN_OUTPUT:		Command_WIN_OUTPUT();break;	//アウトプットウィンドウ表示
 
 	/* 支援 */
-	case F_HOKAN:		Command_HOKAN();break;			//入力補完
+	case F_HOKAN:			Command_HOKAN();break;			//入力補完
+	case F_HELP_CONTENTS:	Command_HELP_CONTENTS();break;	/* ヘルプ目次 */				//Nov. 25, 2000 JEPRO 追加
+	case F_HELP_SEARCH:		Command_HELP_SEARCH();break;	/* ヘルプトキーワード検索 */	//Nov. 25, 2000 JEPRO 追加
 	case F_MENU_ALLFUNC:		/* コマンド一覧 */
 		/* 再帰処理対策 */
 		if( NULL != m_pcOpeBlk ){	/* 操作ブロック */
 			delete m_pcOpeBlk;
 			m_pcOpeBlk = NULL;
 		}
-		Command_MENU_ALLFUNC(); break;
-	case F_EXTHELP1:	Command_EXTHELP1(); break;		/* 外部ヘルプ１ */
-	case F_EXTHTMLHELP:	Command_EXTHTMLHELP(); break;	/* 外部HTMLヘルプ */
+		Command_MENU_ALLFUNC();break;
+	case F_EXTHELP1:	Command_EXTHELP1();break;		/* 外部ヘルプ１ */
+	case F_EXTHTMLHELP:	Command_EXTHTMLHELP();break;	/* 外部HTMLヘルプ */
+	case F_ABOUT:	Command_ABOUT();break;				/* バージョン情報 */	//Dec. 24, 2000 JEPRO 追加
 
 	/* その他 */
 //	case F_SENDMAIL:	Command_SENDMAIL();break;	/* メール送信 */
@@ -1091,7 +1100,6 @@ void CEditView::Command_GOLINEEND( int bSelect, int bIgnoreCurrentSelection )
 
 
 
-
 /* ファイルの先頭に移動 */
 void CEditView::Command_GOFILETOP( int bSelect )
 {
@@ -1117,7 +1125,6 @@ void CEditView::Command_GOFILETOP( int bSelect )
 	}
 	return;
 }
-
 
 
 
@@ -1170,7 +1177,6 @@ void CEditView::Command_GOFILEEND( int bSelect )
 	::ReleaseDC( m_hWnd, hdc );
 	return;
 }
-
 
 
 
@@ -1238,7 +1244,6 @@ void CEditView::Command_WORDLEFT( int bSelect )
 	}
 	return;
 }
-
 
 
 
@@ -1313,6 +1318,7 @@ try_again:;
 
 
 
+
 /* 選択範囲をクリップボードにコピー	*/
 void CEditView::Command_COPY( int bIgnoreLockAndDisdable,
 			enumEOLType neweol )
@@ -1379,7 +1385,6 @@ void CEditView::Command_COPY( int bIgnoreLockAndDisdable,
 
 
 
-
 /* 切り取り(選択範囲をクリップボードにコピーして削除) */
 void CEditView::Command_CUT( void )
 {
@@ -1422,7 +1427,6 @@ void CEditView::Command_CUT( void )
 	DeleteData( TRUE );
 	return;
 }
-
 
 
 
@@ -1550,6 +1554,9 @@ void CEditView::Command_DELETE_BACK( void )
 	return;
 }
 
+
+
+
 //単語の右端まで削除
 void CEditView::Command_WordDeleteToEnd( void )
 {
@@ -1602,6 +1609,8 @@ void CEditView::Command_WordDeleteToEnd( void )
 }
 
 
+
+
 //単語の左端まで削除
 void CEditView::Command_WordDeleteToStart( void )
 {
@@ -1652,6 +1661,9 @@ void CEditView::Command_WordDeleteToStart( void )
 	return;
 }
 
+
+
+
 //単語を削除
 void CEditView::Command_WordDelete( void )
 {
@@ -1668,6 +1680,8 @@ void CEditView::Command_WordDelete( void )
 }
 
 
+
+
 //単語を切り取り
 void CEditView::Command_WordCut( void )
 {
@@ -1682,6 +1696,7 @@ void CEditView::Command_WordCut( void )
 	Command_CUT();
 	return;	
 }
+
 
 
 
@@ -1932,6 +1947,8 @@ void CEditView::Command_DELETE_LINE( void )
 }
 
 
+
+
 //行切り取り(折り返し単位)
 void CEditView::Command_CUT_LINE( void )
 {
@@ -2143,11 +2160,6 @@ void CEditView::Command_PASTE( void )
 	}
 	pszText = cmemClip.GetPtr( &nTextLen );
 	
-	
-	
-	
-	
-	
 	/* テキストが選択されているか */
 	bBox = FALSE;
 	if( IsTextSelected() ){
@@ -2240,6 +2252,9 @@ void CEditView::Command_PASTE( void )
 
 }
 
+
+
+
 ///* テキストを貼り付け ver0 */
 //void CEditView::Command_INSTEXT( BOOL bRedraw, const char* pData, int nDataLen )
 //{
@@ -2254,6 +2269,7 @@ void CEditView::Command_PASTE( void )
 
 
 
+
 /* テキストを貼り付け ver1 */
 void CEditView::Command_INSTEXT( BOOL bRedraw, const char* pszText, BOOL bNoWaitCursor )
 {
@@ -2262,7 +2278,6 @@ void CEditView::Command_INSTEXT( BOOL bRedraw, const char* pszText, BOOL bNoWait
 		return;
 	}
 
-	
 //	HGLOBAL			hglb;
 //	char*			lptstr;
 	int				nNewLine;			/* 挿入された部分の次の位置の行 */
@@ -2385,6 +2400,7 @@ void CEditView::Command_INSTEXT( BOOL bRedraw, const char* pszText, BOOL bNoWait
 
 
 
+
 /* 矩形貼り付け(クリップボードから矩形貼り付け) */
 void CEditView::Command_PASTEBOX( void )
 {
@@ -2404,7 +2420,7 @@ void CEditView::Command_PASTEBOX( void )
 	int			nPos;
 	int			nCount;
 	CMemory		cMem;
-	int			nNewLine;			/* 挿入された部分の次の位置の行 */
+	int			nNewLine;		/* 挿入された部分の次の位置の行 */
 	int			nNewPos;		/* 挿入された部分の次の位置のデータ位置 */
 	int			nCurXOld;
 	int			nCurYOld;
@@ -2704,7 +2720,6 @@ void CEditView::Command_PASTEBOX( void )
 
 
 
-
 /* １バイト文字入力 */
 void CEditView::Command_CHAR( char cChar )
 {
@@ -2964,7 +2979,6 @@ void CEditView::Command_CHAR( char cChar )
 
 
 
-
 /* ２バイト文字入力 */
 void CEditView::Command_IME_CHAR( WORD wChar )
 {
@@ -2972,7 +2986,6 @@ void CEditView::Command_IME_CHAR( WORD wChar )
 		::MessageBeep( MB_ICONHAND );
 		return;
 	}
-
 	
 	const char*	pLine;
 	int			nLineLen;
@@ -3052,13 +3065,10 @@ void CEditView::Command_IME_CHAR( WORD wChar )
 		m_pcOpeBlk->AppendOpe( pcOpe );
 	}
 	
-	
-	
 	/* 入力補完機能を使用する */
 	if( m_pShareData->m_Common.m_bUseHokan 
  	 && FALSE == m_bExecutingKeyMacro	/* キーボードマクロの実行中 */
 	){
-		
 		
 		/* カーソル直前の単語を取得 */
 		if( 0 < GetLeftWord( &cmemData, 100 ) ){
@@ -3104,7 +3114,6 @@ void CEditView::Command_IME_CHAR( WORD wChar )
 
 
 
-
 /* 挿入／上書きモード切り替え */
 void CEditView::Command_CHGMOD_INS( void )
 {
@@ -3120,7 +3129,6 @@ void CEditView::Command_CHGMOD_INS( void )
 	DrawCaretPosInfo();
 	return;
 }
-
 
 
 
@@ -3446,7 +3454,6 @@ end_of_func:;
 	}
 	return;
 }
-
 
 
 
@@ -3793,6 +3800,7 @@ void CEditView::Command_CANCEL_MODE( void )
 
 
 
+
 /* 範囲選択開始	*/
 void CEditView::Command_BEGIN_SELECT( void )
 {
@@ -3803,7 +3811,6 @@ void CEditView::Command_BEGIN_SELECT( void )
 	m_bSelectingLock = TRUE;	/* 選択状態のロック */
 	return;
 }
-
 
 
 
@@ -3826,6 +3833,7 @@ void CEditView::Command_BEGIN_BOXSELECT( void )
 
 
 
+
 /* 新規作成 */
 void CEditView::Command_FILENEW( void )
 {
@@ -3833,6 +3841,7 @@ void CEditView::Command_FILENEW( void )
 	CEditApp::OpenNewEditor( m_hInstance, m_hWnd, (char*)NULL, 0, FALSE );
 	return;
 }
+
 
 
 
@@ -3935,6 +3944,8 @@ void CEditView::Command_FILEOPEN( void )
 }
 
 
+
+
 /* 閉じて(無題) */	//Oct. 17, 2000 jepro 「ファイルを閉じる」というキャプションを変更
 void CEditView::Command_FILECLOSE( void )
 {
@@ -3953,6 +3964,9 @@ void CEditView::Command_FILECLOSE( void )
 	
 	return;
 }
+
+
+
 
 /* 閉じて開く */
 void CEditView::Command_FILECLOSE_OPEN( void )
@@ -3978,6 +3992,7 @@ void CEditView::Command_FILECLOSE_OPEN( void )
 
 
 
+
 /* 上書き保存 */
 BOOL CEditView::Command_FILESAVE( void )
 {
@@ -4000,6 +4015,7 @@ BOOL CEditView::Command_FILESAVE( void )
 
 
 
+
 /* 名前を付けて保存 */
 BOOL CEditView::Command_FILESAVEAS( void )
 {
@@ -4010,6 +4026,8 @@ BOOL CEditView::Command_FILESAVEAS( void )
 	}
 	return FALSE;
 }
+
+
 
 
 /* 現在編集中のファイルのパス名をクリップボードにコピー */
@@ -4041,6 +4059,9 @@ void CEditView::Command_COPYPATH( void )
 
 }
 
+
+
+
 //	May 9, 2000 genta
 /* 現在編集中のファイルのパス名とカーソル位置をクリップボードにコピー */
 void CEditView::Command_COPYTAG( void )
@@ -4061,6 +4082,9 @@ void CEditView::Command_COPYTAG( void )
 	return;
 
 }
+
+
+
 
 /* 指定行ヘジャンプ */
 void CEditView::Command_JUMP( void )
@@ -4323,6 +4347,8 @@ void CEditView::Command_FONT( void )
 }
 
 
+
+
 /* 共通設定 */
 void CEditView::Command_OPTION( void )
 {
@@ -4332,11 +4358,41 @@ void CEditView::Command_OPTION( void )
 	return;
 }
 
+
+
+
 /* タイプ別設定 */
 void CEditView::Command_OPTION_TYPE( void )
 {
 	m_pcEditDoc->OpenPropertySheetTypes( -1, m_pcEditDoc->GetDocumentType() );
 
+	return;
+}
+
+
+
+
+/* タイプ別設定一覧 */
+void CEditView::Command_TYPE_LIST( void )
+{
+	CDlgTypeList	cDlgTypeList;
+	int				nSettingType;
+//	cDlgTypeList.Create( m_hInstance, m_hWnd );
+	nSettingType = m_pcEditDoc->GetDocumentType();
+	if( cDlgTypeList.DoModal( m_hInstance, m_hWnd, &nSettingType ) ){
+		//	Nov. 29, 2000 genta
+		//	一時的な設定適用機能を無理矢理追加
+		if( nSettingType & PROP_TEMPCHANGE_FLAG ){
+			m_pcEditDoc->SetDocumentType( nSettingType & ~PROP_TEMPCHANGE_FLAG, true );
+			m_pcEditDoc->LockDocumentType();
+			/* 設定変更を反映させる */
+			m_pcEditDoc->OnChangeSetting();
+		}
+		else {
+			/* タイプ別設定 */
+			m_pcEditDoc->OpenPropertySheetTypes( -1, nSettingType );
+		}
+	}
 	return;
 }
 
@@ -4510,6 +4566,9 @@ void CEditView::Command_TOLOWER( void )
 	return;
 }
 
+
+
+
 /* 英小文字→英大文字 */
 void CEditView::Command_TOUPPER( void )
 {
@@ -4517,6 +4576,9 @@ void CEditView::Command_TOUPPER( void )
 	ConvSelectedArea( F_TOUPPER );
 	return;
 }
+
+
+
 
 /* 全角→半角 */
 void CEditView::Command_TOHANKAKU( void )
@@ -4526,6 +4588,9 @@ void CEditView::Command_TOHANKAKU( void )
 	return;
 }
 
+
+
+
 /* 半角＋全ひら→全角・カタカナ */	//Sept. 17, 2000 jepro 説明を「半角→全角カタカナ」から変更
 void CEditView::Command_TOZENKAKUKATA( void )
 {
@@ -4533,6 +4598,9 @@ void CEditView::Command_TOZENKAKUKATA( void )
 	ConvSelectedArea( F_TOZENKAKUKATA );
 	return;
 }
+
+
+
 
 /* 半角＋全カタ→全角・ひらがな */	//Sept. 17, 2000 jepro 説明を「半角→全角ひらがな」から変更
 void CEditView::Command_TOZENKAKUHIRA( void )
@@ -4544,6 +4612,7 @@ void CEditView::Command_TOZENKAKUHIRA( void )
 
 
 
+
 /* 半角カタカナ→全角カタカナ */
 void CEditView::Command_HANKATATOZENKAKUKATA( void )
 {
@@ -4551,6 +4620,10 @@ void CEditView::Command_HANKATATOZENKAKUKATA( void )
 	ConvSelectedArea( F_HANKATATOZENKAKUKATA );
 	return;
 }
+
+
+
+
 /* 半角カタカナ→全角ひらがな */
 void CEditView::Command_HANKATATOZENKAKUHIRA( void )
 {
@@ -4558,6 +4631,9 @@ void CEditView::Command_HANKATATOZENKAKUHIRA( void )
 	ConvSelectedArea( F_HANKATATOZENKAKUHIRA );
 	return;
 }
+
+
+
 
 /* TAB→空白 */
 void CEditView::Command_TABTOSPACE( void )
@@ -4655,6 +4731,9 @@ void CEditView::Command_CODECNV_EMAIL( void )
 	return;
 }
 
+
+
+
 /* EUC→SJISコード変換 */
 void CEditView::Command_CODECNV_EUC2SJIS( void )
 {
@@ -4662,6 +4741,9 @@ void CEditView::Command_CODECNV_EUC2SJIS( void )
 	ConvSelectedArea( F_CODECNV_EUC2SJIS );
 	return;
 }
+
+
+
 
 /* Unicode→SJISコード変換 */
 void CEditView::Command_CODECNV_UNICODE2SJIS( void )
@@ -4671,6 +4753,9 @@ void CEditView::Command_CODECNV_UNICODE2SJIS( void )
 	return;
 }
 
+
+
+
 /* SJIS→JISコード変換 */
 void CEditView::Command_CODECNV_SJIS2JIS( void )
 {
@@ -4678,6 +4763,10 @@ void CEditView::Command_CODECNV_SJIS2JIS( void )
 	ConvSelectedArea( F_CODECNV_SJIS2JIS );
 	return;
 }
+
+
+
+
 /* SJIS→EUCコード変換 */
 void CEditView::Command_CODECNV_SJIS2EUC( void )
 {
@@ -4685,6 +4774,9 @@ void CEditView::Command_CODECNV_SJIS2EUC( void )
 	ConvSelectedArea( F_CODECNV_SJIS2EUC );
 	return;
 }
+
+
+
 
 /* UTF-8→SJISコード変換 */
 void CEditView::Command_CODECNV_UTF82SJIS( void )
@@ -4694,6 +4786,9 @@ void CEditView::Command_CODECNV_UTF82SJIS( void )
 	return;
 }
 
+
+
+
 /* UTF-7→SJISコード変換 */
 void CEditView::Command_CODECNV_UTF72SJIS( void )
 {
@@ -4701,6 +4796,9 @@ void CEditView::Command_CODECNV_UTF72SJIS( void )
 	ConvSelectedArea( F_CODECNV_UTF72SJIS );
 	return;
 }
+
+
+
 
 /* SJIS→UTF-7コード変換 */
 void CEditView::Command_CODECNV_SJIS2UTF7( void )
@@ -4710,6 +4808,9 @@ void CEditView::Command_CODECNV_SJIS2UTF7( void )
 	return;
 }
 
+
+
+
 /* SJIS→UTF-8コード変換 */
 void CEditView::Command_CODECNV_SJIS2UTF8( void )
 {
@@ -4718,6 +4819,9 @@ void CEditView::Command_CODECNV_SJIS2UTF8( void )
 	return;
 }
 
+
+
+
 /* 自動判別→SJISコード変換 */
 void CEditView::Command_CODECNV_AUTO2SJIS( void )
 {
@@ -4725,6 +4829,8 @@ void CEditView::Command_CODECNV_AUTO2SJIS( void )
 	ConvSelectedArea( F_CODECNV_AUTO2SJIS );
 	return;
 }
+
+
 
 
 /* アウトライン解析 */
@@ -4836,12 +4942,17 @@ BOOL CEditView::Command_FUNCLIST( BOOL bCheckOnly )
 }
 
 
+
+
 /* 上下に分割 */	//Sept. 17, 2000 jepro 説明の「縦」を「上下に」に変更
 void CEditView::Command_SPLIT_V( void )
 {
 	m_pcEditDoc->m_cSplitterWnd.VSplitOnOff();
 	return;
 }
+
+
+
 
 /* 左右に分割 */	//Sept. 17, 2000 jepro 説明の「横」を「左右に」に変更
 void CEditView::Command_SPLIT_H( void )
@@ -4850,12 +4961,112 @@ void CEditView::Command_SPLIT_H( void )
 	return;
 }
 
+
+
+
 /* 縦横に分割 */	//Sept. 17, 2000 jepro 説明に「に」を追加
 void CEditView::Command_SPLIT_VH( void )
 {
 	m_pcEditDoc->m_cSplitterWnd.VHSplitOnOff();
 	return;
 }
+
+
+
+
+//From Here Nov. 25, 2000 JEPRO
+/* ヘルプ目次 */
+void CEditView::Command_HELP_CONTENTS( void )
+{
+	char	szHelp[_MAX_PATH + 1];
+	/* ヘルプファイルのフルパスを返す */
+	::GetHelpFilePath( szHelp );
+	::WinHelp( m_hWnd, szHelp, HELP_FINDER, 0 );
+	return;
+}
+
+
+
+
+/* ヘルプキーワード検索 */
+void CEditView::Command_HELP_SEARCH( void )
+{
+	char	szHelp[_MAX_PATH + 1];
+	/* ヘルプファイルのフルパスを返す */
+	::GetHelpFilePath( szHelp );
+	::WinHelp( m_hWnd, szHelp, HELP_KEY, (unsigned long)"" );
+	return;
+}
+//To Here Nov. 25, 2000
+
+
+
+
+/* コマンド一覧 */
+void CEditView::Command_MENU_ALLFUNC( void )
+{
+	
+	char szLabel[300];
+//	char szLabel2[300];
+	UINT uFlags;
+	POINT po;
+	HMENU hMenu;
+	HMENU hMenuPopUp;
+	int i;
+	int j;
+	int nId;
+
+//	From Here Sept. 15, 2000 JEPRO
+//	サブメニュー、特に「その他」のコマンドに対してステータスバーに表示されるキーアサイン情報が
+//	メニューで隠れないように右にずらした
+//	(本当はこの「コマンド一覧」メニューをダイアログに変更しバーをつまんで自由に移動できるようにしたい)
+//	po.x = 0;
+	po.x = 540;
+//	To Here Sept. 15, 2000 (Oct. 7, 2000 300→500; Nov. 3, 2000 500→540)
+	po.y = 0;
+	::ClientToScreen( m_hWnd, &po );
+
+	CEditWnd*	pCEditWnd;
+	pCEditWnd = ( CEditWnd* )::GetWindowLong( ::GetParent( m_hwndParent ), GWL_USERDATA );
+	pCEditWnd->m_CMenuDrawer.ResetContents();
+	
+	hMenu = ::CreatePopupMenu();
+//Oct. 14, 2000 JEPRO 「--未定義--」を表示させないように変更したことで1番(カーソル移動系)が前にシフトされた(この変更によって i=1→i=0 と変更)
+	for( i = 0; i < nsFuncCode::nFuncKindNum; i++ ){	
+		hMenuPopUp = ::CreatePopupMenu();
+		for( j = 0; j < nsFuncCode::pnFuncListNumArr[i]; j++ ){
+			::LoadString( m_hInstance, nsFuncCode::ppnFuncListArr[i][j], szLabel, 256 );
+			uFlags = MF_BYPOSITION | MF_STRING | MF_ENABLED;
+//			uFlags = MF_BYPOSITION | MF_STRING | MF_DISABLED | MF_GRAYED;
+			pCEditWnd->m_CMenuDrawer.MyAppendMenu( hMenuPopUp, uFlags, nsFuncCode::ppnFuncListArr[i][j] , szLabel );
+		}
+		pCEditWnd->m_CMenuDrawer.MyAppendMenu( hMenu, MF_BYPOSITION | MF_STRING | MF_POPUP, (UINT)hMenuPopUp , nsFuncCode::ppszFuncKind[i] );
+	}
+
+	nId = ::TrackPopupMenu(
+		hMenu,
+		TPM_TOPALIGN
+		| TPM_LEFTALIGN
+		| TPM_RETURNCMD
+		| TPM_LEFTBUTTON
+		,
+		po.x,
+		po.y,
+		0,
+		::GetParent( m_hwndParent )/*m_hWnd*/,
+		NULL
+	);
+	::DestroyMenu( hMenu );
+	if( 0 != nId ){
+		/* コマンドコードによる処理振り分け */
+//		HandleCommand( nFuncID, TRUE, 0, 0, 0, 0 );
+		::PostMessage( ::GetParent( m_hwndParent ), WM_COMMAND, MAKELONG( nId, 0 ), (LPARAM)NULL );
+	}
+	return;
+}
+
+
+
 
 /* 外部ヘルプ１ */
 void CEditView::Command_EXTHELP1( void )
@@ -4888,6 +5099,7 @@ retry:;
 	::WinHelp( m_hwndParent, m_pShareData->m_Common.m_szExtHelp1, HELP_KEY, (DWORD)(char*)cmemCurText.GetPtr( NULL ) );
 	return;
 }
+
 
 
 
@@ -4949,10 +5161,9 @@ retry:;
 			(DWORD)&link
 		);
 	}
-	
-	
-	
-	
+
+
+
 //	if( NULL != hwndHtmlHelp ){
 //		hwndHtmlHelpChild = ::FindWindowEx( hwndHtmlHelp, NULL, "#32770", NULL );
 //		if( NULL != hwndHtmlHelpChild ){
@@ -5036,68 +5247,18 @@ retry:;
 }
 
 
-/* コマンド一覧 */
-void CEditView::Command_MENU_ALLFUNC( void )
+
+
+//From Here Dec. 25, 2000 JEPRO
+/* バージョン情報 */
+void CEditView::Command_ABOUT( void )
 {
-	
-	char szLabel[300];
-//	char szLabel2[300];
-	UINT uFlags;
-	POINT po;
-	HMENU hMenu;
-	HMENU hMenuPopUp;
-	int i;
-	int j;
-	int nId;
-
-//	From Here Sept. 15, 2000 JEPRO
-//	サブメニュー、特に「その他」のコマンドに対してステータスバーに表示されるキーアサイン情報が
-//	メニューで隠れないように右にずらした
-//	(本当はこの「コマンド一覧」メニューをダイアログに変更しバーをつまんで自由に移動できるようにしたい)
-//	po.x = 0;
-	po.x = 500;
-//	To Here Sept. 15, 2000 (Oct. 7, 2000 300→500)
-	po.y = 0;
-	::ClientToScreen( m_hWnd, &po );
-
-	CEditWnd*	pCEditWnd;
-	pCEditWnd = ( CEditWnd* )::GetWindowLong( ::GetParent( m_hwndParent ), GWL_USERDATA );
-	pCEditWnd->m_CMenuDrawer.ResetContents();
-	
-	hMenu = ::CreatePopupMenu();
-//Oct. 14, 2000 JEPRO 「--未定義--」を表示させないように変更したことで1番(カーソル移動系)が前にシフトされた(この変更によって i=1→i=0 と変更)
-	for( i = 0; i < nsFuncCode::nFuncKindNum; i++ ){	
-		hMenuPopUp = ::CreatePopupMenu();
-		for( j = 0; j < nsFuncCode::pnFuncListNumArr[i]; j++ ){
-			::LoadString( m_hInstance, nsFuncCode::ppnFuncListArr[i][j], szLabel, 256 );
-			uFlags = MF_BYPOSITION | MF_STRING | MF_ENABLED;
-//			uFlags = MF_BYPOSITION | MF_STRING | MF_DISABLED | MF_GRAYED;
-			pCEditWnd->m_CMenuDrawer.MyAppendMenu( hMenuPopUp, uFlags, nsFuncCode::ppnFuncListArr[i][j] , szLabel );
-		}
-		pCEditWnd->m_CMenuDrawer.MyAppendMenu( hMenu, MF_BYPOSITION | MF_STRING | MF_POPUP, (UINT)hMenuPopUp , nsFuncCode::ppszFuncKind[i] );
-	}
-
-	nId = ::TrackPopupMenu(
-		hMenu,
-		TPM_TOPALIGN
-		| TPM_LEFTALIGN
-		| TPM_RETURNCMD
-		| TPM_LEFTBUTTON
-		,
-		po.x,
-		po.y,
-		0,
-		::GetParent( m_hwndParent )/*m_hWnd*/,
-		NULL
-	);
-	::DestroyMenu( hMenu );
-	if( 0 != nId ){
-		/* コマンドコードによる処理振り分け */
-//		HandleCommand( nFuncID, TRUE, 0, 0, 0, 0 );
-		::PostMessage( ::GetParent( m_hwndParent ), WM_COMMAND, MAKELONG( nId, 0 ), (LPARAM)NULL );
-	}
+	CDlgAbout cDlgAbout;
+	cDlgAbout.DoModal( m_hInstance, m_hWnd );
 	return;
 }
+//To Here Dec. 25, 2000
+
 
 
 
@@ -5376,7 +5537,6 @@ void CEditView::Command_MENU_RBUTTON( void )
 //	//	 );
 //	return;
 //	}
-
 
 
 
@@ -5760,7 +5920,6 @@ void CEditView::Command_INDENT( const char* pData, int nDataLen )
 
 
 
-
 /* 逆インデント */
 void CEditView::Command_UNINDENT( char cChar )
 {
@@ -6108,7 +6267,6 @@ void CEditView::Command_UNINDENT( char cChar )
 
 
 
-
 /* GREP */
 void CEditView::Command_GREP( void )
 {
@@ -6222,7 +6380,6 @@ void CEditView::Command_GREP( void )
 
 
 
-
 /* 最後にテキストを追加 */
 void CEditView::Command_ADDTAIL( const char* pszData, int nDataLen )
 {
@@ -6280,7 +6437,7 @@ void CEditView::Command_ADDTAIL( const char* pszData, int nDataLen )
 
 
 
-/* タグジャンプ機能 */
+/* タグジャンプ */
 void/*BOOL*/ CEditView::Command_TAGJUMP( void/*BOOL bCheckOnly*/ )
 {
 	const char*	pLine;
@@ -6444,7 +6601,7 @@ can_not_tagjump_end:;
 
 
 
-/* タグジャンプバック機能 */
+/* タグジャンプバック */
 void/*BOOL*/ CEditView::Command_TAGJUMPBACK( void/*BOOL bCheckOnly*/ )
 {
 	HWND hwndReferer = m_pcEditDoc->m_hwndReferer;
@@ -6652,7 +6809,6 @@ BOOL CEditView::Command_OPENCCPP( BOOL bCheckOnly )
 
 
 
-
 //重ねて表示
 void CEditView::Command_CASCADE( void )
 {
@@ -6678,6 +6834,8 @@ void CEditView::Command_CASCADE( void )
 }
 
 
+
+
 //左右に並べて表示
 void CEditView::Command_TILE_H( void )
 {
@@ -6701,6 +6859,7 @@ void CEditView::Command_TILE_H( void )
 	}
 	return;
 }
+
 
 
 
@@ -6752,7 +6911,6 @@ void CEditView::Command_MAXIMIZE_V( void )
 
 
 
-
 /* すべて最小化	*/	//	Sept. 17, 2000 jepro 説明の「全て」を「すべて」に統一
 void CEditView::Command_MINIMIZE_ALL(void)
 {
@@ -6775,7 +6933,6 @@ void CEditView::Command_MINIMIZE_ALL(void)
 	delete [] phWndArr;
 	return;
 }
-
 
 
 
@@ -6870,6 +7027,7 @@ void CEditView::Command_REPLACE( void )
 
 
 
+
 //	/* 単語リファレンス*/
 //	void CEditView::Command_WORDSREFERENCE( void )
 //	{
@@ -6938,7 +7096,6 @@ void CEditView::Command_CURLINECENTER( void )
 	}	
 	return;	
 }
-
 
 
 
@@ -7040,32 +7197,6 @@ void CEditView::Command_REDRAW( void )
 {
 	/* フォーカス移動時の再描画 */
 	RedrawAll();
-	return;
-}
-
-
-
-/* タイプ別設定一覧 */
-void CEditView::Command_TYPE_LIST( void )
-{
-	CDlgTypeList	cDlgTypeList;
-	int				nSettingType;
-//	cDlgTypeList.Create( m_hInstance, m_hWnd );
-	nSettingType = m_pcEditDoc->GetDocumentType();
-	if( cDlgTypeList.DoModal( m_hInstance, m_hWnd, &nSettingType ) ){
-		//	Nov. 29, 2000 genta
-		//	一時的な設定適用機能を無理矢理追加
-		if( nSettingType & PROP_TEMPCHANGE_FLAG ){
-			m_pcEditDoc->SetDocumentType( nSettingType & ~PROP_TEMPCHANGE_FLAG, true );
-			m_pcEditDoc->LockDocumentType();
-			/* 設定変更を反映させる */
-			m_pcEditDoc->OnChangeSetting();
-		}
-		else {
-			/* タイプ別設定 */
-			m_pcEditDoc->OpenPropertySheetTypes( -1, nSettingType );
-		}
-	}
 	return;
 }
 
@@ -7184,7 +7315,8 @@ void CEditView::Command_ACTIVATE_SQLPLUS( void )
 
 
 
-/* ファイルのプロパティのダイアログ */
+
+/* ファイルのプロパティ */
 void CEditView::Command_PROPERTY_FILE( void )
 {
 #ifdef _DEBUG
@@ -7208,6 +7340,17 @@ void CEditView::Command_PROPERTY_FILE( void )
 	cDlgProperty.DoModal( m_hInstance, m_hWnd, (LPARAM)m_pcEditDoc );
 	return;
 }
+
+
+
+
+/* テキストエディタの全終了 */	//Dec. 27, 2000 JEPRO 追加
+void CEditView::Command_EXITALL( void )
+{
+	CEditApp::TerminateApplication();
+	return;
+}
+
 
 
 
@@ -7243,6 +7386,7 @@ void CEditView::Command_WIN_OUTPUT( void )
 	}
 	return;
 }
+
 
 
 
@@ -7315,9 +7459,6 @@ int CEditView::Command_CUSTMENU( int nMenuIdx )
 
 
 
-
-
-
 //選択範囲内全行コピー
 void CEditView::Command_COPYLINES( void )
 {
@@ -7328,7 +7469,6 @@ void CEditView::Command_COPYLINES( void )
 	);
 	return;
 }
-
 
 
 
@@ -7355,6 +7495,38 @@ void CEditView::Command_COPYLINESWITHLINENUMBER( void )
 		NULL, /* 引用符 */
 		TRUE /* 行番号を付与する */ 
 	);
+	return;
+}
+
+
+
+
+////キー割り当て一覧をクリップボードへコピー	//Dec. 26, 2000 JEPRO ショートカット実行で死ぬ…
+void CEditView::Command_CREATEKEYBINDLIST( void )
+{
+#if 0
+	CMemory		cMemKeyList;
+	CEditDoc	m_cEditDoc;
+	HGLOBAL		hgClip;
+	char*		pszClip;
+
+	CKeyBind::CreateKeyBindList(
+	m_hInstance,
+	m_pShareData->m_nKeyNameArrNum,
+	m_pShareData->m_pKeyNameArr,
+	cMemKeyList
+	 );
+			
+	/* Windowsクリップボードにコピー */
+	hgClip = ::GlobalAlloc( GMEM_MOVEABLE | GMEM_DDESHARE, cMemKeyList.GetLength() + 1 );
+	pszClip = (char*)::GlobalLock( hgClip );
+	memcpy( pszClip, cMemKeyList.GetPtr( NULL ), cMemKeyList.GetLength() + 1 );
+	::GlobalUnlock( hgClip );
+	::OpenClipboard( m_cEditDoc.m_hWnd );
+	::EmptyClipboard();
+	::SetClipboardData( CF_OEMTEXT, hgClip );
+	::CloseClipboard();
+#endif
 	return;
 }
 
@@ -7421,7 +7593,6 @@ retry:;
 	}
 	return;
 }
-
 
 
 
@@ -7557,6 +7728,34 @@ end_of_compare:;
 
 
 
+//jeprotestnow Oct. 30, 2000
+/* メニューバー表示/非表示 */
+//void CEditView::Command_SHOWMENUBAR( void )
+//{
+//	HWND		hwndFrame;
+//	CEditWnd*	pCEditWnd;
+//	RECT		rc;
+//	hwndFrame = ::GetParent( m_hwndParent );
+//	pCEditWnd = ( CEditWnd* )::GetWindowLong( hwndFrame, GWL_USERDATA );
+//	if( NULL == pCEditWnd->m_hwndToolBar ){
+//		/* メニューバー作成 */
+//		pCEditWnd->CreateToolBar();
+//		m_pShareData->m_Common.m_bDispTOOLBAR = TRUE;	/* 次回ウィンドウを開いたときメニューバーを表示する */
+//	}else{
+//		::DestroyWindow( pCEditWnd->m_hwndToolBar );
+//		pCEditWnd->m_hwndToolBar = NULL;
+//		m_pShareData->m_Common.m_bDispTOOLBAR = FALSE;	/* 次回ウィンドウを開いたときメニューバーを表示しない */	//Sept. 9, 2000 jepro　「表示する」となっていたのを修正
+//	}
+////	/* 変更フラグ(共通設定の全体) のセット */
+////	m_pShareData->m_nCommonModify = TRUE;	
+//	::GetClientRect( pCEditWnd->m_hWnd, &rc );
+//	::SendMessage( pCEditWnd->m_hWnd, WM_SIZE, pCEditWnd->m_nWinSizeType, MAKELONG( rc.right - rc.left, rc.bottom - rc.top  ) );
+//	return;
+//}
+//jeprotestnow To Here
+
+
+
 
 /* ツールバー表示/非表示 */
 void CEditView::Command_SHOWTOOLBAR( void )
@@ -7585,7 +7784,6 @@ void CEditView::Command_SHOWTOOLBAR( void )
 
 
 
-
 /* ステータスバーの表示/非表示 */
 void CEditView::Command_SHOWSTATUSBAR( void )
 {
@@ -7610,7 +7808,6 @@ void CEditView::Command_SHOWSTATUSBAR( void )
 	::RedrawWindow( pCEditWnd->m_hWnd, NULL, NULL, RDW_FRAME | RDW_INVALIDATE | RDW_UPDATENOW  );
 	return;
 }
-
 
 
 
@@ -7645,6 +7842,7 @@ void CEditView::Command_SHOWFUNCKEY( void )
 	::SendMessage( pCEditWnd->m_hWnd, WM_SIZE, pCEditWnd->m_nWinSizeType, MAKELONG( rc.right - rc.left, rc.bottom - rc.top  ) );
 	return;
 }
+
 
 
 
@@ -7699,6 +7897,8 @@ void CEditView::Command_PRINT( void )
 }
 
 
+
+
 /* 印刷プレビュー */
 void CEditView::Command_PRINT_PREVIEW( void )
 {
@@ -7711,6 +7911,8 @@ void CEditView::Command_PRINT_PREVIEW( void )
 	pCEditWnd->PrintPreviewModeONOFF();
 	return;
 }
+
+
 
 
 /* 印刷のページレイアウトの設定 */
@@ -7729,6 +7931,7 @@ void CEditView::Command_PRINT_PAGESETUP( void )
 
 
 
+
 /* ブラウズ */
 void CEditView::Command_BROWSE( void )
 {
@@ -7742,7 +7945,6 @@ void CEditView::Command_BROWSE( void )
 	::ShellExecute( NULL, "open", szURL, NULL, NULL, SW_SHOW );		
 	return;
 }
-
 
 
 
@@ -7767,7 +7969,6 @@ void CEditView::Command_RECKEYMACRO( void )
 
 	return;
 }
-
 
 
 
@@ -7835,7 +8036,6 @@ void CEditView::Command_EXECKEYMACRO( void )
 
 
 
-
 /* キーマクロの読み込み */
 void CEditView::Command_LOADKEYMACRO( void )
 {
@@ -7874,7 +8074,6 @@ void CEditView::Command_LOADKEYMACRO( void )
 
 
 
-
 /* 現在のウィンドウ幅で折り返し	*/
 void CEditView::Command_WRAPWINDOWWIDTH( void )	//	Oct. 7, 2000 JEPRO WRAPWINDIWWIDTH を WRAPWINDOWWIDTH に変更
 {
@@ -7901,7 +8100,6 @@ void CEditView::Command_WRAPWINDOWWIDTH( void )	//	Oct. 7, 2000 JEPRO WRAPWINDIW
 
 
 
-
 //検索マークのクリア
 void CEditView::Command_SEARCH_CLEARMARK( void )
 {
@@ -7910,11 +8108,6 @@ void CEditView::Command_SEARCH_CLEARMARK( void )
 	RedrawAll();
 	return;
 }
-
-
-
-
-
 
 
 
@@ -7942,6 +8135,8 @@ void CEditView::ReOpen_XXX( int nCharCode )
 	return;
 
 }
+
+
 
 
 //SJISで開く
@@ -7988,6 +8183,8 @@ void CEditView::Command_FILE_REOPEN_UTF7( void )
 }
 
 
+
+
 //日付挿入
 void CEditView::Command_INS_DATE( void )
 {
@@ -7999,6 +8196,9 @@ void CEditView::Command_INS_DATE( void )
 	return;
 }
 
+
+
+
 //時刻挿入
 void CEditView::Command_INS_TIME( void )
 {
@@ -8009,6 +8209,8 @@ void CEditView::Command_INS_TIME( void )
 	Command_INSTEXT( TRUE, szText, TRUE );
 	return;
 }
+
+
 
 	
 //外部コマンド実行
@@ -8028,10 +8230,9 @@ void CEditView::Command_EXECCOMMAND( void )
 
 	// 子プロセスの標準出力をリダイレクトする
 	ExecCmd( cDlgExec.m_szCommand, cDlgExec.m_bGetStdout );
-
-	
 	return;
 }
+
 
 
 
@@ -8066,6 +8267,9 @@ void CEditView::AddToCmdArr( const char* szCmd )
 	return;
 }
 
+
+
+
 //	Jun. 16, 2000 genta
 //	対括弧の検索
 void CEditView::Command_BRACKETPAIR( void )
@@ -8081,9 +8285,11 @@ void CEditView::Command_BRACKETPAIR( void )
 	}
 }
 
+
+
+
 //	From HERE Sep. 8, 2000 genta
 //	移動履歴を前へたどる
-//
 //
 void CEditView::Command_JUMPPREV(void)
 {
@@ -8099,6 +8305,9 @@ void CEditView::Command_JUMPPREV(void)
 		MoveCursor( x, y, true );
 	}
 }
+
+
+
 
 //	移動履歴を次へたどる
 void CEditView::Command_JUMPNEXT(void)

@@ -33,13 +33,14 @@ MacroFuncInfo m_MacroFuncInfoArr[] =
 	F_PRINT						, "Print",				//印刷
 //	F_PRINT_DIALOG				, "PrintDialog",		//印刷ダイアログ
 	F_PRINT_PREVIEW				, "PrintPreview",		//印刷プレビュー
-	F_PRINT_PAGESETUP			, "PrintPageSetup",		//印刷ページ設定	//	Sept. 14, 2000 jepro 「印刷のページレイアウトの設定」から変更
+	F_PRINT_PAGESETUP			, "PrintPageSetup",		//印刷ページ設定	//Sept. 14, 2000 jepro 「印刷のページレイアウトの設定」から変更
 	F_ACTIVATE_SQLPLUS			, "ActivateSQLPLUS",	/* Oracle SQL*Plusをアクティブ表示 */
 	F_PLSQL_COMPILE_ON_SQLPLUS	, "ExecSQLPLUS",		/* Oracle SQL*Plusで実行 */
 	F_OPENINCLUDEFILE			, "OpenIncludeFile",	//同名のインクルードファイルを開く
 	F_OPENCCPP					, "OpenCpp",			//同名のC/C++ソースファイルを開く
 	F_BROWSE					, "Browse",				//ブラウズ
 	F_PROPERTY_FILE				, "PropertyFile",		//ファイルのプロパティ
+	F_EXITALL					, "ExitAll",			//テキストエディタの全終了	//Dec. 27, 2000 JEPRO 追加
 
 	/* 編集系 */
 	F_CHAR						, "Char",			//文字入力
@@ -145,9 +146,8 @@ MacroFuncInfo m_MacroFuncInfoArr[] =
 	F_COPYLINESASPASSAGE      	, "CopyLinesAsPassage",	//選択範囲内全行引用符付きコピー
 	F_COPYLINESWITHLINENUMBER 	, "CopyLinesWithLineNumber",	//選択範囲内全行行番号付きコピー
 	F_COPYPATH          		, "CopyPath",	//このファイルのパス名をクリップボードにコピー
-	F_COPYTAG	         		, "CopyTag",	//このファイルのパス名とカーソル位置をコピー	//	Sept. 15, 2000 jepro 上と同じ説明になっていたのを修正
-//	jeprotest	うまくいかないので次行は殺してある
-//	F_CREATEKEYBINDLIST			, "CopyKeyBindList",	//キー割り当て一覧をコピー	//	added Sept. 15, 2000 JEPRO
+	F_COPYTAG	         		, "CopyTag",	//このファイルのパス名とカーソル位置をコピー	//Sept. 15, 2000 jepro 上と同じ説明になっていたのを修正
+	F_CREATEKEYBINDLIST			, "CopyKeyBindList",	//キー割り当て一覧をコピー	//Sept. 15, 2000 JEPRO 追加 //Dec. 25, 2000 復活
 
 	/* 挿入系 */
 	F_INS_DATE					, "InsertDate",	// 日付挿入
@@ -173,7 +173,7 @@ MacroFuncInfo m_MacroFuncInfoArr[] =
 	F_CODECNV_SJIS2UTF8			, "SJIStoUTF8",			/* SJIS→UTF-8コード変換 */
 	F_CODECNV_SJIS2UTF7			, "SJIStoUTF7",			/* SJIS→UTF-7コード変換 */
 	F_BASE64DECODE	 			, "Base64Decode",		//Base64デコードして保存
-	F_UUDECODE		 			, "Uudecode",			//uudecodeしてファイルに保存//	//Oct. 17, 2000 jepro 説明を「選択部分をUUENCODEデコード」から変更
+	F_UUDECODE		 			, "Uudecode",			//uudecodeしてファイルに保存	//Oct. 17, 2000 jepro 説明を「選択部分をUUENCODEデコード」から変更
 	
 
 	/* 検索系 */
@@ -202,7 +202,7 @@ MacroFuncInfo m_MacroFuncInfoArr[] =
 	F_OPTION_TYPE				, "OptionType",		/* タイプ別設定 */
 	F_OPTION					, "OptionCommon",	/* 共通設定 */
 	F_FONT						, "SelectFont",		/* フォント設定 */
-	F_WRAPWINDOWWIDTH			, "WrapWindowWidth",/* 現在のウィンドウ幅で折り返し */	//	Oct. 7, 2000 JEPRO WRAPWINDIWWIDTH を WRAPWINDOWWIDTH に変更
+	F_WRAPWINDOWWIDTH			, "WrapWindowWidth",/* 現在のウィンドウ幅で折り返し */	//Oct. 7, 2000 JEPRO WRAPWINDIWWIDTH を WRAPWINDOWWIDTH に変更
 
 	/* カスタムメニュー */
 	F_MENU_RBUTTON				, "RMenu",		/* 右クリックメニュー */
@@ -243,15 +243,18 @@ MacroFuncInfo m_MacroFuncInfoArr[] =
 	F_NEXTWINDOW				, "NextWindow",	//次のウィンドウ
 	F_PREVWINDOW				, "PrevWindow",	//前のウィンドウ
 	F_MAXIMIZE_V				, "MaximizeV",	//縦方向に最大化
-	F_MINIMIZE_ALL				, "MinimizeAll",//すべて最小化	//	Sept. 17, 2000 jepro 説明の「全て」を「すべて」に統一
+	F_MINIMIZE_ALL				, "MinimizeAll",//すべて最小化	//Sept. 17, 2000 jepro 説明の「全て」を「すべて」に統一
 	F_REDRAW					, "ReDraw",		//再描画
 	F_WIN_OUTPUT				, "ActivateWinOutput",	//アウトプットウィンドウ表示
 
 	/* 支援 */
 	F_HOKAN						, "Complete",		/* 入力補完 */	//Oct. 15, 2000 JEPRO 入ってなかったので英名を付けて入れてみた
+	F_HELP_CONTENTS				, "HelpContents",	/* ヘルプ目次 */			//Nov. 25, 2000 JEPRO 追加
+	F_HELP_SEARCH				, "HelpSearch",		/* ヘルプキーワード検索 */	//Nov. 25, 2000 JEPRO 追加
 	F_MENU_ALLFUNC				, "CommandList",	/* コマンド一覧 */
 	F_EXTHELP1					, "ExtHelp1",		/* 外部ヘルプ１ */
-	F_EXTHTMLHELP				, "ExtHtmlHelp"		/* 外部HTMLヘルプ */
+	F_EXTHTMLHELP				, "ExtHtmlHelp",	/* 外部HTMLヘルプ */
+	F_ABOUT						, "About",			/* バージョン情報 */	//Dec. 24, 2000 JEPRO 追加
 
 	/* その他 */
 //	F_SENDMAIL					, "SendMail",	/* メール送信 */	//Oct. 17, 2000 JEPRO メール機能は死んでいるのでコメントアウトにした 
@@ -324,13 +327,14 @@ BOOL CMacro::CanFuncIsKeyMacro( int nFuncID )
 //	case F_PRINT					://印刷
 //	case F_PRINT_DIALOG				://印刷ダイアログ
 //	case F_PRINT_PREVIEW			://印刷プレビュー
-//	case F_PRINT_PAGESETUP			://印刷ページ設定	//	Sept. 14, 2000 jepro 「印刷のページレイアウトの設定」から変更
+//	case F_PRINT_PAGESETUP			://印刷ページ設定	//Sept. 14, 2000 jepro 「印刷のページレイアウトの設定」から変更
 //	case F_ACTIVATE_SQLPLUS			:/* Oracle SQL*Plusをアクティブ表示 */	
-//	case F_PLSQL_COMPILE_ON_SQLPLUS	:/* Oracle SQL*Plusで実行 */	//	Sept. 17, 2000 jepro 説明の「コンパイル」を「実行」に統一
+//	case F_PLSQL_COMPILE_ON_SQLPLUS	:/* Oracle SQL*Plusで実行 */	//Sept. 17, 2000 jepro 説明の「コンパイル」を「実行」に統一
 //	case F_OPENINCLUDEFILE			://同名のインクルードファイルを開く
 //	case F_OPENCCPP					://同名のC/C++ソースファイルを開く
 ///	case F_BROWSE					://ブラウズ
 //	case F_PROPERTY_FILE			://ファイルのプロパティ
+//	case F_EXITALL					://テキストエディタの全終了	//Dec. 27, 2000 JEPRO 追加
 
 	/* 編集系 */
 	case F_CHAR						://文字入力
@@ -434,9 +438,8 @@ BOOL CMacro::CanFuncIsKeyMacro( int nFuncID )
 	case F_COPYLINESASPASSAGE      	://選択範囲内全行引用符付きコピー
 	case F_COPYLINESWITHLINENUMBER 	://選択範囲内全行行番号付きコピー
 	case F_COPYPATH          		://このファイルのパス名をクリップボードにコピー
-	case F_COPYTAG          		://このファイルのパス名とカーソル位置をコピー	//	Sept. 15, 2000 jepro 上と同じ説明になっていたのを修正
-//	jeprotest	うまくいかないので次行は殺してある
-//	case F_CREATEKEYBINDLIST		://キー割り当て一覧をコピー			//	added Sept. 15, 2000 JEPRO
+	case F_COPYTAG          		://このファイルのパス名とカーソル位置をコピー	//Sept. 15, 2000 jepro 上と同じ説明になっていたのを修正
+	case F_CREATEKEYBINDLIST		://キー割り当て一覧をコピー			//Sept. 15, 2000 JEPRO 追加	//Dec. 25, 2000 復活
 
 	/* 挿入系 */
 	case F_INS_DATE					:// 日付挿入
@@ -490,7 +493,7 @@ BOOL CMacro::CanFuncIsKeyMacro( int nFuncID )
 //	case F_OPTION_TYPE				:/* タイプ別設定 */
 //	case F_OPTION					:/* 共通設定 */
 //	case F_FONT						:/* フォント設定 */
-//	case F_WRAPWINDOWWIDTH			:/* 現在のウィンドウ幅で折り返し */	//	Oct. 15, 2000 JEPRO 
+//	case F_WRAPWINDOWWIDTH			:/* 現在のウィンドウ幅で折り返し */	//Oct. 15, 2000 JEPRO 
 
 	/* カスタムメニュー */
 //	case F_MENU_RBUTTON				:/* 右クリックメニュー */
@@ -531,15 +534,18 @@ BOOL CMacro::CanFuncIsKeyMacro( int nFuncID )
 //	case F_TILE_V					://上下に並べて表示
 //	case F_TILE_H					://左右に並べて表示
 //	case F_MAXIMIZE_V				://縦方向に最大化
-//	case F_MINIMIZE_ALL				://すべて最小化	//	Sept. 17, 2000 jepro 説明の「全て」を「すべて」に統一
+//	case F_MINIMIZE_ALL				://すべて最小化	//Sept. 17, 2000 jepro 説明の「全て」を「すべて」に統一
 //	case F_REDRAW					://再描画
 	case F_WIN_OUTPUT				://アウトプットウィンドウ表示
 
 	/* 支援 */
-//  case F_HOKAN					:/* 入力補完 */	//Oct. 15, 2000 JEPRO 入ってなかったので入れてみた
+//  case F_HOKAN					:/* 入力補完 */				//Oct. 15, 2000 JEPRO 入ってなかったので入れてみた
+//	case F_HELP_CONTENTS			:/* ヘルプ目次 */			//Dec. 25, 2000 JEPRO 追加
+//	case F_HELP_SEARCH				:/* ヘルプキーワード検索 */	//Dec. 25, 2000 JEPRO 追加
 //	case F_MENU_ALLFUNC				:/* コマンド一覧 */
 //	case F_EXTHELP1					:/* 外部ヘルプ１ */
 //	case F_EXTHTMLHELP				:/* 外部HTMLヘルプ */
+//	case F_ABOUT					:/* バージョン情報 */		//Dec. 25, 2000 JEPRO 追加
 
 	/* その他 */
 //	case F_SENDMAIL					:/* メール送信 */

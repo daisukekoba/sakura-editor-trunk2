@@ -19,6 +19,11 @@
 //#include <ras.h>
 #include "debug.h"
 #include "CEditApp.h"
+#include "CEditView.h"		//Nov. 21, 2000 JEPROtestnow added
+#include "CEditDoc.h"		//Nov. 21, 2000 JEPROtestnow added
+#include "CEditWnd.h"		//Nov. 21, 2000 JEPROtestnow added
+#include "CDlgAbout.h"		//Nov. 21, 2000 JEPROtestnow added
+#include "CDlgTypeList.h"	//Nov. 21, 2000 JEPROtestnow added
 #include "sakura_rc.h"
 #include "mymessage.h"
 #include "CDlgOpenFile.h"
@@ -141,6 +146,8 @@ HWND CEditApp::Create( HINSTANCE hInstance )
 //	HACCEL		hAccel;
 //	int			nRet;
 	HWND		hwndWork;
+//	const char *pszTitle="sakura new UR1.2.20.0";	//Nov. 12, 2000 JEPROtestnow トレイにバージョンが表示されなくなってしまったので修正してみたが失敗
+//	const char *pszTips	="sakura tipsUR1.2.20.0";	//Nov. 12, 2000 JEPROtestnow トレイにバージョンが表示されなくなってしまったので修正してみたが失敗
 
 	m_hInstance = hInstance;
 	hwndWork = ::FindWindow( m_pszAppName, m_pszAppName );
@@ -174,7 +181,9 @@ HWND CEditApp::Create( HINSTANCE hInstance )
 	g_m_pCEditApp = this;
 	hWnd = ::CreateWindow(
 		m_pszAppName,						// pointer to registered class name
+//		pszTitle,							// pointer to registered class name	//Nov. 12, 2000 JEPROtestnow トレイにバージョンが表示されなくなってしまったので修正してみたが失敗
 		m_pszAppName,						// pointer to window name
+//		pszTips,							// pointer to window name			//Nov. 12, 2000 JEPROtestnow トレイにバージョンが表示されなくなってしまったので修正してみたが失敗
 		WS_OVERLAPPEDWINDOW/*WS_VISIBLE *//*| WS_CHILD *//* | WS_CLIPCHILDREN*/	,	// window style
 		CW_USEDEFAULT,						// horizontal position of window
 		0,									// vertical position of window
@@ -182,7 +191,7 @@ HWND CEditApp::Create( HINSTANCE hInstance )
 		100,								// window height
 		NULL,								// handle to parent or owner window
 		NULL,								// handle to menu or child-window identifier
-		m_hInstance,							// handle to application instance
+		m_hInstance,						// handle to application instance
 		NULL								// pointer to window-creation data
 	);
 //	m_hWnd = hWnd;
@@ -634,22 +643,133 @@ LRESULT CEditApp::DispatchEvent(
 //			MYTRACE( "MYWM_NOTIFYICON\n" );
 			switch (lParam){
 //キーワード：トレイ右クリックメニュー設定
-//	From Here Oct. 12, 2000 JEPRO 左右とも同一処理になっていたのを別々に処理するように変更(全く未完のため殺した)
+//	From Here Oct. 12, 2000 JEPRO 左右とも同一処理になっていたのを別々に処理するように変更
 			case WM_RBUTTONDOWN:
-//				::SetActiveWindow( m_hWnd );
-//				::SetForegroundWindow( m_hWnd );
-//				/* ポップアップメニュー(トレイ右ボタン) */
-//				nId = CreatePopUpMenu_R();
-//				switch( nId ){
-//				case IDM_HELP_CONTENTS:
-//					OnHelp( m_hWnd, IDM_HELP_CONTENTS );
+				::SetActiveWindow( m_hWnd );
+				::SetForegroundWindow( m_hWnd );
+				/* ポップアップメニュー(トレイ右ボタン) */
+				nId = CreatePopUpMenu_R();
+				switch( nId ){
+// Nov. 21, 2000 JEPROtestnow
+				case F_FONT:
+					/* フォント設定 */
+					{
+//						HWND	hwndFrame;
+//						hwndFrame = ::GetParent( m_hwndParent );
+						/* フォント設定ダイアログ */
+//						if( m_pcEditDoc->SelectFont( &(m_pShareData->m_Common.m_lf) ) ){
+							if( m_pShareData->m_Common.m_lf.lfPitchAndFamily & FIXED_PITCH  ){
+								m_pShareData->m_Common.m_bFontIs_FIXED_PITCH = TRUE;	/* 現在のフォントは固定幅フォントである */
+							}else{
+								m_pShareData->m_Common.m_bFontIs_FIXED_PITCH = FALSE;	/* 現在のフォントは固定幅フォントである */
+							}
+							/* 設定変更を反映させる */
+							/* 全編集ウィンドウへメッセージをポストする */
+//							m_cShareData.PostMessageToAllEditors( 
+//								MYWM_CHANGESETTING, 
+//								(WPARAM)0, (LPARAM)0, hwndFrame
+//							);
+//						}
+					}
+					break;
+				case F_OPTION:
+					/* 共通設定 */
+					{
+						/* 設定プロパティシート テスト用 */
+//						m_pcEditDoc->bOpenPropertySheet( -1/*, -1*/ );
+					}
+					break;
+				case F_OPTION_TYPE:
+					/* タイプ別設定 */
+					{
+//						CEditDoc::OpenPropertySheetTypes( -1, m_nSettingType );
+					}
+					break;
+				case F_TYPE_LIST:
+					/* タイプ別設定一覧 */
+					{
+//						CDlgTypeList	cDlgTypeList;
+//						int				nSettingType;
+//						nSettingType = m_pcEditDoc->m_nSettingType;
+//						if( cDlgTypeList.DoModal( m_hInstance, m_hWnd, &nSettingType ) ){
+							/* タイプ別設定 */
+//							m_pcEditDoc->OpenPropertySheetTypes( -1, nSettingType );
+//						}
+					}
+					break;
+				case F_HELP_CONTENTS:
+					/* ヘルプ目次 */
+					{
+						char	szHelp[_MAX_PATH + 1];
+						/* ヘルプファイルのフルパスを返す */
+						::GetHelpFilePath( szHelp );
+						::WinHelp( m_hWnd, szHelp, HELP_FINDER, 0 );
+					}
+					break;
+				case F_HELP_SEARCH:
+					/* ヘルプキーワード検索 */
+					{
+						char	szHelp[_MAX_PATH + 1];
+						/* ヘルプファイルのフルパスを返す */
+						::GetHelpFilePath( szHelp );
+						::WinHelp( m_hWnd, szHelp, HELP_KEY, (unsigned long)"" );
+					}
+					break;
+				case F_MENU_ALLFUNC:
+					/* コマンド一覧 */
+//						CEditView::Command_MENU_ALLFUNC();
+					break;
+				case F_EXTHELP1:
+					/* 外部ヘルプ１ */
+//					{
+//						CEditView::Command_EXTHELP1();
+//					}
 //					break;
+					{
+					retry:;
+						if( 0 == strlen( m_pShareData->m_Common.m_szExtHelp1 ) ){
+							::MessageBeep( MB_ICONHAND );
+							if( IDYES == ::MYMESSAGEBOX( NULL, MB_YESNOCANCEL | MB_ICONEXCLAMATION | MB_APPLMODAL | MB_TOPMOST, GSTR_APPNAME,
+								"外部ヘルプ１が設定されていません。\n今すぐ設定しますか?"
+							) ){
+								/* 共通設定 プロパティシート */
+//								if( !m_pcEditDoc->OpenPropertySheet( ID_PAGENUM_HELPER/*, IDC_EDIT_EXTHELP1*/ ) ){
+//									break;
+//								}
+								goto retry;
+							}
+							else {
+								break;
+							}
+						}
+
+						CMemory		cmemCurText;
+						/* 現在カーソル位置単語または選択範囲より検索等のキーを取得 */
+//						GetCurrentTextForSearch( cmemCurText );
+//						::WinHelp( m_hwndParent, m_pShareData->m_Common.m_szExtHelp1, HELP_KEY, (DWORD)(char*)cmemCurText.GetPtr( NULL ) );
+						break;
+					}			
+					break;
+				case F_EXTHTMLHELP:
+					/* 外部HTMLヘルプ */
+					{
+//						CEditView::Command_EXTHTMLHELP();
+					}
+					break;
+				case F_ABOUT:
+					/* バージョン情報 */
+					{
+						CDlgAbout cDlgAbout;
+						cDlgAbout.DoModal( m_hInstance, m_hWnd );
+					}
+					break;
 //				case IDM_EXITALL:
-//					/* テキストエディタの終了 */
-//					CEditApp::TerminateApplication();
-//					break;
-//				}
-//				return 0L;
+				case F_EXITALL:	//Dec. 26, 2000 JEPRO F_に変更
+					/* テキストエディタの全終了 */
+					CEditApp::TerminateApplication();
+					break;
+				}
+				return 0L;
 //	To Here Oct. 12, 2000
 
 			case WM_LBUTTONDOWN:
@@ -776,23 +896,23 @@ LRESULT CEditApp::DispatchEvent(
 								char*	pszCodeNameCur;
 								char*	pszCodeNameNew;
 								switch( pfi->m_nCharCode ){
-								case CODE_SJIS:		/* SJIS */		pszCodeNameCur = "SJIS";break;	//	Sept. 1, 2000 jepro 'シフト'を'S'に変更
+								case CODE_SJIS:		/* SJIS */		pszCodeNameCur = "SJIS";break;	//Sept. 1, 2000 jepro 'シフト'を'S'に変更
 								case CODE_JIS:		/* JIS */		pszCodeNameCur = "JIS";break;
 								case CODE_EUC:		/* EUC */		pszCodeNameCur = "EUC";break;
 								case CODE_UNICODE:	/* Unicode */	pszCodeNameCur = "Unicode";break;
-								case CODE_UTF8:	/* UTF-8 */			pszCodeNameCur = "UTF-8";break;
-								case CODE_UTF7:	/* UTF-7 */			pszCodeNameCur = "UTF-7";break;
+								case CODE_UTF8:		/* UTF-8 */		pszCodeNameCur = "UTF-8";break;
+								case CODE_UTF7:		/* UTF-7 */		pszCodeNameCur = "UTF-7";break;
 								} 
 								switch( nCharCode ){
-								case CODE_SJIS:		/* SJIS */		pszCodeNameNew = "SJIS";break;	//	Sept. 1, 2000 jepro 'シフト'を'S'に変更
+								case CODE_SJIS:		/* SJIS */		pszCodeNameNew = "SJIS";break;	//Sept. 1, 2000 jepro 'シフト'を'S'に変更
 								case CODE_JIS:		/* JIS */		pszCodeNameNew = "JIS";break;
 								case CODE_EUC:		/* EUC */		pszCodeNameNew = "EUC";break;
 								case CODE_UNICODE:	/* Unicode */	pszCodeNameNew = "Unicode";break;
-								case CODE_UTF8:	/* UTF-8 */			pszCodeNameNew = "UTF-8";break;
-								case CODE_UTF7:	/* UTF-7 */			pszCodeNameNew = "UTF-7";break;
+								case CODE_UTF8:		/* UTF-8 */		pszCodeNameNew = "UTF-8";break;
+								case CODE_UTF7:		/* UTF-7 */		pszCodeNameNew = "UTF-7";break;
 								} 
 								::MYMESSAGEBOX(	m_hWnd,	MB_OK | MB_ICONEXCLAMATION | MB_TOPMOST, GSTR_APPNAME,
-									"%s\n\n\n既に開いているファイルを違う文字コードで開く場合は、\n一旦閉じてから開いてください。\n\n現在の文字コードセット=[%s]\n新しい文字コードセット=[%s]", 
+									"%s\n\n\n既に開いているファイルを違う文字コードで開く場合は、\n一旦閉じてから開いてください。\n\n現在の文字コードセット=[%s]\n新しい文字コードセット=[%s]",
 									szPath, pszCodeNameCur, pszCodeNameNew
 								);
 							}
@@ -894,8 +1014,9 @@ LRESULT CEditApp::DispatchEvent(
 					/* すべてのウィンドウを閉じる */	//Oct. 7, 2000 jepro 「編集ウィンドウの全終了」という説明を左記のように変更
 					CEditApp::CloseAllEditor();
 					break;
-				case IDM_EXITALL:
-					/* テキストエディタの終了 */
+//				case IDM_EXITALL:
+				case F_EXITALL:	//Dec. 26, 2000 JEPRO F_に変更
+					/* テキストエディタの全終了 */
 					CEditApp::TerminateApplication();
 					break;
 				default:
@@ -1053,17 +1174,17 @@ LRESULT CEditApp::DispatchEvent(
 									case CODE_JIS:		/* JIS */		pszCodeNameCur = "JIS";break;
 									case CODE_EUC:		/* EUC */		pszCodeNameCur = "EUC";break;
 									case CODE_UNICODE:	/* Unicode */	pszCodeNameCur = "Unicode";break;
-									case CODE_UTF8:	/* UTF-8 */			pszCodeNameCur = "UTF-8";break;
-									case CODE_UTF7:	/* UTF-7 */			pszCodeNameCur = "UTF-7";break;
+									case CODE_UTF8:		/* UTF-8 */		pszCodeNameCur = "UTF-8";break;
+									case CODE_UTF7:		/* UTF-7 */		pszCodeNameCur = "UTF-7";break;
 									} 
 									switch( nCharCode ){
 									case CODE_SJIS:		/* SJIS */		pszCodeNameNew = "SJIS";break;	//	Sept. 1, 2000 jepro 'シフト'を'S'に変更
 									case CODE_JIS:		/* JIS */		pszCodeNameNew = "JIS";break;
 									case CODE_EUC:		/* EUC */		pszCodeNameNew = "EUC";break;
 									case CODE_UNICODE:	/* Unicode */	pszCodeNameNew = "Unicode";break;
-									case CODE_UTF8:	/* UTF-8 */			pszCodeNameNew = "UTF-8";break;
-									case CODE_UTF7:	/* UTF-7 */			pszCodeNameNew = "UTF-7";break;
-									} 
+									case CODE_UTF8:		/* UTF-8 */		pszCodeNameNew = "UTF-8";break;
+									case CODE_UTF7:		/* UTF-7 */		pszCodeNameNew = "UTF-7";break;
+									}
 									::MYMESSAGEBOX(	m_hWnd,	MB_OK | MB_ICONEXCLAMATION | MB_TOPMOST, GSTR_APPNAME,
 										"%s\n\n\n既に開いているファイルを違う文字コードで開く場合は、\n一旦閉じてから開いてください。\n\n現在の文字コードセット=[%s]\n新しい文字コードセット=[%s]", 
 										szPath, pszCodeNameCur, pszCodeNameNew
@@ -1564,7 +1685,7 @@ bool CEditApp::OpenNewEditor2( HINSTANCE hInstance, HWND hWndParent, FileInfo* p
 
 
 
-/* テキストエディタの終了 */
+/* テキストエディタの全終了 */
 void CEditApp::TerminateApplication( void )
 {
 	CShareData		cShareData;
@@ -1721,19 +1842,19 @@ int	CEditApp::CreatePopUpMenu_L( void )
 //				case 3:
 //					strcat( szMemu, "　[Unicode]" );
 //					break;
-					case CODE_JIS:	/* JIS */
+					case CODE_JIS:		/* JIS */
 						strcat( szMemu, "　[JIS]" );
 						break;
-					case CODE_EUC:	/* EUC */
+					case CODE_EUC:		/* EUC */
 						strcat( szMemu, "　[EUC]" );
 						break;
 					case CODE_UNICODE:	/* Unicode */
 						strcat( szMemu, "　[Unicode]" );
 						break;
-					case CODE_UTF8:	/* UTF-8 */
+					case CODE_UTF8:		/* UTF-8 */
 						strcat( szMemu, "　[UTF-8]" );
 						break;
-					case CODE_UTF7:	/* UTF-7 */
+					case CODE_UTF7:		/* UTF-7 */
 						strcat( szMemu, "　[UTF-7]" );
 						break;
 //	To Here Oct. 5, 2000
@@ -1858,19 +1979,19 @@ int	CEditApp::CreatePopUpMenu_L( void )
 //		To Here Oct. 4, 2000
 						if( 0 != pfi->m_nCharCode ){		/* 文字コード種別 */
 							switch( pfi->m_nCharCode ){
-							case CODE_JIS:	/* JIS */
+							case CODE_JIS:		/* JIS */
 								strcat( szMemu, "　[JIS]" );
 								break;
-							case CODE_EUC:	/* EUC */
+							case CODE_EUC:		/* EUC */
 								strcat( szMemu, "　[EUC]" );
 								break;
 							case CODE_UNICODE:	/* Unicode */
 								strcat( szMemu, "　[Unicode]" );
 								break;
-							case CODE_UTF8:	/* UTF-8 */
+							case CODE_UTF8:		/* UTF-8 */
 								strcat( szMemu, "　[UTF-8]" );
 								break;
-							case CODE_UTF7:	/* UTF-7 */
+							case CODE_UTF7:		/* UTF-7 */
 								strcat( szMemu, "　[UTF-7]" );
 								break;
 							}
@@ -1918,7 +2039,8 @@ int	CEditApp::CreatePopUpMenu_L( void )
 	}
 
 	m_CMenuDrawer.MyAppendMenu( hMenu, MF_BYPOSITION | MF_SEPARATOR, 0, NULL, FALSE );
-	m_CMenuDrawer.MyAppendMenu( hMenu, MF_BYPOSITION | MF_STRING, IDM_EXITALL, "テキストエディタの全終了(&X)", FALSE );
+//	m_CMenuDrawer.MyAppendMenu( hMenu, MF_BYPOSITION | MF_STRING, IDM_EXITALL, "テキストエディタの全終了(&X)", FALSE );
+	m_CMenuDrawer.MyAppendMenu( hMenu, MF_BYPOSITION | MF_STRING, F_EXITALL, "テキストエディタの全終了(&X)", FALSE );	//Dec. 26, 2000 JEPRO F_に変更
 
 	po.x = 0;
 	po.y = 0;
@@ -1955,7 +2077,8 @@ int	CEditApp::CreatePopUpMenu_L( void )
 
 
 
-//	Oct. 12, 2000 JEPRO 下のコードを部分的に下手にいじるより全部コメントアウトしてその下に新たに追加することにした
+//	Oct. 12, 2000 JEPRO 下のコードを部分的に下手にいじるより全部コメントアウトして
+//	その下に新たに追加することにしたのでここは触らない！
 /* ポップアップメニュー(トレイ右ボタン) */
 //int	CEditApp::CreatePopUpMenu_R( void )
 //{
@@ -2064,8 +2187,8 @@ int	CEditApp::CreatePopUpMenu_R( void )
 
 
 	/* トレイ右クリックの「ヘルプ」メニュー */
-	m_CMenuDrawer.MyAppendMenu( hMenu, MF_BYPOSITION | MF_STRING, IDM_HELP_CONTENTS , "ヘルプ目次(&O)", FALSE );
-	m_CMenuDrawer.MyAppendMenu( hMenu, MF_BYPOSITION | MF_STRING, IDM_HELP_SEARCH , "ヘルプトピックの検索(&S)", FALSE );
+	m_CMenuDrawer.MyAppendMenu( hMenu, MF_BYPOSITION | MF_STRING, F_HELP_CONTENTS , "ヘルプ目次(&O)", FALSE );
+	m_CMenuDrawer.MyAppendMenu( hMenu, MF_BYPOSITION | MF_STRING, F_HELP_SEARCH , "ヘルプキーワード検索(&S)", FALSE );	//Nov. 25, 2000 JEPRO 「トピックの」→「キーワード」に変更
 	m_CMenuDrawer.MyAppendMenu( hMenu, MF_BYPOSITION | MF_SEPARATOR, 0, NULL, FALSE );
 	m_CMenuDrawer.MyAppendMenu( hMenu, MF_BYPOSITION | MF_STRING, F_MENU_ALLFUNC , "コマンド一覧(&M)", FALSE );
 	m_CMenuDrawer.MyAppendMenu( hMenu, MF_BYPOSITION | MF_SEPARATOR, 0, NULL, FALSE );
@@ -2074,10 +2197,12 @@ int	CEditApp::CreatePopUpMenu_R( void )
 	m_CMenuDrawer.MyAppendMenu( hMenu, MF_BYPOSITION | MF_STRING, F_EXTHTMLHELP , "外部HTMLヘルプ(&H)", FALSE );
 	m_CMenuDrawer.MyAppendMenu( hMenu, MF_BYPOSITION | MF_SEPARATOR, 0, NULL, FALSE );
 
-	m_CMenuDrawer.MyAppendMenu( hMenu, MF_BYPOSITION | MF_STRING, IDM_ABOUT, "バージョン情報(&A)", FALSE );
+//	m_CMenuDrawer.MyAppendMenu( hMenu, MF_BYPOSITION | MF_STRING, IDM_ABOUT, "バージョン情報(&A)", FALSE );
+	m_CMenuDrawer.MyAppendMenu( hMenu, MF_BYPOSITION | MF_STRING, F_ABOUT, "バージョン情報(&A)", FALSE );	//Dec. 25, 2000 JEPRO F_に変更
 	
 	m_CMenuDrawer.MyAppendMenu( hMenu, MF_BYPOSITION | MF_SEPARATOR, 0, NULL, FALSE );
-	m_CMenuDrawer.MyAppendMenu( hMenu, MF_BYPOSITION | MF_STRING, IDM_EXITALL, "テキストエディタの全終了(&X)", FALSE );
+//	m_CMenuDrawer.MyAppendMenu( hMenu, MF_BYPOSITION | MF_STRING, IDM_EXITALL, "テキストエディタの全終了(&X)", FALSE );
+	m_CMenuDrawer.MyAppendMenu( hMenu, MF_BYPOSITION | MF_STRING, F_EXITALL, "テキストエディタの全終了(&X)", FALSE );	//Dec. 26, 2000 JEPRO F_に変更
 
 	po.x = 0;
 	po.y = 0;

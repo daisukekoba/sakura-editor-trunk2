@@ -37,7 +37,8 @@
 #define F_ACTIVATE_SQLPLUS			30170  /* Oracle SQL*Plusをアクティブ表示 */
 #define F_PLSQL_COMPILE_ON_SQLPLUS	30171  /* Oracle SQL*Plusで実行 */	//	Sept. 17, 2000 jepro 説明の「コンパイル」を「実行」に統一
 #define	F_BROWSE			30180	//ブラウズ
-#define F_PROPERTY_FILE		30190  /* ファイルのプロパティ */
+#define F_PROPERTY_FILE		30190	/* ファイルのプロパティ */
+#define	F_EXITALL			30195	/* テキストエディタの全終了 */	//Dec. 27, 2000 JEPRO 追加
 
 
 /* 編集系 */
@@ -162,7 +163,7 @@
 #define	F_COPYTAG           30621	//このファイルのパス名とカーソル位置をコピー
 //jeprotest	Sept. 16, 2000 JEPRO
 //ショートカットキーがうまく働かないので次行は殺してある(ショートカットを登録しなければ以下の設定で使えるが...)
-//#define	F_CREATEKEYBINDLIST	30630	// キー割り当て一覧をコピー //	added Sept. 15, 2000 JEPRO　上の行はIDM_TESTのままではうまくいかないのでFに変えて登録
+#define	F_CREATEKEYBINDLIST	30630	// キー割り当て一覧をコピー //Sept. 15, 2000 JEPRO　上の行はIDM_TESTのままではうまくいかないのでFに変えて登録
 
 
 /* 挿入系 */
@@ -285,14 +286,14 @@
 
 
 /* 支援 */
-//jeprotest	Sept. 16, 2000 JEPRO
-//ショートカットキーがうまく働かないので次の2行は殺してある(ショートカットを登録しなければ以下の設定で使えるが...)
 #define F_HOKAN				31430		/* 入力補完 */
-//#define	F_HELP_CONTENTS		4045	/* ヘルプ目次 */			//	added Sept. 15, 2000 JEPRO　IDM_HELPのままではうまくいかないのでFに変えたら登録できた(.hも要変更)
-//#define	F_HELP_SEARCH		4044	/* ヘルプトピックの検索 */	//	added Sept. 15, 2000 JEPRO　同上
-#define F_MENU_ALLFUNC		31440		/* コマンド一覧 */
+//Sept. 16, 2000→Nov. 25, 2000 JEPRO //ショートカットキーがうまく働かないので殺してあった下の2行を修正・復活
+#define	F_HELP_CONTENTS		31440		/* ヘルプ目次 */			//Nov. 25, 2000 JEPRO 追加
+#define	F_HELP_SEARCH		31441		/* ヘルプキーワード検索 */	//Nov. 25, 2000 JEPRO 追加
+#define F_MENU_ALLFUNC		31445		/* コマンド一覧 */
 #define	F_EXTHELP1			31450		/* 外部ヘルプ１ */
 #define	F_EXTHTMLHELP		31451		/* 外部HTMLヘルプ */
+#define	F_ABOUT				31455		/* バージョン情報 */	//Dec. 24, 2000 JEPRO 追加
 
 
 /* その他 */

@@ -63,7 +63,7 @@ void CEditView::OnPaint( HDC hdc, PAINTSTRUCT *pPs, BOOL bUseMemoryDC )
 	//	May 9, 2000 genta
 	Types	*TypeDataPtr = &(m_pcEditDoc->GetDocumentAttribute());
 
-	
+
 	int				i;
 	HFONT			hFontOld;
 	HBRUSH			hBrush;
@@ -83,7 +83,7 @@ void CEditView::OnPaint( HDC hdc, PAINTSTRUCT *pPs, BOOL bUseMemoryDC )
 	const CLayout*	pcLayout;
 	HPEN			hPen;
 	HPEN			hPenOld;
-						
+
 	/* キャレットの行桁位置を表示する */
 	DrawCaretPosInfo();
 
@@ -96,24 +96,24 @@ void CEditView::OnPaint( HDC hdc, PAINTSTRUCT *pPs, BOOL bUseMemoryDC )
 
 	/* ルーラーとテキストの間の余白 */
 	hBrush = ::CreateSolidBrush( TypeDataPtr->m_ColorInfoArr[COLORIDX_TEXT].m_colBACK );
-	rc.left = 0;	
-	rc.top = m_nViewAlignTop - m_nTopYohaku;	
-	rc.right = m_nViewAlignLeft + m_nViewCx;	
-	rc.bottom = m_nViewAlignTop;	
+	rc.left = 0;
+	rc.top = m_nViewAlignTop - m_nTopYohaku;
+	rc.right = m_nViewAlignLeft + m_nViewCx;
+	rc.bottom = m_nViewAlignTop;
 	::FillRect( hdc, &rc, hBrush );
 	::DeleteObject( hBrush );
-	
+
 
 	::SetBkMode( hdc, TRANSPARENT );
 	hFontOld = (HFONT)::SelectObject( hdc, m_hFont_HAN );
 	m_hFontOld = NULL;
 
-	
+
 //	crBackOld = ::SetBkColor(   hdc, TypeDataPtr->m_colorBACK );
 //	crTextOld = ::SetTextColor( hdc, TypeDataPtr->m_colorTEXT );
 	crBackOld = ::SetBkColor(   hdc, TypeDataPtr->m_ColorInfoArr[COLORIDX_TEXT].m_colBACK );
 	crTextOld = ::SetTextColor( hdc, TypeDataPtr->m_ColorInfoArr[COLORIDX_TEXT].m_colTEXT );
-	
+
 //	::FillRect( hdc, &pPs->rcPaint, ::GetStockObject( WHITE_BRUSH ) );
 
 
@@ -126,7 +126,7 @@ void CEditView::OnPaint( HDC hdc, PAINTSTRUCT *pPs, BOOL bUseMemoryDC )
 	}else{
 		i = m_nViewTopLine + ( ( nTop - m_nViewAlignTop ) / nLineHeight );
 	}
-	
+
 	int nMaxRollBackLineNum = 260 / TypeDataPtr->m_nMaxLineSize + 1;
 	int nRollBackLineNum;
 	nRollBackLineNum = 0;
@@ -135,15 +135,15 @@ void CEditView::OnPaint( HDC hdc, PAINTSTRUCT *pPs, BOOL bUseMemoryDC )
 		pcLayout = m_pcEditDoc->m_cLayoutMgr.Search( i );
 		if( NULL == pcLayout ){
 			break;
-		}	
+		}
 		if( 0 == pcLayout->m_nOffset ){	/* 対応する論理行の先頭からのオフセット */
 			break;
 		}
 		i--;
 		nRollBackLineNum++;
 	}
-	
-	
+
+
 //	if( NULL != pcLayout ){
 //		if( 0 != pcLayout->m_nOffset ){	/* 対応する論理行の先頭からのオフセット */
 //			pcLayout = pcLayout->m_pPrev;
@@ -179,10 +179,9 @@ void CEditView::OnPaint( HDC hdc, PAINTSTRUCT *pPs, BOOL bUseMemoryDC )
 				int nLineLen = pcLayout->m_pCDocLine->m_pLine->m_nDataLen - pcLayout->m_nOffset;
 				const char * pLine = (const char *)pcLayout->m_pCDocLine->m_pLine->m_pData + pcLayout->m_nOffset;
 			}
-		
 		}
 #endif
-		
+
 		if( DispLineNew(
 			hdc,
 			pcLayout,
@@ -241,11 +240,11 @@ void CEditView::OnPaint( HDC hdc, PAINTSTRUCT *pPs, BOOL bUseMemoryDC )
 		nX = m_nViewAlignLeft + ( TypeDataPtr->m_nMaxLineSize - m_nViewLeftCol ) * nCharWidth;
 		/* 折り返し記号の色のペンを作成 */
 		hPen = ::CreatePen( PS_SOLID, 0, TypeDataPtr->m_ColorInfoArr[COLORIDX_WRAP].m_colTEXT );
-		hPenOld = (HPEN)::SelectObject( hdc, hPen );	
+		hPenOld = (HPEN)::SelectObject( hdc, hPen );
 		::MoveToEx( hdc, nX, m_nViewAlignTop, NULL );
 		::LineTo( hdc, nX, m_nViewAlignTop + m_nViewCy );
-		::SelectObject( hdc, hPenOld );	
-		::DeleteObject( hPen );	
+		::SelectObject( hdc, hPenOld );
+		::DeleteObject( hPen );
 	}
 
 
@@ -284,12 +283,12 @@ void CEditView::OnPaint( HDC hdc, PAINTSTRUCT *pPs, BOOL bUseMemoryDC )
 
 
 /* 行のテキスト／選択状態の描画 New */
-int CEditView::DispLineNew( 
+int CEditView::DispLineNew(
 		HDC						hdc,
-		const CLayout*			pcLayout, 
-		int&					nLineNum, 
-		int						x, 
-		int&					y, 
+		const CLayout*			pcLayout,
+		int&					nLineNum,
+		int						x,
+		int&					y,
 		BOOL					bDispBkBitmap,
 		int						nLineTo,
 		BOOL					bSelected
@@ -363,18 +362,18 @@ int CEditView::DispLineNew(
 //			nLineLen = pCDocLine->m_pLine->m_nDataLen;
 //			pLine = (const unsigned char *)pCDocLine->m_pLine->m_pData;
 //		}
-	
+
 		nCOMMENTMODE = pcLayout->m_nTypePrev;	/* タイプ 0=通常 1=行コメント 2=ブロックコメント 3=シングルクォーテーション文字列 4=ダブルクォーテーション文字列 */
 		nCOMMENTEND = 0;
 //		pcLayout2 = m_pcEditDoc->m_cLayoutMgr.GetLineData( nLineNum );
 //		pcLayout2 = m_pcEditDoc->m_cLayoutMgr.Search( nLineNum );
 //		if( pcLayout2 != pcLayout ){
-//			MYTRACE( "あががががか\n" );		
+//			MYTRACE( "あががががか\n" );
 //		}
 		pcLayout2 = pcLayout;
-		
+
 	}else{
-		pLine = NULL;	
+		pLine = NULL;
 		nLineLen = 0;
 		nCOMMENTMODE = 0;	/* タイプ 0=通常 1=行コメント 2=ブロックコメント 3=シングルクォーテーション文字列 4=ダブルクォーテーション文字列 */
 		nCOMMENTEND = 0;
@@ -408,7 +407,7 @@ int CEditView::DispLineNew(
 			}
 //			pcLayout2 = m_pcEditDoc->m_cLayoutMgr.GetLineData( nLineNum );
 
-//MYTRACE( "pcLayout2 = m_pcEditDoc->m_cLayoutMgr.Search( nLineNum == %d);\n", nLineNum );			
+//MYTRACE( "pcLayout2 = m_pcEditDoc->m_cLayoutMgr.Search( nLineNum == %d);\n", nLineNum );
 			pcLayout2 = m_pcEditDoc->m_cLayoutMgr.Search( nLineNum );
 			if( y/* + nLineHeight*/ >= m_nViewAlignTop ){
 				/* 行番号表示w */
@@ -421,9 +420,9 @@ int CEditView::DispLineNew(
 				/* 検索文字列の色分け */
 				if( TRUE == m_bCurSrchKeyMark	/* 検索文字列のマーク */
 				 && TypeDataPtr->m_ColorInfoArr[COLORIDX_SEARCH].m_bDisp ){
-searchnext:;					
+searchnext:;
 					if( !bSearchStringMode
-					 && IsSeaechString( (const char*)pLine, nLineLen, nPos, &nSearchEnd  ) 
+					 && IsSeaechString( (const char*)pLine, nLineLen, nPos, &nSearchEnd  )
 					){
 						if( y/* + nLineHeight*/ >= m_nViewAlignTop ){
 							/* テキスト表示 */
@@ -486,9 +485,9 @@ searchnext:;
 						/* フォントを選ぶ */
 						hFontOld = (HFONT)::SelectObject( hdc, 
 							ChooseFontHandle( 
-								TypeDataPtr->m_ColorInfoArr[nColorIdx].m_bFatFont, 
-								TypeDataPtr->m_ColorInfoArr[nColorIdx].m_bUnderLine 
-							) 
+								TypeDataPtr->m_ColorInfoArr[nColorIdx].m_bFatFont,
+								TypeDataPtr->m_ColorInfoArr[nColorIdx].m_bUnderLine
+							)
 						);
 						colTextColorOld = ::SetTextColor( hdc, TypeDataPtr->m_ColorInfoArr[nColorIdx].m_colTEXT );	/* TAB文字の色 */
 						colBkColorOld = ::SetBkColor( hdc, TypeDataPtr->m_ColorInfoArr[nColorIdx].m_colBACK );	/* TAB文字背景の色 */
@@ -545,7 +544,7 @@ searchnext:;
 							NULL != TypeDataPtr->m_szLineComment &&	/* 行コメントデリミタ */
 							0 < lstrlen( TypeDataPtr->m_szLineComment ) &&
 							nPos <= nLineLen - (int)lstrlen( TypeDataPtr->m_szLineComment ) &&	/* 行コメントデリミタ */
-							0 == memicmp( &pLine[nPos], TypeDataPtr->m_szLineComment, (int)lstrlen( TypeDataPtr->m_szLineComment ) ) 
+							0 == memicmp( &pLine[nPos], TypeDataPtr->m_szLineComment, (int)lstrlen( TypeDataPtr->m_szLineComment ) )
 						) ||
 						(
 							NULL != TypeDataPtr->m_szLineComment2 &&	/* 行コメントデリミタ2 */
@@ -567,7 +566,7 @@ searchnext:;
 						nBgn = nPos;
 
 						nCOMMENTMODE = 1;	/* 行コメントである */
-						
+
 //						if( TypeDataPtr->m_bDispCOMMENT ){	/* コメントを表示する */
 							/* 現在の色を指定 */
 							if( !bSearchStringMode ){
@@ -727,7 +726,7 @@ searchnext:;
 					}else
 					if( bKeyWordTop && TypeDataPtr->m_nKeyWordSetIdx != -1 && /* キーワードセット */
 						TypeDataPtr->m_ColorInfoArr[COLORIDX_KEYWORD].m_bDisp &&  /* 強調キーワードを表示する */
-//						( pLine[nPos] == '#' || pLine[nPos] == '$' || __iscsym( pLine[nPos] ) ) 
+//						( pLine[nPos] == '#' || pLine[nPos] == '$' || __iscsym( pLine[nPos] ) )
 						IS_KEYWORD_CHAR( pLine[nPos] )
 					){
 						bKeyWordTop = false;
@@ -743,7 +742,7 @@ searchnext:;
 						j = i - nPos;
 						/* ｎ番目のセットから指定キーワードをサーチ 無いときは-1を返す */
 						nIdx = m_pShareData->m_CKeyWordSetMgr.SearchKeyWord2(		//MIK UPDATE 2000.12.01 binary search
-							TypeDataPtr->m_nKeyWordSetIdx , 
+							TypeDataPtr->m_nKeyWordSetIdx ,
 							(const char *)&pLine[nPos],
 							j
 						);
@@ -787,8 +786,8 @@ searchnext:;
 						}			//MIK END
 					}
 					break;
-				case 80:	/* URLモードである */					
-				case 5:	/* キーワードモードである */
+				case 80:	/* URLモードである */
+				case 5:		/* キーワードモードである */
 				case 50:	/* キーワード2モードである */	//MIK
 					if( nPos == nCOMMENTEND ){
 						if( y/* + nLineHeight*/ >= m_nViewAlignTop ){
@@ -820,10 +819,10 @@ searchnext:;
 						goto SEARCH_START;
 					}
 					break;
-					
-				case 1:	/* 行コメントである */					
+
+				case 1:	/* 行コメントである */
 					break;
-				case 2:	/* ブロックコメントである */					
+				case 2:	/* ブロックコメントである */
 					if( 0 == nCOMMENTEND ){
 						/* この物理行にブロックコメントの終端があるか */
 						int i;
@@ -833,7 +832,7 @@ searchnext:;
 							if( 0 == nCharChars_2 ){
 								nCharChars_2 = 1;
 							}
-							if( 0 == memicmp( &pLine[i], TypeDataPtr->m_szBlockCommentTo, (int)lstrlen( TypeDataPtr->m_szBlockCommentTo )	) ){
+							if( 0 == memicmp( &pLine[i], TypeDataPtr->m_szBlockCommentTo, (int)lstrlen( TypeDataPtr->m_szBlockCommentTo ) ) ){
 								nCOMMENTEND = i + (int)lstrlen( TypeDataPtr->m_szBlockCommentTo );
 								break;
 							}
@@ -904,7 +903,7 @@ searchnext:;
 						goto SEARCH_START;
 					}
 					break;
-				case 4:	/* ダブルクォーテーション文字列である */					
+				case 4:	/* ダブルクォーテーション文字列である */
 					if( 0 == nCOMMENTEND ){
 						/* ダブルクォーテーション文字列の終端があるか */
 						int i;
@@ -977,14 +976,13 @@ searchnext:;
 								colTextColorOld = ::SetTextColor( hdc, TypeDataPtr->m_ColorInfoArr[nColorIdx].m_colTEXT );	/* TAB文字の色 */
 								colBkColorOld = ::SetBkColor( hdc, TypeDataPtr->m_ColorInfoArr[nColorIdx].m_colBACK );	/* TAB文字背景の色 */
 
-								
-								HFONT	hFontOld;	
+								HFONT	hFontOld;
 								/* フォントを選ぶ */
-								hFontOld = (HFONT)::SelectObject( hdc, 
-									ChooseFontHandle( 
-										TypeDataPtr->m_ColorInfoArr[nColorIdx].m_bFatFont, 
-										TypeDataPtr->m_ColorInfoArr[nColorIdx].m_bUnderLine 
-									) 
+								hFontOld = (HFONT)::SelectObject( hdc,
+									ChooseFontHandle(
+										TypeDataPtr->m_ColorInfoArr[nColorIdx].m_bFatFont,
+										TypeDataPtr->m_ColorInfoArr[nColorIdx].m_bUnderLine
+									)
 								);
 								::ExtTextOut( hdc, x + nX * ( nCharWidth ), y, fuOptions,
 									&rcClip2, pszTAB,
@@ -1017,7 +1015,7 @@ searchnext:;
 					if( y/* + nLineHeight*/ >= m_nViewAlignTop ){
 						/* テキスト表示 */
 						nX += DispText( hdc, x + nX * ( nCharWidth ), y, &pLine[nBgn], nPos - nBgn );
-					
+
 						/* 全角空白を表示する */
 						rcClip2.left = x + nX * ( nCharWidth );
 						rcClip2.right = rcClip2.left + ( nCharWidth ) * 2;
@@ -1039,18 +1037,18 @@ searchnext:;
 								colBkColorOld = ::SetBkColor( hdc, TypeDataPtr->m_ColorInfoArr[nColorIdx].m_colBACK );	/* 全角スペース文字背景の色 */
 
 
-								HFONT	hFontOld;	
+								HFONT	hFontOld;
 								/* フォントを選ぶ */
-								hFontOld = (HFONT)::SelectObject( hdc, 
-									ChooseFontHandle( 
-										TypeDataPtr->m_ColorInfoArr[nColorIdx].m_bFatFont, 
-										TypeDataPtr->m_ColorInfoArr[nColorIdx].m_bUnderLine 
-									) 
+								hFontOld = (HFONT)::SelectObject( hdc,
+									ChooseFontHandle(
+										TypeDataPtr->m_ColorInfoArr[nColorIdx].m_bFatFont,
+										TypeDataPtr->m_ColorInfoArr[nColorIdx].m_bUnderLine
+									)
 								);
 //								if( TypeDataPtr->m_ColorInfoArr[nColorIdx].m_bFatFont ){	/* 太字か */
-//									hFontOld = (HFONT)::SelectObject( hdc, m_hFont_HAN_FAT );		
+//									hFontOld = (HFONT)::SelectObject( hdc, m_hFont_HAN_FAT );
 //								}else{
-//									hFontOld = (HFONT)::SelectObject( hdc, m_hFont_HAN );		
+//									hFontOld = (HFONT)::SelectObject( hdc, m_hFont_HAN );
 //								}
 
 								::ExtTextOut( hdc, x + nX * ( nCharWidth ), y, fuOptions,
@@ -1086,11 +1084,11 @@ searchnext:;
 					 && 6 != nCOMMENTMODE
 					 && TypeDataPtr->m_ColorInfoArr[COLORIDX_CTRLCODE].m_bDisp	/* コントロールコードを色分け */
 					 &&	(
-							( (unsigned char)0x0 <= pLine[nPos] && pLine[nPos] <= (unsigned char)0x1F ) || 
+							( (unsigned char)0x0 <= pLine[nPos] && pLine[nPos] <= (unsigned char)0x1F ) ||
 							( (unsigned char)'~' < pLine[nPos] && pLine[nPos] < (unsigned char)'｡' ) ||
 							( (unsigned char)'ﾟ' < pLine[nPos] && pLine[nPos] <= (unsigned char)0xff )
 						)
-					 && pLine[nPos] != TAB && pLine[nPos] != CR && pLine[nPos] != LF 
+					 && pLine[nPos] != TAB && pLine[nPos] != CR && pLine[nPos] != LF
 					){
 						if( y/* + nLineHeight*/ >= m_nViewAlignTop ){
 							/* テキスト表示 */
@@ -1110,7 +1108,7 @@ searchnext:;
 								break;
 							}
 							if( 						(
-								( (unsigned char)0x0 <= pLine[i] && pLine[i] <= (unsigned char)0x1F ) || 
+								( (unsigned char)0x0 <= pLine[i] && pLine[i] <= (unsigned char)0x1F ) ||
 									( (unsigned char)'~' < pLine[i] && pLine[i] < (unsigned char)'｡' ) ||
 									( (unsigned char)'ﾟ' < pLine[i] && pLine[i] <= (unsigned char)0xff )
 								) && 
@@ -1166,15 +1164,15 @@ searchnext:;
 
 					/* 折り返し記号を表示する */
 					if( TypeDataPtr->m_ColorInfoArr[COLORIDX_WRAP].m_bDisp ){
-						HFONT	hFontOld;	
+						HFONT	hFontOld;
 						colTextColorOld = ::SetTextColor( hdc, TypeDataPtr->m_ColorInfoArr[COLORIDX_WRAP].m_colTEXT );	/* 折り返し記号の色 */
 						colBkColorOld = ::SetBkColor( hdc, TypeDataPtr->m_ColorInfoArr[COLORIDX_WRAP].m_colBACK );	/* 折り返し記号背景の色 */
 						/* フォントを選ぶ */
-						hFontOld = (HFONT)::SelectObject( hdc, 
-							ChooseFontHandle( 
-								TypeDataPtr->m_ColorInfoArr[COLORIDX_WRAP].m_bFatFont, 
-								TypeDataPtr->m_ColorInfoArr[COLORIDX_WRAP].m_bUnderLine 
-							) 
+						hFontOld = (HFONT)::SelectObject( hdc,
+							ChooseFontHandle(
+								TypeDataPtr->m_ColorInfoArr[COLORIDX_WRAP].m_bFatFont,
+								TypeDataPtr->m_ColorInfoArr[COLORIDX_WRAP].m_bUnderLine
+							)
 						);
 						::ExtTextOut( hdc, x + nX * ( nCharWidth ), y, fuOptions,
 							&rcClip2, pszWRAP, lstrlen( pszWRAP ), m_pnDx );
@@ -1207,10 +1205,10 @@ searchnext:;
 		/* EOF記号の表示 */
 //		if( TypeDataPtr->m_ColorInfoArr[COLORIDX_EOF].m_bDisp ){
 		if( nLineNum + 1 == m_pcEditDoc->m_cLayoutMgr.GetLineCount() &&
-			nX < TypeDataPtr->m_nMaxLineSize 
+			nX < TypeDataPtr->m_nMaxLineSize
 		){
 			if( TypeDataPtr->m_ColorInfoArr[COLORIDX_EOF].m_bDisp ){
-				
+
 				colTextColorOld = ::SetTextColor( hdc, TypeDataPtr->m_ColorInfoArr[COLORIDX_EOF].m_colTEXT );	/* EOFの色 */
 				colBkColorOld = ::SetBkColor( hdc, TypeDataPtr->m_ColorInfoArr[COLORIDX_EOF].m_colBACK );	/* EOF背景の色 */
 				rcClip.left = x + nX * ( nCharWidth );
@@ -1223,25 +1221,25 @@ searchnext:;
 					rcClip.top = y;
 					rcClip.bottom = y + nLineHeight;
 
-					HFONT	hFontOld;	
+					HFONT	hFontOld;
 					/* フォントを選ぶ */
-					hFontOld = (HFONT)::SelectObject( hdc, 
-						ChooseFontHandle( 
-							TypeDataPtr->m_ColorInfoArr[COLORIDX_EOF].m_bFatFont, 
-							TypeDataPtr->m_ColorInfoArr[COLORIDX_EOF].m_bUnderLine 
-						) 
+					hFontOld = (HFONT)::SelectObject( hdc,
+						ChooseFontHandle(
+							TypeDataPtr->m_ColorInfoArr[COLORIDX_EOF].m_bFatFont,
+							TypeDataPtr->m_ColorInfoArr[COLORIDX_EOF].m_bUnderLine
+						)
 					);
 //					if( TypeDataPtr->m_ColorInfoArr[COLORIDX_EOF].m_bFatFont ){	/* 太字か */
-//						hFontOld = (HFONT)::SelectObject( hdc, m_hFont_HAN_FAT );		
+//						hFontOld = (HFONT)::SelectObject( hdc, m_hFont_HAN_FAT );
 //					}else{
-//						hFontOld = (HFONT)::SelectObject( hdc, m_hFont_HAN );		
+//						hFontOld = (HFONT)::SelectObject( hdc, m_hFont_HAN );
 //					}
-					
+
 					::ExtTextOut( hdc, x + nX * ( nCharWidth ) , y, fuOptions,
 						&rcClip, pszEOF, lstrlen( pszEOF ), m_pnDx );
 
 					::SelectObject( hdc, hFontOld );
-				
+
 				}
 				nX += lstrlen( pszEOF );
 				::SetTextColor( hdc, colTextColorOld );
@@ -1299,20 +1297,20 @@ end_of_line:;
 						rcClip.top = y;
 						rcClip.bottom = y + nLineHeight;
 
-						HFONT	hFontOld;	
+						HFONT	hFontOld;
 						/* フォントを選ぶ */
-						hFontOld = (HFONT)::SelectObject( hdc, 
-							ChooseFontHandle( 
-								TypeDataPtr->m_ColorInfoArr[COLORIDX_EOF].m_bFatFont, 
-								TypeDataPtr->m_ColorInfoArr[COLORIDX_EOF].m_bUnderLine 
-							) 
+						hFontOld = (HFONT)::SelectObject( hdc,
+							ChooseFontHandle(
+								TypeDataPtr->m_ColorInfoArr[COLORIDX_EOF].m_bFatFont,
+								TypeDataPtr->m_ColorInfoArr[COLORIDX_EOF].m_bUnderLine
+							)
 						);
 //						if( TypeDataPtr->m_ColorInfoArr[COLORIDX_EOF].m_bFatFont ){	/* 太字か */
-//							hFontOld = (HFONT)::SelectObject( hdc, m_hFont_HAN_FAT );		
+//							hFontOld = (HFONT)::SelectObject( hdc, m_hFont_HAN_FAT );
 //						}else{
-//							hFontOld = (HFONT)::SelectObject( hdc, m_hFont_HAN );		
+//							hFontOld = (HFONT)::SelectObject( hdc, m_hFont_HAN );
 //						}
-						
+
 						::ExtTextOut( hdc, x , y, fuOptions,
 							&rcClip, pszEOF, lstrlen( pszEOF ), m_pnDx );
 
@@ -1349,20 +1347,20 @@ end_of_line:;
 								rcClip.top = y;
 								rcClip.bottom = y + nLineHeight;
 
-								HFONT	hFontOld;	
+								HFONT	hFontOld;
 								/* フォントを選ぶ */
-								hFontOld = (HFONT)::SelectObject( hdc, 
-									ChooseFontHandle( 
-										TypeDataPtr->m_ColorInfoArr[COLORIDX_EOF].m_bFatFont, 
-										TypeDataPtr->m_ColorInfoArr[COLORIDX_EOF].m_bUnderLine 
-									) 
+								hFontOld = (HFONT)::SelectObject( hdc,
+									ChooseFontHandle(
+										TypeDataPtr->m_ColorInfoArr[COLORIDX_EOF].m_bFatFont,
+										TypeDataPtr->m_ColorInfoArr[COLORIDX_EOF].m_bUnderLine
+									)
 								);
 //								if( TypeDataPtr->m_ColorInfoArr[COLORIDX_EOF].m_bFatFont ){	/* 太字か */
-//									hFontOld = (HFONT)::SelectObject( hdc, m_hFont_HAN_FAT );		
+//									hFontOld = (HFONT)::SelectObject( hdc, m_hFont_HAN_FAT );
 //								}else{
-//									hFontOld = (HFONT)::SelectObject( hdc, m_hFont_HAN );		
+//									hFontOld = (HFONT)::SelectObject( hdc, m_hFont_HAN );
 //								}
-								
+
 								::ExtTextOut( hdc, x , y, fuOptions,
 									&rcClip, pszEOF, lstrlen( pszEOF ), m_pnDx );
 
@@ -1387,7 +1385,7 @@ end_of_func:;
 		/* カーソル行アンダーラインのON */
 		CaretUnderLineON( TRUE );
 	}
-//	if( nLineNumOrg == m_nCaretPosY 
+//	if( nLineNumOrg == m_nCaretPosY
 //	 && -1 != m_nOldUnderLineY
 //	 && m_bDoing_UndoRedo == FALSE	/* アンドゥ・リドゥの実行中か */
 //	 && TypeDataPtr->m_ColorInfoArr[COLORIDX_UNDERLINE].m_bDisp
@@ -1400,15 +1398,15 @@ end_of_func:;
 //		MYTRACE( "□カーソル行アンダーラインの描画\n" );
 //		/* カーソル行アンダーラインの描画 */
 //		hPen = ::CreatePen( PS_SOLID, 0, TypeDataPtr->m_ColorInfoArr[COLORIDX_UNDERLINE].m_colTEXT );
-//		hPenOld = (HPEN)::SelectObject( hdc, hPen ); 
+//		hPenOld = (HPEN)::SelectObject( hdc, hPen );
 //		m_nOldUnderLineY = m_nViewAlignTop  + (m_nCaretPosY - m_nViewTopLine) * ( TypeDataPtr->m_nLineSpace + m_nCharHeight ) + m_nCharHeight;
-//		::MoveToEx( 
+//		::MoveToEx(
 //			hdc, 
-//			m_nViewAlignLeft, 
-//			m_nOldUnderLineY, 
+//			m_nViewAlignLeft,
+//			m_nOldUnderLineY,
 //			NULL
 //		);
-//		::LineTo( 
+//		::LineTo(
 //			hdc,
 //			m_nViewCx + m_nViewAlignLeft,
 //			m_nOldUnderLineY
@@ -1423,7 +1421,7 @@ end_of_func:;
 //	May 23, 2000 genta
 //	画面描画補助関数
 /*
-	行末の改行マークを改行コードによって書き分ける（メイン）
+	行末の改行マークを改行コードによって書き分ける（メイン
 
 	hdc: HDC
 	hPen: 描画に使うペン

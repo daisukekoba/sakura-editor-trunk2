@@ -59,7 +59,7 @@ public:
 //	static HWND OpenNewEditor3( HINSTANCE, HWND , const char*, BOOL );	/* 新規編集ウィンドウの追加 ver 2 */
 
 	static BOOL CloseAllEditor( void );	/* すべてのウィンドウを閉じる */	//Oct. 7, 2000 jepro 「編集ウィンドウの全終了」という説明を左記のように変更
-	static void TerminateApplication( void );	/* テキストエディタの終了 */
+	static void TerminateApplication( void );	/* テキストエディタの全終了 */
 	/* コマンドラインの解析 */
 	static void CEditApp::ParseCommandLine( 
 		const char*	pszCmdLineSrc,
@@ -90,7 +90,7 @@ private:
 	HINSTANCE		m_hInstance;
 	HWND			m_hWnd;
 	char*			m_pszAppName;
-	BOOL			m_bCreatedTrayIcon;	/* トレイにアイコンを作った  */
+	BOOL			m_bCreatedTrayIcon;	/* トレイにアイコンを作った */
 
 	CShareData		m_cShareData;
 	DLLSHAREDATA*	m_pShareData;

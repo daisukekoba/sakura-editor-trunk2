@@ -1931,8 +1931,8 @@ END
 //
 
 VS_VERSION_INFO VERSIONINFO
- FILEVERSION 1,2,24,1
- PRODUCTVERSION 1,2,24,1
+ FILEVERSION 1,2,25,0
+ PRODUCTVERSION 1,2,25,0
  FILEFLAGSMASK 0x3fL
 #ifdef _DEBUG
  FILEFLAGS 0x21L
@@ -1950,14 +1950,14 @@ BEGIN
             VALUE "Comments", "フリーソフトです。ご自由にお使い下さい。\0"
             VALUE "CompanyName", "Norio Nakatani\0"
             VALUE "FileDescription", "\0"
-            VALUE "FileVersion", "1.2.24.1\0"
+            VALUE "FileVersion", "1.2.25.0\0"
             VALUE "InternalName", "sakura\0"
             VALUE "LegalCopyright", "Copyright (C) Norio Nakatani\0"
             VALUE "LegalTrademarks", "\0"
             VALUE "OriginalFilename", "sakura.exe\0"
             VALUE "PrivateBuild", "\0"
             VALUE "ProductName", "テキストエディタ SAKURA\0"
-            VALUE "ProductVersion", "1.2.24.1\0"
+            VALUE "ProductVersion", "1.2.25.0\0"
             VALUE "SpecialBuild", "unofficial release 3\0"
         END
     END
@@ -2403,8 +2403,8 @@ END
 STRINGTABLE DISCARDABLE 
 BEGIN
     IDM_EXITALL             "テキストエディタの終了"
-    IDM_HELP_SEARCH         "ヘルプトピックの検索"
     IDM_HELP_CONTENTS       "ヘルプ目次"
+    IDM_HELP_SEARCH         "ヘルプトピックの検索"
     IDM_ABOUT               "バージョン情報"
 END
 

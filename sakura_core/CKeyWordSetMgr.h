@@ -37,13 +37,13 @@ public:
 	char* GetKeyWord( int , int );	/* ｎ番目のセットのｍ番目のキーワードを返す */
 	char* UpdateKeyWord( int , int , const char* );	/* ｎ番目のセットのｍ番目のキーワードを編集 */
 	BOOL AddKeyWord( int, const char* );	/* ｎ番目のセットにキーワードを追加 */
-	BOOL DelKeyWord( int , int );	/* ｎ番目のセットのｍ番目のキーワードを削除 */
+	BOOL DelKeyWord( int , int );			/* ｎ番目のセットのｍ番目のキーワードを削除 */
 	int SearchKeyWord( int , const char*, int );	/* ｎ番目のセットから指定キーワードをサーチ 無いときは-1を返す */
 	BOOL IsModify( CKeyWordSetMgr&, BOOL* pnModifyFlagArr );	/* 変更状況を調査 */
-	void SortKeyWord( int );	/* ｎ番目のセットのキーワードをソートする */  //MIK
+	void SortKeyWord( int );						/* ｎ番目のセットのキーワードをソートする */  //MIK
 	int SearchKeyWord2( int , const char*, int );	/* ｎ番目のセットから指定キーワードをバイナリサーチ 無いときは-1を返す */	//MIK
-	void SetKeyWordCase( int, int );	/* ｎ番目のセットの大文字小文字判断をセットする */	//MIK
-	int GetKeyWordCase( int );	/* ｎ番目のセットの大文字小文字判断を取得する */			//MIK
+	void SetKeyWordCase( int, int );				/* ｎ番目のセットの大文字小文字判断をセットする */	//MIK
+	int GetKeyWordCase( int );						/* ｎ番目のセットの大文字小文字判断を取得する */			//MIK
 	/*
 	|| 演算子
 	*/

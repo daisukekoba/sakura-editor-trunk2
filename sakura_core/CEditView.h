@@ -246,7 +246,7 @@ protected:
 	void OnPaint( HDC, PAINTSTRUCT *, BOOL );/* 通常の描画処理 */
 //	int DispLine( HDC, int, int, int, const unsigned char*, int, BOOL );/* 行のテキスト／選択状態の描画 */
 	int DispLineNew( HDC, const CLayout*, int&, int, int&, BOOL, int, BOOL );/* 行のテキスト／選択状態の描画 */
-	void DispLineNumber( HDC, const CLayout*, int, int );/* 行番号表示w */
+	void DispLineNumber( HDC, const CLayout*, int, int );/* 行番号表示 */
 	void SetCurrentColor( HDC, int );/* 現在の色を指定 */
 	void DispRuler( HDC );/* ルーラー描画 */
 //	void DispRulerEx( HDC );/* ルーラー描画 */
@@ -328,6 +328,7 @@ protected:
 	void Command_PLSQL_COMPILE_ON_SQLPLUS( void );/* Oracle SQL*Plusで実行 */
 	void Command_BROWSE( void );				/* ブラウズ */
 	void Command_PROPERTY_FILE( void );			/* ファイルのプロパティ */
+	void Command_EXITALL( void );				/* テキストエディタの全終了 */	//Dec. 27, 2000 JEPRO 追加
 
 	/* 編集系 */
 	void Command_CHAR( char );				/* 文字入力 */
@@ -418,6 +419,7 @@ protected:
 	void Command_COPYLINES( void );					/* 選択範囲内全行コピー */
 	void Command_COPYLINESASPASSAGE( void );		/* 選択範囲内全行引用符付きコピー */
 	void Command_COPYLINESWITHLINENUMBER( void );	/* 選択範囲内全行行番号付きコピー */
+	void Command_CREATEKEYBINDLIST( void );			// キー割り当て一覧をコピー //Sept. 15, 2000 JEPRO	Command_の作り方がわからないので殺してある
 
 
 	/* データ置換 削除&挿入にも使える */
@@ -498,7 +500,7 @@ void ReplaceData_CEditView(
 	void Command_OPTION_TYPE( void );		/* タイプ別設定 */
 	void Command_OPTION( void );			/* 共通設定 */
 	void Command_FONT( void );				/* フォント設定 */
-	void Command_WRAPWINDOWWIDTH( void );	/* 現在のウィンドウ幅で折り返し */	//	Oct. 7, 2000 JEPRO WRAPWINDIWWIDTH を WRAPWINDOWWIDTH に変更
+	void Command_WRAPWINDOWWIDTH( void );	/* 現在のウィンドウ幅で折り返し */	//Oct. 7, 2000 JEPRO WRAPWINDIWWIDTH を WRAPWINDOWWIDTH に変更
 
 	/* マクロ系 */
 	void Command_RECKEYMACRO( void );	/* キーマクロの記録開始／終了 */
@@ -531,9 +533,12 @@ void ReplaceData_CEditView(
 	
 	/* 支援 */
 	void Command_HOKAN( void );			/* 入力補完	*/
+	void Command_HELP_CONTENTS( void );	/* ヘルプ目次 */			//Nov. 25, 2000 JEPRO added
+	void Command_HELP_SEARCH( void );	/* ヘルプキーワード検索 */	//Nov. 25, 2000 JEPRO added
 	void Command_MENU_ALLFUNC( void );	/* コマンド一覧 */
 	void Command_EXTHELP1( void );		/* 外部ヘルプ１ */
 	void Command_EXTHTMLHELP( void );	/* 外部HTMLヘルプ */
+	void Command_ABOUT( void );			/* バージョン情報 */	//Dec. 24, 2000 JEPRO 追加
 
 	/* その他 */
 	void Command_SENDMAIL( void );		/* メール送信 */

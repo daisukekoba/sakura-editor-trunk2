@@ -199,19 +199,17 @@ bool CShareData::Init(void)
 		static KEYDATAINIT	KeyDataInit[] = {
 		//	Sept. 1, 2000 Jepro note: key binding
 		//		0,		1,		 2,		3,		4,		5,			6,		7,		8,			9
-		//	　keycode, keyname, なし, Shitf+, Ctrl+, Shift+Ctrl+, Alt+, Shit+Alt+, Ctrl+Alt+, Shift+Ctrl+Alt+
+		//		keycode, keyname, なし, Shitf+, Ctrl+, Shift+Ctrl+, Alt+, Shit+Alt+, Ctrl+Alt+, Shift+Ctrl+Alt+
 		//
 			/* マウスボタン */
 			{ 0, "ダブルクリック",F_SELECTWORD, F_SELECTWORD, F_SELECTWORD, F_SELECTWORD, F_SELECTWORD, F_SELECTWORD, F_SELECTWORD, F_SELECTWORD },
 			{ 0, "右クリック",F_MENU_RBUTTON, F_MENU_RBUTTON, F_MENU_RBUTTON, F_MENU_RBUTTON, F_MENU_RBUTTON, F_MENU_RBUTTON, F_MENU_RBUTTON, F_MENU_RBUTTON },
 			/* ファンクションキー */
 		//	From Here Sept. 14, 2000 JEPRO
-			//	VK_F1,"F1", F_EXTHTMLHELP, 0, F_EXTHELP1, 0, 0, 0, 0, 0,
-			//	Shift+F1 で「コマンド一覧」、Shift+Ctrl+F1 で「トピックの検索」、Alt+F1 で「ヘルプ目次」を追加
-			//	なお直接のIDM_HELPではダメ(未定義)なのでFで登録して変更
-			//	Sept. 15, 2000 JEPRO なんか目次とトピック検索のショートカットキーはうまく働かないので0に戻した
-			//	VK_F1,"F1", F_EXTHTMLHELP, F_MENU_ALLFUNC, F_EXTHELP1, F_HELP_SEARCH, F_HELP_CONTENTS, 0, 0, 0,	
-			{ VK_F1,"F1", F_EXTHTMLHELP, F_MENU_ALLFUNC, F_EXTHELP1, 0, 0, 0, 0, 0 },
+		//	VK_F1,"F1", F_EXTHTMLHELP, 0, F_EXTHELP1, 0, 0, 0, 0, 0,
+		//	Shift+F1 に「コマンド一覧」、Alt+F1 に「ヘルプ目次」、Shift+Alt+F1 に「キーワード検索」を追加	//Nov. 25, 2000 JEPRO 殺していたのを修正・復活 //Dec. 25, 2000 JEPRO Shift+Ctrl+F1 に「バージョン情報」を追加
+		//	{ VK_F1,"F1", F_EXTHTMLHELP, F_MENU_ALLFUNC, F_EXTHELP1, 0, 0, 0, 0, 0 },
+			{ VK_F1,"F1", F_EXTHTMLHELP, F_MENU_ALLFUNC, F_EXTHELP1, F_ABOUT, F_HELP_CONTENTS, F_HELP_SEARCH, 0, 0 },
 		//	To Here Sept. 14, 2000
 			{ VK_F2,"F2", 0, 0, 0, 0, 0, 0, 0, 0 },
 			//Sept. 21, 2000 JEPRO	Ctrl+F3 に「検索マークのクリア」を追加
@@ -225,7 +223,7 @@ bool CShareData::Init(void)
 			{ VK_F5,"F5", F_REDRAW, 0, F_EXECCOMMAND, 0, 0, 0, 0, 0 },	//Oct. 28, 2000 F5 は「再描画」に変更 
 			{ VK_F6,"F6", F_BEGIN_SEL, F_BEGIN_BOX, 0, 0, 0, 0, 0, 0 },
 			{ VK_F7,"F7", F_CUT, 0, 0, 0, 0, 0, 0, 0 },
-			{ VK_F8,"F8", F_COPY, 0, 0, 0, 0, 0, 0, 0 },
+			{ VK_F8,"F8", F_COPY, F_COPY_CRLF, 0, 0, 0, 0, 0, 0 },	//Nov. 9, 2000 JEPRO	Shift+F8 に「CRLF改行でコピー」を追加
 			{ VK_F9,"F9", F_PASTE, F_PASTEBOX, 0, 0, 0, 0, 0, 0 },
 			{ VK_F10,"F10", F_PLSQL_COMPILE_ON_SQLPLUS, F_DUPLICATELINE, 0, 0, 0, 0, 0, 0 },	//Oct. 28, 2000 JEPRO F10 に「SQL*Plusで実行」を追加(F5からの移動) 
 			{ VK_F11,"F11", F_OUTLINE, 0, 0, 0, 0, 0, 0, 0 },
@@ -376,36 +374,36 @@ bool CShareData::Init(void)
 //	MS ゴシック標準スタイル10ptに設定
 //		/* LOGFONTの初期化 */
 		memset( &m_pShareData->m_Common.m_lf, 0, sizeof(LOGFONT) );
-		m_pShareData->m_Common.m_lf.lfHeight         = -13;
-		m_pShareData->m_Common.m_lf.lfWidth          = 0;
-		m_pShareData->m_Common.m_lf.lfEscapement     = 0;
-		m_pShareData->m_Common.m_lf.lfOrientation    = 0;
-		m_pShareData->m_Common.m_lf.lfWeight         = 400;
-		m_pShareData->m_Common.m_lf.lfItalic         = 0x0;
-		m_pShareData->m_Common.m_lf.lfUnderline      = 0x0;
-		m_pShareData->m_Common.m_lf.lfStrikeOut      = 0x0;
-		m_pShareData->m_Common.m_lf.lfCharSet        = 0x80;
-		m_pShareData->m_Common.m_lf.lfOutPrecision   = 0x3;
-		m_pShareData->m_Common.m_lf.lfClipPrecision  = 0x2;
-		m_pShareData->m_Common.m_lf.lfQuality        = 0x1;
-		m_pShareData->m_Common.m_lf.lfPitchAndFamily = 0x31;
+		m_pShareData->m_Common.m_lf.lfHeight			= -13;
+		m_pShareData->m_Common.m_lf.lfWidth				= 0;
+		m_pShareData->m_Common.m_lf.lfEscapement		= 0;
+		m_pShareData->m_Common.m_lf.lfOrientation		= 0;
+		m_pShareData->m_Common.m_lf.lfWeight			= 400;
+		m_pShareData->m_Common.m_lf.lfItalic			= 0x0;
+		m_pShareData->m_Common.m_lf.lfUnderline			= 0x0;
+		m_pShareData->m_Common.m_lf.lfStrikeOut			= 0x0;
+		m_pShareData->m_Common.m_lf.lfCharSet			= 0x80;
+		m_pShareData->m_Common.m_lf.lfOutPrecision		= 0x3;
+		m_pShareData->m_Common.m_lf.lfClipPrecision		= 0x2;
+		m_pShareData->m_Common.m_lf.lfQuality			= 0x1;
+		m_pShareData->m_Common.m_lf.lfPitchAndFamily	= 0x31;
 		strcpy( m_pShareData->m_Common.m_lf.lfFaceName, "ＭＳ ゴシック" );
 
 //		/* LOGFONTの初期化 */
 //		memset( &m_pShareData->m_Common.m_lf, 0, sizeof(LOGFONT) );
-//		m_pShareData->m_Common.m_lf.lfHeight         = -19;
-//		m_pShareData->m_Common.m_lf.lfWidth          = 0;
-//		m_pShareData->m_Common.m_lf.lfEscapement     = 0;
-//		m_pShareData->m_Common.m_lf.lfOrientation    = 0;
-//		m_pShareData->m_Common.m_lf.lfWeight         = 400;
-//		m_pShareData->m_Common.m_lf.lfItalic         = 0;
-//		m_pShareData->m_Common.m_lf.lfUnderline      = 0;
-//		m_pShareData->m_Common.m_lf.lfStrikeOut      = 0;
-//		m_pShareData->m_Common.m_lf.lfCharSet        = 128;
-//		m_pShareData->m_Common.m_lf.lfOutPrecision   = 1;
-//		m_pShareData->m_Common.m_lf.lfClipPrecision  = 2;
-//		m_pShareData->m_Common.m_lf.lfQuality        = 1;
-//		m_pShareData->m_Common.m_lf.lfPitchAndFamily = 1;
+//		m_pShareData->m_Common.m_lf.lfHeight			= -19;
+//		m_pShareData->m_Common.m_lf.lfWidth				= 0;
+//		m_pShareData->m_Common.m_lf.lfEscapement		= 0;
+//		m_pShareData->m_Common.m_lf.lfOrientation		= 0;
+//		m_pShareData->m_Common.m_lf.lfWeight			= 400;
+//		m_pShareData->m_Common.m_lf.lfItalic			= 0;
+//		m_pShareData->m_Common.m_lf.lfUnderline			= 0;
+//		m_pShareData->m_Common.m_lf.lfStrikeOut			= 0;
+//		m_pShareData->m_Common.m_lf.lfCharSet			= 128;
+//		m_pShareData->m_Common.m_lf.lfOutPrecision		= 1;
+//		m_pShareData->m_Common.m_lf.lfClipPrecision		= 2;
+//		m_pShareData->m_Common.m_lf.lfQuality			= 1;
+//		m_pShareData->m_Common.m_lf.lfPitchAndFamily	= 1;
 //		strcpy( m_pShareData->m_Common.m_lf.lfFaceName, "FixedSys" );
 //	To Here Sept. 19,2000
 
@@ -422,25 +420,25 @@ bool CShareData::Init(void)
 
 
 		/* バックアップ */
-		m_pShareData->m_Common.m_bBackUp = FALSE;			/* バックアップの作成 */
-		m_pShareData->m_Common.m_bBackUpDialog = TRUE;		/* バックアップの作成前に確認 */
-		m_pShareData->m_Common.m_bBackUpFolder = FALSE;		/* 指定フォルダにバックアップを作成する */
-		m_pShareData->m_Common.m_szBackUpFolder[0] = '\0';	/* バックアップを作成するフォルダ */
-		m_pShareData->m_Common.m_nBackUpType = 2;			/* バックアップファイル名のタイプ 1=(.bak) 2=*_日付.* */
+		m_pShareData->m_Common.m_bBackUp = FALSE;				/* バックアップの作成 */
+		m_pShareData->m_Common.m_bBackUpDialog = TRUE;			/* バックアップの作成前に確認 */
+		m_pShareData->m_Common.m_bBackUpFolder = FALSE;			/* 指定フォルダにバックアップを作成する */
+		m_pShareData->m_Common.m_szBackUpFolder[0] = '\0';		/* バックアップを作成するフォルダ */
+		m_pShareData->m_Common.m_nBackUpType = 2;				/* バックアップファイル名のタイプ 1=(.bak) 2=*_日付.* */
 		m_pShareData->m_Common.m_nBackUpType_Opt1 = BKUP_YEAR | BKUP_MONTH | BKUP_DAY;
-															/* バックアップファイル名：日付 */
+																/* バックアップファイル名：日付 */
 		m_pShareData->m_Common.m_nBackUpType_Opt2 = ('b' << 16 ) + 10;
-															/* バックアップファイル名：連番の数と先頭文字*/
-		m_pShareData->m_Common.m_nBackUpType_Opt3 = 5;		/* バックアップファイル名：Option3 */
-		m_pShareData->m_Common.m_nBackUpType_Opt4 = 0;		/* バックアップファイル名：Option4 */
-		m_pShareData->m_Common.m_nBackUpType_Opt5 = 0;		/* バックアップファイル名：Option5 */
-		m_pShareData->m_Common.m_nBackUpType_Opt6 = 0;		/* バックアップファイル名：Option6 */
-		
-		m_pShareData->m_Common.m_nFileShareMode = OF_SHARE_DENY_WRITE;		/* ファイルの排他制御モード */
+																/* バックアップファイル名：連番の数と先頭文字*/
+		m_pShareData->m_Common.m_nBackUpType_Opt3 = 5;			/* バックアップファイル名：Option3 */
+		m_pShareData->m_Common.m_nBackUpType_Opt4 = 0;			/* バックアップファイル名：Option4 */
+		m_pShareData->m_Common.m_nBackUpType_Opt5 = 0;			/* バックアップファイル名：Option5 */
+		m_pShareData->m_Common.m_nBackUpType_Opt6 = 0;			/* バックアップファイル名：Option6 */
 
-		m_pShareData->m_Common.m_nCaretType = 0;			/* カーソルのタイプ 0=win 1=dos  */
-		m_pShareData->m_Common.m_bIsINSMode = TRUE;			/* 挿入／上書きモード */
-		m_pShareData->m_Common.m_bIsFreeCursorMode = FALSE;	/* フリーカーソルモードか */	//Oct. 29, 2000 JEPRO 「なし」に変更
+		m_pShareData->m_Common.m_nFileShareMode = OF_SHARE_DENY_WRITE;/* ファイルの排他制御モード */
+
+		m_pShareData->m_Common.m_nCaretType = 0;				/* カーソルのタイプ 0=win 1=dos */
+		m_pShareData->m_Common.m_bIsINSMode = TRUE;				/* 挿入／上書きモード */
+		m_pShareData->m_Common.m_bIsFreeCursorMode = FALSE;		/* フリーカーソルモードか */	//Oct. 29, 2000 JEPRO 「なし」に変更
 		m_pShareData->m_Common.m_bAutoIndent = TRUE;			/* オートインデント */
 		m_pShareData->m_Common.m_bAutoIndent_ZENSPACE = TRUE;	/* 日本語空白もインデント */
 
@@ -449,31 +447,31 @@ bool CShareData::Init(void)
 
 //		m_pShareData->m_Common.m_bEnableLineISlog = TRUE;		/* ★廃止★行番号種別　物理行／論理行 */
 
-		m_pShareData->m_Common.m_bRegularExp = 0;	/* 1==正規表現 */
-		m_pShareData->m_Common.m_bLoHiCase = 0;		/* 1==英大文字小文字の区別 */
-		m_pShareData->m_Common.m_bWordOnly = 0;		/* 1==単語のみ検索 */
-		m_pShareData->m_Common.m_bSelectedArea = FALSE;	/* 選択範囲内置換 */
-		m_pShareData->m_Common.m_szExtHelp1[0] = '\0';	/* 外部ヘルプ１ */
-		m_pShareData->m_Common.m_szExtHtmlHelp[0] = '\0';	/* 外部HTMLヘルプ */
+		m_pShareData->m_Common.m_bRegularExp = 0;				/* 1==正規表現 */
+		m_pShareData->m_Common.m_bLoHiCase = 0;					/* 1==英大文字小文字の区別 */
+		m_pShareData->m_Common.m_bWordOnly = 0;					/* 1==単語のみ検索 */
+		m_pShareData->m_Common.m_bSelectedArea = FALSE;			/* 選択範囲内置換 */
+		m_pShareData->m_Common.m_szExtHelp1[0] = '\0';			/* 外部ヘルプ１ */
+		m_pShareData->m_Common.m_szExtHtmlHelp[0] = '\0';		/* 外部HTMLヘルプ */
 
-		m_pShareData->m_Common.m_bNOTIFYNOTFOUND = TRUE;	/* 検索／置換  見つからないときメッセージを表示 */
+		m_pShareData->m_Common.m_bNOTIFYNOTFOUND = TRUE;		/* 検索／置換  見つからないときメッセージを表示 */
 
-		m_pShareData->m_Common.m_bExitConfirm = FALSE;	/* 終了時の確認をする */
+		m_pShareData->m_Common.m_bExitConfirm = FALSE;			/* 終了時の確認をする */
 		m_pShareData->m_Common.m_nRepeatedScrollLineNum = 3;	/* キーリピート時のスクロール行数 */
-		m_pShareData->m_Common.m_nRepeatedScroll_Smooth = FALSE;		/* キーリピート時のスクロールを滑らかにするか */
+		m_pShareData->m_Common.m_nRepeatedScroll_Smooth = FALSE;/* キーリピート時のスクロールを滑らかにするか */
 
-//		strcpy( m_pShareData->m_Common.m_szEMailUserName, "");	/* メールユーザー名 */
+//		strcpy( m_pShareData->m_Common.m_szEMailUserName, "");		/* メールユーザー名 */
 //		strcpy( m_pShareData->m_Common.m_szEMailUserAddress, "");	/* メールアドレス */
-//		strcpy( m_pShareData->m_Common.m_szSMTPServer, "");	/* SMTPホスト名・アドレス */
-//		m_pShareData->m_Common.m_nSMTPPort = 25;	/* SMTPポート番号(通常は25)*/
+//		strcpy( m_pShareData->m_Common.m_szSMTPServer, "");			/* SMTPホスト名・アドレス */
+//		m_pShareData->m_Common.m_nSMTPPort = 25;					/* SMTPポート番号(通常は25)*/
 
 		m_pShareData->m_Common.m_bAddCRLFWhenCopy = FALSE;		/* 折り返し行に改行を付けてコピー */
 		m_pShareData->m_Common.m_bGrepSubFolder = TRUE;			/* Grep: サブフォルダも検索 */
-		m_pShareData->m_Common.m_bGrepOutputLine = TRUE;			/* Grep: 行を出力するか該当部分だけ出力するか */
-		m_pShareData->m_Common.m_nGrepOutputStyle = 1;				/* Grep: 出力形式 */
+		m_pShareData->m_Common.m_bGrepOutputLine = TRUE;		/* Grep: 行を出力するか該当部分だけ出力するか */
+		m_pShareData->m_Common.m_nGrepOutputStyle = 1;			/* Grep: 出力形式 */
 
 		m_pShareData->m_Common.m_bGTJW_RETURN = TRUE;			/* エンターキーでタグジャンプ */
-		m_pShareData->m_Common.m_bGTJW_LDBLCLK = TRUE;				/* ダブルクリックでタグジャンプ */
+		m_pShareData->m_Common.m_bGTJW_LDBLCLK = TRUE;			/* ダブルクリックでタグジャンプ */
 
 //キーワード：ツールバー順序
 		/* ツールバーボタン構造体 */
@@ -482,8 +480,8 @@ bool CShareData::Init(void)
 		i = -1;
 		m_pShareData->m_Common.m_nToolBarButtonIdxArr[++i] = 1;		//新規作成
 		m_pShareData->m_Common.m_nToolBarButtonIdxArr[++i] = 2;		//ファイルを開く
-		m_pShareData->m_Common.m_nToolBarButtonIdxArr[++i] = 3;	//上書き保存　// Sept. 16, 2000 JEPRO 3→11に変更 //Oct. 25, 2000 11→ 3
-		m_pShareData->m_Common.m_nToolBarButtonIdxArr[++i] = 4;	//名前を付けて保存　//Sept. 19, 2000 JEPRO 追加
+		m_pShareData->m_Common.m_nToolBarButtonIdxArr[++i] = 3;		//上書き保存　// Sept. 16, 2000 JEPRO 3→11に変更 //Oct. 25, 2000 11→ 3
+		m_pShareData->m_Common.m_nToolBarButtonIdxArr[++i] = 4;		//名前を付けて保存　//Sept. 19, 2000 JEPRO 追加
 		m_pShareData->m_Common.m_nToolBarButtonIdxArr[++i] = 0;
 
 		m_pShareData->m_Common.m_nToolBarButtonIdxArr[++i] = 161;	//切り取り　//Sept. 16, 2000 JEPRO 4→16に変更	//Oct. 25, 2000 16→161
@@ -495,6 +493,10 @@ bool CShareData::Init(void)
 		m_pShareData->m_Common.m_nToolBarButtonIdxArr[++i] = 34;	//やり直し(Redo)	//Sept. 16, 2000 JEPRO 8→20に変更 //Oct. 25, 2000 20→34
 		m_pShareData->m_Common.m_nToolBarButtonIdxArr[++i] = 0;
 
+		m_pShareData->m_Common.m_nToolBarButtonIdxArr[++i] = 87;	//移動履歴: 前へ	//Dec. 24, 2000 JEPRO 追加
+		m_pShareData->m_Common.m_nToolBarButtonIdxArr[++i] = 88;	//移動履歴: 次へ	//Dec. 24, 2000 JEPRO 追加
+		m_pShareData->m_Common.m_nToolBarButtonIdxArr[++i] = 0;
+
 		m_pShareData->m_Common.m_nToolBarButtonIdxArr[++i] = 225;	//検索	//Sept. 16, 2000 JEPRO 9→22に変更 //Oct. 25, 2000 22→225
 		m_pShareData->m_Common.m_nToolBarButtonIdxArr[++i] = 226;	//次を検索	//Sept. 16, 2000 JEPRO 16→23に変更 //Oct. 25, 2000 23→226
 		m_pShareData->m_Common.m_nToolBarButtonIdxArr[++i] = 227;	//前を検索	//Sept. 16, 2000 JEPRO 17→24に変更 //Oct. 25, 2000 24→227
@@ -502,37 +504,38 @@ bool CShareData::Init(void)
 		m_pShareData->m_Common.m_nToolBarButtonIdxArr[++i] = 229;	//検索マークのクリア	//Sept. 16, 2000 JEPRO 41→25に変更(Oct. 7, 2000 25→26) //Oct. 25, 2000 25→229
 //		m_pShareData->m_Common.m_nToolBarButtonIdxArr[++i] = 0;
 		m_pShareData->m_Common.m_nToolBarButtonIdxArr[++i] = 230;	//Grep	//Sept. 16, 2000 JEPRO 14→31に変更//Oct. 25, 2000 31→230
+		m_pShareData->m_Common.m_nToolBarButtonIdxArr[++i] = 232;	//アウトライン解析	//Dec. 24, 2000 JEPRO 追加
 		m_pShareData->m_Common.m_nToolBarButtonIdxArr[++i] = 0;
 
 		m_pShareData->m_Common.m_nToolBarButtonIdxArr[++i] = 264;	//タイプ別設定	//Sept. 16, 2000 JEPRO 追加
 		m_pShareData->m_Common.m_nToolBarButtonIdxArr[++i] = 265;	//タイプ別設定	//Sept. 16, 2000 JEPRO 18→36に変更//Oct. 25, 2000 36→265
 		m_pShareData->m_Common.m_nToolBarButtonIdxArr[++i] = 266;	//共通設定 //Sept. 16, 2000 JEPRO 10→37に変更 説明を「設定プロパティシート」から変更 //Oct. 25, 2000 37→266
-		m_pShareData->m_Common.m_nToolBarButtonIdxArr[++i] = 267;	//フォント設定	//Sept. 16, 2000 JEPRO 11→38に変更 //Oct. 25, 2000 38→267
+//		m_pShareData->m_Common.m_nToolBarButtonIdxArr[++i] = 267;	//フォント設定	//Sept. 16, 2000 JEPRO 11→38に変更 //Oct. 25, 2000 38→267	//Dec. 24, 2000 外した
 		m_pShareData->m_Common.m_nToolBarButtonIdxArr[++i] = 268;	//現在のウィンドウ幅で折り返し	//Sept. 16, 2000 JEPRO 42→39に変更 //Oct. 25, 2000 39→268
-		m_pShareData->m_Common.m_nToolBarButtonIdxArr[++i] = 0;
+//		m_pShareData->m_Common.m_nToolBarButtonIdxArr[++i] = 0;
 
 //		m_pShareData->m_Common.m_nToolBarButtonIdxArr[++i] = 12;	//同名のインクルードファイルを開く
 //		m_pShareData->m_Common.m_nToolBarButtonIdxArr[++i] = 13;	//同名のC/C++ソースを開く
 
-		m_pShareData->m_Common.m_nToolBarButtonIdxArr[++i] = 277;	//キーマクロの記録開始／終了	//Sept. 16, 2000 JEPRO 55→68に変更//Oct. 25, 2000 68→277
-		m_pShareData->m_Common.m_nToolBarButtonIdxArr[++i] = 280;	//キーマクロの実行	//Sept. 16, 2000 JEPRO 58→71に変更 //Oct. 25, 2000 71→280
+//		m_pShareData->m_Common.m_nToolBarButtonIdxArr[++i] = 277;	//キーマクロの記録開始／終了	//Sept. 16, 2000 JEPRO 55→68に変更//Oct. 25, 2000 68→277	//Dec. 24, 2000 外した
+//		m_pShareData->m_Common.m_nToolBarButtonIdxArr[++i] = 280;	//キーマクロの実行	//Sept. 16, 2000 JEPRO 58→71に変更 //Oct. 25, 2000 71→280	//Dec. 24, 2000 外した
 		m_pShareData->m_Common.m_nToolBarButtonIdxArr[++i] = 0;		//Oct. 8, 2000 jepro 次行のために追加
-		m_pShareData->m_Common.m_nToolBarButtonIdxArr[++i] = 346;	//コマンド一覧	//Oct. 8, 2000 JEPRO 追加 
+		m_pShareData->m_Common.m_nToolBarButtonIdxArr[++i] = 346;	//コマンド一覧	//Oct. 8, 2000 JEPRO 追加
 
-		
+
 		m_pShareData->m_Common.m_nToolBarButtonNum = ++i;	/* ツールバーボタンの数 */
-		m_pShareData->m_Common.m_bToolBarIsFlat = TRUE;	/* フラットツールバーにする／しない */
+		m_pShareData->m_Common.m_bToolBarIsFlat = TRUE;		/* フラットツールバーにする／しない */
 
 
-		m_pShareData->m_Common.m_bDispTOOLBAR = TRUE;				/* 次回ウィンドウを開いたときツールバーを表示する */
-		m_pShareData->m_Common.m_bDispSTATUSBAR = TRUE;				/* 次回ウィンドウを開いたときステータスバーを表示する */
+		m_pShareData->m_Common.m_bDispTOOLBAR = TRUE;		/* 次回ウィンドウを開いたときツールバーを表示する */
+		m_pShareData->m_Common.m_bDispSTATUSBAR = TRUE;		/* 次回ウィンドウを開いたときステータスバーを表示する */
 		m_pShareData->m_Common.m_bDispFUNCKEYWND = FALSE;	/* 次回ウィンドウを開いたときファンクションキーを表示する */
 		m_pShareData->m_Common.m_nFUNCKEYWND_Place = 1;		/* ファンクションキー表示位置／0:上 1:下 */
 
 		/* カスタムメニュー情報 */
-		wsprintf( m_pShareData->m_Common.m_szCustMenuNameArr[0], "右クリックメニュー", i );	
+		wsprintf( m_pShareData->m_Common.m_szCustMenuNameArr[0], "右クリックメニュー", i );
 		for( i = 1; i < MAX_CUSTOM_MENU; ++i ){
-			wsprintf( m_pShareData->m_Common.m_szCustMenuNameArr[i], "メニュー%d", i );	
+			wsprintf( m_pShareData->m_Common.m_szCustMenuNameArr[i], "メニュー%d", i );
 			m_pShareData->m_Common.m_nCustMenuItemNumArr[i] = 0;
 			for( j = 0; j < MAX_CUSTOM_MENU_ITEMS; ++j ){
 				m_pShareData->m_Common.m_nCustMenuItemFuncArr[i][j] = 0;
@@ -540,8 +543,8 @@ bool CShareData::Init(void)
 			}
 		}
 
-		/* カスタムメニュー　規定値 */
-		
+		/* カスタムメニュー 規定値 */
+
 		/* 右クリックメニュー */
 		int n;
 		n = 0;
@@ -563,11 +566,17 @@ bool CShareData::Init(void)
 		m_pShareData->m_Common.m_nCustMenuItemFuncArr[0][n] = F_PASTE;
 		m_pShareData->m_Common.m_nCustMenuItemKeyArr [0][n] = 'P';
 		n++;
-//		m_pShareData->m_Common.m_nCustMenuItemFuncArr[0][n] = F_PASTEBOX;
-//		m_pShareData->m_Common.m_nCustMenuItemKeyArr [0][n] = '\0';
-//		n++;
 		m_pShareData->m_Common.m_nCustMenuItemFuncArr[0][n] = F_DELETE;
 		m_pShareData->m_Common.m_nCustMenuItemKeyArr [0][n] = 'D';
+		n++;
+		m_pShareData->m_Common.m_nCustMenuItemFuncArr[0][n] = 0;
+		m_pShareData->m_Common.m_nCustMenuItemKeyArr [0][n] = '\0';
+		n++;
+		m_pShareData->m_Common.m_nCustMenuItemFuncArr[0][n] = F_COPY_CRLF;	//Nov. 9, 2000 JEPRO 「CRLF改行でコピー」を追加
+		m_pShareData->m_Common.m_nCustMenuItemKeyArr [0][n] = 'L';
+		n++;
+		m_pShareData->m_Common.m_nCustMenuItemFuncArr[0][n] = F_PASTEBOX;	//Nov. 9, 2000 JEPRO 「矩形貼り付け」を復活
+		m_pShareData->m_Common.m_nCustMenuItemKeyArr [0][n] = 'X';
 		n++;
 		m_pShareData->m_Common.m_nCustMenuItemFuncArr[0][n] = 0;
 		m_pShareData->m_Common.m_nCustMenuItemKeyArr [0][n] = '\0';
@@ -605,17 +614,17 @@ bool CShareData::Init(void)
 //		m_pShareData->m_Common.m_nCustMenuItemFuncArr[0][n] = F_FONT;
 //		m_pShareData->m_Common.m_nCustMenuItemKeyArr [0][n] = '3';
 //		n++;
-            
-		m_pShareData->m_Common.m_nCustMenuItemFuncArr[0][n] = 0;		//Oct. 3, 2000 JEPRO 以下にタグジャンプとタグジャンプバックを追加
+
+		m_pShareData->m_Common.m_nCustMenuItemFuncArr[0][n] = 0;		//Oct. 3, 2000 JEPRO 以下に「タグジャンプ」と「タグジャンプバック」を追加
 		m_pShareData->m_Common.m_nCustMenuItemKeyArr [0][n] = '\0';
 		n++;
 		m_pShareData->m_Common.m_nCustMenuItemFuncArr[0][n] = F_TAGJUMP;
-		m_pShareData->m_Common.m_nCustMenuItemKeyArr [0][n] = 'T';
+		m_pShareData->m_Common.m_nCustMenuItemKeyArr [0][n] = 'G';		//Nov. 9, 2000 JEPRO 「コピー」とバッティングしていたアクセスキーを変更(T→G)
 		n++;
 		m_pShareData->m_Common.m_nCustMenuItemFuncArr[0][n] = F_TAGJUMPBACK;
 		m_pShareData->m_Common.m_nCustMenuItemKeyArr [0][n] = 'B';
 		n++;
-		m_pShareData->m_Common.m_nCustMenuItemFuncArr[0][n] = 0;		//Oct. 15, 2000 JEPRO 以下に選択範囲内全行コピーと引用符付きコピーを追加
+		m_pShareData->m_Common.m_nCustMenuItemFuncArr[0][n] = 0;		//Oct. 15, 2000 JEPRO 以下に「選択範囲内全行コピー」と「引用符付きコピー」を追加
 		m_pShareData->m_Common.m_nCustMenuItemKeyArr [0][n] = '\0';
 		n++;
 		m_pShareData->m_Common.m_nCustMenuItemFuncArr[0][n] = F_COPYLINES;
@@ -631,18 +640,18 @@ bool CShareData::Init(void)
 		m_pShareData->m_Common.m_nCustMenuItemKeyArr [0][n] = '\\';
 		n++;
 		m_pShareData->m_Common.m_nCustMenuItemFuncArr[0][n] = F_PROPERTY_FILE;
-		m_pShareData->m_Common.m_nCustMenuItemKeyArr [0][n] = 'R';
+		m_pShareData->m_Common.m_nCustMenuItemKeyArr [0][n] = 'F';		//Nov. 9, 2000 JEPRO 「やり直し」とバッティングしていたアクセスキーを変更(R→F)
 		n++;
 		m_pShareData->m_Common.m_nCustMenuItemNumArr[0] = n;
 
 		/* カスタムメニュー１ */
 		m_pShareData->m_Common.m_nCustMenuItemNumArr[1] = 7;
 		m_pShareData->m_Common.m_nCustMenuItemFuncArr[1][0] = F_FILEOPEN;
-		m_pShareData->m_Common.m_nCustMenuItemKeyArr [1][0] = 'O';		//	Sept. 14, 2000 JEPRO できるだけ標準設定値に合わせるように変更 (F→O)
+		m_pShareData->m_Common.m_nCustMenuItemKeyArr [1][0] = 'O';		//Sept. 14, 2000 JEPRO できるだけ標準設定値に合わせるように変更 (F→O)
 		m_pShareData->m_Common.m_nCustMenuItemFuncArr[1][1] = F_FILESAVE;
 		m_pShareData->m_Common.m_nCustMenuItemKeyArr [1][1] = 'S';
 		m_pShareData->m_Common.m_nCustMenuItemFuncArr[1][2] = F_NEXTWINDOW;
-		m_pShareData->m_Common.m_nCustMenuItemKeyArr [1][2] = 'N';		//	Sept. 14, 2000 JEPRO できるだけ標準設定値に合わせるように変更 (O→N)
+		m_pShareData->m_Common.m_nCustMenuItemKeyArr [1][2] = 'N';		//Sept. 14, 2000 JEPRO できるだけ標準設定値に合わせるように変更 (O→N)
 		m_pShareData->m_Common.m_nCustMenuItemFuncArr[1][3] = F_TOLOWER;
 		m_pShareData->m_Common.m_nCustMenuItemKeyArr [1][3] = 'L';
 		m_pShareData->m_Common.m_nCustMenuItemFuncArr[1][4] = F_TOUPPER;
@@ -654,81 +663,81 @@ bool CShareData::Init(void)
 		/* 見出し記号 */
 		strcpy( m_pShareData->m_Common.m_szMidashiKigou, 	"１２３４５６７８９０（(［[「『【■□▲△▼▽◆◇○◎●§・※☆★第①②③④⑤⑥⑦⑧⑨⑩⑪⑫⑬⑭⑮⑯⑰⑱⑲⑳ⅠⅡⅢⅣⅤⅥⅦⅧⅨⅩ一二三四五六七八九十壱弐参伍" ); 
 		/* 引用符 */
-		strcpy( m_pShareData->m_Common.m_szInyouKigou, "> " );	/* 引用符 */
-		m_pShareData->m_Common.m_bUseHokan = FALSE;	/* 入力補完機能を使用する */
-		strcpy( m_pShareData->m_Common.m_szHokanFile, "" );	/* 入力補完 単語ファイル */
-		m_pShareData->m_Common.m_bUseKeyWordHelp = FALSE;	/* キーワードヘルプを使用する */
+		strcpy( m_pShareData->m_Common.m_szInyouKigou, "> " );		/* 引用符 */
+		m_pShareData->m_Common.m_bUseHokan = FALSE;					/* 入力補完機能を使用する */
+		strcpy( m_pShareData->m_Common.m_szHokanFile, "" );			/* 入力補完 単語ファイル */
+		m_pShareData->m_Common.m_bUseKeyWordHelp = FALSE;			/* キーワードヘルプを使用する */
 		strcpy( m_pShareData->m_Common.m_szKeyWordHelpFile, "" );	/* 辞書ファイル */
 		m_pShareData->m_Common.m_bGrepKanjiCode_AutoDetect = FALSE;	/* Grep: 文字コード自動判別 */
-		m_pShareData->m_Common.m_bHokanLoHiCase = FALSE;	/* 入力補完機能：英大文字小文字を同一視する */
-		m_pShareData->m_Common.m_bSaveWindowSize = TRUE;	/* ウィンドウサイズ継承 */
+		m_pShareData->m_Common.m_bHokanLoHiCase = FALSE;			/* 入力補完機能：英大文字小文字を同一視する */
+		m_pShareData->m_Common.m_bSaveWindowSize = TRUE;			/* ウィンドウサイズ継承 */
 		m_pShareData->m_Common.m_nWinSizeType = SIZE_RESTORED;
 		m_pShareData->m_Common.m_nWinSizeCX = CW_USEDEFAULT;
 		m_pShareData->m_Common.m_nWinSizeCY = 0;
-		m_pShareData->m_Common.m_bUseTaskTray = TRUE;	/* タスクトレイのアイコンを使う */
-		m_pShareData->m_Common.m_bStayTaskTray = TRUE;	/* タスクトレイのアイコンを常駐 */
-		m_pShareData->m_Common.m_wTrayMenuHotKeyCode = 'Z';	/* タスクトレイメニュー　キー */
+		m_pShareData->m_Common.m_bUseTaskTray = TRUE;				/* タスクトレイのアイコンを使う */
+		m_pShareData->m_Common.m_bStayTaskTray = TRUE;				/* タスクトレイのアイコンを常駐 */
+		m_pShareData->m_Common.m_wTrayMenuHotKeyCode = 'Z';			/* タスクトレイメニュー　キー */
 		m_pShareData->m_Common.m_wTrayMenuHotKeyMods = HOTKEYF_ALT | HOTKEYF_CONTROL;	/* タスクトレイメニュー　キー */
-		m_pShareData->m_Common.m_bUseOLE_DragDrop = TRUE;	/* OLEによるDrag&Dropを使う */
-		m_pShareData->m_Common.m_bUseOLE_DropSource = TRUE;	/* OLEによるDrag元にするか */
-		m_pShareData->m_Common.m_bDispExitingDialog = FALSE;	/* 終了ダイアログを表示する */
-		m_pShareData->m_Common.m_bEnableUnmodifiedOverwrite = FALSE;	/* 無変更でも上書きするか */
-		m_pShareData->m_Common.m_bSelectClickedURL = TRUE;	/* URLがクリックされたら選択するか */
-		m_pShareData->m_Common.m_bGrepExitConfirm = FALSE;	/* Grepモードで保存確認するか */
-//		m_pShareData->m_Common.m_bRulerDisp = TRUE;	/* ルーラー表示 */
-		m_pShareData->m_Common.m_nRulerHeight = 13;	/* ルーラーの高さ */
-		m_pShareData->m_Common.m_nRulerBottomSpace = 0;	/* ルーラーとテキストの隙間 */
-		m_pShareData->m_Common.m_nRulerType = 0;	/* ルーラーのタイプ */
+		m_pShareData->m_Common.m_bUseOLE_DragDrop = TRUE;			/* OLEによるDrag&Dropを使う */
+		m_pShareData->m_Common.m_bUseOLE_DropSource = TRUE;			/* OLEによるDrag元にするか */
+		m_pShareData->m_Common.m_bDispExitingDialog = FALSE;		/* 終了ダイアログを表示する */
+		m_pShareData->m_Common.m_bEnableUnmodifiedOverwrite = FALSE;/* 無変更でも上書きするか */
+		m_pShareData->m_Common.m_bSelectClickedURL = TRUE;			/* URLがクリックされたら選択するか */
+		m_pShareData->m_Common.m_bGrepExitConfirm = FALSE;			/* Grepモードで保存確認するか */
+//		m_pShareData->m_Common.m_bRulerDisp = TRUE;					/* ルーラー表示 */
+		m_pShareData->m_Common.m_nRulerHeight = 13;					/* ルーラーの高さ */
+		m_pShareData->m_Common.m_nRulerBottomSpace = 0;				/* ルーラーとテキストの隙間 */
+		m_pShareData->m_Common.m_nRulerType = 0;					/* ルーラーのタイプ */
 		m_pShareData->m_Common.m_bCopyAndDisablSelection = FALSE;	/* コピーしたら選択解除 */
-		m_pShareData->m_Common.m_bHtmlHelpIsSingle = TRUE;	/* HtmlHelpビューアはひとつ */
-		m_pShareData->m_Common.m_bCompareAndTileHorz = TRUE;	/* 文書比較後、左右に並べて表示 */
-//		m_pShareData->m_Common.m_bCompareAndTileHorz = TRUE;	/* 文書比較後、左右に並べて表示 */	//Oct. 10, 2000 JEPRO チェックボックスをボタン化すればこの行は不要のはず
+		m_pShareData->m_Common.m_bHtmlHelpIsSingle = TRUE;			/* HtmlHelpビューアはひとつ */
+		m_pShareData->m_Common.m_bCompareAndTileHorz = TRUE;		/* 文書比較後、左右に並べて表示 */
+//		m_pShareData->m_Common.m_bCompareAndTileHorz = TRUE;		/* 文書比較後、左右に並べて表示 */	//Oct. 10, 2000 JEPRO チェックボックスをボタン化すればこの行は不要のはず
 		/* 1999.11.15 */
-		m_pShareData->m_Common.m_bDropFileAndClose = FALSE;	/* ファイルをドロップしたときは閉じて開く */
-		m_pShareData->m_Common.m_nDropFileNumMax = 8;		/* 一度にドロップ可能なファイル数 */
-		m_pShareData->m_Common.m_bCheckFileTimeStamp = TRUE;	/* 更新の監視 */
-		m_pShareData->m_Common.m_bNotOverWriteCRLF = TRUE;	/* 改行は上書きしない */
-		::SetRect( &m_pShareData->m_Common.m_rcOpenDialog, 0, 0, 0, 0 );			/* 「開く」ダイアログのサイズと位置 */
-		m_pShareData->m_Common.m_bAutoCloseDlgFind = TRUE;	/* 検索ダイアログを自動的に閉じる */
-		m_pShareData->m_Common.m_bScrollBarHorz = TRUE;	/* 水平スクロールバーを使う */
-		m_pShareData->m_Common.m_bAutoCloseDlgFuncList = TRUE;	/* アウトライン ダイアログを自動的に閉じる */
-		m_pShareData->m_Common.m_bAutoCloseDlgReplace = TRUE;	/* 置換 ダイアログを自動的に閉じる */
-		m_pShareData->m_Common.m_bAutoColmnPaste = TRUE;	/* 矩形コピーのテキストは常に矩形貼り付け */
+		m_pShareData->m_Common.m_bDropFileAndClose = FALSE;			/* ファイルをドロップしたときは閉じて開く */
+		m_pShareData->m_Common.m_nDropFileNumMax = 8;				/* 一度にドロップ可能なファイル数 */
+		m_pShareData->m_Common.m_bCheckFileTimeStamp = TRUE;		/* 更新の監視 */
+		m_pShareData->m_Common.m_bNotOverWriteCRLF = TRUE;			/* 改行は上書きしない */
+		::SetRect( &m_pShareData->m_Common.m_rcOpenDialog, 0, 0, 0, 0 );	/* 「開く」ダイアログのサイズと位置 */
+		m_pShareData->m_Common.m_bAutoCloseDlgFind = TRUE;			/* 検索ダイアログを自動的に閉じる */
+		m_pShareData->m_Common.m_bScrollBarHorz = TRUE;				/* 水平スクロールバーを使う */
+		m_pShareData->m_Common.m_bAutoCloseDlgFuncList = FALSE;		/* アウトライン ダイアログを自動的に閉じる */	//Nov. 18, 2000 JEPRO TRUE→FALSE に変更
+		m_pShareData->m_Common.m_bAutoCloseDlgReplace = TRUE;		/* 置換 ダイアログを自動的に閉じる */
+		m_pShareData->m_Common.m_bAutoColmnPaste = TRUE;			/* 矩形コピーのテキストは常に矩形貼り付け */
 
-		m_pShareData->m_Common.m_bHokanKey_RETURN = TRUE;	/* VK_RETURN 補完決定キーが有効/無効 */
-		m_pShareData->m_Common.m_bHokanKey_TAB    = FALSE;	/* VK_TAB   補完決定キーが有効/無効 */
-		m_pShareData->m_Common.m_bHokanKey_RIGHT  = TRUE;	/* VK_RIGHT 補完決定キーが有効/無効 */
-		m_pShareData->m_Common.m_bHokanKey_SPACE  = FALSE;	/* VK_SPACE 補完決定キーが有効/無効 */
+		m_pShareData->m_Common.m_bHokanKey_RETURN = TRUE;			/* VK_RETURN 補完決定キーが有効/無効 */
+		m_pShareData->m_Common.m_bHokanKey_TAB    = FALSE;			/* VK_TAB   補完決定キーが有効/無効 */
+		m_pShareData->m_Common.m_bHokanKey_RIGHT  = TRUE;			/* VK_RIGHT 補完決定キーが有効/無効 */
+		m_pShareData->m_Common.m_bHokanKey_SPACE  = FALSE;			/* VK_SPACE 補完決定キーが有効/無効 */
 
-				
+
 /***********
-書式指定子 意味 
-d 年月日の日。先頭に 0 は付きません。 
-dd 年月日の日。1 桁の場合、先頭に 0 が付きます。 
-ddd 曜日。ロケールの LOCALE_SABBREVDAYNAME が使われます。 
-dddd 曜日。ロケールの LOCALE_SDAYNAME が使われます。 
-M 年月日の月。先頭に 0 は付きません。 
-MM 年月日の月。1 桁の場合、先頭に 0 が付きます。 
-MMM 年月日の月。ロケールの LOCALE_SABBREVMONTHNAME が使われます。 
-MMMM 年月日の月。ロケールの LOCALE_SMONTHNAME が使われます。 
-y 年月日の年。先頭に 0 は付きません。 
-yy 年月日の年。1 桁の場合、先頭に 0 が付きます。 
-yyyy 年月日の年。4 桁で表されます。 
-gg 「平成」などの時代を示す文字列。ロケールの CAL_SERASTRING が使われます。日付がこの情報を持たないときは、無視されます。 
+書式指定子 意味
+d 年月日の日。先頭に 0 は付きません。
+dd 年月日の日。1 桁の場合、先頭に 0 が付きます。
+ddd 曜日。ロケールの LOCALE_SABBREVDAYNAME が使われます。
+dddd 曜日。ロケールの LOCALE_SDAYNAME が使われます。
+M 年月日の月。先頭に 0 は付きません。
+MM 年月日の月。1 桁の場合、先頭に 0 が付きます。
+MMM 年月日の月。ロケールの LOCALE_SABBREVMONTHNAME が使われます。
+MMMM 年月日の月。ロケールの LOCALE_SMONTHNAME が使われます。
+y 年月日の年。先頭に 0 は付きません。
+yy 年月日の年。1 桁の場合、先頭に 0 が付きます。
+yyyy 年月日の年。4 桁で表されます。
+gg 「平成」などの時代を示す文字列。ロケールの CAL_SERASTRING が使われます。日付がこの情報を持たないときは、無視されます。
 ************/
 
 /***********
-書式指定子 意味 
-h 12 時間制の時間。先頭に 0 は付きません。 
-hh 12 時間制の時間。必要に応じて、先頭に 0 が付きます。 
-H 24 時間制の時間。先頭に 0 は付きません。 
-HH 24 時間制の時間。必要に応じて、先頭に 0 が付きます。 
-m 分。先頭に 0 は付きません。 
-mm 分。必要に応じて、先頭に 0 が付きます。 
-s 秒。先頭に 0 は付きません。 
-ss 秒。必要に応じて、先頭に 0 が付きます。 
-t 時刻マーカー。「 A 」「 P 」など。 
-tt 時刻マーカー。「 AM 」「 PM 」「午前」「午後」など。 
+書式指定子 意味
+h 12 時間制の時間。先頭に 0 は付きません。
+hh 12 時間制の時間。必要に応じて、先頭に 0 が付きます。
+H 24 時間制の時間。先頭に 0 は付きません。
+HH 24 時間制の時間。必要に応じて、先頭に 0 が付きます。
+m 分。先頭に 0 は付きません。
+mm 分。必要に応じて、先頭に 0 が付きます。
+s 秒。先頭に 0 は付きません。
+ss 秒。必要に応じて、先頭に 0 が付きます。
+t 時刻マーカー。「 A 」「 P 」など。
+tt 時刻マーカー。「 AM 」「 PM 」「午前」「午後」など。
 ************/
 
 		m_pShareData->m_Common.m_nDateFormatType = 0;//日付書式のタイプ
@@ -737,6 +746,7 @@ tt 時刻マーカー。「 AM 」「 PM 」「午前」「午後」など。
 		strcpy( m_pShareData->m_Common.m_szTimeFormat, "tthh\'時\'mm\'分\'ss\'秒\'"  );//時刻書式
 
 		m_pShareData->m_Common.m_bMenuIcon = TRUE;	/* メニューにアイコンを表示する */
+
 		//	Nov. 12, 2000 genta
 		m_pShareData->m_Common.m_bAutoMIMEdecode = FALSE;	//	ファイル読み込み時にMIMEのdecodeを行うか
 
@@ -757,137 +767,142 @@ tt 時刻マーカー。「 AM 」「 PM 」「午前」「午後」など。
 /* タイプ別設定の規定値 */
 /************************/
 		int nIdx = 0;
-		m_pShareData->m_Types[nIdx].m_nMaxLineSize = 10240;		/* 折り返し文字数 */
-		m_pShareData->m_Types[nIdx].m_nColmSpace = 0;			/* 文字と文字の隙間 */
-		m_pShareData->m_Types[nIdx].m_nLineSpace = 1;			/* 行間のすきま */
-		m_pShareData->m_Types[nIdx].m_nTabSpace = 4;			/* TABの文字数 */
+		m_pShareData->m_Types[nIdx].m_nMaxLineSize = 10240;				/* 折り返し文字数 */
+		m_pShareData->m_Types[nIdx].m_nColmSpace = 0;					/* 文字と文字の隙間 */
+		m_pShareData->m_Types[nIdx].m_nLineSpace = 1;					/* 行間のすきま */
+		m_pShareData->m_Types[nIdx].m_nTabSpace = 4;					/* TABの文字数 */
 		m_pShareData->m_Types[nIdx].m_nKeyWordSetIdx = -1;				/* キーワードセット */
-		m_pShareData->m_Types[nIdx].m_nKeyWordSetIdx2 = -1;				/* キーワード2セット */	//MIK
-		strcpy( m_pShareData->m_Types[nIdx].m_szLineComment, "" );			/* 行コメントデリミタ */
-		strcpy( m_pShareData->m_Types[nIdx].m_szLineComment2, "" );			/* 行コメントデリミタ2 */
-		strcpy( m_pShareData->m_Types[nIdx].m_szBlockCommentFrom, "" );		/* ブロックコメントデリミタ(From) */
-		strcpy( m_pShareData->m_Types[nIdx].m_szBlockCommentTo, "" );		/* ブロックコメントデリミタ(To) */
-		m_pShareData->m_Types[nIdx].m_nStringType = 0;						/* 文字列区切り記号エスケープ方法　0=[\"][\'] 1=[""][''] */
-		strcpy(	m_pShareData->m_Types[nIdx].m_szIndentChars, "" );			/* その他のインデント対象文字 */
+		m_pShareData->m_Types[nIdx].m_nKeyWordSetIdx2 = -1;				/* キーワードセット2 */	//Dec. 4, 2000, MIK
+
+		strcpy( m_pShareData->m_Types[nIdx].m_szLineComment, "" );		/* 行コメントデリミタ */
+		strcpy( m_pShareData->m_Types[nIdx].m_szLineComment2, "" );		/* 行コメントデリミタ2 */
+		strcpy( m_pShareData->m_Types[nIdx].m_szBlockCommentFrom, "" );	/* ブロックコメントデリミタ(From) */
+		strcpy( m_pShareData->m_Types[nIdx].m_szBlockCommentTo, "" );	/* ブロックコメントデリミタ(To) */
+		m_pShareData->m_Types[nIdx].m_nStringType = 0;					/* 文字列区切り記号エスケープ方法 0=[\"][\'] 1=[""][''] */
+		strcpy(	m_pShareData->m_Types[nIdx].m_szIndentChars, "" );		/* その他のインデント対象文字 */
 
 		m_pShareData->m_Types[nIdx].m_nColorInfoArrNum = COLORIDX_LAST;
 
 /**
 		static const char* ppszTypeName[] = {
-			"テキスト",
-			"行番号",
-			"改行記号",
-			"TAB記号",
-			"日本語空白",
-			"EOF記号",
-			"強調キーワード",
-			"コメント",
-			"シングルクォーテーション文字列",
-			"ダブルクォーテーション文字列",
-			"カーソル行アンダーライン",
-			"折り返し記号",
-			"コントロールコード",
-			"URL",
-			"検索文字列",
-			"行番号(変更行)",
-			"ルーラー"
+			"テキスト",							// CI[00]
+			"行番号",							// CI[01]
+			"改行記号",							// CI[02]
+			"TAB記号",							// CI[03]
+			"日本語空白",						// CI[04]
+			"EOF記号",							// CI[05]
+			"強調キーワード",					// CI[06]
+			"コメント",							// CI[07]
+			"シングルクォーテーション文字列",	// CI[08]
+			"ダブルクォーテーション文字列",		// CI[09]
+			"カーソル行アンダーライン",			// CI[10]
+			"折り返し記号",						// CI[11]
+			"コントロールコード",				// CI[12]
+			"URL",								// CI[13]
+			"検索文字列",						// CI[14]
+			"行番号(変更行)",					// CI[15]
+			"ルーラー"							// CI[16]
 		};
 **/
 
 /*	From Here Sept. 18, 2000 JEPRO 順番を大幅に入れ替えた
 		static ColorInfoIni ColorInfo_DEFAULT[] = {
-			"テキスト",           TRUE , FALSE, FALSE, RGB( 0, 0, 0 ), RGB( 255, 255, 255 ),
-			"行番号",             TRUE , FALSE, FALSE, RGB( 0, 0, 255 ), RGB( 239, 239, 239 ),
-			"改行記号",           TRUE, FALSE, FALSE, RGB( 0, 128, 255 ), RGB( 255, 255, 255 ),
-			"TAB記号",            TRUE, FALSE, FALSE, RGB( 192, 192, 192 ), RGB( 255, 255, 255 ),
-			"日本語空白",         TRUE, FALSE, FALSE, RGB( 192, 192, 192 ), RGB( 255, 255, 255 ),
-			"EOF記号",            TRUE, FALSE, FALSE, RGB( 0, 255, 255 ), RGB( 0, 0, 0 ) },
-			"強調キーワード",     TRUE , FALSE, FALSE, RGB( 0, 0, 255 ), RGB( 255, 255, 255 ),
-			"コメント",           TRUE , FALSE, FALSE, RGB( 0, 128, 0 ), RGB( 255, 255, 255 ),
+			"テキスト",				TRUE , FALSE, FALSE, RGB( 0, 0, 0 )			, RGB( 255, 255, 255 ),
+			"行番号",				TRUE , FALSE, FALSE, RGB( 0, 0, 255 )		, RGB( 239, 239, 239 ),
+			"改行記号",				TRUE , FALSE, FALSE, RGB( 0, 128, 255 )		, RGB( 255, 255, 255 ),
+			"TAB記号",				TRUE , FALSE, FALSE, RGB( 192, 192, 192 )	, RGB( 255, 255, 255 ),
+			"日本語空白",			TRUE , FALSE, FALSE, RGB( 192, 192, 192 )	, RGB( 255, 255, 255 ),
+			"EOF記号",				TRUE , FALSE, FALSE, RGB( 0, 255, 255 )		, RGB( 0, 0, 0 ) },
+			"強調キーワード",		TRUE , FALSE, FALSE, RGB( 0, 0, 255 )		, RGB( 255, 255, 255 ),
+			"コメント",				TRUE , FALSE, FALSE, RGB( 0, 128, 0 )		, RGB( 255, 255, 255 ),
 		//	From Here Sept. 4, 2000 JEPRO
 		//	シングルクォーテーション文字列に色を割り当てるが色分け表示はしない
-		//	"シングルクォーテーション文字列", FALSE, FALSE, FALSE, RGB( 0, 0, 0 ), RGB( 255, 255, 255 ),
-			"シングルクォーテーション文字列", FALSE, FALSE, FALSE, RGB( 64, 128, 128 ), RGB( 255, 255, 255 ),
+		//	"シングルクォーテーション文字列", FALSE, FALSE, FALSE, RGB( 0, 0, 0 )		, RGB( 255, 255, 255 ),
+			"シングルクォーテーション文字列", FALSE, FALSE, FALSE, RGB( 64, 128, 128 )	, RGB( 255, 255, 255 ),
 		//	To Here Sept. 4, 2000
-			"ダブルクォーテーション文字列", TRUE, FALSE, FALSE, RGB( 128, 0, 64 ), RGB( 255, 255, 255 ),
-			"カーソル行アンダーライン",  TRUE, FALSE, FALSE, RGB( 0, 0, 255 ), RGB( 255, 255, 255 ),
-			"折り返し記号",       TRUE , FALSE, FALSE, RGB( 255, 0, 255 ), RGB( 255, 255, 255 ),
-			"コントロールコード", TRUE , FALSE, FALSE, RGB( 255, 255, 0 ), RGB( 255, 255, 255 ),
-			"URL",                TRUE , FALSE, TRUE , RGB( 0, 0, 255 ), RGB( 255, 255, 255 ),
-			"検索文字列",         TRUE , FALSE, FALSE, RGB( 0, 0, 0 ), RGB( 255, 255, 0 ),
-			"行番号(変更行)",   TRUE , TRUE , FALSE, RGB( 0, 0, 255 ), RGB( 239, 239, 239 ),
-			"ルーラー",           TRUE , FALSE, FALSE, RGB( 0, 0, 0 ), RGB( 239, 239, 239 )
+			"ダブルクォーテーション文字列", TRUE, FALSE, FALSE, RGB( 128, 0, 64 ),RGB( 255, 255, 255 ),
+			"カーソル行アンダーライン",  TRUE, FALSE, FALSE, RGB( 0, 0, 255 )	, RGB( 255, 255, 255 ),
+			"折り返し記号",       TRUE , FALSE, FALSE, RGB( 255, 0, 255 )		, RGB( 255, 255, 255 ),
+			"コントロールコード", TRUE , FALSE, FALSE, RGB( 255, 255, 0 )		, RGB( 255, 255, 255 ),
+			"URL",                TRUE , FALSE, TRUE , RGB( 0, 0, 255 )			, RGB( 255, 255, 255 ),
+			"検索文字列",         TRUE , FALSE, FALSE, RGB( 0, 0, 0 )			, RGB( 255, 255, 0 ),
+			"行番号(変更行)",	  TRUE , TRUE , FALSE, RGB( 0, 0, 255 )			, RGB( 239, 239, 239 ),
+			"ルーラー",           TRUE , FALSE, FALSE, RGB( 0, 0, 0 )			, RGB( 239, 239, 239 )
 		};
 */
 
 
 /**
-		static const char* ppszTypeName[] = {
-			"テキスト",
-			"ルーラー",
-			"カーソル行アンダーライン",
-			"行番号",
-			"行番号(変更行)",
-			"TAB記号",
-			"日本語空白",
-			"コントロールコード",
-			"改行記号",
-			"折り返し記号",
-			"EOF記号",
-			"検索文字列",
-			"強調キーワード",
-			"コメント",
-			"シングルクォーテーション文字列",
-			"ダブルクォーテーション文字列",
-			"URL"
+		static const char* ppszTypeName[] = {	//改修前のColor Index //Dec.26, 2000 jepro 補追 UR1.2.24から強調キーワードが1つ増えたが以下はそれ以前のもの
+			"テキスト",							// CI[00]
+			"ルーラー",							// CI[16]
+			"カーソル行アンダーライン",			// CI[10]
+			"行番号",							// CI[01]
+			"行番号(変更行)",					// CI[15]
+			"TAB記号",							// CI[03]
+			"日本語空白",						// CI[04]
+			"コントロールコード",				// CI[12]
+			"改行記号",							// CI[02]
+			"折り返し記号",						// CI[11]
+			"EOF記号",							// CI[05]
+			"検索文字列",						// CI[14]
+			"強調キーワード",					// CI[06]
+			"コメント",							// CI[07]
+			"シングルクォーテーション文字列",	// CI[08]
+			"ダブルクォーテーション文字列",		// CI[09]
+			"URL"								// CI[13]
 		};
 **/
 
 		static ColorInfoIni ColorInfo_DEFAULT[] = {
+		//	Nov. 9, 2000 Jepro note: color setting (詳細は CshareData.h を参照のこと)
+		//	0,							1(Disp),	 2(FatFont),3(UnderLIne) , 4(colTEXT),	5(colBACK),
+		//	szName(項目名),				色分け／表示, 太字,	    下線,	       文字色,		背景色,
+		//
 		//Oct. 8, 2000 JEPRO 背景色を真っ白RGB(255,255,255)→(255,251,240)に変更(眩しさを押さえた)
-			"テキスト",           TRUE , FALSE, FALSE, RGB( 0, 0, 0 ), RGB( 255, 251, 240 ),
-			"ルーラー",           TRUE , FALSE, FALSE, RGB( 0, 0, 0 ), RGB( 239, 239, 239 ),
-			"カーソル行アンダーライン",  TRUE, FALSE, FALSE, RGB( 0, 0, 255 ), RGB( 255, 251, 240 ),
-			"行番号",             TRUE , FALSE, FALSE, RGB( 0, 0, 255 ), RGB( 239, 239, 239 ),
-			"行番号(変更行)",   TRUE , TRUE , FALSE, RGB( 0, 0, 255 ), RGB( 239, 239, 239 ),
-			"TAB記号",            TRUE, FALSE, FALSE, RGB( 192, 192, 192 ), RGB( 255, 251, 240 ),
-			"日本語空白",         TRUE, FALSE, FALSE, RGB( 192, 192, 192 ), RGB( 255, 251, 240 ),
-			"コントロールコード", TRUE , FALSE, FALSE, RGB( 255, 255, 0 ), RGB( 255, 251, 240 ),
-			"改行記号",           TRUE, FALSE, FALSE, RGB( 0, 128, 255 ), RGB( 255, 251, 240 ),
-			"折り返し記号",       TRUE , FALSE, FALSE, RGB( 255, 0, 255 ), RGB( 255, 251, 240 ),
-			"EOF記号",            TRUE, FALSE, FALSE, RGB( 0, 255, 255 ), RGB( 0, 0, 0 ),
-			"検索文字列",         TRUE , FALSE, FALSE, RGB( 0, 0, 0 ), RGB( 255, 255, 0 ),
-			"強調キーワード",     TRUE , FALSE, FALSE, RGB( 0, 0, 255 ), RGB( 255, 251, 240 ),
-			"第２強調キーワード", TRUE , FALSE, FALSE, RGB( 0, 0, 255 ), RGB( 255, 251, 240 ),	//MIK
-			"コメント",           TRUE , FALSE, FALSE, RGB( 0, 128, 0 ), RGB( 255, 251, 240 ),
-		//Sept. 4, 2000 JEPRO　シングルクォーテーション文字列に色を割り当てるが色分け表示はしない
+			"テキスト",							TRUE , FALSE, FALSE, RGB( 0, 0, 0 )			, RGB( 255, 251, 240 ),
+			"ルーラー",							TRUE , FALSE, FALSE, RGB( 0, 0, 0 )			, RGB( 239, 239, 239 ),
+			"カーソル行アンダーライン",			TRUE , FALSE, FALSE, RGB( 0, 0, 255 )		, RGB( 255, 251, 240 ),
+			"行番号",							TRUE , FALSE, FALSE, RGB( 0, 0, 255 )		, RGB( 239, 239, 239 ),
+			"行番号(変更行)",					TRUE , TRUE , FALSE, RGB( 0, 0, 255 )		, RGB( 239, 239, 239 ),
+			"TAB記号",							TRUE , FALSE, FALSE, RGB( 192, 192, 192 )	, RGB( 255, 251, 240 ),
+			"日本語空白",						TRUE , FALSE, FALSE, RGB( 192, 192, 192 )	, RGB( 255, 251, 240 ),
+			"コントロールコード",				TRUE , FALSE, FALSE, RGB( 255, 255, 0 )		, RGB( 255, 251, 240 ),
+			"改行記号",							TRUE , FALSE, FALSE, RGB( 0, 128, 255 )		, RGB( 255, 251, 240 ),
+			"折り返し記号",						TRUE , FALSE, FALSE, RGB( 255, 0, 255 )		, RGB( 255, 251, 240 ),
+			"EOF記号",							TRUE , FALSE, FALSE, RGB( 0, 255, 255 )		, RGB( 0, 0, 0 ),
+			"検索文字列",						TRUE , FALSE, FALSE, RGB( 0, 0, 0 )			, RGB( 255, 255, 0 ),
+			"強調キーワード1",					TRUE , FALSE, FALSE, RGB( 0, 0, 255 )		, RGB( 255, 251, 240 ),
+			"強調キーワード2",					TRUE , FALSE, FALSE, RGB( 0, 0, 255 )		, RGB( 255, 251, 240 ),	//Dec. 4, 2000 MIK
+			"コメント",							TRUE , FALSE, FALSE, RGB( 0, 128, 0 )		, RGB( 255, 251, 240 ),
+		//Sept. 4, 2000 JEPRO シングルクォーテーション文字列に色を割り当てるが色分け表示はしない
 		//Oct. 17, 2000 JEPRO 色分け表示するように変更(最初のFALSE→TRUE)
 		//"シングルクォーテーション文字列", FALSE, FALSE, FALSE, RGB( 0, 0, 0 ), RGB( 255, 255, 255 ),
-			"シングルクォーテーション文字列", TRUE, FALSE, FALSE, RGB( 64, 128, 128 ), RGB( 255, 251, 240 ),
-			"ダブルクォーテーション文字列", TRUE, FALSE, FALSE, RGB( 128, 0, 64 ), RGB( 255, 251, 240 ),
-			"URL",                TRUE , FALSE, TRUE , RGB( 0, 0, 255 ), RGB( 255, 251, 240 )
+			"シングルクォーテーション文字列",	TRUE , FALSE, FALSE, RGB( 64, 128, 128 )	, RGB( 255, 251, 240 ),
+			"ダブルクォーテーション文字列",		TRUE , FALSE, FALSE, RGB( 128, 0, 64 )		, RGB( 255, 251, 240 ),
+			"URL",								TRUE , FALSE, TRUE , RGB( 0, 0, 255 )		, RGB( 255, 251, 240 )
   		};
 //	To Here Sept. 18, 2000
 
 
 		for( i = 0; i < COLORIDX_LAST; ++i ){
-			m_pShareData->m_Types[nIdx].m_ColorInfoArr[i].m_nColorIdx     = i;
-			m_pShareData->m_Types[nIdx].m_ColorInfoArr[i].m_bDisp         = ColorInfo_DEFAULT[i].m_bDisp    ;
-			m_pShareData->m_Types[nIdx].m_ColorInfoArr[i].m_bFatFont      = ColorInfo_DEFAULT[i].m_bFatFont ;
-			m_pShareData->m_Types[nIdx].m_ColorInfoArr[i].m_bUnderLine    = ColorInfo_DEFAULT[i].m_bUnderLine;
-			m_pShareData->m_Types[nIdx].m_ColorInfoArr[i].m_colTEXT       = ColorInfo_DEFAULT[i].m_colTEXT  ;
-			m_pShareData->m_Types[nIdx].m_ColorInfoArr[i].m_colBACK       = ColorInfo_DEFAULT[i].m_colBACK  ;
+			m_pShareData->m_Types[nIdx].m_ColorInfoArr[i].m_nColorIdx		= i;
+			m_pShareData->m_Types[nIdx].m_ColorInfoArr[i].m_bDisp			= ColorInfo_DEFAULT[i].m_bDisp;
+			m_pShareData->m_Types[nIdx].m_ColorInfoArr[i].m_bFatFont		= ColorInfo_DEFAULT[i].m_bFatFont;
+			m_pShareData->m_Types[nIdx].m_ColorInfoArr[i].m_bUnderLine		= ColorInfo_DEFAULT[i].m_bUnderLine;
+			m_pShareData->m_Types[nIdx].m_ColorInfoArr[i].m_colTEXT			= ColorInfo_DEFAULT[i].m_colTEXT;
+			m_pShareData->m_Types[nIdx].m_ColorInfoArr[i].m_colBACK			= ColorInfo_DEFAULT[i].m_colBACK;
 //			strcpy( m_pShareData->m_Types[nIdx].m_ColorInfoArr[i].m_szName, ppszTypeName[i] );
 			strcpy( m_pShareData->m_Types[nIdx].m_ColorInfoArr[i].m_szName, ColorInfo_DEFAULT[i].m_pszName );
 		}
-		m_pShareData->m_Types[nIdx].m_bLineNumIsCRLF = TRUE;			/* 行番号の表示 FALSE=折り返し単位／TRUE=改行単位 */
-		m_pShareData->m_Types[nIdx].m_nLineTermType = 1;				/* 行番号区切り　0=なし 1=縦線 2=任意 */
-		m_pShareData->m_Types[nIdx].m_cLineTermChar = ':';				/* 行番号区切り文字 */
-		m_pShareData->m_Types[nIdx].m_bWordWrap = FALSE;				/* 英文ワードラップをする */
-		m_pShareData->m_Types[nIdx].m_nCurrentPrintSetting = 0;			/* 現在選択している印刷設定 */
-		m_pShareData->m_Types[nIdx].m_nDefaultOutline = OUTLINE_TEXT;	/* アウトライン解析方法 */
-		m_pShareData->m_Types[nIdx].m_nSmartIndent = SMARTINDENT_NONE;	/* スマートインデント種別 */
-		m_pShareData->m_Types[nIdx].m_nImeState = IME_CMODE_NOCONVERSION;	/* スマートインデント種別 */
+		m_pShareData->m_Types[nIdx].m_bLineNumIsCRLF = TRUE;				/* 行番号の表示 FALSE=折り返し単位／TRUE=改行単位 */
+		m_pShareData->m_Types[nIdx].m_nLineTermType = 1;					/* 行番号区切り 0=なし 1=縦線 2=任意 */
+		m_pShareData->m_Types[nIdx].m_cLineTermChar = ':';					/* 行番号区切り文字 */
+		m_pShareData->m_Types[nIdx].m_bWordWrap = FALSE;					/* 英文ワードラップをする */
+		m_pShareData->m_Types[nIdx].m_nCurrentPrintSetting = 0;				/* 現在選択している印刷設定 */
+		m_pShareData->m_Types[nIdx].m_nDefaultOutline = OUTLINE_TEXT;		/* アウトライン解析方法 */
+		m_pShareData->m_Types[nIdx].m_nSmartIndent = SMARTINDENT_NONE;		/* スマートインデント種別 */
+		m_pShareData->m_Types[nIdx].m_nImeState = IME_CMODE_NOCONVERSION;	/* IME入力 */
 
 
 		static char* pszTypeNameArr[] = {
@@ -902,17 +917,19 @@ tt 時刻マーカー。「 AM 」「 PM 」「午前」「午後」など。
 			"AWK",
 			"MS-DOSバッチファイル",
 			"Pascal",
-			"設定12",
+			"TeX",		//Oct. 31, 2000 JEPRO TeX ユーザに贈る
 			"設定13",
 			"設定14",
 			"設定15",
-			"設定16"
+			"設定ファイル"	//Nov. 9, 2000 JEPRO Windows標準のini, inf, cnfファイルとsakuraキーワード設定ファイル.kwd, 色設定ファイル.col も読めるようにする
 		};
 		static char* pszTypeExts[] = {
 			"",
-			"txt,doc",
-			"c,cpp,cxx,h",
-			"html,htm,shtml",
+			"txt,doc,ps",	//Nov. 15, 2000 JEPRO PostScriptファイルも読めるようにする
+//			"c,cpp,cxx,h",
+			"c,cpp,cxx,h,rc,dsw,dsp,dep,mak",	//Oct. 31, 2000 JEPRO VC++の生成するテキストファイルも読めるようにする
+//			"html,htm,shtml",
+			"html,htm,shtml,plg",	//Oct. 31, 2000 JEPRO VC++の生成するテキストファイルも読み込めるようにする
 			"sql,plsql",
 			"cbl,cpy",
 			"java,jav",
@@ -920,11 +937,11 @@ tt 時刻マーカー。「 AM 」「 PM 」「午前」「午後」など。
 			"awk",
 			"bat",
 			"dpr,pas",
+			"tex,sty,bib,log,blg,aux,bbl,toc,lof,lot,idx,ind,glo",		//Oct. 31, 2000 JEPRO TeX ユーザに贈る
 			"",
 			"",
 			"",
-			"",
-			""
+			"ini,inf,cnf,kwd,col"	//Nov. 9, 2000 JEPRO Windows標準のini, inf, cnfファイルとsakuraキーワード設定ファイル.kwd, 色設定ファイル.col も読めるようにする
 		};
 
 		m_pShareData->m_Types[0].m_nIdx = 0;
@@ -935,7 +952,7 @@ tt 時刻マーカー。「 AM 」「 PM 」「午前」「午後」など。
 			m_pShareData->m_Types[nIdx].m_nIdx = nIdx;
 			strcpy( m_pShareData->m_Types[nIdx].m_szTypeName, pszTypeNameArr[nIdx] );	/* タイプ属性：名称 */
 			strcpy( m_pShareData->m_Types[nIdx].m_szTypeExts, pszTypeExts[nIdx] );		/* タイプ属性：拡張子リスト */
-			m_pShareData->m_Types[nIdx].m_nKeyWordSetIdx2 = -1;	//MIK
+			m_pShareData->m_Types[nIdx].m_nKeyWordSetIdx2 = -1;	//Dec. 4, 2000 MIK
 		}
 
 		
@@ -960,7 +977,7 @@ tt 時刻マーカー。「 AM 」「 PM 」「午前」「午後」など。
 		//	From Here Sept. 20, 2000 JEPRO テキストの規定値を80→120に変更(不具合一覧.txtがある程度読みやすい桁数)
 //		m_pShareData->m_Types[1].m_nMaxLineSize = 80;					/* 折り返し文字数 */
 		m_pShareData->m_Types[1].m_nMaxLineSize = 120;					/* 折り返し文字数 */
-		//	To Here Sept. 20, 2000	
+		//	To Here Sept. 20, 2000
 		m_pShareData->m_Types[1].m_nDefaultOutline = OUTLINE_TEXT;		/* アウトライン解析方法 */
 		//	Oct. 17, 2000 JEPRO	シングルクォーテーション文字列を色分け表示しない
 		m_pShareData->m_Types[1].m_ColorInfoArr[COLORIDX_SSTRING].m_bDisp = FALSE;
@@ -970,13 +987,13 @@ tt 時刻マーカー。「 AM 」「 PM 」「午前」「午後」など。
 
 		// nIdx = 1;
 		/* C/C++ */
-		strcpy( m_pShareData->m_Types[2].m_szLineComment, "//" );		/* 行コメントデリミタ */
-		strcpy( m_pShareData->m_Types[2].m_szLineComment2, "" );		/* 行コメントデリミタ2 */
-		strcpy( m_pShareData->m_Types[2].m_szBlockCommentFrom, "/*" );	/* ブロックコメントデリミタ(From) */
-		strcpy( m_pShareData->m_Types[2].m_szBlockCommentTo, "*/" );	/* ブロックコメントデリミタ(To) */
-		m_pShareData->m_Types[2].m_nKeyWordSetIdx = 0;					/* キーワードセット */
-		m_pShareData->m_Types[2].m_nDefaultOutline = OUTLINE_CPP;		/* アウトライン解析方法 */
-		m_pShareData->m_Types[2].m_nSmartIndent = SMARTINDENT_CPP;		/* スマートインデント種別 */
+		strcpy( m_pShareData->m_Types[2].m_szLineComment, "//" );			/* 行コメントデリミタ */
+		strcpy( m_pShareData->m_Types[2].m_szLineComment2, "" );			/* 行コメントデリミタ2 */
+		strcpy( m_pShareData->m_Types[2].m_szBlockCommentFrom, "/*" );		/* ブロックコメントデリミタ(From) */
+		strcpy( m_pShareData->m_Types[2].m_szBlockCommentTo, "*/" );		/* ブロックコメントデリミタ(To) */
+		m_pShareData->m_Types[2].m_nKeyWordSetIdx = 0;						/* キーワードセット */
+		m_pShareData->m_Types[2].m_nDefaultOutline = OUTLINE_CPP;			/* アウトライン解析方法 */
+		m_pShareData->m_Types[2].m_nSmartIndent = SMARTINDENT_CPP;			/* スマートインデント種別 */
 
 
 		/* HTML */
@@ -1028,15 +1045,43 @@ tt 時刻マーカー。「 AM 」「 PM 」「午前」「午後」など。
 
 		/* MS-DOSバッチファイル */
 		strcpy( m_pShareData->m_Types[9].m_szLineComment, "REM " );			/* 行コメントデリミタ */
-		strcpy( m_pShareData->m_Types[9].m_szLineComment2, "" );			/* 行コメントデリミタ2 */
+//		strcpy( m_pShareData->m_Types[9].m_szLineComment2, ":" );			/* 行コメントデリミタ2 */	//Oct. 31, 2000 JEPRO ':' を追加(却下された)
 		m_pShareData->m_Types[9].m_nDefaultOutline = OUTLINE_TEXT;			/* アウトライン解析方法 */
 		m_pShareData->m_Types[9].m_nKeyWordSetIdx = 7;						/* キーワードセット */
 
 		/* Pascal */
+		strcpy( m_pShareData->m_Types[10].m_szLineComment, "//" );			/* 行コメントデリミタ */				//Nov. 5, 2000 JEPRO 追加
+		strcpy( m_pShareData->m_Types[10].m_szBlockCommentFrom, "{" );		/* ブロックコメントデリミタ(From) */	//Nov. 5, 2000 JEPRO 追加
+		strcpy( m_pShareData->m_Types[10].m_szBlockCommentTo, "}" );		/* ブロックコメントデリミタ(To) */		//Nov. 5, 2000 JEPRO 追加
+		m_pShareData->m_Types[10].m_nStringType = 1;						/* 文字列区切り記号エスケープ方法　0=[\"][\'] 1=[""][''] */	//Nov. 5, 2000 JEPRO 追加
 		m_pShareData->m_Types[10].m_nKeyWordSetIdx = 5;						/* キーワードセット */
 
+		// From Here Oct. 31, 2000 JEPRO
+		/* TeX */
+		strcpy( m_pShareData->m_Types[11].m_szLineComment, "%" );			/* 行コメントデリミタ */
+		m_pShareData->m_Types[11].m_nDefaultOutline = OUTLINE_TEXT;			/* アウトライン解析方法 */
+		m_pShareData->m_Types[11].m_nKeyWordSetIdx = 9;						/* キーワードセット */
+		//シングルクォーテーション文字列を色分け表示しない
+		m_pShareData->m_Types[11].m_ColorInfoArr[COLORIDX_SSTRING].m_bDisp = FALSE;
+		//ダブルクォーテーション文字列を色分け表示しない
+		m_pShareData->m_Types[11].m_ColorInfoArr[COLORIDX_WSTRING].m_bDisp = FALSE;
+		//URLにアンダーラインを引かない(やっぱりやめた)
+//		m_pShareData->m_Types[11].m_ColorInfoArr[COLORIDX_URL].m_bUnderLine = FALSE;
+		// To Here Oct. 31, 2000
 
-		/* 強調キーワードのテストデータ */	
+		// From Here Nov. 9, 2000 JEPRO
+		/* 設定ファイル */
+		strcpy( m_pShareData->m_Types[15].m_szLineComment, "//" );			/* 行コメントデリミタ */
+		strcpy( m_pShareData->m_Types[15].m_szLineComment2, ";" );			/* 行コメントデリミタ2 */
+		m_pShareData->m_Types[15].m_nDefaultOutline = OUTLINE_TEXT;			/* アウトライン解析方法 */
+		//シングルクォーテーション文字列を色分け表示しない
+		m_pShareData->m_Types[15].m_ColorInfoArr[COLORIDX_SSTRING].m_bDisp = FALSE;
+		//ダブルクォーテーション文字列を色分け表示しない
+		m_pShareData->m_Types[15].m_ColorInfoArr[COLORIDX_WSTRING].m_bDisp = FALSE;
+		// To Here Nov. 9, 2000
+
+
+		/* 強調キーワードのテストデータ */
 		m_pShareData->m_CKeyWordSetMgr.m_nCurrentKeyWordSetIdx = 0;
 
 		m_pShareData->m_CKeyWordSetMgr.AddKeyWordSet( "C/C++", TRUE );		/* セットの追加 */
@@ -1044,11 +1089,11 @@ tt 時刻マーカー。「 AM 」「 PM 」「午前」「午後」など。
 		m_pShareData->m_CKeyWordSetMgr.AddKeyWordSet( "HTML", FALSE );		/* セットの追加 */
 		m_pShareData->m_CKeyWordSetMgr.AddKeyWordSet( "Java", TRUE );		/* セットの追加 */
 		m_pShareData->m_CKeyWordSetMgr.AddKeyWordSet( "CORBA IDL", TRUE );	/* セットの追加 */
-		m_pShareData->m_CKeyWordSetMgr.AddKeyWordSet( "Pascal", TRUE );		/* セットの追加 */
+		m_pShareData->m_CKeyWordSetMgr.AddKeyWordSet( "Pascal", FALSE );	/* セットの追加 */	//Nov. 5, 2000 JEPRO 大・小文字の区別を'しない'に変更
 		m_pShareData->m_CKeyWordSetMgr.AddKeyWordSet( "AWK", TRUE );		/* セットの追加 */
-		m_pShareData->m_CKeyWordSetMgr.AddKeyWordSet( "MS-DOSバッチファイル", FALSE );	/* セットの追加 */
+		m_pShareData->m_CKeyWordSetMgr.AddKeyWordSet( "MS-DOS batch", FALSE );	/* セットの追加 */	//Oct. 31, 2000 JEPRO 'バッチファイル'→'batch' に短縮
 		m_pShareData->m_CKeyWordSetMgr.AddKeyWordSet( "Perl", TRUE );		/* セットの追加 */
-		m_pShareData->m_CKeyWordSetMgr.AddKeyWordSet( "TeX", TRUE );		/* セットの追加 */ //	Sept. 2, 2000 jepro Tex →TeX に修正
+		m_pShareData->m_CKeyWordSetMgr.AddKeyWordSet( "TeX", TRUE );		/* セットの追加 */ //Sept. 2, 2000 jepro Tex →TeX に修正 Bool値は大・小文字の区別
 
 
 
@@ -1700,6 +1745,7 @@ tt 時刻マーカー。「 AM 」「 PM 」「午前」「午後」など。
 			"$17",
 			"$18",
 			"$19",
+			"$20",
 			"FS",
 			"OFS",
 			"NF",
@@ -1793,17 +1839,21 @@ tt 時刻マーカー。「 AM 」「 PM 」「午前」「午後」など。
 			"BREAK",
 			"VERIFY",
 			"SET",
-			"PROMPT",
-			"PATH",
+//			"PROMPT",	//Oct. 31, 2000 JEPRO この2つは既に登録されているので省略
+//			"PATH",
 			"EXIT",
 			"CTTY",
 			"ECHO",
+			"@ECHO",	//Oct. 31, 2000 JEPRO '@' を強調可能にしたので追加
 			"LOCK",
 			"UNLOCK",
 			"GOTO",
 			"SHIFT",
 			"IF",
 			"FOR",
+			"DO",	//Nov. 2, 2000 JEPRO 追加
+			"IN",	//Nov. 2, 2000 JEPRO 追加
+			"ELSE",	//Nov. 2, 2000 JEPRO 追加 Win2000で使える
 			"CLS",
 			"TRUENAME",
 			"LOADHIGH",
@@ -2175,186 +2225,535 @@ tt 時刻マーカー。「 AM 」「 PM 」「午前」「午後」など。
 
 
 		static const char*	ppszKeyWordsTEX[] = {
-			"begin",
-			"documentclass",
-			"usepackage",
-			"pagestyle",
-			"pagenumber",
-			"setcounter",
-			"def",
-			"newcommand",
-			"chapter",
-			"section",
-			"subsection",
-			"eqnarray",
-			"figure",
-			"pagenumbering",
-			"title",
-			"author",
-			"document",
-			"maketitle",
-			"input",
-			"tableofcontents",
-			"listoffigures",
-			"include",
-			"label",
-			"ref",
-			"pageref",
-			"thebibliography",
-			"sim",
-			"equiv",
-			"end",
-			"subsubsection",
-			"minipage",
-			"center",
-			"caption",
-			"includegraphics",
-			"linewidth",
-			"mathrm",
-			"par",
-			"nonumber",
-			"mit",
-			"alpha",
-			"beta",
-			"gamma",
-			"delta",
-			"epsilon",
-			"zeta",
-			"eta",
-			"theta",
-			"iota",
-			"kappa",
-			"lambda",
-			"mu",
-			"nu",
-			"xi",
-			"pi",
-			"rho",
-			"sigma",
-			"tau",
-			"upsilon",
-			"phi",
-			"chi",
-			"psi",
-			"omega",
-			"varepsilon",
-			"vartheta",
-			"varpi",
-			"varrho",
-			"varsigma",
-			"varphi",
-			"Gamma",
-			"Delta",
-			"Theta",
-			"Lambda",
-			"Xi",
-			"Pi",
-			"Sigma",
-			"Upsilon",
-			"Phi",
-			"Psi",
-			"Omega",
-			"timex",
-			"ast",
-			"wr",
-			"cdot",
-			"uplus",
-			"oplus",
-			"div",
-			"star",
-			"setminus",
-			"bullet",
-			"circ",
-			"backslash",
-			"rangle",
-			"langle",
-			"triangle",
-			"nabla",
-			"infty",
-			"angle",
-			"heartsuit",
-			"frac",
-			"natural",
-			"bot",
-			"sharp",
-			"imath",
-			"jmath",
-			"hbar",
-			"forall",
-			"exists",
-			"clubsuit",
-			"spadesuit",
-			"diamondsuit",
-			"ll",
-			"gg",
-			"perp",
-			"parallel",
-			"cong",
-			"simeq",
-			"propt",
-			"not",
-			"longrightarrow",
-			"longleftarrow",
-			"int",
-			"oint",
-			"sum",
-			"sin",
-			"cos",
-			"exp",
-			"ln",
-			"log",
-			"tan",
-			"sqrt",
-			"table",
-			"tabular",
-			"hline",
-			"wrapfigure",
-			"mbox",
-			"times",
-			"bibitem",
-			"itshape",
-			"bigskip",
-			"partial",
-			"bigl",
-			"bigr",
-			"itemize",
-			"noindent",
-			"item",
-			"enumerate",
-			"pm",
-			"LaTeX",
-			"textrm",
-			"textsf",
-			"texttt",
-			"textmd",
-			"textbf",
-			"textit",
-			"textsl",
-			"textsc",
-			"textmc",
-			"textgt",
-			"large",
-			"Large",
-			"textless",
-			"textgreater",
-			"TeX",
-			"LaTeX2e",
-			"textbar",
-			"dag",
-			"oe",
-			"OE",
-			"ae",
-			"aa",
-			"AA",
-			"mp",
-			"vspace",
-			"hspace",
-			"medskip",
-			"smallskip",
-			"vfill",
-			"vfil",
-			"hfill",
-			"hfil"
+			"error",
+			"Warning",
+//			"center",
+//			"document",
+//			"enumerate",
+//			"eqnarray",
+//			"figure",
+//			"itemize",
+//			"minipage",
+//			"tabbing",
+//			"table",
+//			"tabular",
+//			"\\!",
+//			"\\#",
+//			"\\%",
+//			"\\&",
+//			"\\(",
+//			"\\)",
+//			"\\+",
+//			"\\,",
+//			"\\-",
+//			"\\:",
+//			"\\;",
+//			"\\<",
+//			"\\=",
+//			"\\>",
+			"\\aa",
+			"\\AA",
+			"\\acute",
+			"\\addcontentsline",
+			"\\addtocounter",
+			"\\addtolength",
+			"\\ae",
+			"\\AE",
+			"\\aleph",
+			"\\alpha",
+			"\\alph",
+			"\\Alph",
+			"\\and",
+			"\\angle",
+			"\\appendix",
+			"\\approx",
+			"\\arabic",
+			"\\arccos",
+			"\\arctan",
+			"\\arg",
+			"\\arrayrulewidth",
+			"\\arraystretch",
+			"\\ast",
+			"\\atop",
+			"\\author",
+			"\\b",
+			"\\backslash",
+			"\\bar",
+			"\\baselineskip",
+			"\\baselinestretch",
+			"\\begin",
+			"\\beta",
+			"\\bf",
+			"\\bibitem",
+			"\\bibliography",
+			"\\bibliographystyle",
+			"\\big",
+			"\\Big",
+			"\\bigcap",
+			"\\bigcirc",
+			"\\bigcup",
+			"\\bigg",
+			"\\Bigg",
+			"\\Biggl",
+			"\\Biggm",
+			"\\biggl",
+			"\\biggm",
+			"\\biggr",
+			"\\Biggr",
+			"\\bigl",
+			"\\bigm",
+			"\\Bigm",
+			"\\Bigl",
+			"\\bigodot",
+			"\\bigoplus",
+			"\\bigotimes",
+			"\\bigr",
+			"\\Bigr",
+			"\\bigskip",
+			"\\bigtriangledown",
+			"\\bigtriangleup",
+			"\\boldmath",
+			"\\bot",
+			"\\Box",
+			"\\brace",
+			"\\breve",
+			"\\bullet",
+			"\\bye",
+			"\\c",
+			"\\cal",
+			"\\cap",
+			"\\caption",
+			"\\cc",
+			"\\cdot",
+			"\\cdots",
+			"\\centering",
+			"\\chapter",
+			"\\check",
+			"\\chi",
+			"\\choose",
+			"\\circ",
+			"\\circle",
+			"\\cite",
+			"\\clearpage",
+			"\\cline",
+			"\\closing",
+			"\\clubsuit",
+			"\\colon",
+			"\\columnsep",
+			"\\columnseprule",
+			"\\cong",
+			"\\cot",
+			"\\coth",
+			"\\cr",
+			"\\cup",
+			"\\d",
+			"\\dag",
+			"\\dagger",
+			"\\date",
+			"\\dashbox",
+			"\\ddag",
+			"\\ddot",
+			"\\ddots",
+			"\\def",
+			"\\deg",
+			"\\delta",
+			"\\Delta",
+			"\\det",
+			"\\diamond",
+			"\\diamondsuit",
+			"\\dim",
+			"\\displaystyle",
+			"\\documentclass",
+			"\\documentstyle",
+			"\\dot",
+			"\\doteq",
+			"\\dotfill",
+			"\\Downarrow",
+			"\\downarrow",
+			"\\ell",
+			"\\em",
+			"\\emptyset",
+			"\\encl",
+			"\\end",
+			"\\enspace",
+			"\\enskip",
+			"\\epsilon",
+			"\\eqno",
+			"\\equiv",
+			"\\evensidemargin",
+			"\\eta",
+			"\\exists",
+			"\\exp",
+			"\\fbox",
+			"\\fboxrule",
+			"\\flat",
+			"\\footnote",
+			"\\footnotesize",
+			"\\forall",
+			"\\frac",
+			"\\frame",
+			"\\framebox",
+			"\\gamma",
+			"\\Gamma",
+			"\\gcd",
+			"\\ge",
+			"\\geq",
+			"\\gets",
+			"\\gg",
+			"\\grave",
+			"\\gt",
+			"\\H",
+			"\\hat",
+			"\\hbar",
+			"\\hbox",
+			"\\headsep",
+			"\\heartsuit",
+			"\\hfil",
+			"\\hfill",
+			"\\hline",
+			"\\hom",
+			"\\hrulefill",
+			"\\hskip",
+			"\\hspace",
+			"\\hspace*",
+			"\\huge",
+			"\\Huge",
+			"\\i",
+			"\\Im",
+			"\\imath",
+			"\\in",
+			"\\include",
+			"\\includegraphics",
+			"\\includeonly",
+			"\\indent",
+			"\\index",
+			"\\inf",
+			"\\infty",
+			"\\input",
+			"\\int",
+			"\\iota",
+			"\\it",
+			"\\item",
+			"\\itemsep",
+			"\\j",
+			"\\jmath",
+			"\\kappa",
+			"\\ker",
+			"\\kern",
+			"\\kill",
+			"\\l",
+			"\\L",
+			"\\label",
+			"\\lambda",
+			"\\Lambda",
+			"\\land",
+			"\\langle",
+			"\\large",
+			"\\Large",
+			"\\LARGE",
+			"\\LaTeX",
+			"\\LaTeXe",
+			"\\lceil",
+			"\\ldots",
+			"\\le",
+			"\\leftarrow",
+			"\\Leftarrow",
+			"\\lefteqn",
+			"\\leftharpoondown",
+			"\\leftharpoonup",
+			"\\leftmargin",
+			"\\leftrightarrow",
+			"\\Leftrightarrow",
+			"\\leq",
+			"\\leqno",
+			"\\lfloor",
+			"\\lg",
+			"\\lim",
+			"\\liminf",
+			"\\limsup",
+			"\\line",
+			"\\linebreak",
+			"\\linewidth",
+			"\\listoffigures",
+			"\\listoftables",
+			"\\ll",
+			"\\llap",
+			"\\ln",
+			"\\lnot",
+			"\\log",
+			"\\longleftarrow",
+			"\\Longleftarrow",
+			"\\longleftrightarrow",
+			"\\Longleftrightarrow",
+			"\\longrightarrow",
+			"\\Longrightarrow",
+			"\\lor",
+			"\\lower",
+			"\\magstep",
+			"\\makeatletter",
+			"\\makeatother",
+			"\\makebox",
+			"\\makeindex",
+			"\\maketitle",
+			"\\makelabels",
+			"\\mathop",
+			"\\mapsto",
+			"\\markboth",
+			"\\markright",
+			"\\mathstrut",
+			"\\max",
+			"\\mbox",
+			"\\mc",
+			"\\medskip",
+			"\\mid",
+			"\\min",
+			"\\mit",
+			"\\mp",
+			"\\mu",
+			"\\multicolumn",
+			"\\multispan",
+			"\\multiput",
+			"\\nabla",
+			"\\natural",
+			"\\ne",
+			"\\neg",
+			"\\nearrow",
+			"\\nwarrow",
+			"\\neq",
+			"\\newblock",
+			"\\newcommand",
+			"\\newenvironment",
+			"\\newfont",
+			"\\newlength",
+			"\\newline",
+			"\\newpage",
+			"\\newtheorem",
+			"\\ni",
+			"\\noalign",
+			"\\noindent",
+			"\\nolimits",
+			"\\nolinebreak",
+			"\\nonumber",
+			"\\nopagebreak",
+			"\\normalsize",
+			"\\not",
+			"\\notice",
+			"\\notin",
+			"\\nu",
+			"\\o",
+			"\\O",
+			"\\oddsidemargin",
+			"\\odot",
+			"\\oe",
+			"\\OE",
+			"\\oint",
+			"\\Omega",
+			"\\omega",
+			"\\ominus",
+			"\\oplus",
+			"\\opening",
+			"\\otimes",
+			"\\owns",
+			"\\overleftarrow",
+			"\\overline",
+			"\\overrightarrow",
+			"\\overvrace",
+			"\\oval",
+			"\\P",
+			"\\pagebreak",
+			"\\pagenumbering",
+			"\\pageref",
+			"\\pagestyle",
+			"\\par",
+			"\\parallel",
+			"\\paragraph",
+			"\\parbox",
+			"\\parindent",
+			"\\parskip",
+			"\\partial",
+			"\\perp",
+			"\\phi",
+			"\\Phi",
+			"\\pi",
+			"\\Pi",
+			"\\pm",
+			"\\Pr",
+			"\\prime",
+			"\\printindex",
+			"\\prod",
+			"\\propto",
+			"\\ps",
+			"\\psi",
+			"\\Psi",
+			"\\put",
+			"\\qquad",
+			"\\quad",
+			"\\raisebox",
+			"\\rangle",
+			"\\rceil",
+			"\\Re",
+			"\\ref",
+			"\\renewcommand",
+			"\\renewenvironment",
+			"\\rfloor",
+			"\\rho",
+			"\\right",
+			"\\rightarrow",
+			"\\Rightarrow",
+			"\\rightharpoondown",
+			"\\rightharpoonup",
+			"\\rightleftharpoonup",
+			"\\rightmargin",
+			"\\rm",
+			"\\rule",
+			"\\roman",
+			"\\Roman",
+			"\\S",
+			"\\samepage",
+			"\\sb",
+			"\\sc",
+			"\\scriptsize",
+			"\\scriptscriptstyle",
+			"\\scriptstyle",
+			"\\searrow",
+			"\\sec",
+			"\\section",
+			"\\setcounter",
+			"\\setlength",
+			"\\settowidth",
+			"\\setminus",
+			"\\sf",
+			"\\sharp",
+			"\\sigma",
+			"\\Sigma",
+			"\\signature",
+			"\\sim",
+			"\\simeq",
+			"\\sin",
+			"\\sinh",
+			"\\sl",
+			"\\sloppy",
+			"\\small",
+			"\\smash",
+			"\\smallskip",
+			"\\sp",
+			"\\spadesuit",
+			"\\special",
+			"\\sqrt",
+			"\\ss",
+			"\\star",
+			"\\stackrel",
+			"\\strut",
+			"\\subparagraph",
+			"\\subsection",
+			"\\subset",
+			"\\subseteq",
+			"\\subsubsection",
+			"\\sum",
+			"\\sup",
+			"\\supset",
+			"\\supseteq",
+			"\\swarrow",
+			"\\t",
+			"\\tableofcontents",
+			"\\tan",
+			"\\tanh",
+			"\\tau",
+			"\\TeX",
+			"\\textbf",
+			"\\textgreater",
+			"\\textgt",
+			"\\textheight",
+			"\\textit",
+			"\\textless",
+			"\\textmc",
+			"\\textrm",
+			"\\textsc",
+			"\\textsf",
+			"\\textsl",
+			"\\textstyle",
+			"\\texttt",
+			"\\textwidth",
+			"\\thanks",
+			"\\thebibliography",
+			"\\theequation",
+			"\\thepage",
+			"\\thesection",
+			"\\theta",
+			"\\Theta",
+			"\\thicklines",
+			"\\thinlines",
+			"\\thinspace",
+			"\\thisepage",
+			"\\thisepagestyle",
+			"\\tie",
+			"\\tilde",
+			"\\times",
+			"\\tiny",
+			"\\title",
+			"\\titlepage",
+			"\\to",
+			"\\toaddress",
+			"\\topmargin",
+			"\\triangle",
+			"\\tt",
+			"\\twocolumn",
+			"\\u",
+			"\\underline",
+			"\\undervrace",
+			"\\unitlength",
+			"\\Uparrow",
+			"\\uparrow",
+			"\\updownarrow",
+			"\\Updownarrow",
+			"\\uplus",
+			"\\upsilon",
+			"\\Upsilon",
+			"\\usepackage",
+			"\\v",
+			"\\varepsilon",
+			"\\varphi",
+			"\\varpi",
+			"\\varrho",
+			"\\varsigma",
+			"\\vartheta",
+			"\\vbox",
+			"\\vcenter",
+			"\\vec",
+			"\\vector",
+			"\\vee",
+			"\\verb",
+			"\\verb*",
+			"\\verbatim",
+			"\\vert",
+			"\\Vert",
+			"\\vfil",
+			"\\vfill",
+			"\\vrule",
+			"\\vskip",
+			"\\vspace",
+			"\\vspace*",
+			"\\wedge",
+			"\\widehat",
+			"\\widetilde",
+			"\\wp",
+			"\\wr",
+			"\\wrapfigure",
+			"\\xi",
+			"\\Xi",
+			"\\zeta"//,
+//			"\\[",
+//			"\\\"",
+//			"\\\'",
+//			"\\\\",
+//			"\\]",
+//			"\\^",
+//			"\\_",
+//			"\\`",
+//			"\\{",
+//			"\\|",
+//			"\\}",
+//			"\\~",
 		};
 		static int nKeyWordsTEX_Num =  sizeof( ppszKeyWordsTEX ) / sizeof( ppszKeyWordsTEX[0] );
 		for( i = 0; i < nKeyWordsTEX_Num; ++i ){

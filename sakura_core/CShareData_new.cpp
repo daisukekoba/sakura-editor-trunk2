@@ -25,22 +25,22 @@
 /* レジストリ項目　値の読み込み/書き込み */
 LONG CShareData::MY_RegVal_IO(
 	BOOL			bRead,
-	HKEY			hKey,			// handle of key to set value for  
-	LPCTSTR			lpValueName,	// address of value to set 
-	int				nRegCnvID,		// 
-	BYTE *			lpDataSrc,		// address of value data 
+	HKEY			hKey,			// handle of key to set value for
+	LPCTSTR			lpValueName,	// address of value to set
+	int				nRegCnvID,		//
+	BYTE *			lpDataSrc,		// address of value data
 	DWORD			cbDataSrc 		// size of value data,
 )
 {
 	LONG			lRet;
 	DWORD			dwType;
-	CONST BYTE *	pData;		// address of value data 
-	DWORD			nDataLen;	// size of value data 
+	CONST BYTE *	pData;		// address of value data
+	DWORD			nDataLen;	// size of value data
 //	char			szValueStr[1024];
 	char			szValueStr[MAX_SETNUM * MAX_KEYWORDNUM * ( MAX_KEYWORDLEN ) + 1];
 	int*			pnWork;
 //	if( NULL == lpDataSrc ){
-//		MYTRACE( "MY_RegVal_IO() NULL == lpDataSrc\n" );	
+//		MYTRACE( "MY_RegVal_IO() NULL == lpDataSrc\n" );
 //	}
 //	szValueStr[0] = '\0';
 	/* 「読み込み」 か 「書き込み」か */
@@ -66,15 +66,15 @@ LONG CShareData::MY_RegVal_IO(
 		if( ERROR_SUCCESS != lRet ){
 //			char*	pszMsgBuf;
 //			::FormatMessage(
-//				FORMAT_MESSAGE_ALLOCATE_BUFFER | 
-//				FORMAT_MESSAGE_FROM_SYSTEM | 
+//				FORMAT_MESSAGE_ALLOCATE_BUFFER |
+//				FORMAT_MESSAGE_FROM_SYSTEM |
 //				FORMAT_MESSAGE_IGNORE_INSERTS,
 //				NULL,
 //				::GetLastError(),
 //				MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT), // デフォルト言語
 //				(LPTSTR) &pszMsgBuf,
 //				0,
-//				NULL 
+//				NULL
 //			);
 //			::MYMESSAGEBOX(	NULL, MB_OK | MB_ICONINFORMATION | MB_TOPMOST, "作者に教えて欲しいエラー",
 //				"レジストリ項目　値の読み込み失敗 lpValueName=[%s]%s\n", lpValueName, pszMsgBuf
@@ -128,15 +128,15 @@ LONG CShareData::MY_RegVal_IO(
 		if( ERROR_SUCCESS != lRet ){
 			char*	pszMsgBuf;
 			::FormatMessage(
-				FORMAT_MESSAGE_ALLOCATE_BUFFER | 
-				FORMAT_MESSAGE_FROM_SYSTEM | 
+				FORMAT_MESSAGE_ALLOCATE_BUFFER |
+				FORMAT_MESSAGE_FROM_SYSTEM |
 				FORMAT_MESSAGE_IGNORE_INSERTS,
 				NULL,
 				::GetLastError(),
 				MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT), // デフォルト言語
 				(LPTSTR) &pszMsgBuf,
 				0,
-				NULL 
+				NULL
 			);
 			::MYMESSAGEBOX(	NULL, MB_OK | MB_ICONINFORMATION | MB_TOPMOST, "作者に教えて欲しいエラー",
 				"レジストリ項目　値の書き込み()失敗 lpValueName=[%s]%s\n", lpValueName, pszMsgBuf
@@ -170,7 +170,7 @@ BOOL CShareData::ShareData_IO( BOOL bRead )
 	BOOL			bRet;
 	int				nMemLen;
 	char*			pszMem;
-	
+
 //	DWORD			dwTimeStart;
 //	DWORD			dwTime;
 	CRunningTimer	cRunningTimer;
@@ -187,7 +187,7 @@ BOOL CShareData::ShareData_IO( BOOL bRead )
 	cRunningTimer.Reset();
 //	dwTimeStart = cRunningTimer.Read();
 //	dwTime = dwTimeStart;
-	
+
 	wsprintf( szKey, "%s", pszKeyRoot );
 	if( bRead ){
 		/* レジストリの存在チェック */
@@ -291,7 +291,7 @@ BOOL CShareData::ShareData_IO( BOOL bRead )
 	MY_RegVal_IO( bRead, hkReg, "szMACROFOLDER", REGCNV_SZ2SZ, (BYTE *)/*&*/m_pShareData->m_szMACROFOLDER, 0 );
 	/* 設定インポート用フォルダ */
 	MY_RegVal_IO( bRead, hkReg, "szIMPORTFOLDER", REGCNV_SZ2SZ, (BYTE *)/*&*/m_pShareData->m_szIMPORTFOLDER, 0 );
-	
+
 	::RegCloseKey( hkReg );
 
 
@@ -331,7 +331,7 @@ BOOL CShareData::ShareData_IO( BOOL bRead )
 		MY_RegVal_IO( bRead, hkReg, "bBackUp", REGCNV_INT2SZ, (BYTE *)&m_pShareData->m_Common.m_bBackUp, 0 );
 		MY_RegVal_IO( bRead, hkReg, "bBackUpDialog", REGCNV_INT2SZ, (BYTE *)&m_pShareData->m_Common.m_bBackUpDialog, 0 );
 		MY_RegVal_IO( bRead, hkReg, "bBackUpFolder", REGCNV_INT2SZ, (BYTE *)&m_pShareData->m_Common.m_bBackUpFolder, 0 );
-		
+
 		if( !bRead ){
 			int	nDummy;
 			int	nCharChars;
@@ -356,7 +356,7 @@ BOOL CShareData::ShareData_IO( BOOL bRead )
 			}
 		}
 
-		
+
 		MY_RegVal_IO( bRead, hkReg, "nBackUpType", REGCNV_INT2SZ, (BYTE *)&m_pShareData->m_Common.m_nBackUpType, 0 );
 		MY_RegVal_IO( bRead, hkReg, "bBackUpType2_Opt1", REGCNV_INT2SZ, (BYTE *)&m_pShareData->m_Common.m_nBackUpType_Opt1, 0 );
 		MY_RegVal_IO( bRead, hkReg, "bBackUpType2_Opt2", REGCNV_INT2SZ, (BYTE *)&m_pShareData->m_Common.m_nBackUpType_Opt2, 0 );
@@ -367,7 +367,7 @@ BOOL CShareData::ShareData_IO( BOOL bRead )
 		MY_RegVal_IO( bRead, hkReg, "nFileShareMode", REGCNV_INT2SZ, (BYTE *)&m_pShareData->m_Common.m_nFileShareMode, 0 );
 		MY_RegVal_IO( bRead, hkReg, "szExtHelp1", REGCNV_SZ2SZ, (BYTE *)/*&*/m_pShareData->m_Common.m_szExtHelp1, 0 );
 		MY_RegVal_IO( bRead, hkReg, "szExtHtmlHelp", REGCNV_SZ2SZ, (BYTE *)/*&*/m_pShareData->m_Common.m_szExtHtmlHelp, 0 );
-		
+
 		MY_RegVal_IO( bRead, hkReg, "nMRUArrNum_MAX", REGCNV_INT2SZ, (BYTE *)&m_pShareData->m_Common.m_nMRUArrNum_MAX, 0 );
 		MY_RegVal_IO( bRead, hkReg, "nOPENFOLDERArrNum_MAX", REGCNV_INT2SZ, (BYTE *)&m_pShareData->m_Common.m_nOPENFOLDERArrNum_MAX, 0 );
 		MY_RegVal_IO( bRead, hkReg, "bDispTOOLBAR", REGCNV_INT2SZ, (BYTE *)&m_pShareData->m_Common.m_bDispTOOLBAR, 0 );
@@ -396,9 +396,9 @@ BOOL CShareData::ShareData_IO( BOOL bRead )
 			}
 		}
 
-		
-		
-		
+
+
+
 		::RegCloseKey( hkReg );
 
 
@@ -420,7 +420,7 @@ BOOL CShareData::ShareData_IO( BOOL bRead )
 			}
 		}
 		::RegCloseKey( hkReg );
-	
+
 
 		/* カスタムメニュー */
 		wsprintf( szKey, "%s\\Common\\CustMenu", pszKeyRoot );
@@ -444,7 +444,7 @@ BOOL CShareData::ShareData_IO( BOOL bRead )
 		::RegCloseKey( hkReg );
 //	}
 
-//	/* 変更フラグ　フォント */
+//	/* 変更フラグ フォント */
 //	if( !bRead && FALSE == m_pShareData->m_bFontModify ){
 //		/* 書き込みしない */
 //	}else{
@@ -454,28 +454,28 @@ BOOL CShareData::ShareData_IO( BOOL bRead )
 			bRet = FALSE;
 			goto Section02;
 		}
-		MY_RegVal_IO( bRead, hkReg, "lf.lfHeight        ", REG_BINARY, (BYTE *)&m_pShareData->m_Common.m_lf.lfHeight        , sizeof( m_pShareData->m_Common.m_lf.lfHeight         ) );
-		MY_RegVal_IO( bRead, hkReg, "lf.lfWidth         ", REG_BINARY, (BYTE *)&m_pShareData->m_Common.m_lf.lfWidth         , sizeof( m_pShareData->m_Common.m_lf.lfWidth          ) );
-		MY_RegVal_IO( bRead, hkReg, "lf.lfEscapement    ", REG_BINARY, (BYTE *)&m_pShareData->m_Common.m_lf.lfEscapement    , sizeof( m_pShareData->m_Common.m_lf.lfEscapement     ) );
-		MY_RegVal_IO( bRead, hkReg, "lf.lfOrientation   ", REG_BINARY, (BYTE *)&m_pShareData->m_Common.m_lf.lfOrientation   , sizeof( m_pShareData->m_Common.m_lf.lfOrientation    ) );
-		MY_RegVal_IO( bRead, hkReg, "lf.lfWeight        ", REG_BINARY, (BYTE *)&m_pShareData->m_Common.m_lf.lfWeight        , sizeof( m_pShareData->m_Common.m_lf.lfWeight         ) );
-		MY_RegVal_IO( bRead, hkReg, "lf.lfItalic        ", REG_BINARY, (BYTE *)&m_pShareData->m_Common.m_lf.lfItalic        , sizeof( m_pShareData->m_Common.m_lf.lfItalic         ) );
-		MY_RegVal_IO( bRead, hkReg, "lf.lfUnderline     ", REG_BINARY, (BYTE *)&m_pShareData->m_Common.m_lf.lfUnderline     , sizeof( m_pShareData->m_Common.m_lf.lfUnderline      ) );
-		MY_RegVal_IO( bRead, hkReg, "lf.lfStrikeOut     ", REG_BINARY, (BYTE *)&m_pShareData->m_Common.m_lf.lfStrikeOut     , sizeof( m_pShareData->m_Common.m_lf.lfStrikeOut      ) );
-		MY_RegVal_IO( bRead, hkReg, "lf.lfCharSet       ", REG_BINARY, (BYTE *)&m_pShareData->m_Common.m_lf.lfCharSet       , sizeof( m_pShareData->m_Common.m_lf.lfCharSet        ) );
-		MY_RegVal_IO( bRead, hkReg, "lf.lfOutPrecision  ", REG_BINARY, (BYTE *)&m_pShareData->m_Common.m_lf.lfOutPrecision  , sizeof( m_pShareData->m_Common.m_lf.lfOutPrecision   ) );
-		MY_RegVal_IO( bRead, hkReg, "lf.lfClipPrecision ", REG_BINARY, (BYTE *)&m_pShareData->m_Common.m_lf.lfClipPrecision , sizeof( m_pShareData->m_Common.m_lf.lfClipPrecision  ) );
-		MY_RegVal_IO( bRead, hkReg, "lf.lfQuality       ", REG_BINARY, (BYTE *)&m_pShareData->m_Common.m_lf.lfQuality       , sizeof( m_pShareData->m_Common.m_lf.lfQuality        ) );
-		MY_RegVal_IO( bRead, hkReg, "lf.lfPitchAndFamily", REG_BINARY, (BYTE *)&m_pShareData->m_Common.m_lf.lfPitchAndFamily, sizeof( m_pShareData->m_Common.m_lf.lfPitchAndFamily ) );
-		MY_RegVal_IO( bRead, hkReg, "lf.lfFaceName", REGCNV_SZ2SZ, (BYTE *)/*&*/m_pShareData->m_Common.m_lf.lfFaceName, 0 );
-		MY_RegVal_IO( bRead, hkReg, "bFontIs_FIXED_PITCH", REGCNV_INT2SZ, (BYTE *)&m_pShareData->m_Common.m_bFontIs_FIXED_PITCH, 0 );
+		MY_RegVal_IO( bRead, hkReg, "lf.lfHeight"			, REG_BINARY, (BYTE *)&m_pShareData->m_Common.m_lf.lfHeight			, sizeof( m_pShareData->m_Common.m_lf.lfHeight			) );
+		MY_RegVal_IO( bRead, hkReg, "lf.lfWidth"			, REG_BINARY, (BYTE *)&m_pShareData->m_Common.m_lf.lfWidth			, sizeof( m_pShareData->m_Common.m_lf.lfWidth			) );
+		MY_RegVal_IO( bRead, hkReg, "lf.lfEscapement"		, REG_BINARY, (BYTE *)&m_pShareData->m_Common.m_lf.lfEscapement		, sizeof( m_pShareData->m_Common.m_lf.lfEscapement		) );
+		MY_RegVal_IO( bRead, hkReg, "lf.lfOrientation"		, REG_BINARY, (BYTE *)&m_pShareData->m_Common.m_lf.lfOrientation	, sizeof( m_pShareData->m_Common.m_lf.lfOrientation		) );
+		MY_RegVal_IO( bRead, hkReg, "lf.lfWeight"			, REG_BINARY, (BYTE *)&m_pShareData->m_Common.m_lf.lfWeight			, sizeof( m_pShareData->m_Common.m_lf.lfWeight			) );
+		MY_RegVal_IO( bRead, hkReg, "lf.lfItalic"			, REG_BINARY, (BYTE *)&m_pShareData->m_Common.m_lf.lfItalic			, sizeof( m_pShareData->m_Common.m_lf.lfItalic			) );
+		MY_RegVal_IO( bRead, hkReg, "lf.lfUnderline"		, REG_BINARY, (BYTE *)&m_pShareData->m_Common.m_lf.lfUnderline		, sizeof( m_pShareData->m_Common.m_lf.lfUnderline		) );
+		MY_RegVal_IO( bRead, hkReg, "lf.lfStrikeOut"		, REG_BINARY, (BYTE *)&m_pShareData->m_Common.m_lf.lfStrikeOut		, sizeof( m_pShareData->m_Common.m_lf.lfStrikeOut		) );
+		MY_RegVal_IO( bRead, hkReg, "lf.lfCharSet"			, REG_BINARY, (BYTE *)&m_pShareData->m_Common.m_lf.lfCharSet		, sizeof( m_pShareData->m_Common.m_lf.lfCharSet			) );
+		MY_RegVal_IO( bRead, hkReg, "lf.lfOutPrecision"		, REG_BINARY, (BYTE *)&m_pShareData->m_Common.m_lf.lfOutPrecision	, sizeof( m_pShareData->m_Common.m_lf.lfOutPrecision	) );
+		MY_RegVal_IO( bRead, hkReg, "lf.lfClipPrecision"	, REG_BINARY, (BYTE *)&m_pShareData->m_Common.m_lf.lfClipPrecision	, sizeof( m_pShareData->m_Common.m_lf.lfClipPrecision	) );
+		MY_RegVal_IO( bRead, hkReg, "lf.lfQuality"			, REG_BINARY, (BYTE *)&m_pShareData->m_Common.m_lf.lfQuality		, sizeof( m_pShareData->m_Common.m_lf.lfQuality			) );
+		MY_RegVal_IO( bRead, hkReg, "lf.lfPitchAndFamily"	, REG_BINARY, (BYTE *)&m_pShareData->m_Common.m_lf.lfPitchAndFamily, sizeof( m_pShareData->m_Common.m_lf.lfPitchAndFamily	) );
+		MY_RegVal_IO( bRead, hkReg, "lf.lfFaceName"			, REGCNV_SZ2SZ , (BYTE *)/*&*/m_pShareData->m_Common.m_lf.lfFaceName, 0 );
+		MY_RegVal_IO( bRead, hkReg, "bFontIs_FIXED_PITCH"	, REGCNV_INT2SZ, (BYTE *)&m_pShareData->m_Common.m_bFontIs_FIXED_PITCH, 0 );
 		::RegCloseKey( hkReg );
 //	}
 
 //	MYTRACE( "レジストリ処理 2 所要時間(ミリ秒) = %d\n", cRunningTimer.Read() );
 //	cRunningTimer.Reset();
 
-//	/* 変更フラグ　キー割り当て */
+//	/* 変更フラグ キー割り当て */
 //	if( !bRead && FALSE == m_pShareData->m_bKeyBindModify ){
 //		/* 書き込みしない */
 //	}else{
@@ -492,7 +492,7 @@ BOOL CShareData::ShareData_IO( BOOL bRead )
 //				/* 書き込みしない */
 //				continue;
 //			}
-			
+
 //			wsprintf( szKeyName, "Key[%03d].nKC", i );
 //			MY_RegVal_IO( bRead, hkReg, szKeyName, REGCNV_INT2SZ, (BYTE *)&m_pShareData->m_pKeyNameArr[i].m_nKeyCode, 0 );
 //			wsprintf( szKeyName, "Key[%03d].szKN", i );
@@ -509,7 +509,7 @@ BOOL CShareData::ShareData_IO( BOOL bRead )
 			wsprintf( szKeyName, "K[%03d].", i );
 			if( bRead ){
 				if( ERROR_SUCCESS == MY_RegVal_IO( bRead, hkReg, szKeyName, REGCNV_SZ2SZ, (BYTE *)szKeyData, 0 ) ){
-					wsscanf( szKeyData, "%d,%d,%d,%d,%d,%d,%d,%d", 
+					wsscanf( szKeyData, "%d,%d,%d,%d,%d,%d,%d,%d",
 						&m_pShareData->m_pKeyNameArr[i].m_nFuncCodeArr[0],
 						&m_pShareData->m_pKeyNameArr[i].m_nFuncCodeArr[1],
 						&m_pShareData->m_pKeyNameArr[i].m_nFuncCodeArr[2],
@@ -540,7 +540,7 @@ BOOL CShareData::ShareData_IO( BOOL bRead )
 
 //	MYTRACE( "レジストリ処理 3 所要時間(ミリ秒) = %d\n", cRunningTimer.Read() );
 //	cRunningTimer.Reset();
-	
+
 //	/* 変更フラグ(印刷の全体) */
 //	if( !bRead && FALSE == m_pShareData->m_bPrintSettingModify ){
 //		/* 書き込みしない */
@@ -560,20 +560,20 @@ BOOL CShareData::ShareData_IO( BOOL bRead )
 			static const char* pszForm = "%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d";
 			if( bRead ){
 				if( ERROR_SUCCESS == MY_RegVal_IO( bRead, hkReg, szKeyName, REGCNV_SZ2SZ, (BYTE *)szKeyData, 0 ) ){
-					sscanf( szKeyData, pszForm, 
-						&m_pShareData->m_PrintSettingArr[i].m_nPrintFontWidth       ,
-						&m_pShareData->m_PrintSettingArr[i].m_nPrintFontHeight      ,
-						&m_pShareData->m_PrintSettingArr[i].m_nPrintDansuu          ,
-						&m_pShareData->m_PrintSettingArr[i].m_nPrintDanSpace        ,
-						&m_pShareData->m_PrintSettingArr[i].m_nPrintLineSpacing     ,
-						&m_pShareData->m_PrintSettingArr[i].m_nPrintMarginTY        ,
-						&m_pShareData->m_PrintSettingArr[i].m_nPrintMarginBY        ,
-						&m_pShareData->m_PrintSettingArr[i].m_nPrintMarginLX        ,
-						&m_pShareData->m_PrintSettingArr[i].m_nPrintMarginRX        ,
+					sscanf( szKeyData, pszForm,
+						&m_pShareData->m_PrintSettingArr[i].m_nPrintFontWidth		,
+						&m_pShareData->m_PrintSettingArr[i].m_nPrintFontHeight		,
+						&m_pShareData->m_PrintSettingArr[i].m_nPrintDansuu			,
+						&m_pShareData->m_PrintSettingArr[i].m_nPrintDanSpace		,
+						&m_pShareData->m_PrintSettingArr[i].m_nPrintLineSpacing		,
+						&m_pShareData->m_PrintSettingArr[i].m_nPrintMarginTY		,
+						&m_pShareData->m_PrintSettingArr[i].m_nPrintMarginBY		,
+						&m_pShareData->m_PrintSettingArr[i].m_nPrintMarginLX		,
+						&m_pShareData->m_PrintSettingArr[i].m_nPrintMarginRX		,
 						&m_pShareData->m_PrintSettingArr[i].m_nPrintPaperOrientation,
-						&m_pShareData->m_PrintSettingArr[i].m_nPrintPaperSize       ,
-						&m_pShareData->m_PrintSettingArr[i].m_bPrintWordWrap        ,
-						&m_pShareData->m_PrintSettingArr[i].m_bPrintLineNumber		,      
+						&m_pShareData->m_PrintSettingArr[i].m_nPrintPaperSize		,
+						&m_pShareData->m_PrintSettingArr[i].m_bPrintWordWrap		,
+						&m_pShareData->m_PrintSettingArr[i].m_bPrintLineNumber		,
 						&m_pShareData->m_PrintSettingArr[i].m_bHeaderUse[0]			,
 						&m_pShareData->m_PrintSettingArr[i].m_bHeaderUse[1]			,
 						&m_pShareData->m_PrintSettingArr[i].m_bHeaderUse[2]			,
@@ -584,20 +584,20 @@ BOOL CShareData::ShareData_IO( BOOL bRead )
 					 );
 				}
 			}else{
-				wsprintf( szKeyData, pszForm, 
-					m_pShareData->m_PrintSettingArr[i].m_nPrintFontWidth       ,
-					m_pShareData->m_PrintSettingArr[i].m_nPrintFontHeight      ,
-					m_pShareData->m_PrintSettingArr[i].m_nPrintDansuu          ,
-					m_pShareData->m_PrintSettingArr[i].m_nPrintDanSpace        ,
-					m_pShareData->m_PrintSettingArr[i].m_nPrintLineSpacing     ,
-					m_pShareData->m_PrintSettingArr[i].m_nPrintMarginTY        ,
-					m_pShareData->m_PrintSettingArr[i].m_nPrintMarginBY        ,
-					m_pShareData->m_PrintSettingArr[i].m_nPrintMarginLX        ,
-					m_pShareData->m_PrintSettingArr[i].m_nPrintMarginRX        ,
-					m_pShareData->m_PrintSettingArr[i].m_nPrintPaperOrientation,
-					m_pShareData->m_PrintSettingArr[i].m_nPrintPaperSize       ,
-					m_pShareData->m_PrintSettingArr[i].m_bPrintWordWrap        ,
-					m_pShareData->m_PrintSettingArr[i].m_bPrintLineNumber		,		      
+				wsprintf( szKeyData, pszForm,
+					m_pShareData->m_PrintSettingArr[i].m_nPrintFontWidth		,
+					m_pShareData->m_PrintSettingArr[i].m_nPrintFontHeight		,
+					m_pShareData->m_PrintSettingArr[i].m_nPrintDansuu			,
+					m_pShareData->m_PrintSettingArr[i].m_nPrintDanSpace			,
+					m_pShareData->m_PrintSettingArr[i].m_nPrintLineSpacing		,
+					m_pShareData->m_PrintSettingArr[i].m_nPrintMarginTY			,
+					m_pShareData->m_PrintSettingArr[i].m_nPrintMarginBY			,
+					m_pShareData->m_PrintSettingArr[i].m_nPrintMarginLX			,
+					m_pShareData->m_PrintSettingArr[i].m_nPrintMarginRX			,
+					m_pShareData->m_PrintSettingArr[i].m_nPrintPaperOrientation	,
+					m_pShareData->m_PrintSettingArr[i].m_nPrintPaperSize		,
+					m_pShareData->m_PrintSettingArr[i].m_bPrintWordWrap			,
+					m_pShareData->m_PrintSettingArr[i].m_bPrintLineNumber		,
 					m_pShareData->m_PrintSettingArr[i].m_bHeaderUse[0]			,
 					m_pShareData->m_PrintSettingArr[i].m_bHeaderUse[1]			,
 					m_pShareData->m_PrintSettingArr[i].m_bHeaderUse[2]			,
@@ -607,29 +607,29 @@ BOOL CShareData::ShareData_IO( BOOL bRead )
 				);
 				MY_RegVal_IO( bRead, hkReg, szKeyName, REGCNV_SZ2SZ, (BYTE *)szKeyData, 0 );
 			}
-//			wsprintf( szKeyName, "PS[%02d].nFTW2"    , i ); MY_RegVal_IO( bRead, hkReg, szKeyName, REGCNV_INT2SZ, (BYTE *)&m_pShareData->m_PrintSettingArr[i].m_nPrintFontWidth        , 0 );
-//			wsprintf( szKeyName, "PS[%02d].nFTH2"    , i ); MY_RegVal_IO( bRead, hkReg, szKeyName, REGCNV_INT2SZ, (BYTE *)&m_pShareData->m_PrintSettingArr[i].m_nPrintFontHeight       , 0 );
-//			wsprintf( szKeyName, "PS[%02d].nDSu"     , i ); MY_RegVal_IO( bRead, hkReg, szKeyName, REGCNV_INT2SZ, (BYTE *)&m_pShareData->m_PrintSettingArr[i].m_nPrintDansuu           , 0 );
-//			wsprintf( szKeyName, "PS[%02d].nDSp2"    , i ); MY_RegVal_IO( bRead, hkReg, szKeyName, REGCNV_INT2SZ, (BYTE *)&m_pShareData->m_PrintSettingArr[i].m_nPrintDanSpace         , 0 );
-//			wsprintf( szKeyName, "PS[%02d].nLSp"     , i ); MY_RegVal_IO( bRead, hkReg, szKeyName, REGCNV_INT2SZ, (BYTE *)&m_pShareData->m_PrintSettingArr[i].m_nPrintLineSpacing      , 0 );
-//			wsprintf( szKeyName, "PS[%02d].nMGTY2"   , i ); MY_RegVal_IO( bRead, hkReg, szKeyName, REGCNV_INT2SZ, (BYTE *)&m_pShareData->m_PrintSettingArr[i].m_nPrintMarginTY         , 0 );
-//			wsprintf( szKeyName, "PS[%02d].nMGBY2"   , i ); MY_RegVal_IO( bRead, hkReg, szKeyName, REGCNV_INT2SZ, (BYTE *)&m_pShareData->m_PrintSettingArr[i].m_nPrintMarginBY         , 0 );
-//			wsprintf( szKeyName, "PS[%02d].nMGLX2"   , i ); MY_RegVal_IO( bRead, hkReg, szKeyName, REGCNV_INT2SZ, (BYTE *)&m_pShareData->m_PrintSettingArr[i].m_nPrintMarginLX         , 0 );
-//			wsprintf( szKeyName, "PS[%02d].nMGRX2"   , i ); MY_RegVal_IO( bRead, hkReg, szKeyName, REGCNV_INT2SZ, (BYTE *)&m_pShareData->m_PrintSettingArr[i].m_nPrintMarginRX         , 0 );
-//			wsprintf( szKeyName, "PS[%02d].nPOrient" , i ); MY_RegVal_IO( bRead, hkReg, szKeyName, REGCNV_INT2SZ, (BYTE *)&m_pShareData->m_PrintSettingArr[i].m_nPrintPaperOrientation , 0 );
-//			wsprintf( szKeyName, "PS[%02d].nPSize"   , i ); MY_RegVal_IO( bRead, hkReg, szKeyName, REGCNV_INT2SZ, (BYTE *)&m_pShareData->m_PrintSettingArr[i].m_nPrintPaperSize        , 0 );
-//			wsprintf( szKeyName, "PS[%02d].bWWrap"   , i ); MY_RegVal_IO( bRead, hkReg, szKeyName, REGCNV_INT2SZ, (BYTE *)&m_pShareData->m_PrintSettingArr[i].m_bPrintWordWrap         , 0 );
-//			wsprintf( szKeyName, "PS[%02d].bLNum"    , i ); MY_RegVal_IO( bRead, hkReg, szKeyName, REGCNV_INT2SZ, (BYTE *)&m_pShareData->m_PrintSettingArr[i].m_bPrintLineNumber       , 0 );
+//			wsprintf( szKeyName, "PS[%02d].nFTW2"	, i ); MY_RegVal_IO( bRead, hkReg, szKeyName, REGCNV_INT2SZ, (BYTE *)&m_pShareData->m_PrintSettingArr[i].m_nPrintFontWidth			, 0 );
+//			wsprintf( szKeyName, "PS[%02d].nFTH2"	, i ); MY_RegVal_IO( bRead, hkReg, szKeyName, REGCNV_INT2SZ, (BYTE *)&m_pShareData->m_PrintSettingArr[i].m_nPrintFontHeight			, 0 );
+//			wsprintf( szKeyName, "PS[%02d].nDSu"	, i ); MY_RegVal_IO( bRead, hkReg, szKeyName, REGCNV_INT2SZ, (BYTE *)&m_pShareData->m_PrintSettingArr[i].m_nPrintDansuu				, 0 );
+//			wsprintf( szKeyName, "PS[%02d].nDSp2"	, i ); MY_RegVal_IO( bRead, hkReg, szKeyName, REGCNV_INT2SZ, (BYTE *)&m_pShareData->m_PrintSettingArr[i].m_nPrintDanSpace			, 0 );
+//			wsprintf( szKeyName, "PS[%02d].nLSp"	, i ); MY_RegVal_IO( bRead, hkReg, szKeyName, REGCNV_INT2SZ, (BYTE *)&m_pShareData->m_PrintSettingArr[i].m_nPrintLineSpacing		, 0 );
+//			wsprintf( szKeyName, "PS[%02d].nMGTY2"	, i ); MY_RegVal_IO( bRead, hkReg, szKeyName, REGCNV_INT2SZ, (BYTE *)&m_pShareData->m_PrintSettingArr[i].m_nPrintMarginTY			, 0 );
+//			wsprintf( szKeyName, "PS[%02d].nMGBY2"	, i ); MY_RegVal_IO( bRead, hkReg, szKeyName, REGCNV_INT2SZ, (BYTE *)&m_pShareData->m_PrintSettingArr[i].m_nPrintMarginBY			, 0 );
+//			wsprintf( szKeyName, "PS[%02d].nMGLX2"	, i ); MY_RegVal_IO( bRead, hkReg, szKeyName, REGCNV_INT2SZ, (BYTE *)&m_pShareData->m_PrintSettingArr[i].m_nPrintMarginLX			, 0 );
+//			wsprintf( szKeyName, "PS[%02d].nMGRX2"	, i ); MY_RegVal_IO( bRead, hkReg, szKeyName, REGCNV_INT2SZ, (BYTE *)&m_pShareData->m_PrintSettingArr[i].m_nPrintMarginRX			, 0 );
+//			wsprintf( szKeyName, "PS[%02d].nPOrient", i ); MY_RegVal_IO( bRead, hkReg, szKeyName, REGCNV_INT2SZ, (BYTE *)&m_pShareData->m_PrintSettingArr[i].m_nPrintPaperOrientation	, 0 );
+//			wsprintf( szKeyName, "PS[%02d].nPSize"	, i ); MY_RegVal_IO( bRead, hkReg, szKeyName, REGCNV_INT2SZ, (BYTE *)&m_pShareData->m_PrintSettingArr[i].m_nPrintPaperSize			, 0 );
+//			wsprintf( szKeyName, "PS[%02d].bWWrap"	, i ); MY_RegVal_IO( bRead, hkReg, szKeyName, REGCNV_INT2SZ, (BYTE *)&m_pShareData->m_PrintSettingArr[i].m_bPrintWordWrap			, 0 );
+//			wsprintf( szKeyName, "PS[%02d].bLNum"	, i ); MY_RegVal_IO( bRead, hkReg, szKeyName, REGCNV_INT2SZ, (BYTE *)&m_pShareData->m_PrintSettingArr[i].m_bPrintLineNumber			, 0 );
 
 
-			wsprintf( szKeyName, "PS[%02d].szSName"     , i ); MY_RegVal_IO( bRead, hkReg, szKeyName, REGCNV_SZ2SZ, (BYTE *)/*&*/m_pShareData->m_PrintSettingArr[i].m_szPrintSettingName     , 0 );
-			wsprintf( szKeyName, "PS[%02d].szFF"        , i ); MY_RegVal_IO( bRead, hkReg, szKeyName, REGCNV_SZ2SZ, (BYTE *)/*&*/m_pShareData->m_PrintSettingArr[i].m_szPrintFontFaceHan     , 0 );
-			wsprintf( szKeyName, "PS[%02d].szFFZ"       , i ); MY_RegVal_IO( bRead, hkReg, szKeyName, REGCNV_SZ2SZ, (BYTE *)/*&*/m_pShareData->m_PrintSettingArr[i].m_szPrintFontFaceZen     , 0 );
+			wsprintf( szKeyName, "PS[%02d].szSName"	, i ); MY_RegVal_IO( bRead, hkReg, szKeyName, REGCNV_SZ2SZ, (BYTE *)/*&*/m_pShareData->m_PrintSettingArr[i].m_szPrintSettingName	, 0 );
+			wsprintf( szKeyName, "PS[%02d].szFF"	, i ); MY_RegVal_IO( bRead, hkReg, szKeyName, REGCNV_SZ2SZ, (BYTE *)/*&*/m_pShareData->m_PrintSettingArr[i].m_szPrintFontFaceHan	, 0 );
+			wsprintf( szKeyName, "PS[%02d].szFFZ"	, i ); MY_RegVal_IO( bRead, hkReg, szKeyName, REGCNV_SZ2SZ, (BYTE *)/*&*/m_pShareData->m_PrintSettingArr[i].m_szPrintFontFaceZen	, 0 );
 			for( j = 0; j < 3; ++j ){
 //				wsprintf( szKeyName, "PS[%02d].bHU[%d]"  , i, j ); MY_RegVal_IO( bRead, hkReg, szKeyName, REGCNV_INT2SZ, (BYTE *)&m_pShareData->m_PrintSettingArr[i].m_bHeaderUse   [j], 0 );
-				wsprintf( szKeyName, "PS[%02d].szHF[%d]", i, j ); MY_RegVal_IO( bRead, hkReg, szKeyName, REGCNV_SZ2SZ, (BYTE *)/*&*/m_pShareData->m_PrintSettingArr[i].m_szHeaderForm [j], 0 );
-//				wsprintf( szKeyName, "PS[%02d].bFTU[%d]"  , i, j ); MY_RegVal_IO( bRead, hkReg, szKeyName, REGCNV_INT2SZ, (BYTE *)&m_pShareData->m_PrintSettingArr[i].m_bFooterUse   [j], 0 );
-				wsprintf( szKeyName, "PS[%02d].szFTF[%d]", i, j ); MY_RegVal_IO( bRead, hkReg, szKeyName, REGCNV_SZ2SZ, (BYTE *)/*&*/m_pShareData->m_PrintSettingArr[i].m_szFooterForm [j], 0 );
+				wsprintf( szKeyName, "PS[%02d].szHF[%d]" , i, j ); MY_RegVal_IO( bRead, hkReg, szKeyName, REGCNV_SZ2SZ , (BYTE *)/*&*/m_pShareData->m_PrintSettingArr[i].m_szHeaderForm [j], 0 );
+//				wsprintf( szKeyName, "PS[%02d].bFTU[%d]" , i, j ); MY_RegVal_IO( bRead, hkReg, szKeyName, REGCNV_INT2SZ, (BYTE *)&m_pShareData->m_PrintSettingArr[i].m_bFooterUse   [j], 0 );
+				wsprintf( szKeyName, "PS[%02d].szFTF[%d]", i, j ); MY_RegVal_IO( bRead, hkReg, szKeyName, REGCNV_SZ2SZ , (BYTE *)/*&*/m_pShareData->m_PrintSettingArr[i].m_szFooterForm [j], 0 );
 			}
 			wsprintf( szKeyName, "PS[%02d].szDriver", i ); MY_RegVal_IO( bRead, hkReg, szKeyName, REGCNV_SZ2SZ, (BYTE *)/*&*/m_pShareData->m_PrintSettingArr[i].m_mdmDevMode.m_szPrinterDriverName, 0 );
 			wsprintf( szKeyName, "PS[%02d].szDevice", i ); MY_RegVal_IO( bRead, hkReg, szKeyName, REGCNV_SZ2SZ, (BYTE *)/*&*/m_pShareData->m_PrintSettingArr[i].m_mdmDevMode.m_szPrinterDeviceName, 0 );
@@ -654,7 +654,7 @@ BOOL CShareData::ShareData_IO( BOOL bRead )
 		MY_RegVal_IO( bRead, hkReg, "nCurrentKeyWordSetIdx", REGCNV_INT2SZ, (BYTE *)&m_pShareData->m_CKeyWordSetMgr.m_nCurrentKeyWordSetIdx, 0 );
 		MY_RegVal_IO( bRead, hkReg, "nKeyWordSetNum", REGCNV_INT2SZ, (BYTE *)&m_pShareData->m_CKeyWordSetMgr.m_nKeyWordSetNum, 0 );
 
-	
+
 		for( i = 0; i < m_pShareData->m_CKeyWordSetMgr.m_nKeyWordSetNum; ++i ){
 //			/* 変更フラグ(キーワードのセットごと) */
 //			if( !bRead && FALSE == m_pShareData->m_bKeyWordSetModifyArr[i] ){
@@ -713,11 +713,11 @@ BOOL CShareData::ShareData_IO( BOOL bRead )
 		}
 		::RegCloseKey( hkReg );
 //	}
-	
+
 
 //	MYTRACE( "レジストリ処理 5 所要時間(ミリ秒) = %d\n", cRunningTimer.Read() );
 //	cRunningTimer.Reset();
-	
+
 //	wsprintf( szKey, "%s\\Types", pszKeyRoot );
 //	if( ERROR_SUCCESS != ::RegCreateKeyEx( HKEY_CURRENT_USER, szKey, 0, NULL, REG_OPTION_NON_VOLATILE, KEY_ALL_ACCESS, NULL, &hkReg, &dwDisposition ) ){
 //		bRet = FALSE;
@@ -756,7 +756,7 @@ BOOL CShareData::ShareData_IO( BOOL bRead )
 				 );
 			}
 		}else{
-			wsprintf( szKeyData, pszForm, 
+			wsprintf( szKeyData, pszForm,
 				m_pShareData->m_Types[i].m_nIdx,
 				m_pShareData->m_Types[i].m_nMaxLineSize,
 				m_pShareData->m_Types[i].m_nColmSpace,
@@ -790,29 +790,29 @@ BOOL CShareData::ShareData_IO( BOOL bRead )
 		for( j = 0; j < m_pShareData->m_Types[i].m_nColorInfoArrNum; ++j ){
 //			static const char* pszForm = "%d,%d,%06x,%06x,%s";
 			static const char* pszForm = "%d,%d,%06x,%06x";
-			wsprintf( szKeyName, "CI[%02d]", j ); 
+			wsprintf( szKeyName, "CI[%02d]", j );
 //			strcpy( szKeyName, "CI[" );
 //			itoa( j, szNum, 10 );
 //			strcat( szKeyName, szNum );
 //			strcat( szKeyName, "]" );
-			
+
 			if( bRead ){
 				if( ERROR_SUCCESS == MY_RegVal_IO( bRead, hkReg, szKeyName, REGCNV_SZ2SZ, (BYTE *)szKeyData, 0 ) ){
 					sscanf( szKeyData, pszForm, 
-						&m_pShareData->m_Types[i].m_ColorInfoArr[j].m_bDisp   , 
-						&m_pShareData->m_Types[i].m_ColorInfoArr[j].m_bFatFont, 
-						&m_pShareData->m_Types[i].m_ColorInfoArr[j].m_colTEXT , 
+						&m_pShareData->m_Types[i].m_ColorInfoArr[j].m_bDisp   ,
+						&m_pShareData->m_Types[i].m_ColorInfoArr[j].m_bFatFont,
+						&m_pShareData->m_Types[i].m_ColorInfoArr[j].m_colTEXT ,
 						&m_pShareData->m_Types[i].m_ColorInfoArr[j].m_colBACK
-//						m_pShareData->m_Types[i].m_ColorInfoArr[j].m_szName	  
+//						m_pShareData->m_Types[i].m_ColorInfoArr[j].m_szName
 					 );
 				}
 			}else{
-				wsprintf( szKeyData, pszForm, 
-					m_pShareData->m_Types[i].m_ColorInfoArr[j].m_bDisp   , 
-					m_pShareData->m_Types[i].m_ColorInfoArr[j].m_bFatFont, 
-					m_pShareData->m_Types[i].m_ColorInfoArr[j].m_colTEXT , 
+				wsprintf( szKeyData, pszForm,
+					m_pShareData->m_Types[i].m_ColorInfoArr[j].m_bDisp   ,
+					m_pShareData->m_Types[i].m_ColorInfoArr[j].m_bFatFont,
+					m_pShareData->m_Types[i].m_ColorInfoArr[j].m_colTEXT ,
 					m_pShareData->m_Types[i].m_ColorInfoArr[j].m_colBACK
-//					m_pShareData->m_Types[i].m_ColorInfoArr[j].m_szName	 
+//					m_pShareData->m_Types[i].m_ColorInfoArr[j].m_szName
 				);
 				MY_RegVal_IO( bRead, hkReg, szKeyName, REGCNV_SZ2SZ, (BYTE *)szKeyData, 0 );
 			}
@@ -823,7 +823,7 @@ BOOL CShareData::ShareData_IO( BOOL bRead )
 //		if( !bRead ){
 //			m_pShareData->m_nTypesModifyArr[i] = FALSE;
 //		}
-		
+
 		::RegCloseKey( hkReg );
 	}
 //	::RegCloseKey( hkReg );
@@ -835,12 +835,12 @@ Section02:;
 //	/* 変更フラグ(共通設定の全体)のクリア */
 //	m_pShareData->m_nCommonModify = FALSE;
 //  
-//	/* 変更フラグ　フォント */
+//	/* 変更フラグ フォント */
 //	m_pShareData->m_bFontModify = FALSE;
 //
-//	m_pShareData->m_bKeyBindModify = FALSE;	/* 変更フラグ　キー割り当て */
+//	m_pShareData->m_bKeyBindModify = FALSE;	/* 変更フラグ キー割り当て */
 //	for( i = 0; i < sizeof( m_pShareData->m_pKeyNameArr ) / sizeof( m_pShareData->m_pKeyNameArr[0] ); ++i ){
-//		m_pShareData->m_bKeyBindModifyArr[i] = FALSE;	/* 変更フラグ　キー割り当て(キーごと) */
+//		m_pShareData->m_bKeyBindModifyArr[i] = FALSE;	/* 変更フラグ キー割り当て(キーごと) */
 //	}
 //	/* 変更フラグ(印刷の全体)のクリア */
 //	m_pShareData->m_bPrintSettingModify = FALSE;
@@ -921,13 +921,13 @@ BOOL CShareData::ShareData_IO_2( BOOL bRead )
 	);
 	_splitpath( szPath, szDrive, szDir, szFname, szExt );
 	_makepath( szIniFileName, szDrive, szDir, szFname, "ini" );
-	
+
 //	strcpy( szIniFileName, "c:\\tmp\\sakura.ini" );
 
 
 //	MYTRACE( "Iniファイル処理-1 所要時間(ミリ秒) = %d\n", cRunningTimer.Read() );
 
-	
+
 	if( bRead ){
 //		/* レジストリの存在チェック */
 //		if( -1 == _access( szIniFileName, 0 ) ){
@@ -938,10 +938,10 @@ BOOL CShareData::ShareData_IO_2( BOOL bRead )
 			/* 設定ファイルが存在しない */
 			return FALSE;
 		}
-#ifdef _DEBUG		
+#ifdef _DEBUG
 		cProfile.DUMP();
 #endif
-		
+
 	}
 //	MYTRACE( "Iniファイル処理 0 所要時間(ミリ秒) = %d\n", cRunningTimer.Read() );
 
@@ -1052,7 +1052,7 @@ BOOL CShareData::ShareData_IO_2( BOOL bRead )
 		}
 		cProfile.IOProfileData( bRead, pszSecName, szKeyName, REGCNV_SZ2SZ, (char*)/*&*/m_pShareData->m_szCmdArr[i], 0 );
 	}
-	
+
 
 
 //	MYTRACE( "Iniファイル処理 1 所要時間(ミリ秒) = %d\n", cRunningTimer.Read() );
@@ -1095,7 +1095,7 @@ BOOL CShareData::ShareData_IO_2( BOOL bRead )
 		cProfile.IOProfileData( bRead, pszSecName, "bBackUp", REGCNV_INT2SZ, (char*)&m_pShareData->m_Common.m_bBackUp, 0 );
 		cProfile.IOProfileData( bRead, pszSecName, "bBackUpDialog", REGCNV_INT2SZ, (char*)&m_pShareData->m_Common.m_bBackUpDialog, 0 );
 		cProfile.IOProfileData( bRead, pszSecName, "bBackUpFolder", REGCNV_INT2SZ, (char*)&m_pShareData->m_Common.m_bBackUpFolder, 0 );
-		
+
 		if( !bRead ){
 			int	nDummy;
 			int	nCharChars;
@@ -1120,7 +1120,7 @@ BOOL CShareData::ShareData_IO_2( BOOL bRead )
 			}
 		}
 
-		
+
 		cProfile.IOProfileData( bRead, pszSecName, "nBackUpType", REGCNV_INT2SZ, (char*)&m_pShareData->m_Common.m_nBackUpType, 0 );
 		cProfile.IOProfileData( bRead, pszSecName, "bBackUpType2_Opt1", REGCNV_INT2SZ, (char*)&m_pShareData->m_Common.m_nBackUpType_Opt1, 0 );
 		cProfile.IOProfileData( bRead, pszSecName, "bBackUpType2_Opt2", REGCNV_INT2SZ, (char*)&m_pShareData->m_Common.m_nBackUpType_Opt2, 0 );
@@ -1132,7 +1132,7 @@ BOOL CShareData::ShareData_IO_2( BOOL bRead )
 		cProfile.IOProfileData( bRead, pszSecName, "szExtHelp1", REGCNV_SZ2SZ, (char*)/*&*/m_pShareData->m_Common.m_szExtHelp1, 0 );
 		cProfile.IOProfileData( bRead, pszSecName, "szExtHtmlHelp", REGCNV_SZ2SZ, (char*)/*&*/m_pShareData->m_Common.m_szExtHtmlHelp, 0 );
 
-		
+
 		cProfile.IOProfileData( bRead, pszSecName, "nMRUArrNum_MAX", REGCNV_INT2SZ, (char*)&m_pShareData->m_Common.m_nMRUArrNum_MAX, 0 );
 		cProfile.IOProfileData( bRead, pszSecName, "nOPENFOLDERArrNum_MAX", REGCNV_INT2SZ, (char*)&m_pShareData->m_Common.m_nOPENFOLDERArrNum_MAX, 0 );
 		cProfile.IOProfileData( bRead, pszSecName, "bDispTOOLBAR", REGCNV_INT2SZ, (char*)&m_pShareData->m_Common.m_bDispTOOLBAR, 0 );
@@ -1155,7 +1155,7 @@ BOOL CShareData::ShareData_IO_2( BOOL bRead )
 		cProfile.IOProfileData( bRead, pszSecName, "bTaskTrayStay", REGCNV_INT2SZ, (char*)&m_pShareData->m_Common.m_bStayTaskTray, 0 );
 		if( bRead ){
 			/* タスクトレイに常駐するときは、必ずタスクトレイアイコンを使う */
-			if( m_pShareData->m_Common.m_bStayTaskTray ){  
+			if( m_pShareData->m_Common.m_bStayTaskTray ){ 
 				m_pShareData->m_Common.m_bUseTaskTray = TRUE;
 			}
 		}
@@ -1262,7 +1262,7 @@ BOOL CShareData::ShareData_IO_2( BOOL bRead )
 		}
 //	}
 
-	/* 変更フラグ　フォント */
+	/* 変更フラグ フォント */
 //	if( !bRead && FALSE == m_pShareData->m_bFontModify ){
 //		/* 書き込みしない */
 //	}else{
@@ -1277,55 +1277,55 @@ BOOL CShareData::ShareData_IO_2( BOOL bRead )
 		if( bRead ){
 			if( TRUE == cProfile.IOProfileData( bRead, pszSecName, "lf", REGCNV_SZ2SZ, (char*)szKeyData, 0 ) ){
 				sscanf( szKeyData, pszForm,
-					&m_pShareData->m_Common.m_lf.lfHeight,     				
-					&m_pShareData->m_Common.m_lf.lfWidth,      
-					&m_pShareData->m_Common.m_lf.lfEscapement, 
+					&m_pShareData->m_Common.m_lf.lfHeight,
+					&m_pShareData->m_Common.m_lf.lfWidth,
+					&m_pShareData->m_Common.m_lf.lfEscapement,
 					&m_pShareData->m_Common.m_lf.lfOrientation,
 					&m_pShareData->m_Common.m_lf.lfWeight,
-					&m_pShareData->m_Common.m_lf.lfItalic,        
-					&m_pShareData->m_Common.m_lf.lfUnderline,     
-					&m_pShareData->m_Common.m_lf.lfStrikeOut,     
-					&m_pShareData->m_Common.m_lf.lfCharSet,       
-					&m_pShareData->m_Common.m_lf.lfOutPrecision,  
-					&m_pShareData->m_Common.m_lf.lfClipPrecision, 
-					&m_pShareData->m_Common.m_lf.lfQuality,       
+					&m_pShareData->m_Common.m_lf.lfItalic,
+					&m_pShareData->m_Common.m_lf.lfUnderline,
+					&m_pShareData->m_Common.m_lf.lfStrikeOut,
+					&m_pShareData->m_Common.m_lf.lfCharSet,
+					&m_pShareData->m_Common.m_lf.lfOutPrecision,
+					&m_pShareData->m_Common.m_lf.lfClipPrecision,
+					&m_pShareData->m_Common.m_lf.lfQuality,
 					&m_pShareData->m_Common.m_lf.lfPitchAndFamily
 				);
 			}
 		}else{
 			wsprintf( szKeyData, pszForm,
-				m_pShareData->m_Common.m_lf.lfHeight,     				
-				m_pShareData->m_Common.m_lf.lfWidth,      
-				m_pShareData->m_Common.m_lf.lfEscapement, 
+				m_pShareData->m_Common.m_lf.lfHeight,
+				m_pShareData->m_Common.m_lf.lfWidth,
+				m_pShareData->m_Common.m_lf.lfEscapement,
 				m_pShareData->m_Common.m_lf.lfOrientation,
 				m_pShareData->m_Common.m_lf.lfWeight,
-				m_pShareData->m_Common.m_lf.lfItalic,        
-				m_pShareData->m_Common.m_lf.lfUnderline,     
-				m_pShareData->m_Common.m_lf.lfStrikeOut,     
-				m_pShareData->m_Common.m_lf.lfCharSet,       
-				m_pShareData->m_Common.m_lf.lfOutPrecision,  
-				m_pShareData->m_Common.m_lf.lfClipPrecision, 
-				m_pShareData->m_Common.m_lf.lfQuality,       
+				m_pShareData->m_Common.m_lf.lfItalic,
+				m_pShareData->m_Common.m_lf.lfUnderline,
+				m_pShareData->m_Common.m_lf.lfStrikeOut,
+				m_pShareData->m_Common.m_lf.lfCharSet,
+				m_pShareData->m_Common.m_lf.lfOutPrecision,
+				m_pShareData->m_Common.m_lf.lfClipPrecision,
+				m_pShareData->m_Common.m_lf.lfQuality,
 				m_pShareData->m_Common.m_lf.lfPitchAndFamily
 			);
 			cProfile.IOProfileData( bRead, pszSecName, "lf", REGCNV_SZ2SZ, (char*)szKeyData, 0 );
 		}
 
 
-//		cProfile.IOProfileData( bRead, pszSecName, "lf.lfHeight"        , REGCNV_INT2SZ, (char*)&m_pShareData->m_Common.m_lf.lfHeight        , 0 );
-//		cProfile.IOProfileData( bRead, pszSecName, "lf.lfWidth"         , REGCNV_INT2SZ, (char*)&m_pShareData->m_Common.m_lf.lfWidth         , 0 );
-//		cProfile.IOProfileData( bRead, pszSecName, "lf.lfEscapement"    , REGCNV_INT2SZ, (char*)&m_pShareData->m_Common.m_lf.lfEscapement    , 0 );
-//		cProfile.IOProfileData( bRead, pszSecName, "lf.lfOrientation"   , REGCNV_INT2SZ, (char*)&m_pShareData->m_Common.m_lf.lfOrientation   , 0 );
-//		cProfile.IOProfileData( bRead, pszSecName, "lf.lfWeight"        , REGCNV_INT2SZ, (char*)&m_pShareData->m_Common.m_lf.lfWeight        , 0  );
-//		cProfile.IOProfileData( bRead, pszSecName, "lf.lfItalic"        , REG_BINARY, (char*)&m_pShareData->m_Common.m_lf.lfItalic        , sizeof( m_pShareData->m_Common.m_lf.lfItalic         ) );
-//		cProfile.IOProfileData( bRead, pszSecName, "lf.lfUnderline"     , REG_BINARY, (char*)&m_pShareData->m_Common.m_lf.lfUnderline     , sizeof( m_pShareData->m_Common.m_lf.lfUnderline      ) );
-//		cProfile.IOProfileData( bRead, pszSecName, "lf.lfStrikeOut"     , REG_BINARY, (char*)&m_pShareData->m_Common.m_lf.lfStrikeOut     , sizeof( m_pShareData->m_Common.m_lf.lfStrikeOut      ) );
-//		cProfile.IOProfileData( bRead, pszSecName, "lf.lfCharSet"       , REG_BINARY, (char*)&m_pShareData->m_Common.m_lf.lfCharSet       , sizeof( m_pShareData->m_Common.m_lf.lfCharSet        ) );
-//		cProfile.IOProfileData( bRead, pszSecName, "lf.lfOutPrecision"  , REG_BINARY, (char*)&m_pShareData->m_Common.m_lf.lfOutPrecision  , sizeof( m_pShareData->m_Common.m_lf.lfOutPrecision   ) );
-//		cProfile.IOProfileData( bRead, pszSecName, "lf.lfClipPrecision" , REG_BINARY, (char*)&m_pShareData->m_Common.m_lf.lfClipPrecision , sizeof( m_pShareData->m_Common.m_lf.lfClipPrecision  ) );
-//		cProfile.IOProfileData( bRead, pszSecName, "lf.lfQuality"       , REG_BINARY, (char*)&m_pShareData->m_Common.m_lf.lfQuality       , sizeof( m_pShareData->m_Common.m_lf.lfQuality        ) );
-//		cProfile.IOProfileData( bRead, pszSecName, "lf.lfPitchAndFamily", REG_BINARY, (char*)&m_pShareData->m_Common.m_lf.lfPitchAndFamily, sizeof( m_pShareData->m_Common.m_lf.lfPitchAndFamily ) );
-		cProfile.IOProfileData( bRead, pszSecName, "lfFaceName", REGCNV_SZ2SZ, (char*)/*&*/m_pShareData->m_Common.m_lf.lfFaceName, 0 );
+//		cProfile.IOProfileData( bRead, pszSecName, "lf.lfHeight"		, REGCNV_INT2SZ, (char*)&m_pShareData->m_Common.m_lf.lfHeight		, 0 );
+//		cProfile.IOProfileData( bRead, pszSecName, "lf.lfWidth"			, REGCNV_INT2SZ, (char*)&m_pShareData->m_Common.m_lf.lfWidth		, 0 );
+//		cProfile.IOProfileData( bRead, pszSecName, "lf.lfEscapement"	, REGCNV_INT2SZ, (char*)&m_pShareData->m_Common.m_lf.lfEscapement	, 0 );
+//		cProfile.IOProfileData( bRead, pszSecName, "lf.lfOrientation"	, REGCNV_INT2SZ, (char*)&m_pShareData->m_Common.m_lf.lfOrientation	, 0 );
+//		cProfile.IOProfileData( bRead, pszSecName, "lf.lfWeight"		, REGCNV_INT2SZ, (char*)&m_pShareData->m_Common.m_lf.lfWeight		, 0  );
+//		cProfile.IOProfileData( bRead, pszSecName, "lf.lfItalic"		, REG_BINARY, (char*)&m_pShareData->m_Common.m_lf.lfItalic			, sizeof( m_pShareData->m_Common.m_lf.lfItalic			) );
+//		cProfile.IOProfileData( bRead, pszSecName, "lf.lfUnderline"		, REG_BINARY, (char*)&m_pShareData->m_Common.m_lf.lfUnderline		, sizeof( m_pShareData->m_Common.m_lf.lfUnderline		) );
+//		cProfile.IOProfileData( bRead, pszSecName, "lf.lfStrikeOut"		, REG_BINARY, (char*)&m_pShareData->m_Common.m_lf.lfStrikeOut		, sizeof( m_pShareData->m_Common.m_lf.lfStrikeOut		) );
+//		cProfile.IOProfileData( bRead, pszSecName, "lf.lfCharSet"		, REG_BINARY, (char*)&m_pShareData->m_Common.m_lf.lfCharSet			, sizeof( m_pShareData->m_Common.m_lf.lfCharSet			) );
+//		cProfile.IOProfileData( bRead, pszSecName, "lf.lfOutPrecision"	, REG_BINARY, (char*)&m_pShareData->m_Common.m_lf.lfOutPrecision	, sizeof( m_pShareData->m_Common.m_lf.lfOutPrecision	) );
+//		cProfile.IOProfileData( bRead, pszSecName, "lf.lfClipPrecision"	, REG_BINARY, (char*)&m_pShareData->m_Common.m_lf.lfClipPrecision	, sizeof( m_pShareData->m_Common.m_lf.lfClipPrecision	) );
+//		cProfile.IOProfileData( bRead, pszSecName, "lf.lfQuality"		, REG_BINARY, (char*)&m_pShareData->m_Common.m_lf.lfQuality			, sizeof( m_pShareData->m_Common.m_lf.lfQuality			) );
+//		cProfile.IOProfileData( bRead, pszSecName, "lf.lfPitchAndFamily", REG_BINARY, (char*)&m_pShareData->m_Common.m_lf.lfPitchAndFamily	, sizeof( m_pShareData->m_Common.m_lf.lfPitchAndFamily	) );
+		cProfile.IOProfileData( bRead, pszSecName, "lfFaceName"			, REGCNV_SZ2SZ, (char*)/*&*/m_pShareData->m_Common.m_lf.lfFaceName, 0 );
 
 		cProfile.IOProfileData( bRead, pszSecName, "bFontIs_FIXED_PITCH", REGCNV_INT2SZ, (char*)&m_pShareData->m_Common.m_bFontIs_FIXED_PITCH, 0 );
 //	}
@@ -1333,7 +1333,7 @@ BOOL CShareData::ShareData_IO_2( BOOL bRead )
 //	MYTRACE( "Iniファイル処理 2 所要時間(ミリ秒) = %d\n", cRunningTimer.Read() );
 //	cRunningTimer.Reset();
 
-	/* 変更フラグ　キー割り当て */
+	/* 変更フラグ キー割り当て */
 //	if( !bRead && FALSE == m_pShareData->m_bKeyBindModify ){
 //		/* 書き込みしない */
 //	}else{
@@ -1348,7 +1348,7 @@ BOOL CShareData::ShareData_IO_2( BOOL bRead )
 	//保存不要	cProfile.IOProfileData( bRead, pszSecName, "nKeyNameArrNum", REGCNV_INT2SZ, (char*)&m_pShareData->m_nKeyNameArrNum, 0 );
 	//	for( i = 0; i < sizeof( m_pShareData->m_pKeyNameArr ) / sizeof( m_pShareData->m_pKeyNameArr[0] ); ++i ){
 		for( i = 0; i < m_pShareData->m_nKeyNameArrNum; ++i ){
-//			if( !bRead && FALSE == m_pShareData->m_bKeyBindModifyArr[i] ){	/* 変更フラグ　キー割り当て(キーごと) */
+//			if( !bRead && FALSE == m_pShareData->m_bKeyBindModifyArr[i] ){	/* 変更フラグ キー割り当て(キーごと) */
 //				/* 書き込みしない */
 //				continue;
 //			}
@@ -1368,10 +1368,10 @@ BOOL CShareData::ShareData_IO_2( BOOL bRead )
 
 //			wsprintf( szKeyName, "K[%03d]", i );
 			strcpy( szKeyName, m_pShareData->m_pKeyNameArr[i].m_szKeyName );
-			
+
 			if( bRead ){
 				if( TRUE == cProfile.IOProfileData( bRead, pszSecName, szKeyName, REGCNV_SZ2SZ, (char*)szKeyData, 0 ) ){
-					sscanf( szKeyData, "%d,%d,%d,%d,%d,%d,%d,%d", 
+					sscanf( szKeyData, "%d,%d,%d,%d,%d,%d,%d,%d",
 						&m_pShareData->m_pKeyNameArr[i].m_nFuncCodeArr[0],
 						&m_pShareData->m_pKeyNameArr[i].m_nFuncCodeArr[1],
 						&m_pShareData->m_pKeyNameArr[i].m_nFuncCodeArr[2],
@@ -1383,7 +1383,7 @@ BOOL CShareData::ShareData_IO_2( BOOL bRead )
 					 );
 				}
 			}else{
-				wsprintf( szKeyData, "%d,%d,%d,%d,%d,%d,%d,%d", 
+				wsprintf( szKeyData, "%d,%d,%d,%d,%d,%d,%d,%d",
 					m_pShareData->m_pKeyNameArr[i].m_nFuncCodeArr[0],
 					m_pShareData->m_pKeyNameArr[i].m_nFuncCodeArr[1],
 					m_pShareData->m_pKeyNameArr[i].m_nFuncCodeArr[2],
@@ -1401,7 +1401,7 @@ BOOL CShareData::ShareData_IO_2( BOOL bRead )
 
 //	MYTRACE( "Iniファイル処理 3 所要時間(ミリ秒) = %d\n", cRunningTimer.Read() );
 //	cRunningTimer.Reset();
-	
+
 	/* 変更フラグ(印刷の全体) */
 //	if( !bRead && FALSE == m_pShareData->m_bPrintSettingModify ){
 //		/* 書き込みしない */
@@ -1423,19 +1423,19 @@ BOOL CShareData::ShareData_IO_2( BOOL bRead )
 			if( bRead ){
 				if( TRUE == cProfile.IOProfileData( bRead, pszSecName, szKeyName, REGCNV_SZ2SZ, (char*)szKeyData, 0 ) ){
 					sscanf( szKeyData, pszForm, 
-						&m_pShareData->m_PrintSettingArr[i].m_nPrintFontWidth       ,
-						&m_pShareData->m_PrintSettingArr[i].m_nPrintFontHeight      ,
-						&m_pShareData->m_PrintSettingArr[i].m_nPrintDansuu          ,
-						&m_pShareData->m_PrintSettingArr[i].m_nPrintDanSpace        ,
-						&m_pShareData->m_PrintSettingArr[i].m_nPrintLineSpacing     ,
-						&m_pShareData->m_PrintSettingArr[i].m_nPrintMarginTY        ,
-						&m_pShareData->m_PrintSettingArr[i].m_nPrintMarginBY        ,
-						&m_pShareData->m_PrintSettingArr[i].m_nPrintMarginLX        ,
-						&m_pShareData->m_PrintSettingArr[i].m_nPrintMarginRX        ,
+						&m_pShareData->m_PrintSettingArr[i].m_nPrintFontWidth		,
+						&m_pShareData->m_PrintSettingArr[i].m_nPrintFontHeight		,
+						&m_pShareData->m_PrintSettingArr[i].m_nPrintDansuu			,
+						&m_pShareData->m_PrintSettingArr[i].m_nPrintDanSpace		,
+						&m_pShareData->m_PrintSettingArr[i].m_nPrintLineSpacing		,
+						&m_pShareData->m_PrintSettingArr[i].m_nPrintMarginTY		,
+						&m_pShareData->m_PrintSettingArr[i].m_nPrintMarginBY		,
+						&m_pShareData->m_PrintSettingArr[i].m_nPrintMarginLX		,
+						&m_pShareData->m_PrintSettingArr[i].m_nPrintMarginRX		,
 						&m_pShareData->m_PrintSettingArr[i].m_nPrintPaperOrientation,
-						&m_pShareData->m_PrintSettingArr[i].m_nPrintPaperSize       ,
-						&m_pShareData->m_PrintSettingArr[i].m_bPrintWordWrap        ,
-						&m_pShareData->m_PrintSettingArr[i].m_bPrintLineNumber		,      
+						&m_pShareData->m_PrintSettingArr[i].m_nPrintPaperSize		,
+						&m_pShareData->m_PrintSettingArr[i].m_bPrintWordWrap		,
+						&m_pShareData->m_PrintSettingArr[i].m_bPrintLineNumber		,
 						&m_pShareData->m_PrintSettingArr[i].m_bHeaderUse[0]			,
 						&m_pShareData->m_PrintSettingArr[i].m_bHeaderUse[1]			,
 						&m_pShareData->m_PrintSettingArr[i].m_bHeaderUse[2]			,
@@ -1446,20 +1446,20 @@ BOOL CShareData::ShareData_IO_2( BOOL bRead )
 					 );
 				}
 			}else{
-				wsprintf( szKeyData, pszForm, 
-					m_pShareData->m_PrintSettingArr[i].m_nPrintFontWidth       ,
-					m_pShareData->m_PrintSettingArr[i].m_nPrintFontHeight      ,
-					m_pShareData->m_PrintSettingArr[i].m_nPrintDansuu          ,
-					m_pShareData->m_PrintSettingArr[i].m_nPrintDanSpace        ,
-					m_pShareData->m_PrintSettingArr[i].m_nPrintLineSpacing     ,
-					m_pShareData->m_PrintSettingArr[i].m_nPrintMarginTY        ,
-					m_pShareData->m_PrintSettingArr[i].m_nPrintMarginBY        ,
-					m_pShareData->m_PrintSettingArr[i].m_nPrintMarginLX        ,
-					m_pShareData->m_PrintSettingArr[i].m_nPrintMarginRX        ,
-					m_pShareData->m_PrintSettingArr[i].m_nPrintPaperOrientation,
-					m_pShareData->m_PrintSettingArr[i].m_nPrintPaperSize       ,
-					m_pShareData->m_PrintSettingArr[i].m_bPrintWordWrap        ,
-					m_pShareData->m_PrintSettingArr[i].m_bPrintLineNumber		,		      
+				wsprintf( szKeyData, pszForm,
+					m_pShareData->m_PrintSettingArr[i].m_nPrintFontWidth		,
+					m_pShareData->m_PrintSettingArr[i].m_nPrintFontHeight		,
+					m_pShareData->m_PrintSettingArr[i].m_nPrintDansuu			,
+					m_pShareData->m_PrintSettingArr[i].m_nPrintDanSpace			,
+					m_pShareData->m_PrintSettingArr[i].m_nPrintLineSpacing		,
+					m_pShareData->m_PrintSettingArr[i].m_nPrintMarginTY			,
+					m_pShareData->m_PrintSettingArr[i].m_nPrintMarginBY			,
+					m_pShareData->m_PrintSettingArr[i].m_nPrintMarginLX			,
+					m_pShareData->m_PrintSettingArr[i].m_nPrintMarginRX			,
+					m_pShareData->m_PrintSettingArr[i].m_nPrintPaperOrientation	,
+					m_pShareData->m_PrintSettingArr[i].m_nPrintPaperSize		,
+					m_pShareData->m_PrintSettingArr[i].m_bPrintWordWrap			,
+					m_pShareData->m_PrintSettingArr[i].m_bPrintLineNumber		,
 					m_pShareData->m_PrintSettingArr[i].m_bHeaderUse[0]			,
 					m_pShareData->m_PrintSettingArr[i].m_bHeaderUse[1]			,
 					m_pShareData->m_PrintSettingArr[i].m_bHeaderUse[2]			,
@@ -1469,29 +1469,29 @@ BOOL CShareData::ShareData_IO_2( BOOL bRead )
 				);
 				cProfile.IOProfileData( bRead, pszSecName, szKeyName, REGCNV_SZ2SZ, (char*)szKeyData, 0 );
 			}
-//			wsprintf( szKeyName, "PS[%02d].nFTW2"    , i ); cProfile.IOProfileData( bRead, pszSecName, szKeyName, REGCNV_INT2SZ, (char*)&m_pShareData->m_PrintSettingArr[i].m_nPrintFontWidth        , 0 );
-//			wsprintf( szKeyName, "PS[%02d].nFTH2"    , i ); cProfile.IOProfileData( bRead, pszSecName, szKeyName, REGCNV_INT2SZ, (char*)&m_pShareData->m_PrintSettingArr[i].m_nPrintFontHeight       , 0 );
-//			wsprintf( szKeyName, "PS[%02d].nDSu"     , i ); cProfile.IOProfileData( bRead, pszSecName, szKeyName, REGCNV_INT2SZ, (char*)&m_pShareData->m_PrintSettingArr[i].m_nPrintDansuu           , 0 );
-//			wsprintf( szKeyName, "PS[%02d].nDSp2"    , i ); cProfile.IOProfileData( bRead, pszSecName, szKeyName, REGCNV_INT2SZ, (char*)&m_pShareData->m_PrintSettingArr[i].m_nPrintDanSpace         , 0 );
-//			wsprintf( szKeyName, "PS[%02d].nLSp"     , i ); cProfile.IOProfileData( bRead, pszSecName, szKeyName, REGCNV_INT2SZ, (char*)&m_pShareData->m_PrintSettingArr[i].m_nPrintLineSpacing      , 0 );
-//			wsprintf( szKeyName, "PS[%02d].nMGTY2"   , i ); cProfile.IOProfileData( bRead, pszSecName, szKeyName, REGCNV_INT2SZ, (char*)&m_pShareData->m_PrintSettingArr[i].m_nPrintMarginTY         , 0 );
-//			wsprintf( szKeyName, "PS[%02d].nMGBY2"   , i ); cProfile.IOProfileData( bRead, pszSecName, szKeyName, REGCNV_INT2SZ, (char*)&m_pShareData->m_PrintSettingArr[i].m_nPrintMarginBY         , 0 );
-//			wsprintf( szKeyName, "PS[%02d].nMGLX2"   , i ); cProfile.IOProfileData( bRead, pszSecName, szKeyName, REGCNV_INT2SZ, (char*)&m_pShareData->m_PrintSettingArr[i].m_nPrintMarginLX         , 0 );
-//			wsprintf( szKeyName, "PS[%02d].nMGRX2"   , i ); cProfile.IOProfileData( bRead, pszSecName, szKeyName, REGCNV_INT2SZ, (char*)&m_pShareData->m_PrintSettingArr[i].m_nPrintMarginRX         , 0 );
-//			wsprintf( szKeyName, "PS[%02d].nPOrient" , i ); cProfile.IOProfileData( bRead, pszSecName, szKeyName, REGCNV_INT2SZ, (char*)&m_pShareData->m_PrintSettingArr[i].m_nPrintPaperOrientation , 0 );
-//			wsprintf( szKeyName, "PS[%02d].nPSize"   , i ); cProfile.IOProfileData( bRead, pszSecName, szKeyName, REGCNV_INT2SZ, (char*)&m_pShareData->m_PrintSettingArr[i].m_nPrintPaperSize        , 0 );
-//			wsprintf( szKeyName, "PS[%02d].bWWrap"   , i ); cProfile.IOProfileData( bRead, pszSecName, szKeyName, REGCNV_INT2SZ, (char*)&m_pShareData->m_PrintSettingArr[i].m_bPrintWordWrap         , 0 );
-//			wsprintf( szKeyName, "PS[%02d].bLNum"    , i ); cProfile.IOProfileData( bRead, pszSecName, szKeyName, REGCNV_INT2SZ, (char*)&m_pShareData->m_PrintSettingArr[i].m_bPrintLineNumber       , 0 );
+//			wsprintf( szKeyName, "PS[%02d].nFTW2"	, i ); cProfile.IOProfileData( bRead, pszSecName, szKeyName, REGCNV_INT2SZ, (char*)&m_pShareData->m_PrintSettingArr[i].m_nPrintFontWidth		, 0 );
+//			wsprintf( szKeyName, "PS[%02d].nFTH2"	, i ); cProfile.IOProfileData( bRead, pszSecName, szKeyName, REGCNV_INT2SZ, (char*)&m_pShareData->m_PrintSettingArr[i].m_nPrintFontHeight		, 0 );
+//			wsprintf( szKeyName, "PS[%02d].nDSu"	, i ); cProfile.IOProfileData( bRead, pszSecName, szKeyName, REGCNV_INT2SZ, (char*)&m_pShareData->m_PrintSettingArr[i].m_nPrintDansuu			, 0 );
+//			wsprintf( szKeyName, "PS[%02d].nDSp2"	, i ); cProfile.IOProfileData( bRead, pszSecName, szKeyName, REGCNV_INT2SZ, (char*)&m_pShareData->m_PrintSettingArr[i].m_nPrintDanSpace			, 0 );
+//			wsprintf( szKeyName, "PS[%02d].nLSp"	, i ); cProfile.IOProfileData( bRead, pszSecName, szKeyName, REGCNV_INT2SZ, (char*)&m_pShareData->m_PrintSettingArr[i].m_nPrintLineSpacing		, 0 );
+//			wsprintf( szKeyName, "PS[%02d].nMGTY2"	, i ); cProfile.IOProfileData( bRead, pszSecName, szKeyName, REGCNV_INT2SZ, (char*)&m_pShareData->m_PrintSettingArr[i].m_nPrintMarginTY			, 0 );
+//			wsprintf( szKeyName, "PS[%02d].nMGBY2"	, i ); cProfile.IOProfileData( bRead, pszSecName, szKeyName, REGCNV_INT2SZ, (char*)&m_pShareData->m_PrintSettingArr[i].m_nPrintMarginBY			, 0 );
+//			wsprintf( szKeyName, "PS[%02d].nMGLX2"	, i ); cProfile.IOProfileData( bRead, pszSecName, szKeyName, REGCNV_INT2SZ, (char*)&m_pShareData->m_PrintSettingArr[i].m_nPrintMarginLX			, 0 );
+//			wsprintf( szKeyName, "PS[%02d].nMGRX2"	, i ); cProfile.IOProfileData( bRead, pszSecName, szKeyName, REGCNV_INT2SZ, (char*)&m_pShareData->m_PrintSettingArr[i].m_nPrintMarginRX			, 0 );
+//			wsprintf( szKeyName, "PS[%02d].nPOrient", i ); cProfile.IOProfileData( bRead, pszSecName, szKeyName, REGCNV_INT2SZ, (char*)&m_pShareData->m_PrintSettingArr[i].m_nPrintPaperOrientation	, 0 );
+//			wsprintf( szKeyName, "PS[%02d].nPSize"	, i ); cProfile.IOProfileData( bRead, pszSecName, szKeyName, REGCNV_INT2SZ, (char*)&m_pShareData->m_PrintSettingArr[i].m_nPrintPaperSize		, 0 );
+//			wsprintf( szKeyName, "PS[%02d].bWWrap"	, i ); cProfile.IOProfileData( bRead, pszSecName, szKeyName, REGCNV_INT2SZ, (char*)&m_pShareData->m_PrintSettingArr[i].m_bPrintWordWrap			, 0 );
+//			wsprintf( szKeyName, "PS[%02d].bLNum"	, i ); cProfile.IOProfileData( bRead, pszSecName, szKeyName, REGCNV_INT2SZ, (char*)&m_pShareData->m_PrintSettingArr[i].m_bPrintLineNumber		, 0 );
 
 
-			wsprintf( szKeyName, "PS[%02d].szSName"     , i ); cProfile.IOProfileData( bRead, pszSecName, szKeyName, REGCNV_SZ2SZ, (char*)/*&*/m_pShareData->m_PrintSettingArr[i].m_szPrintSettingName     , 0 );
-			wsprintf( szKeyName, "PS[%02d].szFF"        , i ); cProfile.IOProfileData( bRead, pszSecName, szKeyName, REGCNV_SZ2SZ, (char*)/*&*/m_pShareData->m_PrintSettingArr[i].m_szPrintFontFaceHan     , 0 );
-			wsprintf( szKeyName, "PS[%02d].szFFZ"       , i ); cProfile.IOProfileData( bRead, pszSecName, szKeyName, REGCNV_SZ2SZ, (char*)/*&*/m_pShareData->m_PrintSettingArr[i].m_szPrintFontFaceZen     , 0 );
+			wsprintf( szKeyName, "PS[%02d].szSName"	, i ); cProfile.IOProfileData( bRead, pszSecName, szKeyName, REGCNV_SZ2SZ, (char*)/*&*/m_pShareData->m_PrintSettingArr[i].m_szPrintSettingName	, 0 );
+			wsprintf( szKeyName, "PS[%02d].szFF"	, i ); cProfile.IOProfileData( bRead, pszSecName, szKeyName, REGCNV_SZ2SZ, (char*)/*&*/m_pShareData->m_PrintSettingArr[i].m_szPrintFontFaceHan	, 0 );
+			wsprintf( szKeyName, "PS[%02d].szFFZ"	, i ); cProfile.IOProfileData( bRead, pszSecName, szKeyName, REGCNV_SZ2SZ, (char*)/*&*/m_pShareData->m_PrintSettingArr[i].m_szPrintFontFaceZen	, 0 );
 			for( j = 0; j < 3; ++j ){
-//				wsprintf( szKeyName, "PS[%02d].bHU[%d]"  , i, j ); cProfile.IOProfileData( bRead, pszSecName, szKeyName, REGCNV_INT2SZ, (char*)&m_pShareData->m_PrintSettingArr[i].m_bHeaderUse   [j], 0 );
-				wsprintf( szKeyName, "PS[%02d].szHF[%d]", i, j ); cProfile.IOProfileData( bRead, pszSecName, szKeyName, REGCNV_SZ2SZ, (char*)/*&*/m_pShareData->m_PrintSettingArr[i].m_szHeaderForm [j], 0 );
-//				wsprintf( szKeyName, "PS[%02d].bFTU[%d]"  , i, j ); cProfile.IOProfileData( bRead, pszSecName, szKeyName, REGCNV_INT2SZ, (char*)&m_pShareData->m_PrintSettingArr[i].m_bFooterUse   [j], 0 );
-				wsprintf( szKeyName, "PS[%02d].szFTF[%d]", i, j ); cProfile.IOProfileData( bRead, pszSecName, szKeyName, REGCNV_SZ2SZ, (char*)/*&*/m_pShareData->m_PrintSettingArr[i].m_szFooterForm [j], 0 );
+//				wsprintf( szKeyName, "PS[%02d].bHU[%d]"	 , i, j ); cProfile.IOProfileData( bRead, pszSecName, szKeyName, REGCNV_INT2SZ, (char*)&m_pShareData->m_PrintSettingArr[i].m_bHeaderUse   [j], 0 );
+				wsprintf( szKeyName, "PS[%02d].szHF[%d]" , i, j ); cProfile.IOProfileData( bRead, pszSecName, szKeyName, REGCNV_SZ2SZ , (char*)/*&*/m_pShareData->m_PrintSettingArr[i].m_szHeaderForm [j], 0 );
+//				wsprintf( szKeyName, "PS[%02d].bFTU[%d]" , i, j ); cProfile.IOProfileData( bRead, pszSecName, szKeyName, REGCNV_INT2SZ, (char*)&m_pShareData->m_PrintSettingArr[i].m_bFooterUse   [j], 0 );
+				wsprintf( szKeyName, "PS[%02d].szFTF[%d]", i, j ); cProfile.IOProfileData( bRead, pszSecName, szKeyName, REGCNV_SZ2SZ , (char*)/*&*/m_pShareData->m_PrintSettingArr[i].m_szFooterForm [j], 0 );
 			}
 			wsprintf( szKeyName, "PS[%02d].szDriver", i ); cProfile.IOProfileData( bRead, pszSecName, szKeyName, REGCNV_SZ2SZ, (char*)/*&*/m_pShareData->m_PrintSettingArr[i].m_mdmDevMode.m_szPrinterDriverName, 0 );
 			wsprintf( szKeyName, "PS[%02d].szDevice", i ); cProfile.IOProfileData( bRead, pszSecName, szKeyName, REGCNV_SZ2SZ, (char*)/*&*/m_pShareData->m_PrintSettingArr[i].m_mdmDevMode.m_szPrinterDeviceName, 0 );
@@ -1503,11 +1503,11 @@ BOOL CShareData::ShareData_IO_2( BOOL bRead )
 //	MYTRACE( "Iniファイル処理 4 所要時間(ミリ秒) = %d\n", cRunningTimer.Read() );
 //	cRunningTimer.Reset();
 
-	
+
 
 //	MYTRACE( "Iniファイル処理 5 所要時間(ミリ秒) = %d\n", cRunningTimer.Read() );
 //	cRunningTimer.Reset();
-	
+
 //	wsprintf( szKey, "%s\\Types", pszKeyRoot );
 //	if( ERROR_SUCCESS != ::RegCreateKeyEx( HKEY_CURRENT_USER, szKey, 0, NULL, REG_OPTION_NON_VOLATILE, KEY_ALL_ACCESS, NULL, &hkReg, &dwDisposition ) ){
 //		bRet = FALSE;
@@ -1533,7 +1533,7 @@ BOOL CShareData::ShareData_IO_2( BOOL bRead )
 		strcpy( szKeyName, "nInts" );
 		if( bRead ){
 			if( TRUE == cProfile.IOProfileData( bRead, pszSecName, szKeyName, REGCNV_SZ2SZ, (char*)szKeyData, 0 ) ){
-				sscanf( szKeyData, pszForm, 
+				sscanf( szKeyData, pszForm,
 					&m_pShareData->m_Types[i].m_nIdx,
 					&m_pShareData->m_Types[i].m_nMaxLineSize,
 					&m_pShareData->m_Types[i].m_nColmSpace,
@@ -1548,7 +1548,7 @@ BOOL CShareData::ShareData_IO_2( BOOL bRead )
 				 );
 			}
 		}else{
-			wsprintf( szKeyData, pszForm, 
+			wsprintf( szKeyData, pszForm,
 				m_pShareData->m_Types[i].m_nIdx,
 				m_pShareData->m_Types[i].m_nMaxLineSize,
 				m_pShareData->m_Types[i].m_nColmSpace,
@@ -1582,7 +1582,7 @@ BOOL CShareData::ShareData_IO_2( BOOL bRead )
 			}
 		}
 
-		
+
 //		strcpy( szKeyName, "szTypeName" );
 		cProfile.IOProfileData( bRead, pszSecName, "szTypeName", REGCNV_SZ2SZ, (char*)/*&*/m_pShareData->m_Types[i].m_szTypeName, 0 );
 //		strcpy( szKeyName, "szTypeExts" );
@@ -1608,24 +1608,24 @@ BOOL CShareData::ShareData_IO_2( BOOL bRead )
 
 		/* 色設定 I/O */
 		IO_ColorSet( &cProfile, bRead, pszSecName, m_pShareData->m_Types[i].m_ColorInfoArr  );
-/*		
+/*
 		for( j = 0; j < m_pShareData->m_Types[i].m_nColorInfoArrNum; ++j ){
 			static const char* pszForm = "%d,%d,%06x,%06x";
-			wsprintf( szKeyName, "CI[%02d]", j ); 
+			wsprintf( szKeyName, "CI[%02d]", j );
 			if( bRead ){
 				if( TRUE == cProfile.IOProfileData( bRead, pszSecName, szKeyName, REGCNV_SZ2SZ, (char*)szKeyData, 0 ) ){
-					sscanf( szKeyData, pszForm, 
-						&m_pShareData->m_Types[i].m_ColorInfoArr[j].m_bDisp   , 
-						&m_pShareData->m_Types[i].m_ColorInfoArr[j].m_bFatFont, 
-						&m_pShareData->m_Types[i].m_ColorInfoArr[j].m_colTEXT , 
+					sscanf( szKeyData, pszForm,
+						&m_pShareData->m_Types[i].m_ColorInfoArr[j].m_bDisp   ,
+						&m_pShareData->m_Types[i].m_ColorInfoArr[j].m_bFatFont,
+						&m_pShareData->m_Types[i].m_ColorInfoArr[j].m_colTEXT ,
 						&m_pShareData->m_Types[i].m_ColorInfoArr[j].m_colBACK
 					 );
 				}
 			}else{
-				wsprintf( szKeyData, pszForm, 
-					m_pShareData->m_Types[i].m_ColorInfoArr[j].m_bDisp   , 
-					m_pShareData->m_Types[i].m_ColorInfoArr[j].m_bFatFont, 
-					m_pShareData->m_Types[i].m_ColorInfoArr[j].m_colTEXT , 
+				wsprintf( szKeyData, pszForm,
+					m_pShareData->m_Types[i].m_ColorInfoArr[j].m_bDisp   ,
+					m_pShareData->m_Types[i].m_ColorInfoArr[j].m_bFatFont,
+					m_pShareData->m_Types[i].m_ColorInfoArr[j].m_colTEXT ,
 					m_pShareData->m_Types[i].m_ColorInfoArr[j].m_colBACK
 				);
 				cProfile.IOProfileData( bRead, pszSecName, szKeyName, REGCNV_SZ2SZ, (char*)szKeyData, 0 );
@@ -1637,7 +1637,7 @@ BOOL CShareData::ShareData_IO_2( BOOL bRead )
 //		if( !bRead ){
 //			m_pShareData->m_nTypesModifyArr[i] = FALSE;
 //		}
-		
+
 	}
 
 
@@ -1654,7 +1654,7 @@ BOOL CShareData::ShareData_IO_2( BOOL bRead )
 		cProfile.IOProfileData( bRead, pszSecName, "nCurrentKeyWordSetIdx", REGCNV_INT2SZ, (char*)&m_pShareData->m_CKeyWordSetMgr.m_nCurrentKeyWordSetIdx, 0 );
 		cProfile.IOProfileData( bRead, pszSecName, "nKeyWordSetNum", REGCNV_INT2SZ, (char*)&m_pShareData->m_CKeyWordSetMgr.m_nKeyWordSetNum, 0 );
 
-	
+
 		for( i = 0; i < m_pShareData->m_CKeyWordSetMgr.m_nKeyWordSetNum; ++i ){
 //			/* 変更フラグ(キーワードのセットごと) */
 //			if( !bRead && FALSE == m_pShareData->m_bKeyWordSetModifyArr[i] ){
@@ -1723,7 +1723,7 @@ BOOL CShareData::ShareData_IO_2( BOOL bRead )
 //	/* 変更フラグ　フォント */
 //	m_pShareData->m_bFontModify = FALSE;
 
-//	m_pShareData->m_bKeyBindModify = FALSE;	/* 変更フラグ　キー割り当て */
+//	m_pShareData->m_bKeyBindModify = FALSE;	/* 変更フラグ キー割り当て */
 //	for( i = 0; i < sizeof( m_pShareData->m_pKeyNameArr ) / sizeof( m_pShareData->m_pKeyNameArr[0] ); ++i ){
 //		m_pShareData->m_bKeyBindModifyArr[i] = FALSE;	/* 変更フラグ　キー割り当て(キーごと) */
 //	}
@@ -1768,21 +1768,21 @@ void CShareData::IO_ColorSet( CProfile* pcProfile, BOOL bRead, const char* pszSe
 		if( bRead ){
 			if( TRUE == pcProfile->IOProfileData( bRead, pszSecName, szKeyName, REGCNV_SZ2SZ, (char*)szKeyData, 0 ) ){
 				pColorInfoArr[j].m_bUnderLine = FALSE;
-				sscanf( szKeyData, pszForm, 
-					&pColorInfoArr[j].m_bDisp   , 
-					&pColorInfoArr[j].m_bFatFont, 
-					&pColorInfoArr[j].m_colTEXT , 
+				sscanf( szKeyData, pszForm,
+					&pColorInfoArr[j].m_bDisp   ,
+					&pColorInfoArr[j].m_bFatFont,
+					&pColorInfoArr[j].m_colTEXT ,
 					&pColorInfoArr[j].m_colBACK ,
-					&pColorInfoArr[j].m_bUnderLine 
+					&pColorInfoArr[j].m_bUnderLine
 				 );
 			}
 		}else{
 			wsprintf( szKeyData, pszForm, 
-				pColorInfoArr[j].m_bDisp   , 
-				pColorInfoArr[j].m_bFatFont, 
-				pColorInfoArr[j].m_colTEXT , 
+				pColorInfoArr[j].m_bDisp   ,
+				pColorInfoArr[j].m_bFatFont,
+				pColorInfoArr[j].m_colTEXT ,
 				pColorInfoArr[j].m_colBACK ,
-				pColorInfoArr[j].m_bUnderLine 
+				pColorInfoArr[j].m_bUnderLine
 			);
 			pcProfile->IOProfileData( bRead, pszSecName, szKeyName, REGCNV_SZ2SZ, (char*)szKeyData, 0 );
 		}

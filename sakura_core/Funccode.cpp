@@ -64,9 +64,10 @@ const int pnFuncList_File[] = {	//Oct. 16, 2000 JEPRO 変数名変更(List5→List_Fil
 	F_WINCLOSE			,	//ウィンドウを閉じる	//Oct.17,2000 コマンド本家は「ウィンドウ系」
 	F_WIN_CLOSEALL		,	//すべてのウィンドウを閉じる	//Oct. 17, 2000 JEPRO 名前を変更(F_FILECLOSEALL→F_WIN_CLOSEALL)	//Oct.17,2000 コマンド本家は「ウィンドウ系」
 	F_BROWSE			,	//ブラウズ
-	F_PROPERTY_FILE			/* ファイルのプロパティ */
+	F_PROPERTY_FILE		,	/* ファイルのプロパティ */
+	F_EXITALL				//テキストエディタの全終了	//Dec. 27, 2000 JEPRO 追加
 };
-const int nFincList_File_Num = sizeof( pnFuncList_File ) / sizeof( pnFuncList_File[0] );//Oct. 16, 2000 JEPRO 配列名変更(FuncList5→FuncList_File)
+const int nFincList_File_Num = sizeof( pnFuncList_File ) / sizeof( pnFuncList_File[0] );	//Oct. 16, 2000 JEPRO 配列名変更(FuncList5→FuncList_File)
 
 
 /* 編集系 */
@@ -189,10 +190,10 @@ const int pnFuncList_Clip[] = {	//Oct. 16, 2000 JEPRO 変数名変更(List2→List_Cli
 	F_COPYLINESASPASSAGE		,	//選択範囲内全行引用符付きコピー
 	F_COPYLINESWITHLINENUMBER	,	//選択範囲内全行行番号付きコピー
 	F_COPYPATH					,	//このファイルのパス名をクリップボードにコピー
-	F_COPYTAG						//このファイルのパス名とカーソル位置をコピー	//	Sept. 14, 2000 JEPRO メニューに合わせて下に移動
+	F_COPYTAG					,	//このファイルのパス名とカーソル位置をコピー	//Sept. 14, 2000 JEPRO メニューに合わせて下に移動
 //jeprotest	Sept. 16, 2000 JEPRO
 //ショートカットキーがうまく働かないので次行は殺してある　それに合わせて上の行の','も取り除いてある(ショートカットを登録しなければ以下の設定で使えるが...)
-//	F_CREATEKEYBINDLIST				//キー割り当て一覧をコピー			//	added Sept. 15, 2000 JEPRO　IDM_TESTのままではうまくいかないのでFに変えて登録(.hも要変更)
+	F_CREATEKEYBINDLIST				//キー割り当て一覧をコピー			//	added Sept. 15, 2000 JEPRO　IDM_TESTのままではうまくいかないのでFに変えて登録(.hも要変更)
 };
 const int nFincList_Clip_Num = sizeof( pnFuncList_Clip ) / sizeof( pnFuncList_Clip[0] );	//Oct. 16, 2000 JEPRO 変数名変更(List1→List_Move)
 
@@ -343,13 +344,13 @@ const int nFincList_Win_Num = sizeof( pnFuncList_Win ) / sizeof( pnFuncList_Win[
 /* 支援 */
 const int pnFuncList_Support[] = {	//Oct. 16, 2000 JEPRO 変数名変更(List11→List_Support)
 	F_HOKAN						,	/* 入力補完 */
-// 	Sept. 16, 2000 JEPRO
-//ショートカットキーがうまく働かないので次の2行は殺してある　それに伴い上の行の','も取り除いた(ショートカットを登録しなければ以下の設定で使えるが...)
-//	F_HELP_CONTENTS				,	/* ヘルプ目次 */			// added Sept. 15, 2000 JEPRO　IDM_HELPのままではうまくいかないのでFに変えたら登録できた(.hも要変更)
-//	F_HELP_SEARCH				,	/* ヘルプトピックの検索 */	// added Sept. 15, 2000 JEPRO　同上
+//Sept. 15, 2000→Nov. 25, 2000 JEPRO //ショートカットキーがうまく働かないので殺してあった下の2行を修正・復活
+	F_HELP_CONTENTS				,	/* ヘルプ目次 */			//Nov. 25, 2000 JEPRO 追加
+	F_HELP_SEARCH				,	/* ヘルプキーワード検索 */	//Nov. 25, 2000 JEPRO 追加
 	F_MENU_ALLFUNC				,	/* コマンド一覧 */
 	F_EXTHELP1					,	/* 外部ヘルプ１ */
-	F_EXTHTMLHELP					/* 外部HTMLヘルプ */
+	F_EXTHTMLHELP				,	/* 外部HTMLヘルプ */
+	F_ABOUT							/* バージョン情報 */	//Dec. 24, 2000 JEPRO 追加
 };
 const int nFincList_Support_Num = sizeof( pnFuncList_Support ) / sizeof( pnFuncList_Support[0] );	//Oct. 16, 2000 JEPRO 変数名変更(List11→List_Support)
 

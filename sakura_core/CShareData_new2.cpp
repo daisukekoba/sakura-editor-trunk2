@@ -57,7 +57,7 @@ CShareData::CShareData()
 //		選択--------- 選択系			(4段目32個: 97-128)
 //					+ 矩形選択系		(5段目32個: 129-160) //(注. 矩形選択系のほとんどは未実装)
 //					+ クリップボード系	(6段目24個: 161-184)
-//			★挿入系					(6段目残りの8個: 185-192)	
+//			★挿入系					(6段目残りの8個: 185-192)
 //		変換--------- 変換系			(7段目32個: 193-224)
 //		検索--------- 検索系			(8段目32個: 225-256)
 //		ツール------- モード切り替え系	(9段目4個: 257-260)
@@ -68,9 +68,9 @@ CShareData::CShareData()
 //		ヘルプ------- 支援				(11段目残りの10個: 343-352)
 //			★その他					(12段目32個: 353-384)
 //	注1. 「挿入系」はメニューでは「編集」に入っている
-//	注2．「その他」はメニューには入っていないものを入れる　(現在何もないので12段目を設定してない)	
+//	注2．「その他」はメニューには入っていないものを入れる　(現在何もないので12段目を設定してない)
 //	注3. 「コマンド一覧」で敢えて重複していれてあるコマンドはその「本家」の方に配置した
-//	注4. 「コマンド一覧」に入ってないコマンドもわかっている範囲で位置予約といておいた
+//	注4. 「コマンド一覧」に入ってないコマンドもわかっている範囲で位置予約にしておいた
 //  注5. F_DISABLE は未定義用(ダミーとしても使う)
 //	注6. ユーザー用に確保された場所は特にないので各段の空いている後ろの方を使ってください。
 
@@ -102,7 +102,7 @@ CShareData::CShareData()
 /* 24 */		F_DISABLE	, TBSTATE_ENABLED, TBSTYLE_BUTTON, 0, 0,	//ダミー
 /* 25 */		F_DISABLE	, TBSTATE_ENABLED, TBSTYLE_BUTTON, 0, 0,	//ダミー
 /* 26 */		F_DISABLE	, TBSTATE_ENABLED, TBSTYLE_BUTTON, 0, 0,	//ダミー
-/* 27 */		F_DISABLE	, TBSTATE_ENABLED, TBSTYLE_BUTTON, 0, 0,	//ダミー
+/* 27 */		F_EXITALL					, TBSTATE_ENABLED, TBSTYLE_BUTTON, 0, 0,	// テキストエディタの全終了	//Dec. 27, 2000 JEPRO 追加
 /* 28 */		F_DISABLE	, TBSTATE_ENABLED, TBSTYLE_BUTTON, 0, 0,	//ダミー
 /* 29 */		F_DISABLE	, TBSTATE_ENABLED, TBSTYLE_BUTTON, 0, 0,	//ダミー
 /* 30 */		F_DISABLE	, TBSTATE_ENABLED, TBSTYLE_BUTTON, 0, 0,	//ダミー
@@ -255,10 +255,10 @@ CShareData::CShareData()
 /* 167 */		F_DISABLE/*F_ADDTAIL*/					, TBSTATE_ENABLED, TBSTYLE_BUTTON, 0, 0,	//最後にテキストを追加	(未公開コマンド？未完成？)
 /* 168 */		F_COPYLINES					, TBSTATE_ENABLED, TBSTYLE_BUTTON, 0, 0,	//選択範囲内全行コピー	//Sept. 30, 2000 JEPRO 追加
 /* 169 */		F_COPYLINESASPASSAGE		, TBSTATE_ENABLED, TBSTYLE_BUTTON, 0, 0,	//選択範囲内全行引用符付きコピー	//Sept. 30, 2000 JEPRO 追加
-/* 170 */		F_COPYLINESWITHLINENUMBER	, TBSTATE_ENABLED, TBSTYLE_BUTTON, 0, 0,	//選択範囲内全行行番号付きコピー	//Sept. 30 2000 JEPRO 追加
-/* 171 */		F_DISABLE/*F_COPYPATH*/			, TBSTATE_ENABLED, TBSTYLE_BUTTON, 0, 0,	//このファイルのパス名をコピー //	added Oct. 22, 2000 JEPRO				//アイコン未作
-/* 172 */		F_DISABLE/*F_COPYTAG*/			, TBSTATE_ENABLED, TBSTYLE_BUTTON, 0, 0,	//このファイルのパス名とカーソル位置をコピー //	added Oct. 22, 2000 JEPRO	//アイコン未作
-/* 173 */		F_DISABLE/*F_CREATEKEYBINDLIST*/			, TBSTATE_ENABLED, TBSTYLE_BUTTON, 0, 0,	//キー割り当て一覧をコピー //	added Oct. 22, 2000 JEPRO		//アイコン未作
+/* 170 */		F_COPYLINESWITHLINENUMBER	, TBSTATE_ENABLED, TBSTYLE_BUTTON, 0, 0,	//選択範囲内全行行番号付きコピー	//Sept. 30, 2000 JEPRO 追加
+/* 171 */		F_COPYPATH	, TBSTATE_ENABLED, TBSTYLE_BUTTON, 0, 0,	//このファイルのパス名をコピー //	added Oct. 22, 2000 JEPRO				//Nov. 5, 2000 JEPRO 追加
+/* 172 */		F_COPYTAG	, TBSTATE_ENABLED, TBSTYLE_BUTTON, 0, 0,	//このファイルのパス名とカーソル位置をコピー //	added Oct. 22, 2000 JEPRO	//Nov. 5, 2000 JEPRO 追加
+/* 173 */		F_CREATEKEYBINDLIST			, TBSTATE_ENABLED, TBSTYLE_BUTTON, 0, 0,	//キー割り当て一覧をコピー //	added Oct. 22, 2000 JEPRO		//アイコン未作
 /* 174 */		F_DISABLE	, TBSTATE_ENABLED, TBSTYLE_BUTTON, 0, 0,	//ダミー
 /* 175 */		F_DISABLE	, TBSTATE_ENABLED, TBSTYLE_BUTTON, 0, 0,	//ダミー
 /* 176 */		F_DISABLE	, TBSTATE_ENABLED, TBSTYLE_BUTTON, 0, 0,	//ダミー
@@ -272,8 +272,8 @@ CShareData::CShareData()
 /* 184 */		F_DISABLE	, TBSTATE_ENABLED, TBSTYLE_BUTTON, 0, 0,	//ダミー
 
 /* 挿入系(6段目残り8個: 185-192) */
-/* 185 */		F_DISABLE/*F_INS_DATE*/				, TBSTATE_ENABLED, TBSTYLE_BUTTON, 0, 0,	//日付挿入	//アイコン未作
-/* 186 */		F_DISABLE/*F_INS_TIME*/				, TBSTATE_ENABLED, TBSTYLE_BUTTON, 0, 0,	//時刻挿入	//アイコン未作
+/* 185 */		F_INS_DATE	, TBSTATE_ENABLED, TBSTYLE_BUTTON, 0, 0,	//日付挿入	//Nov. 5, 2000 JEPRO 追加
+/* 186 */		F_INS_TIME	, TBSTATE_ENABLED, TBSTYLE_BUTTON, 0, 0,	//時刻挿入	//Nov. 5, 2000 JEPRO 追加
 /* 187 */		F_DISABLE	, TBSTATE_ENABLED, TBSTYLE_BUTTON, 0, 0,	//ダミー
 /* 188 */		F_DISABLE	, TBSTATE_ENABLED, TBSTYLE_BUTTON, 0, 0,	//ダミー
 /* 189 */		F_DISABLE	, TBSTATE_ENABLED, TBSTYLE_BUTTON, 0, 0,	//ダミー
@@ -350,8 +350,8 @@ CShareData::CShareData()
 /* 256 */		F_DISABLE	, TBSTATE_ENABLED, TBSTYLE_BUTTON, 0, 0,	//ダミー
 
 /* モード切り替え系(9段目4個: 257-260) */
-/* 257 */		F_DISABLE/*F_CHGMOD_INS*/	, TBSTATE_ENABLED, TBSTYLE_BUTTON, 0, 0,	//挿入／上書きモード切り替え	//アイコン未作
-/* 258 */		F_DISABLE/*F_CANCEL_MODE*/	, TBSTATE_ENABLED, TBSTYLE_BUTTON, 0, 0,	//各種モードの取り消し			//アイコン未作
+/* 257 */		F_CHGMOD_INS, TBSTATE_ENABLED, TBSTYLE_BUTTON, 0, 0,	//挿入／上書きモード切り替え	//Nov. 5, 2000 JEPRO 追加
+/* 258 */		F_CANCEL_MODE, TBSTATE_ENABLED, TBSTYLE_BUTTON, 0, 0,	//各種モードの取り消し			//Nov. 7, 2000 JEPRO 追加
 /* 259 */		F_DISABLE	, TBSTATE_ENABLED, TBSTYLE_BUTTON, 0, 0,	//ダミー
 /* 260 */		F_DISABLE	, TBSTATE_ENABLED, TBSTYLE_BUTTON, 0, 0,	//ダミー
 
@@ -433,8 +433,8 @@ CShareData::CShareData()
 /* 329 */		F_NEXTWINDOW	, TBSTATE_ENABLED, TBSTYLE_BUTTON, 0, 0,	//次のウィンドウ
 /* 330 */		F_PREVWINDOW	, TBSTATE_ENABLED, TBSTYLE_BUTTON, 0, 0,	//前のウィンドウ
 /* 331 */		F_MAXIMIZE_V	, TBSTATE_ENABLED, TBSTYLE_BUTTON, 0, 0,	//縦方向に最大化
-/* 332 */		F_MINIMIZE_ALL	, TBSTATE_ENABLED, TBSTYLE_BUTTON, 0, 0,	//すべて最小化	//	Sept. 17, 2000 jepro 説明の「全て」を「すべて」に統一
-/* 333 */		F_REDRAW		, TBSTATE_ENABLED, TBSTYLE_BUTTON, 0, 0,	//再描画			//Sept. 30, 2000 JEPRO 追加
+/* 332 */		F_MINIMIZE_ALL	, TBSTATE_ENABLED, TBSTYLE_BUTTON, 0, 0,	//すべて最小化					//Sept. 17, 2000 jepro 説明の「全て」を「すべて」に統一
+/* 333 */		F_REDRAW		, TBSTATE_ENABLED, TBSTYLE_BUTTON, 0, 0,	//再描画						//Sept. 30, 2000 JEPRO 追加
 /* 334 */		F_WIN_OUTPUT	, TBSTATE_ENABLED, TBSTYLE_BUTTON, 0, 0,	//アウトプットウィンドウ表示	//Sept. 18, 2000 JEPRO 追加
 /* 335 */		F_DISABLE	, TBSTATE_ENABLED, TBSTYLE_BUTTON, 0, 0,	//ダミー
 /* 336 */		F_DISABLE	, TBSTATE_ENABLED, TBSTYLE_BUTTON, 0, 0,	//ダミー
@@ -447,12 +447,12 @@ CShareData::CShareData()
 
 /* 支援(11段目残りの10個: 343-352) */
 /* 343 */		F_HOKAN			, TBSTATE_ENABLED, TBSTYLE_BUTTON, 0, 0,	//入力補完
-/* 344 */		F_DISABLE/*F_HELP_CONTENTS*/, TBSTATE_ENABLED, TBSTYLE_BUTTON, 0, 0,	//ヘルプ目次			//	added Oct. 22, 2000 JEPRO	//アイコン未作
-/* 345 */		F_DISABLE/*F_HELP_SEARCH*/	, TBSTATE_ENABLED, TBSTYLE_BUTTON, 0, 0,	//ヘルプトピックの検索	//	added Oct. 22, 2000 JEPRO	//アイコン未作
-/* 346 */		F_MENU_ALLFUNC	, TBSTATE_ENABLED, TBSTYLE_BUTTON, 0, 0,	//コマンド一覧	//Sept. 30, 2000 JEPRO 追加
+/* 344 */		F_HELP_CONTENTS , TBSTATE_ENABLED, TBSTYLE_BUTTON, 0, 0,	//ヘルプ目次			//Nov. 25, 2000 JEPRO 追加
+/* 345 */		F_HELP_SEARCH	, TBSTATE_ENABLED, TBSTYLE_BUTTON, 0, 0,	//ヘルプキーワード検索	//Nov. 25, 2000 JEPRO 追加
+/* 346 */		F_MENU_ALLFUNC	, TBSTATE_ENABLED, TBSTYLE_BUTTON, 0, 0,	//コマンド一覧			//Sept. 30, 2000 JEPRO 追加
 /* 347 */		F_EXTHELP1		, TBSTATE_ENABLED, TBSTYLE_BUTTON, 0, 0,	//外部ヘルプ１
 /* 348 */		F_EXTHTMLHELP	, TBSTATE_ENABLED, TBSTYLE_BUTTON, 0, 0,	//外部HTMLヘルプ
-/* 349 */		F_DISABLE/*F_VERSION*/	, TBSTATE_ENABLED, TBSTYLE_BUTTON, 0, 0,	//バージョン情報	//	added Oct. 22, 2000 JEPRO			//アイコン未作
+/* 349 */		F_ABOUT			, TBSTATE_ENABLED, TBSTYLE_BUTTON, 0, 0,	//バージョン情報	//Dec. 24, 2000 JEPRO 追加
 /* 350 */		F_DISABLE	, TBSTATE_ENABLED, TBSTYLE_BUTTON, 0, 0,	//ダミー
 /* 351 */		F_DISABLE	, TBSTATE_ENABLED, TBSTYLE_BUTTON, 0, 0,	//ダミー
 /* 352 */		F_DISABLE	, TBSTATE_ENABLED, TBSTYLE_BUTTON, 0, 0,	//ダミー
