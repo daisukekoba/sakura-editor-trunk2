@@ -114,8 +114,10 @@ public:
 
 	
 	void InsertData_CDocLineMgr( int , int , const char* , int , int* , int* , int*, int );	/* データの挿入 */
-	int ReadFile( const char*, HWND, HWND, int, FILETIME* );
-	int WriteFile( const char*, HWND, HWND, int, FILETIME* );
+	//	Nov. 12, 2000 genta 引数追加
+	int ReadFile( const char*, HWND, HWND, int, FILETIME*, int extraflag );
+	//	Feb. 6, 2001 genta 引数追加(改行コード設定)
+	int WriteFile( const char*, HWND, HWND, int, FILETIME*, CEOL );
 	CDocLine* GetLineInfo( int );
 
 	/*
