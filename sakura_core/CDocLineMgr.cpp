@@ -1952,6 +1952,9 @@ char* CDocLineMgr::SearchString(
 	int	nCharChars1;
 	int	nCharChars2;
 	int	nCompareTo;
+
+//	Mar. 4, 2001 genta
+#if 0
 	if( !bLoHiCase ){
 		nCompareTo = nDesLen - nSrcLen;
 		for( nPos = nIdxPos; nPos <= nCompareTo; /*nPos++*/ ){
@@ -2016,8 +2019,11 @@ char* CDocLineMgr::SearchString(
 		}
 		return NULL;
 	}else{
+//	Mar. 4, 2001 genta
+#endif
 		/* üŒ`’Tõ */
-		for( nPos = nIdxPos; nPos <= nDesLen - nSrcLen; /*nPos++*/ ){
+		nCompareTo = nDesLen - nSrcLen;	//	Mar. 4, 2001 genta
+		for( nPos = nIdxPos; nPos <= nCompareTo; /*nPos++*/ ){
 			nCharChars = CMemory::MemCharNext( (const char *)pLine, nDesLen, (const char *)&pLine[nPos] ) - (const char *)&pLine[nPos];
 			nCharChars1 = nCharChars;
 			for( i = 0; i < nSrcLen; /*i++*/ ){
@@ -2034,14 +2040,22 @@ char* CDocLineMgr::SearchString(
 				}else{
 					nWork = nCharChars1;
 				}
-				for( j = 0; j < nWork; ++j ){
-					if( pLine[nPos + i + j] != pszPattern[i + j] ){
+				//	From Here Mar. 4, 2001 genta
+				if( bLoHiCase && nWork == 1 ){	//	‰p‘å¬•¶Žš‚Ì“¯ˆêŽ‹
+					if( toupper( pLine[nPos + i] ) != toupper( pszPattern[i] ) )
+						break;
+				}
+				else {
+					for( j = 0; j < nWork; ++j ){
+						if( pLine[nPos + i + j] != pszPattern[i + j] ){
+							break;
+						}
+					}
+					if( j < nWork ){
 						break;
 					}
 				}
-				if( j < nWork ){
-					break;
-				}
+				//	To Here
 				if( 0 == nCharChars2 ){
 					++i;
 				}else{
@@ -2059,7 +2073,8 @@ char* CDocLineMgr::SearchString(
 			}
 		}
 		return NULL;
-	}
+	//	Mar. 4, 2001 genta	: comment out
+	//}
 }
 
 

@@ -153,7 +153,13 @@ struct PRINTSETTING {
 #define COLORIDX_SSTRING		15	/* シングルクォーテーション文字列 */	//Dec. 4, 2000 shifted by MIK
 #define COLORIDX_WSTRING		16	/* ダブルクォーテーション文字列 */		//Dec. 4, 2000 shifted by MIK
 #define COLORIDX_URL			17	/* URL */								//Dec. 4, 2000 shifted by MIK
-#define COLORIDX_LAST			18											//Dec. 4, 2000 shifted by MIK
+//@@@ 2001.02.17 Start by MIK: 半角数字を強調表示
+//#ifdef COMPILE_COLOR_DIGIT
+#define COLORIDX_DIGIT			18	/* 半角数字 */	//@@@ 2001.02.17 by MIK
+#define COLORIDX_LAST			19											//Dec. 4, 2000 @@@2001.02.17 renumber by MIK
+//#else
+//#define COLORIDX_LAST			18											//Dec. 4, 2000
+//#endif
 //	To Here Sept. 18, 2000
 
 /* 色設定 */

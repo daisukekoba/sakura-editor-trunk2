@@ -44,6 +44,9 @@ static char* colorIDXKeyName[] =
 	"SQT",		//15
 	"WQT",		//16
 	"URL",		//17
+//#ifdef COMPILE_COLOR_DIGIT
+	"NUM",		//18 //@@@ 2001.02.17 by MIK îºäpêîéöÇÃã≠í≤
+//#endif
 	"LAST"		// Not Used
 };
 

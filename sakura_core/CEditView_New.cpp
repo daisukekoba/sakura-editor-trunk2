@@ -279,6 +279,21 @@ void CEditView::OnPaint( HDC hdc, PAINTSTRUCT *pPs, BOOL bUseMemoryDC )
 
 
 
+/* //@@@ 2001.02.17 Start by MIK
+ * nCOMMENTMODE
+ *  0: 通常
+ *  1: 行コメント
+ *  2: ブロックコメント
+ *  3: シングルコーテーション
+ *  4: ダブルコーテーション
+ *  5: 強調キーワード１
+ *  6: コントロールコード
+ *  9: 半角数字
+ *  50: 強調キーワード２
+ *  80: URL
+ *  90: 検索
+ */ 
+//@@@ 2001.02.17 End by MIK
 
 
 
@@ -410,7 +425,7 @@ int CEditView::DispLineNew(
 //MYTRACE( "pcLayout2 = m_pcEditDoc->m_cLayoutMgr.Search( nLineNum == %d);\n", nLineNum );
 			pcLayout2 = m_pcEditDoc->m_cLayoutMgr.Search( nLineNum );
 			if( y/* + nLineHeight*/ >= m_nViewAlignTop ){
-				/* 行番号表示w */
+				/* 行番号表示 */
 				DispLineNumber( hdc, pcLayout2, nLineNum, y );
 			}
 			nBgn = nPos;
@@ -536,8 +551,6 @@ searchnext:;
 				SEARCH_START:;
 				switch( nCOMMENTMODE ){
 				case 0:
-					if( !IS_KEYWORD_CHAR( pLine[nPos] ))
-							bKeyWordTop = true;
 					//	Mar. 15, 2000 genta
 					if( TypeDataPtr->m_ColorInfoArr[COLORIDX_COMMENT].m_bDisp && (
 						(
@@ -723,13 +736,35 @@ searchnext:;
 						if( !bSearchStringMode ){
 							SetCurrentColor( hdc, nCOMMENTMODE );
 						}
+//@@@ 2001.02.17 Start by MIK: 半角数字を強調表示
+//#ifdef COMPILE_COLOR_DIGIT
+					}else if(bKeyWordTop && TypeDataPtr->m_ColorInfoArr[COLORIDX_DIGIT].m_bDisp
+					    && (i = IsNumber((const char*)pLine, nPos, nLineLen)) > 0)     /* 半角数字を表示する */
+					{
+						/* キーワード文字列の終端をセットする */
+						i = nPos + i;
+						if( y/* + nLineHeight*/ >= m_nViewAlignTop )
+						{
+							/* テキスト表示 */
+							nX += DispText( hdc, x + nX * ( nCharWidth ), y, &pLine[nBgn], nPos - nBgn );
+						}
+						/* 現在の色を指定 */
+						nBgn = nPos;
+						nCOMMENTMODE = 9;	/* 半角数字である */
+						nCOMMENTEND = i;
+						if( !bSearchStringMode ){
+							SetCurrentColor( hdc, nCOMMENTMODE );
+						}
+//#endif
+//@@@ 2001.02.17 End by MIK: 半角数字を強調表示
 					}else
 					if( bKeyWordTop && TypeDataPtr->m_nKeyWordSetIdx != -1 && /* キーワードセット */
 						TypeDataPtr->m_ColorInfoArr[COLORIDX_KEYWORD].m_bDisp &&  /* 強調キーワードを表示する */
 //						( pLine[nPos] == '#' || pLine[nPos] == '$' || __iscsym( pLine[nPos] ) )
 						IS_KEYWORD_CHAR( pLine[nPos] )
 					){
-						bKeyWordTop = false;
+						//	Mar 4, 2001 genta comment out
+						//	bKeyWordTop = false;
 						/* キーワード文字列の終端を探す */
 						for( i = nPos + 1; i <= nLineLen - 1; ++i ){
 //							if( pLine[i] == '#' || pLine[i] == '$' || __iscsym( pLine[i] ) ){
@@ -785,9 +820,14 @@ searchnext:;
 							}																							//MIK
 						}			//MIK END
 					}
+					//	From Here Mar. 4, 2001 genta
+					if( IS_KEYWORD_CHAR( pLine[nPos] ))	bKeyWordTop = false;
+					else								bKeyWordTop = true;
+					//	To Here
 					break;
 				case 80:	/* URLモードである */
 				case 5:		/* キーワードモードである */
+				case 9:		/* 半角数字である */  //@@@ 2001.02.17 by MIK
 				case 50:	/* キーワード2モードである */	//MIK
 					if( nPos == nCOMMENTEND ){
 						if( y/* + nLineHeight*/ >= m_nViewAlignTop ){

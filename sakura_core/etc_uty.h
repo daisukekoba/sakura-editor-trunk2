@@ -24,6 +24,9 @@ SAKURA_CORE_API void GetLineColm( const char*, int*, int* );
 SAKURA_CORE_API BOOL IsFilePath( const char*, int*, int* );
 SAKURA_CORE_API BOOL IsURL( const char*, int, int* );/* 指定アドレスがURLの先頭ならばTRUEとその長さを返す */
 SAKURA_CORE_API BOOL IsMailAddress( const char*, int, int* );	/* 現在位置がメールアドレスならば、NULL以外と、その長さを返す */
+//#ifdef COMPILE_COLOR_DIGIT
+SAKURA_CORE_API int IsNumber( const char*, int, int );/* 数値ならその長さを返す */  //@@@ 2001.02.17 by MIK
+//#endif
 SAKURA_CORE_API void ActivateFrameWindow( HWND );	/* アクティブにする */
 SAKURA_CORE_API BOOL GetSystemResources( int*, int*, int* );	/* システムリソースを調べる */
 SAKURA_CORE_API BOOL CheckSystemResources( const char* );	/* システムリソースのチェック */

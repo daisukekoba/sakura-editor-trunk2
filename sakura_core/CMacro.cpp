@@ -93,7 +93,7 @@ MacroFuncInfo m_MacroFuncInfoArr[] =
 	/* 選択系 */	//Oct. 15, 2000 JEPRO 「カーソル移動系」が多くなったので「選択系」として独立化(サブメニュー化は構造上できないので)
 	F_SELECTWORD				, "SelectWord",			//現在位置の単語選択
 	F_SELECTALL					, "SelectAll",			//すべて選択
-	F_BEGIN_SEL					, "BebinSelect",		//範囲選択開始
+	F_BEGIN_SEL					, "BeginSelect",		//範囲選択開始 Mar. 5, 2001 genta 名称修正
 	F_UP_SEL					, "Up_Sel",				//(範囲選択)カーソル上移動
 	F_DOWN_SEL					, "Down_Sel",			//(範囲選択)カーソル下移動
 	F_LEFT_SEL					, "Left_Sel",			//(範囲選択)カーソル左移動

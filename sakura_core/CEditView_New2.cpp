@@ -127,6 +127,13 @@ void CEditView::SetCurrentColor( HDC hdc, int nCOMMENTMODE )
 //			}
 //		}
 		break;
+//@@@ 2001.02.17 Start by MIK: 半角数字を強調表示
+//#ifdef COMPILE_COLOR_DIGIT
+	case 9:	/* 半角数字である */
+		nColorIdx = COLORIDX_DIGIT;
+		break;
+//#endif
+//@@@ 2001.02.17 End by MIK: 半角数字を強調表示
 	case 50:	/* キーワード2（登録単語）文字列である */	//MIK
 		nColorIdx = COLORIDX_KEYWORD2;						//MIK
 		break;												//MIK

@@ -27,7 +27,7 @@ struct ARRHEAD {
 
 //	共有メモリのバージョン 1～unsinged intの最大値
 //	共有メモリの形式を変更したときはここも修正すること
-const unsigned int uShareDataVersion = 6;
+const unsigned int uShareDataVersion = 7;
 
 
 CShareData::~CShareData()
@@ -930,7 +930,10 @@ tt 時刻マーカー。「 AM 」「 PM 」「午前」「午後」など。
 		//"シングルクォーテーション文字列", FALSE, FALSE, FALSE, RGB( 0, 0, 0 ), RGB( 255, 255, 255 ),
 			"シングルクォーテーション文字列",	TRUE , FALSE, FALSE, RGB( 64, 128, 128 )	, RGB( 255, 251, 240 ),
 			"ダブルクォーテーション文字列",		TRUE , FALSE, FALSE, RGB( 128, 0, 64 )		, RGB( 255, 251, 240 ),
-			"URL",								TRUE , FALSE, TRUE , RGB( 0, 0, 255 )		, RGB( 255, 251, 240 )
+			"URL",								TRUE , FALSE, TRUE , RGB( 0, 0, 255 )		, RGB( 255, 251, 240 ),
+//#ifdef COMPILE_COLOR_DIGIT
+			"数字",								TRUE , FALSE, FALSE, RGB( 0, 0, 255 )		, RGB( 255, 251, 240 )     //@@@ 2001.02.17 by MIK
+//#endif
   		};
 //	To Here Sept. 18, 2000
 

@@ -1825,21 +1825,30 @@ void CEditDoc::MakeFuncList_C( CFuncInfoArr* pcFuncInfoArr )
 	int			nFuncLine;
 	int			nFuncId;
 	int			nFuncNum;
+	//	Mar. 4, 2001 genta
+	bool		bLineTop;			//	行頭かどうかを判別するためのフラグ
+									//	プリプロセッサ指令用
+	//	Mar. 4, 2001 genta
+	bool		bCppInitSkip;		//	C++のメンバー変数、親クラスの初期化子をSKIP
 	nNestLevel = 0;
 	szWordPrev[0] = '\0';
 	szWord[nWordIdx] = '\0';
 	nMode = 0;
 	nNestLevel2 = 0;
 	nFuncNum = 0;
+	bCppInitSkip = false;
 //	for( nLineCount = 0; nLineCount <  m_cLayoutMgr.GetLineCount(); ++nLineCount ){
 	for( nLineCount = 0; nLineCount <  m_cDocLineMgr.GetLineCount(); ++nLineCount ){
 //		pLine = m_cLayoutMgr.GetLineStr( nLineCount, &nLineLen );
 		pLine = m_cDocLineMgr.GetLineStr( nLineCount, &nLineLen );
+		//	Mar. 4, 2001 genta
+		bLineTop = true;
 		for( i = 0; i < nLineLen; ++i ){
 			/* 1バイト文字だけを処理する */
 			nCharChars = CMemory::MemCharNext( pLine, nLineLen, &pLine[i] ) - &pLine[i];
 			if(	1 < nCharChars ){
 				i += (nCharChars - 1);
+				bLineTop = false;
 				continue;
 			}
 			/* エスケープシーケンスは常に取り除く */
@@ -1933,9 +1942,13 @@ void CEditDoc::MakeFuncList_C( CFuncInfoArr* pcFuncInfoArr )
 			/* ノーマルモード */
 			if( 0 == nMode ){
 				/* 空白やタブ記号等を飛ばす */
-				if( C_IsSpace( pLine[i] )){
+				if( C_IsSpace( pLine[i] ))
 					continue;
-				}else
+				//	Mar 4, 2001 genta
+				//	プリプロセッサ指令は無視する
+				if( bLineTop && '#' == pLine[i] )
+					break;
+				bLineTop = false;
 				if( i < nLineLen - 1 && '/' == pLine[i] &&  '/' == pLine[i + 1] ){
 					break;
 				}else
@@ -1976,6 +1989,7 @@ void CEditDoc::MakeFuncList_C( CFuncInfoArr* pcFuncInfoArr )
 						}
 					}
 					nNestLevel2 = 0;
+					bCppInitSkip = false;	//	Mar. 4, 2001 genta
 					++nNestLevel;
 					nMode = 0;
 					continue;
@@ -1987,7 +2001,7 @@ void CEditDoc::MakeFuncList_C( CFuncInfoArr* pcFuncInfoArr )
 					continue;
 				}else
 				if( '(' == pLine[i] ){
-					if( nNestLevel == 0 ){
+					if( nNestLevel == 0 && !bCppInitSkip ){
 						strcpy( szFuncName, szWordPrev );
 						nFuncLine = nLineCount + 1;
 						nNestLevel2 = 1;
@@ -1999,8 +2013,6 @@ void CEditDoc::MakeFuncList_C( CFuncInfoArr* pcFuncInfoArr )
 					if( 1 == nNestLevel2 ){
 						nNestLevel2 = 2;
 					}
-
-
 					nMode = 0;
 					continue;
 				}else
@@ -2055,6 +2067,9 @@ void CEditDoc::MakeFuncList_C( CFuncInfoArr* pcFuncInfoArr )
 								pcFuncInfoArr->AppendData( nFuncLine, nPosY + 1 , szFuncName, nFuncId );
 							}
 							nNestLevel2 = 0;
+							//	Mar 4, 2001 genta	初期化子だったときはそれ以降の登録を制限する
+							if( pLine[i] == ':' )
+								bCppInitSkip = true;
 						}
 
 						//	//	Mar. 15, 2000 genta
