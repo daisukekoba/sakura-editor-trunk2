@@ -127,6 +127,10 @@ CEditDoc::CEditDoc() :
 	//	自動保存の設定
 	ReloadAutoSaveParam();
 
+	//	Sep, 29, 2001 genta
+	//	マクロ
+	m_pcSMacroMgr = new CSMacroMgr;
+
 	return;
 }
 
@@ -140,6 +144,7 @@ CEditDoc::~CEditDoc()
 		DestroyWindow( m_hWnd );
 	}
 	/* ファイルの排他ロック解除 */
+	delete m_pcSMacroMgr;
 	DoFileUnLock();
 	return;
 }
@@ -195,7 +200,8 @@ BOOL CEditDoc::Create(
 
 	/* 設定プロパティシートの初期化１ */
 //@@	m_cProp1.Create( m_hInstance, m_hWnd );
-	m_cPropCommon.Create( m_hInstance, m_hWnd, pcIcons );
+	//	Sep. 29, 2001 genta マクロクラスを渡すように
+	m_cPropCommon.Create( m_hInstance, m_hWnd, pcIcons, m_pcSMacroMgr );
 	m_cPropTypes.Create( m_hInstance, m_hWnd );
 
 	/* 入力補完ウィンドウ作成 */

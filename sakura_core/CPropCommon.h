@@ -35,6 +35,7 @@ class CPropCommon;
 #include "CKeyWordSetMgr.h"
 #include "CImageListMgr.h"
 #include "sakura_rc.h"
+#include "CSMacroMgr.h"
 
 #define ID_PAGENUM_ZENPAN	0	//Oct. 25, 2000 JEPRO ZENPAN1→ZENPAN に変更
 #define ID_PAGENUM_WIN		1	//Oct. 25, 2000 JEPRO  5→ 1 に変更
@@ -69,7 +70,8 @@ public:
 	*/
 	CPropCommon();
 	~CPropCommon();
-	void Create( HINSTANCE, HWND, CImageListMgr* );	/* 初期化 */
+	//	Sep. 29, 2001 genta マクロクラスを渡すように;
+	void Create( HINSTANCE, HWND, CImageListMgr*, CSMacroMgr* );	/* 初期化 */
 
 	/*
 	||  Attributes & Operations
@@ -90,6 +92,9 @@ public:
 
 	//	Oct. 16, 2000 genta
 	CImageListMgr*	m_pcIcons;	//	Image List
+	
+	//	Sep. 29, 2001 genta マクロ
+	CSMacroMgr*		m_pcSMacroMgr;
 
 	/*
 	|| ダイアログデータ

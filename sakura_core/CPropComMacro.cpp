@@ -61,6 +61,10 @@ BOOL CPropCommon::DispatchEvent_PROP_Macro( HWND hwndDlg, UINT uMsg, WPARAM wPar
 	NM_UPDOWN*	pMNUD;
 	int			idCtrl;
 
+	WORD		wNotifyCode;
+	WORD		wID;
+	HWND		hwndCtl;
+
 	switch( uMsg ){
 
 	case WM_INITDIALOG:
@@ -89,6 +93,12 @@ BOOL CPropCommon::DispatchEvent_PROP_Macro( HWND hwndDlg, UINT uMsg, WPARAM wPar
 //		}
 		break;
 
+	case WM_COMMAND:
+		wNotifyCode = HIWORD(wParam);	/* 通知コード */
+		wID = LOWORD(wParam);			/* 項目ID､ コントロールID､ またはアクセラレータID */
+		hwndCtl = (HWND) lParam;		/* コントロールのハンドル */
+
+		break;
 //@@@ 2001.02.04 Start by MIK: Popup Help
 	case WM_HELP:
 		{
@@ -112,17 +122,26 @@ BOOL CPropCommon::DispatchEvent_PROP_Macro( HWND hwndDlg, UINT uMsg, WPARAM wPar
 */
 void CPropCommon::SetData_PROP_Macro( HWND hwndDlg )
 {
-	HWND hListView = ::GetDlgItem( hwndDlg, IDC_MACROLIST );
-
-	//	ためしに1つ追加してみるか
+	int index;
 	LVITEM sItem;
 
-	memset( &sItem, 0, sizeof( sItem ));
-	sItem.iItem = 0;
-	sItem.mask = LVIF_TEXT;
-	sItem.iSubItem = 1;
-	sItem.pszText = "TEST";
-	ListView_SetItem( hListView, &sItem );
+	HWND hListView = ::GetDlgItem( hwndDlg, IDC_MACROLIST );
+	
+	for( index = 0; index < MAX_CUSTMACRO; ++index ){
+		memset( &sItem, 0, sizeof( sItem ));
+		sItem.iItem = index;
+		sItem.mask = LVIF_TEXT;
+		sItem.iSubItem = 1;
+		sItem.pszText = m_pShareData->m_MacroTable[index].m_szName;
+		ListView_SetItem( hListView, &sItem );
+
+		memset( &sItem, 0, sizeof( sItem ));
+		sItem.iItem = index;
+		sItem.mask = LVIF_TEXT;
+		sItem.iSubItem = 2;
+		sItem.pszText = m_pShareData->m_MacroTable[index].m_szFile;
+		ListView_SetItem( hListView, &sItem );
+	}
 	
 	return;
 }
@@ -136,6 +155,29 @@ void CPropCommon::SetData_PROP_Macro( HWND hwndDlg )
 int CPropCommon::GetData_PROP_Macro( HWND hwndDlg )
 {
 	m_nPageNum = ID_PAGENUM_MACRO;
+
+	int index;
+	LVITEM sItem;
+
+	HWND hListView = ::GetDlgItem( hwndDlg, IDC_MACROLIST );
+
+	for( index = 0; index < MAX_CUSTMACRO; ++index ){
+		memset( &sItem, 0, sizeof( sItem ));
+		sItem.iItem = index;
+		sItem.mask = LVIF_TEXT;
+		sItem.iSubItem = 1;
+		sItem.cchTextMax = MACRONAME_MAX - 1;
+		sItem.pszText = m_pShareData->m_MacroTable[index].m_szName;
+		ListView_GetItem( hListView, &sItem );
+
+		memset( &sItem, 0, sizeof( sItem ));
+		sItem.iItem = index;
+		sItem.mask = LVIF_TEXT;
+		sItem.iSubItem = 2;
+		sItem.cchTextMax = _MAX_PATH;
+		sItem.pszText = m_pShareData->m_MacroTable[index].m_szFile;
+		ListView_GetItem( hListView, &sItem );
+	}
 
 	return TRUE;
 }
@@ -178,10 +220,10 @@ void CPropCommon::InitDialog_PROP_Macro( HWND hwndDlg )
 
 	//	メモリの確保
 	//	必要な数だけ先に確保する．
-	ListView_SetItemCount( hListView, SIZE_CUSTMACRO );
+	ListView_SetItemCount( hListView, MAX_CUSTMACRO );
 
 	//	Index部分の登録
-	for( pos = 0; pos < SIZE_CUSTMACRO ; ++pos ){
+	for( pos = 0; pos < MAX_CUSTMACRO ; ++pos ){
 		LVITEM sItem;
 		char buf[4];
 		memset( &sItem, 0, sizeof( sItem ));

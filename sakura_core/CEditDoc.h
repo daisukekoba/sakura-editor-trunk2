@@ -56,6 +56,7 @@ class CEditDoc;
 #include "CHokanMgr.h"
 #include "CAutoSave.h"
 #include "CImageListMgr.h"
+#include "CSMacroMgr.h"
 
 
 /*-----------------------------------------------------------------------
@@ -236,6 +237,9 @@ public: /* テスト用にアクセス属性を変更 */
 	HWND			m_hwndReferer;	/* 参照元ウィンドウ */
 	int				m_nRefererX;	/* 参照元 行頭からのバイト位置桁 */
 	int				m_nRefererLine;	/* 参照元行 折り返し無しの物理行位置 */
+	
+	//	Sep. 29, 2001 genta
+	CSMacroMgr*		m_pcSMacroMgr;	//	マクロ
 
 //	CDlgTest*		m_pcDlgTest;
 

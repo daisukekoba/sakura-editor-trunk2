@@ -402,6 +402,10 @@ SOURCE=.\CShareData_new2.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=.\CSMacroMgr.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=.\CSplitBoxWnd.cpp
 # End Source File
 # Begin Source File
@@ -660,6 +664,10 @@ SOURCE=.\CRunningTimer.h
 # Begin Source File
 
 SOURCE=.\CShareData.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\CSMacroMgr.h
 # End Source File
 # Begin Source File
 

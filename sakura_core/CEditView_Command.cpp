@@ -130,6 +130,18 @@ BOOL CEditView::HandleCommand(
 		bRepeat = FALSE;
 	}
 
+	//	From Here Sep. 29, 2001 genta マクロの実行機能追加
+	if( F_USERMACRO_0 <= nCommand && nCommand < F_USERMACRO_0 + MAX_CUSTMACRO ){
+		m_bExecutingKeyMacro = TRUE;
+		if( !m_pcEditDoc->m_pcSMacroMgr->Exec( m_hInstance, this, nCommand - F_USERMACRO_0 )){
+			::MYMESSAGEBOX( m_hwndParent,	MB_OK | MB_ICONINFORMATION, GSTR_APPNAME,
+				"マクロ %d の実行に失敗しました。", nCommand - F_USERMACRO_0
+			);
+		}
+		m_bExecutingKeyMacro = FALSE;
+		return TRUE;
+	}
+	//	To Here Sep. 29, 2001 genta マクロの実行機能追加
 
 	if( m_bHokan ){
 		if( nCommand != F_HOKAN
