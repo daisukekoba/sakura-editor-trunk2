@@ -114,7 +114,7 @@ BEGIN
         END
         MENUITEM SEPARATOR
         MENUITEM "すべてのウィンドウを閉じる(&Q)", F_WIN_CLOSEALL
-        MENUITEM "テキストエディタの終了(&X)",  F_EXITALL
+        MENUITEM "テキストエディタの全終了(&X)", F_EXITALL
     END
 END
 
@@ -204,7 +204,7 @@ BEGIN
     LTEXT           "",IDC_STATIC_JRE32VER,90,40,70,8
     PUSHBUTTON      "上検索(&U)",IDC_BUTTON1,219,5,50,14,WS_GROUP
     DEFPUSHBUTTON   "下検索(&D)",IDOK,219,21,50,14
-    PUSHBUTTON      "キャンセル",IDCANCEL,219,44,50,14,WS_GROUP
+    PUSHBUTTON      "キャンセル(&X)",IDCANCEL,219,44,50,14,WS_GROUP
     PUSHBUTTON      "ヘルプ(&H)",IDC_BUTTON_HELP,219,60,50,14
 END
 
@@ -245,7 +245,7 @@ BEGIN
     CONTROL         "Spin1",IDC_SPIN_nDropFileNumMax,"msctls_updown32",
                     UDS_ALIGNRIGHT | UDS_AUTOBUDDY | UDS_ARROWKEYS,169,102,9,
                     12
-    GROUPBOX        "ファイルオープン",IDC_STATIC,3,73,264,75,WS_GROUP
+    GROUPBOX        "ファイルオープン",IDC_STATIC,3,73,264,80,WS_GROUP
     LTEXT           "個までとする",IDC_LABEL_AUTOSAVE4,131,104,38,8,NOT 
                     WS_GROUP
     LTEXT           "←注：ドロップファイルは1つのみ有効",IDC_LANEL_NOTE,150,
@@ -255,7 +255,7 @@ BEGIN
                     WS_TABSTOP,8,118,162,10
     CONTROL         "ファイルを開いたときにMIME Encodeされたヘッダをデコードする(&B)",
                     IDC_CHECK_AutoMIMEDecode,"Button",BS_AUTOCHECKBOX | 
-                    WS_TABSTOP,8,131,207,10
+                    WS_TABSTOP,8,133,207,10
 END
 
 IDD_ABOUT DIALOG DISCARDABLE  0, 0, 239, 105
@@ -265,22 +265,23 @@ FONT 9, "ＭＳ Ｐゴシック"
 BEGIN
     ICON            IDI_ICON_STD,IDC_STATIC_MYICON,5,5,20,20,SS_NOTIFY
     CONTROL         "テキストエディタ Ver. 0.3.9.0",IDC_STATIC,"Static",
-                    SS_LEFTNOWORDWRAP,30,7,81,8
-    LTEXT           "UR 8.8.8.8",IDC_STATIC_VER,113,7,70,10,NOT WS_GROUP
-    LTEXT           "Copyright (C) 1998-2000  by Norio Nakatani",IDC_STATIC,
-                    7,30,142,8,NOT WS_GROUP
-    LTEXT           "Last Update:1999/99/99 99:99:99",IDC_STATIC_UPDATE,30,
-                    18,140,8,NOT WS_GROUP
-    LTEXT           "このソフトはフリーソフトです。",IDC_STATIC,7,71,91,8,
-                    NOT WS_GROUP
-    DEFPUSHBUTTON   "OK",IDOK,94,84,50,14
-    PUSHBUTTON      "作者連絡先(&A)",IDC_BUTTON_CONTACT,182,7,50,14
-    LTEXT           "非公式版 Homepage:",IDC_STATIC_URL_CAPTION,7,57,63,10
+                    SS_LEFTNOWORDWRAP,30,7,80,8
+    LTEXT           "UR 8.8.8.8",IDC_STATIC_VER,113,7,60,8,NOT WS_GROUP
+    LTEXT           "Copyright (C) 1998-2000  by Norio Nakatani && others",
+                    IDC_STATIC,38,30,162,8,NOT WS_GROUP
+    LTEXT           "Last Update:1999/99/99 99:99:99",IDC_STATIC_UPDATE,40,
+                    18,97,8,NOT WS_GROUP
+    LTEXT           "このソフトはフリーソフトです。ご自由にお使い下さい。",
+                    IDC_STATIC,41,72,156,8,NOT WS_GROUP
+    DEFPUSHBUTTON   "&OK",IDOK,94,87,50,14
+    PUSHBUTTON      "原作者連絡先(&A)...",IDC_BUTTON_CONTACT,175,7,59,14
+    LTEXT           "Project Sakura Editor:",IDC_STATIC_URL_CAPTION,12,57,64,
+                    8
     LTEXT           "http://sakura-editor.sourceforge.net/",
-                    IDC_STATIC_URL_UR,70,57,110,9,SS_NOTIFY
+                    IDC_STATIC_URL_UR,80,57,109,8,SS_NOTIFY
     LTEXT           "http://hp.vector.co.jp/authors/VA016528/",
-                    IDC_STATIC_URL_ORG,70,44,122,8,SS_NOTIFY
-    LTEXT           "作者公式 Homepage:",IDC_STATIC,7,44,61,10
+                    IDC_STATIC_URL_ORG,80,45,123,8,SS_NOTIFY
+    LTEXT           "原作者ホームページ:",IDC_STATIC,12,45,61,8
 END
 
 IDD_JUMP DIALOG DISCARDABLE  0, 0, 245, 121
@@ -314,7 +315,7 @@ BEGIN
     GROUPBOX        "PL/SQLコンパイルエラー行",IDC_STATIC,5,35,180,80,
                     WS_GROUP
     DEFPUSHBUTTON   "ジャンプ(&J)",IDOK,190,5,50,14,WS_GROUP
-    PUSHBUTTON      "キャンセル",IDCANCEL,190,24,50,14
+    PUSHBUTTON      "キャンセル(&X)",IDCANCEL,190,24,50,14
     PUSHBUTTON      "ヘルプ(&H)",IDC_BUTTON_HELP,190,101,50,14
 END
 
@@ -332,7 +333,7 @@ BEGIN
                     0,210,205
     PUSHBUTTON      "コピー(&C)",IDC_BUTTON_COPY,5,235,50,14,WS_DISABLED
     DEFPUSHBUTTON   "ジャンプ(&J)",IDOK,58,235,50,14
-    PUSHBUTTON      "キャンセル",IDCANCEL,112,235,50,14
+    PUSHBUTTON      "キャンセル(&X)",IDCANCEL,112,235,50,14
     PUSHBUTTON      "ヘルプ(&H)",IDC_BUTTON_HELP,165,235,50,14
     CONTROL         "このダイアログを自動的に閉じる(&C)",
                     IDC_CHECK_bAutoCloseDlgFuncList,"Button",BS_AUTOCHECKBOX | 
@@ -447,7 +448,7 @@ BEGIN
                     BS_AUTORADIOBUTTON,140,115,40,10
     GROUPBOX        "結果出力形式",IDC_STATIC,135,93,60,35,WS_GROUP
     DEFPUSHBUTTON   "検索(&F)",IDOK,255,81,50,14,WS_GROUP
-    PUSHBUTTON      "キャンセル",IDCANCEL,255,100,50,14
+    PUSHBUTTON      "キャンセル(&X)",IDCANCEL,255,100,50,14
     PUSHBUTTON      "ヘルプ(&H)",IDC_BUTTON_HELP,255,116,50,14
 END
 
@@ -602,7 +603,7 @@ BEGIN
     DEFPUSHBUTTON   "下検索(&D)",IDC_BUTTON_SEARCHNEXT,225,21,50,14
     PUSHBUTTON      "置換(&R)",IDC_BUTTON_REPALCE,225,37,50,14
     PUSHBUTTON      "すべて置換(&A)",IDC_BUTTON_REPALCEALL,225,53,50,14
-    PUSHBUTTON      "キャンセル",IDCANCEL,225,72,50,14,WS_GROUP
+    PUSHBUTTON      "キャンセル(&X)",IDCANCEL,225,72,50,14,WS_GROUP
     PUSHBUTTON      "ヘルプ(&H)",IDC_BUTTON_HELP,225,88,50,14
     LTEXT           "※置換後文字列には正規表現は使えません。",IDC_STATIC,5,
                     94,150,8
@@ -688,8 +689,8 @@ BEGIN
     COMBOBOX        IDC_COMBO1,5,5,170,220,CBS_SIMPLE | CBS_SORT | 
                     CBS_DISABLENOSCROLL | WS_VSCROLL | WS_TABSTOP,
                     WS_EX_CLIENTEDGE
-    DEFPUSHBUTTON   "OK",IDOK,5,227,50,14
-    PUSHBUTTON      "キャンセル",IDCANCEL,65,227,50,14
+    DEFPUSHBUTTON   "&OK",IDOK,5,227,50,14
+    PUSHBUTTON      "キャンセル(&X)",IDCANCEL,65,227,50,14
     PUSHBUTTON      "ヘルプ(&H)",IDC_BUTTON_HELP,125,227,50,14
 END
 
@@ -702,10 +703,10 @@ BEGIN
                     8
     LISTBOX         IDC_LIST_TYPES,5,15,120,132,LBS_NOINTEGRALHEIGHT | 
                     WS_VSCROLL | WS_TABSTOP
-    DEFPUSHBUTTON   "設定変更(&S)...",IDOK,129,17,50,15
-    PUSHBUTTON      "キャンセル",IDCANCEL,129,54,50,14
+    DEFPUSHBUTTON   "設定変更(&S)...",IDOK,130,15,50,14
+    PUSHBUTTON      "一時適用(&R)",IDC_BUTTON_TEMPCHANGE,130,31,50,14
+    PUSHBUTTON      "キャンセル(&X)",IDCANCEL,130,50,50,14
     PUSHBUTTON      "ヘルプ(&H)",IDC_BUTTON_HELP,130,133,50,14
-    PUSHBUTTON      "一時適用(&R)",IDC_BUTTON_TEMPCHANGE,129,35,50,15
 END
 
 IDD_TYPELIST_PROP DIALOG DISCARDABLE  0, 0, 201, 59
@@ -715,10 +716,10 @@ FONT 9, "ＭＳ Ｐゴシック"
 BEGIN
     LTEXT           "名前(&N)",IDC_STATIC,5,6,24,8
     EDITTEXT        IDC_EDIT_NAME,37,4,158,12,ES_AUTOHSCROLL
-    LTEXT           "拡張子(&X)",IDC_STATIC,5,21,30,8
+    LTEXT           "拡張子(&E)",IDC_STATIC,5,21,30,8
     EDITTEXT        IDC_EDIT_EXT,37,19,80,12,ES_AUTOHSCROLL
-    DEFPUSHBUTTON   "OK",IDOK,45,40,50,14
-    PUSHBUTTON      "キャンセル",IDCANCEL,105,40,50,14
+    DEFPUSHBUTTON   "&OK",IDOK,45,40,50,14
+    PUSHBUTTON      "キャンセル(&X)",IDCANCEL,105,40,50,14
 END
 
 IDD_PROPTYPESP1 DIALOGEX 0, 0, 270, 213
@@ -749,25 +750,25 @@ BEGIN
     RTEXT           "TAB幅(&T)",IDC_STATIC,28,101,30,8,NOT WS_GROUP
     COMBOBOX        IDC_COMBO_TABSPACE,61,99,40,81,CBS_DROPDOWNLIST | 
                     CBS_SORT | WS_VSCROLL | WS_TABSTOP
-    COMBOBOX        IDC_COMBO_OUTLINES,30,151,89,85,CBS_DROPDOWNLIST | 
+    LTEXT           "起動時にIMEを(&M)",IDC_STATIC,8,141,54,8
+    COMBOBOX        IDC_COMBO_IMESWITCH,62,139,60,80,CBS_DROPDOWNLIST | 
                     WS_VSCROLL | WS_TABSTOP
-    EDITTEXT        IDC_EDIT_INDENTCHARS,166,167,89,12,ES_AUTOHSCROLL
-    COMBOBOX        IDC_COMBO_SMARTINDENT,167,138,89,80,CBS_DROPDOWNLIST | 
+    LTEXT           "起動時のIME入力状態(&K)",IDC_STATIC,8,156,75,8
+    COMBOBOX        IDC_COMBO_IMESTATE,30,166,92,80,CBS_DROPDOWNLIST | 
+                    WS_VSCROLL | WS_TABSTOP
+    GROUPBOX        "IME",IDC_STATIC,3,125,125,65
+    LTEXT           "スマートインデント(&S)",IDC_STATIC,137,56,62,8
+    COMBOBOX        IDC_COMBO_SMARTINDENT,168,66,90,80,CBS_DROPDOWNLIST | 
+                    WS_VSCROLL | WS_TABSTOP
+    LTEXT           "その他のインデント対象文字(&I)",IDC_STATIC,137,84,90,8
+    EDITTEXT        IDC_EDIT_INDENTCHARS,168,94,90,12,ES_AUTOHSCROLL
+    GROUPBOX        "インデント",IDC_STATIC,132,40,135,80
+    LTEXT           "アウトライン解析方法(&O)",IDC_STATIC,137,141,72,8
+    COMBOBOX        IDC_COMBO_OUTLINES,168,151,90,85,CBS_DROPDOWNLIST | 
                     WS_VSCROLL | WS_TABSTOP
     CONTROL         "英文ワードラップ(&W)",IDC_CHECK_WORDWRAP,"Button",
-                    BS_AUTOCHECKBOX | WS_TABSTOP,9,167,74,10
-    GROUPBOX        "IME",IDC_STATIC,131,39,132,56
-    LTEXT           "アウトライン解析方法(&O)",IDC_STATIC,10,138,72,8
-    LTEXT           "スマートインデント(&S)",IDC_STATIC,134,129,62,8
-    LTEXT           "起動時のIME入力状態(&K)",IDC_STATIC,134,65,76,10
-    COMBOBOX        IDC_COMBO_IMESTATE,163,77,88,80,CBS_DROPDOWNLIST | 
-                    WS_VSCROLL | WS_TABSTOP
-    GROUPBOX        "その他",IDC_STATIC,3,125,125,61
-    LTEXT           "その他のインデント対象文字(&I)",IDC_STATIC,135,155,90,8
-    GROUPBOX        "インデント",IDC_STATIC,132,117,131,68
-    COMBOBOX        IDC_COMBO_IMESWITCH,193,47,57,80,CBS_DROPDOWNLIST | 
-                    WS_VSCROLL | WS_TABSTOP
-    LTEXT           "起動時にIMEを(&M)",IDC_STATIC,136,51,54,8
+                    BS_AUTOCHECKBOX | WS_TABSTOP,137,170,74,10
+    GROUPBOX        "その他",IDC_STATIC,132,125,135,65
 END
 
 IDD_PROPERTY_FILE DIALOG DISCARDABLE  0, 0, 270, 225
@@ -831,8 +832,8 @@ CAPTION "汎用入力ダイアログ"
 FONT 9, "ＭＳ Ｐゴシック"
 BEGIN
     EDITTEXT        IDC_EDIT1,5,15,175,12,ES_AUTOHSCROLL
-    DEFPUSHBUTTON   "OK",IDOK,37,36,50,14
-    PUSHBUTTON      "キャンセル",IDCANCEL,98,35,50,14
+    DEFPUSHBUTTON   "&OK",IDOK,37,36,50,14
+    PUSHBUTTON      "キャンセル(&X)",IDCANCEL,98,35,50,14
     LTEXT           "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX",
                     IDC_STATIC_MSG,6,5,175,8
 END
@@ -844,14 +845,14 @@ BEGIN
     LTEXT           "種別(&K)",IDC_LABEL_MENUFUNCKIND,27,4,23,8
     COMBOBOX        IDC_COMBO_FUNCKIND,51,2,70,170,CBS_DROPDOWNLIST | 
                     CBS_NOINTEGRALHEIGHT | WS_VSCROLL | WS_TABSTOP
-    LTEXT           "機能(&F)",IDC_LABEL_MENUFUNC,3,7,23,8,NOT WS_GROUP
-    LISTBOX         IDC_LIST_FUNC,3,18,118,177,LBS_NOINTEGRALHEIGHT | 
+    LTEXT           "機能(&F)",IDC_LABEL_MENUFUNC,3,10,23,8,NOT WS_GROUP
+    LISTBOX         IDC_LIST_FUNC,3,20,118,175,LBS_NOINTEGRALHEIGHT | 
                     WS_VSCROLL | WS_HSCROLL | WS_TABSTOP
-    LTEXT           "選択(&C)",IDC_LABEL_MENUCHOICE,166,3,25,8
-    COMBOBOX        IDC_COMBO_MENU,192,0,73,186,CBS_DROPDOWNLIST | 
+    LTEXT           "選択(&C)",IDC_LABEL_MENUCHOICE,172,4,25,8
+    COMBOBOX        IDC_COMBO_MENU,197,2,70,186,CBS_DROPDOWNLIST | 
                     CBS_NOINTEGRALHEIGHT | WS_VSCROLL | WS_TABSTOP
-    LTEXT           "メニュー(&M)",IDC_LABEL_MENU,130,5,35,8,NOT WS_GROUP
-    LISTBOX         IDC_LIST_RES,149,31,118,164,LBS_NOINTEGRALHEIGHT | 
+    LTEXT           "メニュー(&M)",IDC_LABEL_MENU,136,10,35,8,NOT WS_GROUP
+    LISTBOX         IDC_LIST_RES,149,20,118,175,LBS_NOINTEGRALHEIGHT | 
                     WS_VSCROLL | WS_HSCROLL | WS_TABSTOP
     PUSHBUTTON      "削除(&D)",IDC_BUTTON_DELETE,122,32,26,14,WS_GROUP
     PUSHBUTTON      "---(&S)",IDC_BUTTON_INSERTSEPARATOR,122,51,26,14,
@@ -865,7 +866,6 @@ BEGIN
     PUSHBUTTON      "インポート(&I)...",IDC_BUTTON_IMPORT,8,198,53,14,
                     WS_GROUP
     PUSHBUTTON      "エクスポート(&X)...",IDC_BUTTON_EXPORT,63,198,53,14
-    EDITTEXT        IDC_EDIT_MENUNAME,149,15,116,13,ES_AUTOHSCROLL
 END
 
 IDD_PROP_FORMAT DIALOG DISCARDABLE  0, 0, 270, 213
@@ -1003,46 +1003,46 @@ BEGIN
     PUSHBUTTON      "インポート(&I)...",IDC_BUTTON_IMPORT,18,198,53,14,
                     WS_GROUP
     PUSHBUTTON      "エクスポート(&X)...",IDC_BUTTON_EXPORT,73,198,53,14
-    LTEXT           "強調キーワード1(&1)",IDC_STATIC,142,7,58,8
-    COMBOBOX        IDC_COMBO_SET,204,7,63,180,CBS_DROPDOWNLIST | WS_VSCROLL | 
+    LTEXT           "強調キーワード&1",IDC_STATIC,142,5,50,8
+    COMBOBOX        IDC_COMBO_SET,195,3,72,180,CBS_DROPDOWNLIST | WS_VSCROLL | 
                     WS_TABSTOP
+    LTEXT           "強調キーワード&2",IDC_STATIC,143,22,50,8
+    COMBOBOX        IDC_COMBO_SET2,195,20,72,180,CBS_DROPDOWNLIST | 
+                    WS_VSCROLL | WS_TABSTOP
     LTEXT           "範囲指定型(&F)",IDC_STATIC,150,52,44,8
     EDITTEXT        IDC_EDIT_BLOCKCOMMENT_FROM,197,50,24,12,ES_AUTOHSCROLL
     LTEXT           "～(&T)",IDC_STATIC,224,52,16,8,NOT WS_GROUP
     EDITTEXT        IDC_EDIT_BLOCKCOMMENT_TO,241,50,24,12,ES_AUTOHSCROLL
-    LTEXT           "行型&1",IDC_STATIC,150,67,18,8
-    EDITTEXT        IDC_EDIT_LINECOMMENT,170,65,24,12,ES_AUTOHSCROLL
+    LTEXT           "行型(&M)",IDC_STATIC,150,67,24,8
+    EDITTEXT        IDC_EDIT_LINECOMMENT,176,65,24,12,ES_AUTOHSCROLL
     CONTROL         "位置(&P)",IDC_CHECK1,"Button",BS_AUTOCHECKBOX | 
-                    WS_DISABLED | WS_TABSTOP,197,66,33,10
+                    WS_DISABLED | WS_TABSTOP,207,66,33,10
     EDITTEXT        IDC_EDIT3,250,65,15,12,ES_AUTOHSCROLL | WS_DISABLED
-    LTEXT           "行型&2",IDC_STATIC,150,82,18,8
-    EDITTEXT        IDC_EDIT_LINECOMMENT2,170,80,24,12,ES_AUTOHSCROLL
+    LTEXT           "行型(&E)",IDC_STATIC,150,82,24,8
+    EDITTEXT        IDC_EDIT_LINECOMMENT2,176,80,24,12,ES_AUTOHSCROLL
     CONTROL         "位置(&O)",IDC_CHECK6,"Button",BS_AUTOCHECKBOX | 
-                    WS_DISABLED | WS_TABSTOP,197,81,34,10
+                    WS_DISABLED | WS_TABSTOP,207,81,34,10
     EDITTEXT        IDC_EDIT5,250,80,15,12,ES_AUTOHSCROLL | WS_DISABLED
     GROUPBOX        "コメントスタイル",IDC_STATIC,145,38,122,60,WS_GROUP
     CONTROL         "C言語風: ""&\\""",IDC_RADIO_ESCAPETYPE_1,"Button",
-                    BS_AUTORADIOBUTTON | WS_GROUP,148,126,58,10
+                    BS_AUTORADIOBUTTON | WS_GROUP,148,122,58,10
     CONTROL         "PL/S&QL風: """"""""",IDC_RADIO_ESCAPETYPE_2,"Button",
-                    BS_AUTORADIOBUTTON,148,140,59,10
-    GROUPBOX        "エスケープ",IDC_STATIC,145,115,65,40,WS_GROUP
+                    BS_AUTORADIOBUTTON,148,136,59,10
+    GROUPBOX        "エスケープ",IDC_STATIC,145,111,65,40,WS_GROUP
     CONTROL         "折り返し単位(&R)",IDC_RADIO_LINENUM_LAYOUT,"Button",
-                    BS_AUTORADIOBUTTON | WS_GROUP,148,176,58,10
+                    BS_AUTORADIOBUTTON | WS_GROUP,148,168,58,10
     CONTROL         "改行単位(&W)",IDC_RADIO_LINENUM_CRLF,"Button",
-                    BS_AUTORADIOBUTTON,148,190,53,10
-    GROUPBOX        "行番号の表示",IDC_STATIC,145,164,65,40,WS_GROUP
+                    BS_AUTORADIOBUTTON,148,182,53,10
+    GROUPBOX        "行番号の表示",IDC_STATIC,145,156,65,40,WS_GROUP
     CONTROL         "なし(&N)",IDC_RADIO_LINETERMTYPE0,"Button",
-                    BS_AUTORADIOBUTTON | WS_GROUP,218,143,35,10
+                    BS_AUTORADIOBUTTON | WS_GROUP,218,135,35,10
     CONTROL         "縦線(&V)",IDC_RADIO_LINETERMTYPE1,"Button",
-                    BS_AUTORADIOBUTTON,218,157,35,10
+                    BS_AUTORADIOBUTTON,218,149,35,10
     CONTROL         "任意(&Y)",IDC_RADIO_LINETERMTYPE2,"Button",
-                    BS_AUTORADIOBUTTON,218,171,35,10
-    LTEXT           "半角(&S)",IDC_LABEL_LINETERMCHAR,223,187,26,8
-    EDITTEXT        IDC_EDIT_LINETERMCHAR,249,185,15,12,ES_AUTOHSCROLL
-    GROUPBOX        "行番号区切り",IDC_STATIC,215,131,52,73
-    LTEXT           "強調キーワード2(&2)",IDC_STATIC,143,23,61,8
-    COMBOBOX        IDC_COMBO_SET2,204,24,63,180,CBS_DROPDOWNLIST | 
-                    WS_VSCROLL | WS_TABSTOP
+                    BS_AUTORADIOBUTTON,218,163,35,10
+    LTEXT           "半角(&S)",IDC_LABEL_LINETERMCHAR,222,179,26,8
+    EDITTEXT        IDC_EDIT_LINETERMCHAR,249,177,15,12,ES_AUTOHSCROLL
+    GROUPBOX        "行番号区切り",IDC_STATIC,214,123,52,73
 END
 
 IDD_COMPARE DIALOG DISCARDABLE  0, 0, 365, 165
@@ -1058,8 +1058,8 @@ BEGIN
                     WS_TABSTOP
     CONTROL         "左右に表示(&T)",IDC_CHECK_TILE_H,"Button",
                     BS_AUTOCHECKBOX | WS_GROUP | WS_TABSTOP,305,30,55,10
-    DEFPUSHBUTTON   "OK",IDOK,190,145,50,14
-    PUSHBUTTON      "キャンセル",IDCANCEL,250,145,50,14
+    DEFPUSHBUTTON   "&OK",IDOK,190,145,50,14
+    PUSHBUTTON      "キャンセル(&X)",IDCANCEL,250,145,50,14
     PUSHBUTTON      "ヘルプ(&H)",IDC_BUTTON_HELP,310,145,50,14
     PUSHBUTTON      "上下に表示(&V)",IDC_BUTTON1,130,145,50,14,NOT 
                     WS_VISIBLE | WS_DISABLED | WS_GROUP
@@ -1105,9 +1105,10 @@ CAPTION "印刷ページ設定"
 FONT 9, "ＭＳ Ｐゴシック"
 BEGIN
     LTEXT           "ページ設定(&1)",IDC_STATIC,11,9,42,8
-    COMBOBOX        IDC_COMBO_SETTINGNAME,54,7,119,170,CBS_DROPDOWNLIST | 
+    COMBOBOX        IDC_COMBO_SETTINGNAME,54,7,118,170,CBS_DROPDOWNLIST | 
                     WS_VSCROLL | WS_TABSTOP
-    PUSHBUTTON      "設定名変更(&2)",IDC_BUTTON_EDITSETTINGNAME,176,7,51,14
+    PUSHBUTTON      "設定名変更(&2)...",IDC_BUTTON_EDITSETTINGNAME,174,7,55,
+                    14
     GROUPBOX        "設定",IDC_STATIC,5,22,224,204
     LTEXT           "半角フォント(&F)",IDC_STATIC,8,37,45,8
     COMBOBOX        IDC_COMBO_FONT_HAN,54,35,65,230,CBS_DROPDOWNLIST | 
@@ -1173,8 +1174,8 @@ BEGIN
                     BS_AUTOCHECKBOX | WS_TABSTOP,147,50,74,10
     LTEXT           "ヘッダー(&U)",IDC_STATIC,108,166,37,8,WS_DISABLED
     LTEXT           "フッター(&D)",IDC_STATIC,108,192,33,8,WS_DISABLED
-    DEFPUSHBUTTON   "OK",IDOK,59,234,50,14
-    PUSHBUTTON      "キャンセル",IDCANCEL,119,234,50,14
+    DEFPUSHBUTTON   "&OK",IDOK,59,234,50,14
+    PUSHBUTTON      "キャンセル(&X)",IDCANCEL,119,234,50,14
     PUSHBUTTON      "ヘルプ(&H)",IDC_BUTTON_HELP,179,234,50,14
     LTEXT           "行あたりの文字数：",IDC_STATIC,136,79,56,8
     LTEXT           "縦方向の行数：",IDC_STATIC,136,95,46,8
@@ -1185,8 +1186,8 @@ BEGIN
                     WS_DISABLED
     EDITTEXT        IDC_EDIT_FOOT1,108,203,115,14,ES_AUTOHSCROLL | 
                     WS_DISABLED
-    CONTROL         "縦(&O)",IDC_RADIO_PORTLAIT,"Button",BS_AUTORADIOBUTTON | 
-                    WS_DISABLED | WS_GROUP,54,145,32,10
+    CONTROL         "縦(&I)",IDC_RADIO_PORTLAIT,"Button",BS_AUTORADIOBUTTON | 
+                    WS_DISABLED | WS_GROUP,54,145,29,10
     CONTROL         "横(&A)",IDC_RADIO_LANDSCAPE,"Button",BS_AUTORADIOBUTTON | 
                     WS_DISABLED,91,145,32,10
 END
@@ -1405,8 +1406,8 @@ FONT 9, "ＭＳ Ｐゴシック"
 BEGIN
     LISTBOX         IDC_LIST1,5,5,117,65,LBS_SORT | LBS_NOINTEGRALHEIGHT | 
                     WS_VSCROLL | WS_TABSTOP
-    DEFPUSHBUTTON   "OK",IDOK,130,7,50,14
-    PUSHBUTTON      "キャンセル",IDCANCEL,130,24,50,14
+    DEFPUSHBUTTON   "&OK",IDOK,130,7,50,14
+    PUSHBUTTON      "キャンセル(&X)",IDCANCEL,130,24,50,14
 END
 
 IDD_EXEC DIALOG DISCARDABLE  30, 0, 274, 61
@@ -1422,7 +1423,7 @@ BEGIN
     CONTROL         "標準出力を得る(&S)",IDC_CHECK_GETSTDOUT,"Button",
                     BS_AUTOCHECKBOX | WS_TABSTOP,5,25,70,10
     DEFPUSHBUTTON   "実行(&E)",IDOK,99,41,50,14
-    PUSHBUTTON      "キャンセル",IDCANCEL,159,41,50,14
+    PUSHBUTTON      "キャンセル(&X)",IDCANCEL,159,41,50,14
     PUSHBUTTON      "ヘルプ(&H)",IDC_BUTTON_HELP,219,41,50,14
     PUSHBUTTON      "?",IDC_BUTTON_HELPER,238,25,12,13,WS_DISABLED
 END
@@ -1487,8 +1488,8 @@ BEGIN
     EDITTEXT        IDC_EDIT_TO,56,45,25,12,ES_AUTOHSCROLL | ES_NUMBER
     LTEXT           "1～999ページ",IDC_STATIC_ALL,56,16,60,8
     GROUPBOX        "",IDC_STATIC,5,2,125,63,WS_GROUP
-    DEFPUSHBUTTON   "OK",IDOK,135,5,50,14,WS_GROUP
-    PUSHBUTTON      "キャンセル",IDCANCEL,135,24,50,14
+    DEFPUSHBUTTON   "&OK",IDOK,135,5,50,14,WS_GROUP
+    PUSHBUTTON      "キャンセル(&X)",IDCANCEL,135,24,50,14
 END
 
 IDD_FILEOPEN DIALOG DISCARDABLE  0, 0, 155, 125
@@ -1534,7 +1535,7 @@ BEGIN
 
     IDD_PROP_FILE, DIALOG
     BEGIN
-        LEFTMARGIN, 3
+        LEFTMARGIN, 7
         RIGHTMARGIN, 263
         TOPMARGIN, 7
         BOTTOMMARGIN, 206
@@ -1649,7 +1650,7 @@ BEGIN
 
     IDD_PROPTYPESP1, DIALOG
     BEGIN
-        LEFTMARGIN, 3
+        LEFTMARGIN, 7
         RIGHTMARGIN, 263
         TOPMARGIN, 7
         BOTTOMMARGIN, 206
@@ -1728,7 +1729,7 @@ BEGIN
     IDD_PROP_COLOR, DIALOG
     BEGIN
         LEFTMARGIN, 7
-        RIGHTMARGIN, 267
+        RIGHTMARGIN, 263
         TOPMARGIN, 7
         BOTTOMMARGIN, 206
     END
@@ -1931,8 +1932,8 @@ END
 //
 
 VS_VERSION_INFO VERSIONINFO
- FILEVERSION 1,2,25,1
- PRODUCTVERSION 1,2,25,1
+ FILEVERSION 1,2,25,0
+ PRODUCTVERSION 1,2,25,0
  FILEFLAGSMASK 0x3fL
 #ifdef _DEBUG
  FILEFLAGS 0x21L
@@ -1947,18 +1948,16 @@ BEGIN
     BEGIN
         BLOCK "041104b0"
         BEGIN
-            VALUE "Comments", "フリーソフトです。ご自由にお使い下さい。\0"
-            VALUE "CompanyName", "Norio Nakatani\0"
-            VALUE "FileDescription", "\0"
-            VALUE "FileVersion", "1.2.25.1\0"
+            VALUE "Comments", "フリーソフトです。\0"
+            VALUE "CompanyName", "Project: Sakura Editor\0"
+            VALUE "FileDescription", "テキストエディタ SAKURA\0"
+            VALUE "FileVersion", "1.2.25.0\0"
             VALUE "InternalName", "sakura\0"
-            VALUE "LegalCopyright", "Copyright (C) Norio Nakatani\0"
-            VALUE "LegalTrademarks", "\0"
+            VALUE "LegalCopyright", "Copyright (C) Norio Nakatani & others\0"
+            VALUE "LegalTrademarks", "　\0"
             VALUE "OriginalFilename", "sakura.exe\0"
-            VALUE "PrivateBuild", "\0"
             VALUE "ProductName", "テキストエディタ SAKURA\0"
-            VALUE "ProductVersion", "1.2.25.1\0"
-            VALUE "SpecialBuild", "unofficial release 3\0"
+            VALUE "ProductVersion", "1.2.25.0\0"
         END
     END
     BLOCK "VarFileInfo"
@@ -2093,7 +2092,7 @@ END
 
 STRINGTABLE DISCARDABLE 
 BEGIN
-    F_EXITALL               "テキストエディタの終了"
+    F_EXITALL               "テキストエディタの全終了"
     F_CHAR                  "文字入力"
     F_IME_CHAR              "全角文字入力"
 END
@@ -2191,6 +2190,11 @@ BEGIN
     F_COPYLINESWITHLINENUMBER "選択範囲内全行行番号付きコピー"
     F_COPYPATH              "このファイルのパス名をコピー"
     F_COPYTAG               "このファイルのパス名とカーソル位置をコピー"
+END
+
+STRINGTABLE DISCARDABLE 
+BEGIN
+    F_CREATEKEYBINDLIST     "キー割り当て一覧をコピー"
 END
 
 STRINGTABLE DISCARDABLE 
@@ -2356,7 +2360,7 @@ END
 STRINGTABLE DISCARDABLE 
 BEGIN
     F_HELP_CONTENTS         "ヘルプ目次"
-    F_HELP_SEARCH           "ヘルプトピックの検索"
+    F_HELP_SEARCH           "ヘルプキーワード検索"
     F_MENU_ALLFUNC          "コマンド一覧"
     F_EXTHELP1              "外部ヘルプ１"
     F_EXTHTMLHELP           "外部HTMLヘルプ"
@@ -2402,11 +2406,6 @@ BEGIN
     F_CUSTMENU_22           "カスタムメニュー22"
     F_CUSTMENU_23           "カスタムメニュー23"
     F_CUSTMENU_24           "カスタムメニュー24"
-END
-
-STRINGTABLE DISCARDABLE 
-BEGIN
-    F_CREATEKEYBINDLIST     "キー割り当て一覧をコピー"
 END
 
 STRINGTABLE DISCARDABLE 
