@@ -1931,8 +1931,8 @@ END
 //
 
 VS_VERSION_INFO VERSIONINFO
- FILEVERSION 1,2,25,0
- PRODUCTVERSION 1,2,25,0
+ FILEVERSION 1,2,25,1
+ PRODUCTVERSION 1,2,25,1
  FILEFLAGSMASK 0x3fL
 #ifdef _DEBUG
  FILEFLAGS 0x21L
@@ -1950,14 +1950,14 @@ BEGIN
             VALUE "Comments", "フリーソフトです。ご自由にお使い下さい。\0"
             VALUE "CompanyName", "Norio Nakatani\0"
             VALUE "FileDescription", "\0"
-            VALUE "FileVersion", "1.2.25.0\0"
+            VALUE "FileVersion", "1.2.25.1\0"
             VALUE "InternalName", "sakura\0"
             VALUE "LegalCopyright", "Copyright (C) Norio Nakatani\0"
             VALUE "LegalTrademarks", "\0"
             VALUE "OriginalFilename", "sakura.exe\0"
             VALUE "PrivateBuild", "\0"
             VALUE "ProductName", "テキストエディタ SAKURA\0"
-            VALUE "ProductVersion", "1.2.25.0\0"
+            VALUE "ProductVersion", "1.2.25.1\0"
             VALUE "SpecialBuild", "unofficial release 3\0"
         END
     END
@@ -2093,6 +2093,7 @@ END
 
 STRINGTABLE DISCARDABLE 
 BEGIN
+    F_EXITALL               "テキストエディタの終了"
     F_CHAR                  "文字入力"
     F_IME_CHAR              "全角文字入力"
 END
@@ -2354,9 +2355,12 @@ END
 
 STRINGTABLE DISCARDABLE 
 BEGIN
+    F_HELP_CONTENTS         "ヘルプ目次"
+    F_HELP_SEARCH           "ヘルプトピックの検索"
     F_MENU_ALLFUNC          "コマンド一覧"
     F_EXTHELP1              "外部ヘルプ１"
     F_EXTHTMLHELP           "外部HTMLヘルプ"
+    F_ABOUT                 "バージョン情報"
 END
 
 STRINGTABLE DISCARDABLE 
@@ -2402,15 +2406,11 @@ END
 
 STRINGTABLE DISCARDABLE 
 BEGIN
-    F_EXITALL               "テキストエディタの終了"
-    F_HELP_CONTENTS         "ヘルプ目次"
-    F_HELP_SEARCH           "ヘルプトピックの検索"
-    F_ABOUT                 "バージョン情報"
+    F_CREATEKEYBINDLIST     "キー割り当て一覧をコピー"
 END
 
 STRINGTABLE DISCARDABLE 
 BEGIN
-    F_CREATEKEYBINDLIST     "キー割り当て一覧をコピー"
     IDS_AUTHOR_PAGE         "http://hp.vector.co.jp/authors/VA016528/"
     IDS_AUTHOR_MAIL         "hippie@mcn.ne.jp"
 END
