@@ -847,8 +847,8 @@ BEGIN
     LTEXT           "機能(&F)",IDC_LABEL_MENUFUNC,3,7,23,8,NOT WS_GROUP
     LISTBOX         IDC_LIST_FUNC,3,18,118,177,LBS_NOINTEGRALHEIGHT | 
                     WS_VSCROLL | WS_HSCROLL | WS_TABSTOP
-    LTEXT           "選択(&C)",IDC_LABEL_MENUCHOICE,206,3,25,8
-    COMBOBOX        IDC_COMBO_MENU,237,0,28,186,CBS_DROPDOWNLIST | 
+    LTEXT           "選択(&C)",IDC_LABEL_MENUCHOICE,166,3,25,8
+    COMBOBOX        IDC_COMBO_MENU,192,0,73,186,CBS_DROPDOWNLIST | 
                     CBS_NOINTEGRALHEIGHT | WS_VSCROLL | WS_TABSTOP
     LTEXT           "メニュー(&M)",IDC_LABEL_MENU,130,5,35,8,NOT WS_GROUP
     LISTBOX         IDC_LIST_RES,149,31,118,164,LBS_NOINTEGRALHEIGHT | 
@@ -1931,8 +1931,8 @@ END
 //
 
 VS_VERSION_INFO VERSIONINFO
- FILEVERSION 1,2,24,0
- PRODUCTVERSION 1,2,24,0
+ FILEVERSION 1,2,24,1
+ PRODUCTVERSION 1,2,24,1
  FILEFLAGSMASK 0x3fL
 #ifdef _DEBUG
  FILEFLAGS 0x21L
@@ -1950,14 +1950,14 @@ BEGIN
             VALUE "Comments", "フリーソフトです。ご自由にお使い下さい。\0"
             VALUE "CompanyName", "Norio Nakatani\0"
             VALUE "FileDescription", "\0"
-            VALUE "FileVersion", "1.2.24.0\0"
+            VALUE "FileVersion", "1.2.24.1\0"
             VALUE "InternalName", "sakura\0"
             VALUE "LegalCopyright", "Copyright (C) Norio Nakatani\0"
             VALUE "LegalTrademarks", "\0"
             VALUE "OriginalFilename", "sakura.exe\0"
             VALUE "PrivateBuild", "\0"
             VALUE "ProductName", "テキストエディタ SAKURA\0"
-            VALUE "ProductVersion", "1.2.24.0\0"
+            VALUE "ProductVersion", "1.2.24.1\0"
             VALUE "SpecialBuild", "unofficial release 3\0"
         END
     END

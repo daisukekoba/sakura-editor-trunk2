@@ -827,7 +827,7 @@ void CEditView::Command_RIGHT( int bSelect, int bIgnoreCurrentSelection, BOOL bR
 					/* 最終行か */
 					if( m_nCaretPosY + 1 == m_pcEditDoc->m_cLayoutMgr.GetLineCount() ){
 						/* 改行で終わっているか */
-						if( EOL_NONE != pcLayout->m_cEol.GetLen() ){
+						if( EOL_NONE != pcLayout->m_cEol.GetType() ){
 	//					if( pLine[ nLineLen - 1 ] == '\n' || pLine[ nLineLen - 1 ] == '\r' ){
 							nPosX = m_nCaretPosX + 1;
 						}else{
@@ -844,7 +844,7 @@ void CEditView::Command_RIGHT( int bSelect, int bIgnoreCurrentSelection, BOOL bR
 				/* 最終行か */
 				if( m_nCaretPosY + 1 == m_pcEditDoc->m_cLayoutMgr.GetLineCount() ){
 					/* 改行で終わっているか */
-					if( EOL_NONE != pcLayout->m_cEol.GetLen() ){
+					if( EOL_NONE != pcLayout->m_cEol.GetType() ){
 	//				if( pLine[ nLineLen - 1 ] == '\n' || pLine[ nLineLen - 1 ] == '\r' ){
 						nPosX = 0;
 						++nPosY;

@@ -4031,6 +4031,32 @@ void CEditView::DisableSelectArea( BOOL bDraw )
 	m_bBeginLineSelect = FALSE;		/* 行単位選択中 */
 	m_bBeginWordSelect = FALSE;		/* 単語単位選択中 */
 
+	//	From Here Dec. 6, 2000 genta
+#if 0
+	//	フリーカーソルでない場合には行末より右にある
+	//	キャレットを適切な位置まで移動する．
+	if( ! m_pShareData->m_Common.m_bIsFreeCursorMode ){
+		int len, pos;
+		const char *line;
+
+
+		line = m_pcEditDoc->m_cLayoutMgr.GetLineStr( m_nCaretPosY, &len );
+		//	データがない＝EOFのみの行 i.e. Columnは常に0
+		if( line == NULL && m_nCaretPosX > 0){
+			MoveCursor( 0, m_nCaretPosY, bDraw );
+		}
+		else {
+			pos = LineIndexToColmn( line, m_nCaretPosY, len );	//	行末の桁位置を計算
+			if( m_nCaretPosX > pos ){
+				MoveCursor( pos, m_nCaretPosY, bDraw );
+			}
+		}
+//		char buf[30];
+//		wsprintf( buf, "X[%d] Y[%d], len[%d], pos[%d]", m_nCaretPosX, m_nCaretPosY, len, pos );
+//		::MessageBox( NULL, buf, "CEditView::DisableSelectArea", MB_OK );
+	}
+#endif
+	//	To Here Dec. 6, 2000 genta
 
 //	if( m_pcEditDoc->GetDocumentAttribute().m_ColorInfoArr[COLORIDX_UNDERLINE].m_bDisp ){
 //		/* カーソル行アンダーラインの描画 */
