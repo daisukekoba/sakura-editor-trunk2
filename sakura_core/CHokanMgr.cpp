@@ -57,7 +57,7 @@ LRESULT APIENTRY HokanList_SubclassProc( HWND hwnd, UINT uMsg, WPARAM wParam, LP
 			/* キーストロークを親に転送 */
 			::EnableWindow( ::GetParent( ::GetParent( pCDialog->m_hwndParent ) ), TRUE );
 //			::ShowWindow( pCDialog->m_hWnd, SW_HIDE );
-			::SetFocus( ::GetParent( ::GetParent( pCDialog->m_hwndParent ) ) );
+//			::SetFocus( ::GetParent( ::GetParent( pCDialog->m_hwndParent ) ) );
 			return ::PostMessage( ::GetParent( ::GetParent( pCDialog->m_hwndParent ) ), uMsg, wParam, lParam );
 		}
 		break;
@@ -313,7 +313,7 @@ int CHokanMgr::Search(
 		nX -= nCX - 8;
 	}else{
 		// サイズを調整して右に表示
-		nCX = max(rcDesktop.right - nX , 100);	// 最低サイズを100くらいに
+		nCX = max((int)(rcDesktop.right - nX) , 100);	// 最低サイズを100くらいに
 	}
 
 //	2001/06/19 End
