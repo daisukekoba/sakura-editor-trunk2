@@ -4,6 +4,15 @@
 #include "CPropCommon.h"
 
 
+//@@@ 2001.02.04 Start by MIK: Popup Help
+const DWORD p_helpids[] = {	//11100
+	IDC_CHECK_bSelectClickedURL,	11110,	//クリッカブルURL
+//	IDC_STATIC,						-1,
+	0, 0
+};
+//@@@ 2001.02.04 End
+
+
 
 
 
@@ -47,6 +56,18 @@ BOOL CPropCommon::DispatchEvent_PROP_URL( HWND hwndDlg, UINT uMsg, WPARAM wParam
 			break;
 //		}
 		break;
+
+//@@@ 2001.02.04 Start by MIK: Popup Help
+	case WM_HELP:
+		{
+			HELPINFO *p = (HELPINFO *)lParam;
+			::WinHelp( (HWND)p->hItemHandle, m_szHelpFile, HELP_WM_HELP, (DWORD)(LPVOID)p_helpids );
+		}
+		return TRUE;
+		/*NOTREACHED*/
+		break;
+//@@@ 2001.02.04 End
+
 	}
 	return FALSE;
 }

@@ -84,6 +84,62 @@ char* MakeRGBStr( DWORD dwRGB, char* pszText )
 
 }
 
+
+//@@@ 2001.02.04 Start by MIK: Popup Help
+const DWORD p_helpids1[] = {	//11300
+	IDC_CHECK_WORDWRAP,				11310,	//英文ワードラップ
+	IDC_COMBO_TABSPACE,				11330,	//タブ幅
+	IDC_COMBO_IMESWITCH,			11331,	//起動時のIME
+	IDC_COMBO_IMESTATE,				11332,	//起動時のIME状態
+	IDC_COMBO_SMARTINDENT,			11333,	//スマートインデント
+	IDC_COMBO_OUTLINES,				11334,	//アウトライン解析方法
+	IDC_EDIT_TYPENAME,				11340,	//設定の名前
+	IDC_EDIT_TYPEEXTS,				11341,	//ファイル拡張子
+	IDC_EDIT_MAXLINELEN,			11342,	//折り返し桁数
+	IDC_EDIT_CHARSPACE,				11343,	//文字の隙間
+	IDC_EDIT_LINESPACE,				11344,	//行間の隙間
+	IDC_EDIT_INDENTCHARS,			11345,	//インデント対象文字
+	IDC_SPIN_MAXLINELEN,			-1,
+	IDC_SPIN_CHARSPACE,				-1,
+	IDC_SPIN_LINESPACE,				-1,
+//	IDC_STATIC,						-1,
+	0, 0
+};
+const DWORD p_helpids2[] = {	//11400
+	IDC_BUTTON_TEXTCOLOR,			11400,	//文字色
+	IDC_BUTTON_BACKCOLOR,			11401,	//背景色
+	IDC_BUTTON_SAMETEXTCOLOR,		11402,	//文字色統一
+	IDC_BUTTON_SAMEBKCOLOR,			11403,	//背景色統一
+	IDC_BUTTON_IMPORT,				11404,	//インポート
+	IDC_BUTTON_EXPORT,				11405,	//エクスポート
+	IDC_CHECK_DISP,					11410,	//色分け表示
+	IDC_CHECK_FAT,					11411,	//太字
+	IDC_CHECK_UNDERLINE,			11412,	//下線
+	IDC_CHECK1,						11413,	//位置１
+	IDC_CHECK6,						11414,	//位置２
+	IDC_COMBO_SET,					11430,	//キーワードセット１
+	IDC_COMBO_SET2,					11431,	//キーワードセット２
+	IDC_EDIT_BLOCKCOMMENT_FROM,		11440,	//ブロックコメント開始
+	IDC_EDIT_BLOCKCOMMENT_TO,		11441,	//ブロックコメント終了
+	IDC_EDIT_LINECOMMENT,			11442,	//行コメント（１）
+	IDC_EDIT_LINECOMMENT2,			11443,	//行コメント（２）
+	IDC_EDIT3,						11444,	//位置編集１
+	IDC_EDIT5,						11445,	//位置編集２
+	IDC_EDIT_LINETERMCHAR,			11446,	//行番号区切り
+	IDC_LIST_COLORS,				11450,	//色リスト
+	IDC_RADIO_ESCAPETYPE_1,			11460,	//文字列エスケープ（C言語風）
+	IDC_RADIO_ESCAPETYPE_2,			11461,	//文字列エスケープ（PL/SQL風）
+	IDC_RADIO_LINENUM_LAYOUT,		11462,	//行番号の表示（折り返し単位）
+	IDC_RADIO_LINENUM_CRLF,			11463,	//行番号の表示（改行単位）
+	IDC_RADIO_LINETERMTYPE0,		11464,	//行番号区切り（なし）
+	IDC_RADIO_LINETERMTYPE1,		11465,	//行番号区切り（縦線）
+	IDC_RADIO_LINETERMTYPE2,		11466,	//行番号区切り（任意）
+//	IDC_STATIC,						-1,
+	0, 0
+};
+//@@@ 2001.02.04 End
+
+
 /* p1 ダイアログプロシージャ */
 BOOL CALLBACK PropTypesP1Proc(
 	HWND	hwndDlg,	// handle to dialog box
@@ -695,6 +751,18 @@ BOOL CPropTypes::DispatchEvent_p1(
 //		MYTRACE( "pMNUD->iPos		=%d\n",		pMNUD->iPos );
 //		MYTRACE( "pMNUD->iDelta		=%d\n",		pMNUD->iDelta );
 		break;
+
+//@@@ 2001.02.04 Start by MIK: Popup Help
+	case WM_HELP:
+		{
+			HELPINFO *p = (HELPINFO *)lParam;
+			::WinHelp( (HWND)p->hItemHandle, m_szHelpFile, HELP_WM_HELP, (DWORD)(LPVOID)p_helpids1 );
+		}
+		return TRUE;
+		/*NOTREACHED*/
+		break;
+//@@@ 2001.02.04 End
+
 	}
 	return FALSE;
 }
@@ -2008,6 +2076,18 @@ BOOL CPropTypes::DispatchEvent_p3_new(
 			DrawColorListItem( pDis );
 		}
 		break;
+
+//@@@ 2001.02.04 Start by MIK: Popup Help
+	case WM_HELP:
+		{
+			HELPINFO *p = (HELPINFO *)lParam;
+			::WinHelp( (HWND)p->hItemHandle, m_szHelpFile, HELP_WM_HELP, (DWORD)(LPVOID)p_helpids2 );
+		}
+		return TRUE;
+		/*NOTREACHED*/
+		break;
+//@@@ 2001.02.04 End
+
 	}
 	return FALSE;
 }

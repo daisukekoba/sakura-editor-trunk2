@@ -12,6 +12,31 @@
 //	To Here Sept. 5, 2000
 
 
+//@@@ 2001.02.04 Start by MIK: Popup Help
+const DWORD p_helpids[] = {	//10100
+	IDC_BUTTON_DELETE,				10100,	//メニューから機能削除
+	IDC_BUTTON_INSERTSEPARATOR,		10101,	//セパレータ挿入
+	IDC_BUTTON_INSERT,				10102,	//メニューへ機能挿入
+	IDC_BUTTON_ADD,					10103,	//メニューへ機能追加
+	IDC_BUTTON_UP,					10104,	//メニューの機能を上へ移動
+	IDC_BUTTON_DOWN,				10105,	//メニューの機能を下へ移動
+	IDC_BUTTON_IMPORT,				10106,	//インポート
+	IDC_BUTTON_EXPORT,				10107,	//エクスポート
+	IDC_COMBO_FUNCKIND,				10130,	//機能の種別
+	IDC_COMBO_MENU,					10131,	//メニューの種別
+	IDC_LIST_FUNC,					10150,	//機能一覧
+	IDC_LIST_RES,					10151,	//メニュー一覧
+	IDC_LABEL_MENUFUNCKIND,			-1,
+	IDC_LABEL_MENUCHOICE,			-1,
+	IDC_LABEL_MENUFUNC,				-1,
+	IDC_LABEL_MENU,					-1,
+	IDC_LABEL_MENUKEYCHANGE,		-1,
+//	IDC_STATIC,						-1,
+	0, 0
+};
+//@@@ 2001.02.04 End
+
+
 /* p8 メッセージ処理 */
 BOOL CPropCommon::DispatchEvent_p8(
     HWND	hwndDlg,	// handle to dialog box
@@ -566,6 +591,18 @@ BOOL CPropCommon::DispatchEvent_p8(
 	case WM_DESTROY:
 		::KillTimer( hwndDlg, 1 );
 		break;
+
+//@@@ 2001.02.04 Start by MIK: Popup Help
+	case WM_HELP:
+		{
+			HELPINFO *p = (HELPINFO *)lParam;
+			::WinHelp( (HWND)p->hItemHandle, m_szHelpFile, HELP_WM_HELP, (DWORD)(LPVOID)p_helpids );
+		}
+		return TRUE;
+		/*NOTREACHED*/
+		break;
+//@@@ 2001.02.04 End
+
 	}
 	return FALSE;
 }

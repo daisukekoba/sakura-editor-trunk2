@@ -20,6 +20,30 @@
 #include "global.h"
 
 
+//@@@ 2001.02.04 Start by MIK: Popup Help
+const DWORD p_helpids[] = {	//10600
+	IDC_BUTTON_HOKANFILE_REF,		10600,	//補完ファイル参照
+	IDC_BUTTON_KEYWORDHELPFILE_REF,	10601,	//キーワードヘルプファイル参照
+	IDC_BUTTON_OPENHELP1,			10602,	//外部ヘルプファイル参照
+	IDC_BUTTON_OPENEXTHTMLHELP,		10603,	//外部HTMLファイル参照
+	IDC_CHECK_USEHOKAN,				10610,	//逐次入力補完
+	IDC_CHECK_HOKANLOHICASE,		10611,	//入力補完の英大文字小文字
+	IDC_CHECK_m_bHokanKey_RETURN,	10612,	//候補決定キー（Enter）
+	IDC_CHECK_m_bHokanKey_TAB,		10613,	//候補決定キー（Tab）
+	IDC_CHECK_m_bHokanKey_RIGHT,	10614,	//候補決定キー（→）
+	IDC_CHECK_m_bHokanKey_SPACE,	10615,	//候補決定キー（Space）
+	IDC_CHECK_USEKEYWORDHELP,		10616,	//キーワードヘルプ機能
+	IDC_CHECK_HTMLHELPISSINGLE,		10617,	//ビューアの複数起動
+	IDC_EDIT_HOKANFILE,				10640,	//単語ファイル名
+	IDC_EDIT_KEYWORDHELPFILE,		10641,	//辞書ファイル名
+	IDC_EDIT_EXTHELP1,				10642,	//外部ヘルプファイル名
+	IDC_EDIT_EXTHTMLHELP,			10643,	//外部HTMLヘルプファイル名
+//	IDC_STATIC,						-1,
+	0, 0
+};
+//@@@ 2001.02.04 End
+
+
 
 /* p10 メッセージ処理 */
 BOOL CPropCommon::DispatchEvent_p10(
@@ -201,6 +225,18 @@ BOOL CPropCommon::DispatchEvent_p10(
 //		MYTRACE( "pMNUD->iPos    =%d\n", pMNUD->iPos      );
 //		MYTRACE( "pMNUD->iDelta  =%d\n", pMNUD->iDelta    );
 		break;
+
+//@@@ 2001.02.04 Start by MIK: Popup Help
+	case WM_HELP:
+		{
+			HELPINFO *p = (HELPINFO *)lParam;
+			::WinHelp( (HWND)p->hItemHandle, m_szHelpFile, HELP_WM_HELP, (DWORD)(LPVOID)p_helpids );
+		}
+		return TRUE;
+		/*NOTREACHED*/
+		break;
+//@@@ 2001.02.04 End
+
 	}
 	return FALSE;
 }

@@ -4,6 +4,19 @@
 #include "CPropCommon.h"
 
 
+//@@@ 2001.02.04 Start by MIK: Popup Help
+const DWORD p_helpids[] = {	//10210
+	IDC_CHECK_ADDCRLFWHENCOPY,			10210,	//折り返し行に改行を付けてコピー
+	IDC_CHECK_COPYnDISABLESELECTEDAREA,	10211,	//コピーしたら選択解除
+	IDC_CHECK_DRAGDROP,					10212,	//Drag&Drop編集する
+	IDC_CHECK_DROPSOURCE,				10213,	//ドロップ元にする
+	IDC_CHECK_bNotOverWriteCRLF,		10214,	//上書きモード
+//	IDC_STATIC,							-1,
+	0, 0
+};
+//@@@ 2001.02.04 End
+
+
 
 
 
@@ -83,6 +96,18 @@ BOOL CPropCommon::DispatchEvent_PROP_EDIT(
 			break;
 //		}
 		break;
+
+//@@@ 2001.02.04 Start by MIK: Popup Help
+	case WM_HELP:
+		{
+			HELPINFO *p = (HELPINFO *)lParam;
+			::WinHelp( (HWND)p->hItemHandle, m_szHelpFile, HELP_WM_HELP, (DWORD)(LPVOID)p_helpids );
+		}
+		return TRUE;
+		/*NOTREACHED*/
+		break;
+//@@@ 2001.02.04 End
+
 	}
 	return FALSE;
 }

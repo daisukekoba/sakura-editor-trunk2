@@ -26,6 +26,32 @@
 #include "CMenuDrawer.h"
 
 
+//@@@ 2001.02.04 Start by MIK: Popup Help
+const DWORD p_helpids[] = {	//10900
+	IDC_BUTTON_CLEAR_MRU_FILE,		10900,	//履歴をクリア（ファイル）
+	IDC_BUTTON_CLEAR_MRU_FOLDER,	10901,	//履歴をクリア（フォルダ）
+	IDC_CHECK_FREECARET,			10910,	//フリーカーソル
+	IDC_CHECK_INDENT,				10911,	//自動インデント
+	IDC_CHECK_INDENT_WSPACE,		10912,	//全角空白もインデント
+	IDC_CHECK_USETRAYICON,			10913,	//タスクトレイを使う
+	IDC_CHECK_STAYTASKTRAY,			10914,	//タスクトレイに常駐
+	IDC_CHECK_REPEATEDSCROLLSMOOTH,	10915,	//すこし滑らか
+	IDC_CHECK_EXITCONFIRM,			10916,	//終了の確認
+	IDC_HOTKEY_TRAYMENU,			10940,	//左クリックメニューのショートカットキー
+	IDC_EDIT_REPEATEDSCROLLLINENUM,	10941,	//スクロール行数
+	IDC_EDIT_MAX_MRU_FILE,			10942,	//ファイル履歴の最大数
+	IDC_EDIT_MAX_MRU_FOLDER,		10943,	//フォルダ履歴の最大数
+	IDC_RADIO_CARETTYPE0,			10960,	//カーソル形状（Windows風）
+	IDC_RADIO_CARETTYPE1,			10961,	//カーソル形状（MS-DOS風）
+	IDC_SPIN_REPEATEDSCROLLLINENUM,	-1,
+	IDC_SPIN_MAX_MRU_FILE,			-1,
+	IDC_SPIN_MAX_MRU_FOLDER,		-1,
+//	IDC_STATIC,						-1,
+	0, 0
+};
+//@@@ 2001.02.04 End
+
+
 
 
 
@@ -1304,6 +1330,18 @@ BOOL CPropCommon::DispatchEvent_p1(
 //		MYTRACE( "pMNUD->iPos    =%d\n", pMNUD->iPos );
 //		MYTRACE( "pMNUD->iDelta  =%d\n", pMNUD->iDelta );
 		break;
+
+//@@@ 2001.02.04 Start by MIK: Popup Help
+	case WM_HELP:
+		{
+			HELPINFO *p = (HELPINFO *)lParam;
+			::WinHelp( (HWND)p->hItemHandle, m_szHelpFile, HELP_WM_HELP, (DWORD)(LPVOID)p_helpids );
+		}
+		return TRUE;
+		/*NOTREACHED*/
+		break;
+//@@@ 2001.02.04 End
+
 	}
 	return FALSE;
 }
@@ -1644,6 +1682,5 @@ void CPropCommon::OnHelp( HWND hwndParent, int nPageID )
 	}
 	return;
 }
-
 
 /*[EOF]*/

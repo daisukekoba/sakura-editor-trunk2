@@ -4,6 +4,27 @@
 #include "CPropCommon.h"
 
 
+//@@@ 2001.02.04 Start by MIK: Popup Help
+const DWORD p_helpids[] = {	//11000
+	IDC_BUTTON_DELETE,				11000,	//ツールバーから機能削除
+	IDC_BUTTON_INSERTSEPARATOR,		11001,	//セパレータ挿入
+	IDC_BUTTON_INSERT,				11002,	//ツールバーへ機能挿入
+	IDC_BUTTON_ADD,					11003,	//ツールバーへ機能追加
+	IDC_BUTTON_UP,					11004,	//ツールバーの機能を上へ移動
+	IDC_BUTTON_DOWN,				11005,	//ツールバーの機能を下へ移動
+	IDC_CHECK_TOOLBARISFLAT,		11010,	//フラットなボタン
+	IDC_COMBO_FUNCKIND,				11030,	//機能の種別
+	IDC_LIST_FUNC,					11040,	//機能一覧
+	IDC_LIST_RES,					11041,	//ツールバー一覧
+	IDC_LABEL_MENUFUNCKIND,			-1,
+	IDC_LABEL_MENUFUNC,				-1,
+	IDC_LABEL_TOOLBAR,				-1,
+//	IDC_STATIC,						-1,
+	0, 0
+};
+//@@@ 2001.02.04 End
+
+
 /* p6 メッセージ処理 */
 BOOL CPropCommon::DispatchEvent_p6(
 	HWND	hwndDlg,	// handle to dialog box
@@ -282,6 +303,18 @@ BOOL CPropCommon::DispatchEvent_p6(
 	case WM_DESTROY:
 		::KillTimer( hwndDlg, 1 );
 		break;
+
+//@@@ 2001.02.04 Start by MIK: Popup Help
+	case WM_HELP:
+		{
+			HELPINFO *p = (HELPINFO *)lParam;
+			::WinHelp( (HWND)p->hItemHandle, m_szHelpFile, HELP_WM_HELP, (DWORD)(LPVOID)p_helpids );
+		}
+		return TRUE;
+		/*NOTREACHED*/
+		break;
+//@@@ 2001.02.04 End
+
 	}
 	return FALSE;
 }

@@ -4,6 +4,17 @@
 #include "CPropCommon.h"
 
 
+//@@@ 2001.02.04 Start by MIK: Popup Help
+const DWORD p_helpids[] = {	//10500
+	IDC_CHECK_bGrepExitConfirm,		10510,	//GREPの保存確認
+	IDC_CHECK_GTJW_RETURN,			10511,	//タグジャンプ（エンターキー）
+	IDC_CHECK_GTJW_LDBLCLK,			10512,	//タグジャンプ（ダブルクリック）
+//	IDC_STATIC,						-1,
+	0, 0
+};
+//@@@ 2001.02.04 End
+
+
 
 
 
@@ -47,6 +58,18 @@ BOOL CPropCommon::DispatchEvent_PROP_GREP( HWND hwndDlg, UINT uMsg, WPARAM wPara
 			break;
 //		}
 		break;
+
+//@@@ 2001.02.04 Start by MIK: Popup Help
+	case WM_HELP:
+		{
+			HELPINFO *p = (HELPINFO *)lParam;
+			::WinHelp( (HWND)p->hItemHandle, m_szHelpFile, HELP_WM_HELP, (DWORD)(LPVOID)p_helpids );
+		}
+		return TRUE;
+		/*NOTREACHED*/
+		break;
+//@@@ 2001.02.04 End
+
 	}
 	return FALSE;
 }

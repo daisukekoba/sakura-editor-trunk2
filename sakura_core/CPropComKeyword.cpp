@@ -20,6 +20,24 @@
 #include "global.h"
 
 
+//@@@ 2001.02.04 Start by MIK: Popup Help
+const DWORD p_helpids[] = {	//10800
+	IDC_BUTTON_ADDSET,				10800,	//キーワードセット追加
+	IDC_BUTTON_DELSET,				10801,	//キーワードセット削除
+	IDC_BUTTON_ADDKEYWORD,			10802,	//キーワード追加
+	IDC_BUTTON_EDITKEYWORD,			10803,	//キーワード編集
+	IDC_BUTTON_DELKEYWORD,			10804,	//キーワード削除
+	IDC_BUTTON_IMPORT,				10805,	//インポート
+	IDC_BUTTON_EXPORT,				10806,	//エクスポート
+	IDC_CHECK_KEYWORDCASE,			10810,	//キーワードの英大文字小文字区別
+	IDC_COMBO_SET,					10830,	//強調キーワードセット名
+	IDC_LIST_KEYWORD,				10840,	//キーワード一覧
+//	IDC_STATIC,						-1,
+	0, 0
+};
+//@@@ 2001.02.04 End
+
+
 /* p7 メッセージ処理 */
 BOOL CPropCommon::DispatchEvent_p7(
     HWND	hwndDlg,	// handle to dialog box
@@ -315,6 +333,18 @@ BOOL CPropCommon::DispatchEvent_p7(
 	case WM_DESTROY:
 		::KillTimer( hwndDlg, 1 );
 		break;
+
+//@@@ 2001.02.04 Start by MIK: Popup Help
+	case WM_HELP:
+		{
+			HELPINFO *p = (HELPINFO *)lParam;
+			::WinHelp( (HWND)p->hItemHandle, m_szHelpFile, HELP_WM_HELP, (DWORD)(LPVOID)p_helpids );
+		}
+		return TRUE;
+		/*NOTREACHED*/
+		break;
+//@@@ 2001.02.04 End
+
 	}
 	return FALSE;
 }
