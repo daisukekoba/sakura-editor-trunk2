@@ -1,8 +1,10 @@
 //	$Id$
-//	Copyright (C) 1998-2000, Norio Nakatani
+/************************************************************************
+	CPropComUrl.cpp
+	Copyright (C) 1998-2000, Norio Nakatani
+************************************************************************/
 
 #include "CPropCommon.h"
-
 
 //@@@ 2001.02.04 Start by MIK: Popup Help
 const DWORD p_helpids[] = {	//11100
@@ -11,7 +13,6 @@ const DWORD p_helpids[] = {	//11100
 	0, 0
 };
 //@@@ 2001.02.04 End
-
 
 
 
@@ -78,7 +79,7 @@ void CPropCommon::SetData_PROP_URL( HWND hwndDlg )
 {
 //	BOOL	bRet;
 
-//	BOOL				m_bSelectClickedURL;	/* URLがクリックされたら選択するか */
+//	BOOL	m_bSelectClickedURL;	/* URLがクリックされたら選択するか */
 
 
 	/* URLがクリックされたら選択するか */
@@ -86,9 +87,6 @@ void CPropCommon::SetData_PROP_URL( HWND hwndDlg )
 
 	return;
 }
-
-
-
 
 
 
@@ -103,9 +101,10 @@ int CPropCommon::GetData_PROP_URL( HWND hwndDlg )
 
 	/* URLがクリックされたら選択するか */
 	m_Common.m_bSelectClickedURL = ::IsDlgButtonChecked( hwndDlg, IDC_CHECK_bSelectClickedURL );
-	
+
 
 	return TRUE;
 }
 
 
+/*[EOF]*/

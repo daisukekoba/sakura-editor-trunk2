@@ -3,10 +3,11 @@
 	CDlgExec.cpp
 	Copyright (C) 1998-2000, Norio Nakatani
 ************************************************************************/
+
 #include "CDlgExec.h"
-#include "funccode.h"    //Stonee, 2001/03/12  コメントアウトされてたのを有効にした
+#include "funccode.h"	//Stonee, 2001/03/12  コメントアウトされてたのを有効にした
 #include "sakura_rc.h"
-#include "etc_uty.h"     //Stonee, 2001/03/12
+#include "etc_uty.h"	//Stonee, 2001/03/12
 
 CDlgExec::CDlgExec()
 {
@@ -123,4 +124,3 @@ BOOL CDlgExec::OnBnClicked( int wID )
 
 
 /*[EOF]*/
-

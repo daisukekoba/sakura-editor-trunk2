@@ -4854,15 +4854,14 @@ BOOL CEditView::Command_FUNCLIST( BOOL bCheckOnly )
 		m_pcEditDoc->MakeFuncList_C( &cFuncInfoArr );
 		/* C言語標準保護委員会勧告特別処理実装箇所(嘘) */
 		if( CheckEXT( m_pcEditDoc->m_szFilePath, "c" ) ){
-			nListType = OUTLINE_C;/* これでC関数一覧リストビューになる */
+			nListType = OUTLINE_C;	/* これでC関数一覧リストビューになる */
 		}
 		break;
 	case OUTLINE_PLSQL:		m_pcEditDoc->MakeFuncList_PLSQL( &cFuncInfoArr );break;
 	case OUTLINE_JAVA:		m_pcEditDoc->MakeFuncList_Java( &cFuncInfoArr );break;
 	case OUTLINE_COBOL:		m_pcEditDoc->MakeTopicList_cobol( &cFuncInfoArr );break;
 	case OUTLINE_ASM:		m_pcEditDoc->MakeTopicList_asm( &cFuncInfoArr );break;
-	//	Sep. 8, 2000 genta
-	case OUTLINE_PERL:		m_pcEditDoc->MakeFuncList_Perl( &cFuncInfoArr );break;
+	case OUTLINE_PERL:		m_pcEditDoc->MakeFuncList_Perl( &cFuncInfoArr );break;	//	Sep. 8, 2000 genta
 	case OUTLINE_TEXT:
 	case OUTLINE_UNKNOWN:
 	default:

@@ -29,6 +29,7 @@
 #include "CDlgPrintPage.h"
 #include "funccode.h"		// Stonee, 2001/03/12
 
+
 #define IDT_TOOLBAR		456
 #define ID_TOOLBAR		100
 
@@ -172,7 +173,7 @@ CEditWnd::CEditWnd() :
 	m_pPrintSetting( NULL ),		/* 現在の印刷設定 */
 
 	m_hwndPrintPreviewBar( NULL ),	/* 印刷プレビュー 操作バー */
-	m_hwndVScrollBar( NULL )	,	/* 印刷プレビュー 垂直スクロールバーウィンドウハンドル */
+	m_hwndVScrollBar( NULL ),		/* 印刷プレビュー 垂直スクロールバーウィンドウハンドル */
 	m_hwndHScrollBar( NULL ),		/* 印刷プレビュー 水平スクロールバーウィンドウハンドル */
 	m_hwndSizeBox( NULL ),			/* 印刷プレビュー サイズボックスウィンドウハンドル */
 	m_pszAppName( GSTR_EDITWINDOWNAME ),
@@ -2590,11 +2591,11 @@ void CEditWnd::InitMenu( HMENU hMenu, UINT uPos, BOOL fSystemMenu )
 			}
 			m_CMenuDrawer.MyAppendMenu( hMenu, MF_BYPOSITION | MF_SEPARATOR, 0, NULL );
 
-			//	From Here Sept. 20, 2000 JEPRO 名称CMMANDをCOMMANDに変更
+			//From Here Sept. 20, 2000 JEPRO 名称CMMANDをCOMMANDに変更
 //			m_CMenuDrawer.MyAppendMenu( hMenu, MF_BYPOSITION | MF_STRING, F_EXECCMMAND, "外部コマンド実行(&X)" );
-			m_CMenuDrawer.MyAppendMenu( hMenu, MF_BYPOSITION | MF_STRING, F_EXECCOMMAND, "外部コマンド実行(&X)" );
-			m_CMenuDrawer.MyAppendMenu( hMenu, MF_BYPOSITION | MF_SEPARATOR, 0, NULL );
-			//	To Here Sept. 20, 2000
+//			m_CMenuDrawer.MyAppendMenu( hMenu, MF_BYPOSITION | MF_STRING, F_EXECCOMMAND, "外部コマンド実行(&X)" );	//Mar. 10, 2001 JEPRO 機能しないのでメニューから隠した(うまくグレイ表示にならないので)
+//			m_CMenuDrawer.MyAppendMenu( hMenu, MF_BYPOSITION | MF_SEPARATOR, 0, NULL );								//Mar. 10, 2001 上の変更にともないこれも隠した
+			//To Here Sept. 20, 2000
 
 			//「カスタムメニュー」ポップアップ
 			hMenuPopUp = ::CreateMenu();
@@ -3253,7 +3254,7 @@ int CEditWnd::IsFuncEnable( CEditDoc* pcEditDoc, DLLSHAREDATA* pShareData, int n
 	case F_TOUPPER:					/* 英小文字→英大文字 */
 	case F_TOHANKAKU:				/* 全角→半角 */
 	case F_TOZENKAKUKATA:			/* 半角＋全ひら→全角・カタカナ */	//Sept. 17, 2000 jepro 説明を「半角→全角カタカナ」から変更
-	case F_TOZENKAKUHIRA:			/* 半角と全カタ→全角・ひらがな */	//Sept. 17, 2000 jepro 説明を「半角→全角ひらがな」から変更
+	case F_TOZENKAKUHIRA:			/* 半角＋全カタ→全角・ひらがな */	//Sept. 17, 2000 jepro 説明を「半角→全角ひらがな」から変更
 	case F_HANKATATOZENKAKUKATA:	/* 半角カタカナ→全角カタカナ */
 	case F_HANKATATOZENKAKUHIRA:	/* 半角カタカナ→全角ひらがな */
 	case F_TABTOSPACE:				/* TAB→空白 */
@@ -3278,13 +3279,13 @@ int CEditWnd::IsFuncEnable( CEditDoc* pcEditDoc, DLLSHAREDATA* pShareData, int n
 		}
 	case F_SELECTWORD:	/* 現在位置の単語選択 */
 	case F_CUT_LINE:	//行切り取り(折り返し単位)
+	case F_DELETE_LINE:	//行削除(折り返し単位)
 		/* テキストが選択されているか */
 		if( pcEditDoc->IsTextSelected( ) ){
 			return FALSE;
 		}else{
 			return TRUE;
 		}
-	case F_DELETE_LINE:	//行削除(折り返し単位)
 	case F_UNDO:
 		/* Undo(元に戻す)可能な状態か？ */
 		if( pcEditDoc->IsEnableUndo() ){

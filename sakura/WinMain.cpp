@@ -1,14 +1,12 @@
 //	$Id$
 /************************************************************************
-
 	WinMain.cpp
 	Copyright (C) 1998-2000, Norio Nakatani
 
 	UPDATE:
 	CREATE: 1998/3/13
-
-
 ************************************************************************/
+
 #include <windows.h>
 //#include <stdio.h>
 //#include <io.h>
@@ -58,9 +56,6 @@ int WINAPI WinMain( HINSTANCE, HINSTANCE, LPSTR, int );
 //	VS_FIXEDFILEINFO	Value;
 //};
 //char* m_pszAppName = "SakuraTrayClass";
-
-
-
 
 
 
@@ -211,7 +206,7 @@ int WINAPI WinMain(
 
 
 		/* 共有データ構造体のアドレスを返す */
-		if( !m_cShareData.Init()){
+		if( !m_cShareData.Init() ){
 			//	適切なデータを得られなかった
 			::MessageBox( NULL, "異なるバージョンのエディタを同時に起動することはできません。", GSTR_APPNAME, MB_OK | MB_ICONERROR );
 			return 0;
@@ -323,7 +318,7 @@ int WINAPI WinMain(
 				//	Nov. 6, 2000 genta
 				//	キャレット位置の復元のため
 				//	オプション指定がないときは画面移動を行わないようにする
-				if(( 0 <= fi.m_nViewTopLine || 0 <= fi.m_nViewLeftCol ) && fi.m_nViewTopLine < pcEditWnd->m_cEditDoc.m_cLayoutMgr.GetLineCount() ){
+				if( ( 0 <= fi.m_nViewTopLine || 0 <= fi.m_nViewLeftCol ) && fi.m_nViewTopLine < pcEditWnd->m_cEditDoc.m_cLayoutMgr.GetLineCount() ){
 					pcEditWnd->m_cEditDoc.m_cEditViewArr[0].m_nViewTopLine = fi.m_nViewTopLine;
 					pcEditWnd->m_cEditDoc.m_cEditViewArr[0].m_nViewLeftCol = fi.m_nViewLeftCol;
 				}
@@ -385,16 +380,14 @@ CreateControlProcess:;
 		/* リソースから製品バージョンの取得 */
 		GetAppVersionInfo( hInstance, VS_VERSION_INFO, &m_pShareData->m_dwProductVersionMS, &m_pShareData->m_dwProductVersionLS );
 //		MYTRACE( "製品バージョン=%d.%d.%d.%d\n",
-//			HIWORD( m_pShareData->m_dwProductVersionMS ),	LOWORD( m_pShareData->m_dwProductVersionMS ),
-//			HIWORD( m_pShareData->m_dwProductVersionLS ),	LOWORD( m_pShareData->m_dwProductVersionLS )
+//			HIWORD( m_pShareData->m_dwProductVersionMS ), LOWORD( m_pShareData->m_dwProductVersionMS ),
+//			HIWORD( m_pShareData->m_dwProductVersionLS ), LOWORD( m_pShareData->m_dwProductVersionLS )
 //		);
 
 		/* 共有データのロード */
 		if( FALSE == m_cShareData.LoadShareData() ){
 //			int	i;
-			/*	レジストリから設定データが存在しなかった場合は初回起動時とみなし
-				全レジストリデータを作っておく
-			*/
+			/*	レジストリから設定データが存在しなかった場合は初回起動時とみなし全レジストリデータを作っておく */
 
 //			/* 変更フラグ(共通設定の全体)のセット */
 //			m_pShareData->m_nCommonModify = TRUE;
@@ -431,7 +424,7 @@ CreateControlProcess:;
 
 		if( NULL == ( hwndTray = pcEditApp->Create( hInstance ) ) ){
 			::MessageBeep( MB_ICONSTOP );
-			::MYMESSAGEBOX(	NULL, MB_OK | MB_ICONSTOP | MB_TOPMOST, GSTR_APPNAME, "ウィンドウの作成に失敗しました。\n起動できません。" );
+			::MYMESSAGEBOX( NULL, MB_OK | MB_ICONSTOP | MB_TOPMOST, GSTR_APPNAME, "ウィンドウの作成に失敗しました。\n起動できません。" );
 			return 0;
 		}
 		m_pShareData->m_hwndTray = hwndTray;

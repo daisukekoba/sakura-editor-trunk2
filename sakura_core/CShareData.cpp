@@ -924,7 +924,7 @@ tt 時刻マーカー。「 AM 」「 PM 」「午前」「午後」など。
 			"折り返し記号",						TRUE , FALSE, FALSE, RGB( 255, 0, 255 )		, RGB( 255, 251, 240 ),
 			"EOF記号",							TRUE , FALSE, FALSE, RGB( 0, 255, 255 )		, RGB( 0, 0, 0 ),
 //#ifdef COMPILE_COLOR_DIGIT
-			"半角数値",							TRUE , FALSE, FALSE, RGB( 128, 0, 255 )		, RGB( 255, 251, 240 ),	//@@@ 2001.02.17 by MIK		//Mar. 7, 2001 JEPRO RGB(0,0,255)を変更
+			"半角数値",							FALSE, FALSE, FALSE, RGB( 235, 0, 0 )		, RGB( 255, 251, 240 ),	//@@@ 2001.02.17 by MIK		//Mar. 7, 2001 JEPRO RGB(0,0,255)を変更  Mar.10, 2001 標準は色なしに
 //#endif
 			"検索文字列",						TRUE , FALSE, FALSE, RGB( 0, 0, 0 )			, RGB( 255, 255, 0 ),
 			"強調キーワード1",					TRUE , FALSE, FALSE, RGB( 0, 0, 255 )		, RGB( 255, 251, 240 ),
@@ -982,7 +982,8 @@ tt 時刻マーカー。「 AM 」「 PM 」「午前」「午後」など。
 			"",
 			"txt,doc,1st,err,ps",	//Nov. 15, 2000 JEPRO PostScriptファイルも読めるようにする //Jan. 12, 2001 JEPRO readme.1st も読めるようにする //Feb. 12, 2001 JEPRO .err エラーメッセージ
 //			"c,cpp,cxx,h",
-			"c,cpp,cxx,cc,cp,c++,h,hpp,hxx,hh,hp,h++,rc,dsw,dsp,dep,mak",	//Oct. 31, 2000 JEPRO VC++の生成するテキストファイルも読めるようにする	//Feb. 7, 2001 JEPRO .cc/cp/c++/.hpp/hxx/hh/hp/h++を追加
+			"c,cpp,cxx,cc,cp,c++,h,hpp,hxx,hh,hp,h++,rc,dsw,dsp,dep,mak,hm",	//Oct. 31, 2000 JEPRO VC++の生成するテキストファイルも読めるようにする
+				//Feb. 7, 2001 JEPRO .cc/cp/c++/.hpp/hxx/hh/hp/h++を追加	//Mar. 15, 2001 JEPRO .hmを追加
 //			"html,htm,shtml",
 			"html,htm,shtml,plg",	//Oct. 31, 2000 JEPRO VC++の生成するテキストファイルも読み込めるようにする
 			"sql,plsql",
@@ -992,7 +993,7 @@ tt 時刻マーカー。「 AM 」「 PM 」「午前」「午後」など。
 			"awk",
 			"bat",
 			"dpr,pas",
-			"tex,sty,bib,log,blg,aux,bbl,toc,lof,lot,idx,ind,glo",		//Oct. 31, 2000 JEPRO TeX ユーザに贈る
+			"tex,ltx,sty,bib,log,blg,aux,bbl,toc,lof,lot,idx,ind,glo",		//Oct. 31, 2000 JEPRO TeX ユーザに贈る	//Mar. 10, 2001 JEPRO 追加
 			"",
 			"",
 			"",
@@ -1018,9 +1019,9 @@ tt 時刻マーカー。「 AM 」「 PM 」「午前」「午後」など。
 		strcpy( m_pShareData->m_Types[0].m_szBlockCommentTo, "" );		/* ブロックコメントデリミタ(To) */
 		m_pShareData->m_Types[0].m_nMaxLineSize = 10240;				/* 折り返し文字数 */
 		m_pShareData->m_Types[0].m_nDefaultOutline = OUTLINE_UNKNOWN;	/* アウトライン解析方法 */
-		//	Oct. 17, 2000 JEPRO	シングルクォーテーション文字列を色分け表示しない
+		//Oct. 17, 2000 JEPRO	シングルクォーテーション文字列を色分け表示しない
 		m_pShareData->m_Types[0].m_ColorInfoArr[COLORIDX_SSTRING].m_bDisp = FALSE;
-		//	Sept. 4, 2000 JEPRO	ダブルクォーテーション文字列を色分け表示しない
+		//Sept. 4, 2000 JEPRO	ダブルクォーテーション文字列を色分け表示しない
 		m_pShareData->m_Types[0].m_ColorInfoArr[COLORIDX_WSTRING].m_bDisp = FALSE;
 
 		nIdx = 0;
@@ -1029,14 +1030,14 @@ tt 時刻マーカー。「 AM 」「 PM 」「午前」「午後」など。
 		strcpy( m_pShareData->m_Types[1].m_szLineComment2, "" );		/* 行コメントデリミタ2 */
 		strcpy( m_pShareData->m_Types[1].m_szBlockCommentFrom, "" );	/* ブロックコメントデリミタ(From) */
 		strcpy( m_pShareData->m_Types[1].m_szBlockCommentTo, "" );		/* ブロックコメントデリミタ(To) */
-		//	From Here Sept. 20, 2000 JEPRO テキストの規定値を80→120に変更(不具合一覧.txtがある程度読みやすい桁数)
+		//From Here Sept. 20, 2000 JEPRO テキストの規定値を80→120に変更(不具合一覧.txtがある程度読みやすい桁数)
 //		m_pShareData->m_Types[1].m_nMaxLineSize = 80;					/* 折り返し文字数 */
 		m_pShareData->m_Types[1].m_nMaxLineSize = 120;					/* 折り返し文字数 */
-		//	To Here Sept. 20, 2000
+		//To Here Sept. 20, 2000
 		m_pShareData->m_Types[1].m_nDefaultOutline = OUTLINE_TEXT;		/* アウトライン解析方法 */
-		//	Oct. 17, 2000 JEPRO	シングルクォーテーション文字列を色分け表示しない
+		//Oct. 17, 2000 JEPRO	シングルクォーテーション文字列を色分け表示しない
 		m_pShareData->m_Types[1].m_ColorInfoArr[COLORIDX_SSTRING].m_bDisp = FALSE;
-		//	Sept. 4, 2000 JEPRO	ダブルクォーテーション文字列を色分け表示しない
+		//Sept. 4, 2000 JEPRO	ダブルクォーテーション文字列を色分け表示しない
 		m_pShareData->m_Types[1].m_ColorInfoArr[COLORIDX_WSTRING].m_bDisp = FALSE;
 
 
@@ -1049,6 +1050,8 @@ tt 時刻マーカー。「 AM 」「 PM 」「午前」「午後」など。
 		m_pShareData->m_Types[2].m_nKeyWordSetIdx = 0;						/* キーワードセット */
 		m_pShareData->m_Types[2].m_nDefaultOutline = OUTLINE_CPP;			/* アウトライン解析方法 */
 		m_pShareData->m_Types[2].m_nSmartIndent = SMARTINDENT_CPP;			/* スマートインデント種別 */
+		//Mar. 10, 2001 JEPRO	半角数値を色分け表示
+		m_pShareData->m_Types[2].m_ColorInfoArr[COLORIDX_DIGIT].m_bDisp = TRUE;
 
 
 		/* HTML */
@@ -1089,9 +1092,13 @@ tt 時刻マーカー。「 AM 」「 PM 」「午前」「午後」など。
 		m_pShareData->m_Types[6].m_nKeyWordSetIdx = 3;						/* キーワードセット */
 		m_pShareData->m_Types[6].m_nDefaultOutline = OUTLINE_JAVA;			/* アウトライン解析方法 */
 		m_pShareData->m_Types[6].m_nSmartIndent = SMARTINDENT_CPP;			/* スマートインデント種別 */
+		//Mar. 10, 2001 JEPRO	半角数値を色分け表示
+		m_pShareData->m_Types[6].m_ColorInfoArr[COLORIDX_DIGIT].m_bDisp = TRUE;
 
 		/* アセンブラ */
 		m_pShareData->m_Types[7].m_nDefaultOutline = OUTLINE_ASM;			/* アウトライン解析方法 */
+		//Mar. 10, 2001 JEPRO	半角数値を色分け表示
+		m_pShareData->m_Types[7].m_ColorInfoArr[COLORIDX_DIGIT].m_bDisp = TRUE;
 
 		/* awk */
 		strcpy( m_pShareData->m_Types[8].m_szLineComment, "#" );			/* 行コメントデリミタ */
@@ -1114,8 +1121,10 @@ tt 時刻マーカー。「 AM 」「 PM 」「午前」「午後」など。
 //#endif
 		m_pShareData->m_Types[10].m_nStringType = 1;						/* 文字列区切り記号エスケープ方法  0=[\"][\'] 1=[""][''] */	//Nov. 5, 2000 JEPRO 追加
 		m_pShareData->m_Types[10].m_nKeyWordSetIdx = 5;						/* キーワードセット */
+		//Mar. 10, 2001 JEPRO	半角数値を色分け表示
+		m_pShareData->m_Types[2].m_ColorInfoArr[COLORIDX_DIGIT].m_bDisp = TRUE;
 
-		// From Here Oct. 31, 2000 JEPRO
+		//From Here Oct. 31, 2000 JEPRO
 		/* TeX */
 		strcpy( m_pShareData->m_Types[11].m_szLineComment, "%" );			/* 行コメントデリミタ */
 		m_pShareData->m_Types[11].m_nDefaultOutline = OUTLINE_TEXT;			/* アウトライン解析方法 */
@@ -1127,9 +1136,9 @@ tt 時刻マーカー。「 AM 」「 PM 」「午前」「午後」など。
 		m_pShareData->m_Types[11].m_ColorInfoArr[COLORIDX_WSTRING].m_bDisp = FALSE;
 		//URLにアンダーラインを引かない(やっぱりやめた)
 //		m_pShareData->m_Types[11].m_ColorInfoArr[COLORIDX_URL].m_bUnderLine = FALSE;
-		// To Here Oct. 31, 2000
+		//To Here Oct. 31, 2000
 
-		// From Here Nov. 9, 2000 JEPRO
+		//From Here Nov. 9, 2000 JEPRO
 		/* 設定ファイル */
 		strcpy( m_pShareData->m_Types[15].m_szLineComment, "//" );			/* 行コメントデリミタ */
 		strcpy( m_pShareData->m_Types[15].m_szLineComment2, ";" );			/* 行コメントデリミタ2 */
@@ -1138,7 +1147,7 @@ tt 時刻マーカー。「 AM 」「 PM 」「午前」「午後」など。
 		m_pShareData->m_Types[15].m_ColorInfoArr[COLORIDX_SSTRING].m_bDisp = FALSE;
 		//ダブルクォーテーション文字列を色分け表示しない
 		m_pShareData->m_Types[15].m_ColorInfoArr[COLORIDX_WSTRING].m_bDisp = FALSE;
-		// To Here Nov. 9, 2000
+		//To Here Nov. 9, 2000
 
 
 		/* 強調キーワードのテストデータ */

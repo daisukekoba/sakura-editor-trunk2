@@ -166,14 +166,13 @@ public: /* テスト用にアクセス属性を変更 */
 	char			m_szGrepKey[1024];			/* Grepモードの場合、その検索キー */
 	HWND			m_hWnd;						/* 編集ウィンドウハンドル */
 	COpeBuf			m_cOpeBuf;					/* アンドゥバッファ */
-	void			MakeFuncList_C( CFuncInfoArr* );	/* C/C++関数リスト作成 */
+	void			MakeFuncList_C( CFuncInfoArr* );		/* C/C++関数リスト作成 */
 	void 			MakeFuncList_PLSQL( CFuncInfoArr* );	/* PL/SQL関数リスト作成 */
-	void 			MakeTopicList_txt( CFuncInfoArr* );	/* テキスト・トピックリスト作成 */
-	void			MakeFuncList_Java( CFuncInfoArr* );	/* Java関数リスト作成 */
+	void 			MakeTopicList_txt( CFuncInfoArr* );		/* テキスト・トピックリスト作成 */
+	void			MakeFuncList_Java( CFuncInfoArr* );		/* Java関数リスト作成 */
 	void			MakeTopicList_cobol( CFuncInfoArr* );	/* COBOL アウトライン解析 */
-	void			MakeTopicList_asm( CFuncInfoArr* );	/* アセンブラ アウトライン解析 */
-	//	Sep. 8, 2000 genta
-	void			MakeFuncList_Perl( CFuncInfoArr* );	/* Perl関数リスト作成 */
+	void			MakeTopicList_asm( CFuncInfoArr* );		/* アセンブラ アウトライン解析 */
+	void			MakeFuncList_Perl( CFuncInfoArr* );		/* Perl関数リスト作成 */	//	Sep. 8, 2000 genta
 
 
 	CSplitterWnd	m_cSplitterWnd;				/* 分割フレーム */

@@ -252,7 +252,7 @@ void CDlgFuncList::SetData( void/*HWND hwndDlg*/ )
 				item.pszText								/* 検出結果の種類 */
 			);
 //			m_cmemClipText.Append( (const char *)szText, lstrlen( szText ) );	/* クリップボードコピー用テキスト */
-			m_cmemClipText.AppendSz( (const char *)szText );	/* クリップボードコピー用テキスト */
+			m_cmemClipText.AppendSz( (const char *)szText );					/* クリップボードコピー用テキスト */
 		}
 		if( bSelected ){
 			ListView_GetItemRect( hwndList, 0, &rc, LVIR_BOUNDS );
@@ -278,7 +278,7 @@ void CDlgFuncList::SetData( void/*HWND hwndDlg*/ )
 
 
 /* ダイアログデータの取得 */
-/*  0==条件未入力   0より大きい==正常   0より小さい==入力エラー  */
+/* 0==条件未入力   0より大きい==正常   0より小さい==入力エラー */
 int CDlgFuncList::GetData( void )
 {
 	HWND			hwndList;
@@ -359,7 +359,7 @@ void CDlgFuncList::SetTreeCpp( HWND hwndDlg )
 	tvis.hParent = TVI_ROOT;
 	tvis.hInsertAfter = TVI_LAST;
 	tvis.item.mask = TVIF_TEXT | TVIF_PARAM;
-	tvis.item.pszText = "ｸﾞﾛｰﾊﾞﾙ";
+	tvis.item.pszText = "グローバル";
 	tvis.item.lParam = -1;
 	htiGlobal = TreeView_InsertItem( hwndTree, &tvis );
 
@@ -375,7 +375,7 @@ void CDlgFuncList::SetTreeCpp( HWND hwndDlg )
 		if( NULL != ( pPos = strstr( pWork, "::" ) ) ){
 			pClassName = new char[pPos - pWork + 1 + 3 ];
 			memcpy( pClassName, pWork, pPos - pWork );
-			strcpy( &pClassName[pPos - pWork], "ｸﾗｽ" );
+			strcpy( &pClassName[pPos - pWork], "クラス" );
 			pFuncName = new char[ lstrlen( pPos + lstrlen( "::" ) ) + 1 ];
 			strcpy( pFuncName, pPos + lstrlen( "::" ) );
 
@@ -418,7 +418,7 @@ void CDlgFuncList::SetTreeCpp( HWND hwndDlg )
 				pcFuncInfo->m_cmemFuncName.GetPtr( NULL ) 	/* 検出結果 */
 			);
 //			m_cmemClipText.Append( (const char *)szText, lstrlen( szText ) );	/* クリップボードコピー用テキスト */
-			m_cmemClipText.AppendSz( (const char *)szText );	/* クリップボードコピー用テキスト */
+			m_cmemClipText.AppendSz( (const char *)szText );					/* クリップボードコピー用テキスト */
 		}else{
 			/* グローバル関数の場合 */
 			pClassName = NULL;
@@ -444,11 +444,11 @@ void CDlgFuncList::SetTreeCpp( HWND hwndDlg )
 				/* クリップボードにコピーするテキストを編集 */
 				wsprintf( szText, "%s(%d): %s(宣言)\r\n",
 					m_pcFuncInfoArr->m_szFilePath,				/* 解析対象ファイル名 */
-					pcFuncInfo->m_nFuncLineCRLF,					/* 検出行番号 */
+					pcFuncInfo->m_nFuncLineCRLF,				/* 検出行番号 */
 					pcFuncInfo->m_cmemFuncName.GetPtr( NULL ) 	/* 検出結果 */
 				);
 //				m_cmemClipText.Append( (const char *)szText, lstrlen( szText ) );	/* クリップボードコピー用テキスト */
-				m_cmemClipText.AppendSz( (const char *)szText );	/* クリップボードコピー用テキスト */
+				m_cmemClipText.AppendSz( (const char *)szText );					/* クリップボードコピー用テキスト */
 			}else{
 				/* クリップボードにコピーするテキストを編集 */
 				wsprintf( szText, "%s(%d): %s\r\n",
@@ -457,7 +457,7 @@ void CDlgFuncList::SetTreeCpp( HWND hwndDlg )
 					pcFuncInfo->m_cmemFuncName.GetPtr( NULL ) 	/* 検出結果 */
 				);
 //				m_cmemClipText.Append( (const char *)szText, lstrlen( szText ) );	/* クリップボードコピー用テキスト */
-				m_cmemClipText.AppendSz( (const char *)szText );	/* クリップボードコピー用テキスト */
+				m_cmemClipText.AppendSz( (const char *)szText );					/* クリップボードコピー用テキスト */
 			}
 		}
 		/* 現在カーソル位置のメソッドかどうか調べる */
@@ -552,7 +552,7 @@ void CDlgFuncList::SetTreeJava( HWND hwndDlg, BOOL bAddClass )
 		/* クラス名::メソッドの場合 */
 		if( NULL != ( pPos = strstr( pWork, "::" ) ) ){
 			/* インナークラスのネストレベルを調べる */
-			int k, m;
+			int	k, m;
 			int	nWorkLen;
 			int	nCharChars;
 			nClassNest = 0;
@@ -592,7 +592,7 @@ void CDlgFuncList::SetTreeJava( HWND hwndDlg, BOOL bAddClass )
 				pClassName = new char[ lstrlen( szClassArr[k] ) + 1 + 3 ];
 				strcpy( pClassName, szClassArr[k] );
 				if( bAddClass ){
-					strcat( pClassName, "ｸﾗｽ" );
+					strcat( pClassName, "クラス" );
 				}
 				while( NULL != htiClass ){
 					tvi.mask = TVIF_HANDLE | TVIF_TEXT;
@@ -638,7 +638,7 @@ void CDlgFuncList::SetTreeJava( HWND hwndDlg, BOOL bAddClass )
 				pcFuncInfo->m_cmemFuncName.GetPtr( NULL ) 	/* 検出結果 */
 			);
 //			m_cmemClipText.Append( (const char *)szText, lstrlen( szText ) );	/* クリップボードコピー用テキスト */
-			m_cmemClipText.AppendSz( (const char *)szText );	/* クリップボードコピー用テキスト */
+			m_cmemClipText.AppendSz( (const char *)szText );					/* クリップボードコピー用テキスト */
 //		}else{
 //			/* グローバル関数の場合 */
 //			pClassName = NULL;
@@ -664,7 +664,7 @@ void CDlgFuncList::SetTreeJava( HWND hwndDlg, BOOL bAddClass )
 //				/* クリップボードにコピーするテキストを編集 */
 //				sprintf( szText, "%s(%d): %s(宣言)\r\n",
 //					m_pcFuncInfoArr->m_szFilePath,				/* 解析対象ファイル名 */
-//					pcFuncInfo->m_nFuncLineCRLF,					/* 検出行番号 */
+//					pcFuncInfo->m_nFuncLineCRLF,				/* 検出行番号 */
 //					pcFuncInfo->m_cmemFuncName.GetPtr( NULL ) 	/* 検出結果 */
 //				);
 //				m_cmemClipText.Append( (const char *)szText, lstrlen( szText ) );	/* クリップボードコピー用テキスト */
@@ -751,8 +751,8 @@ void CDlgFuncList::GetTreeTextNext(
 		}
 //		m_cmemClipText.Append( (const char *)tvi.pszText, lstrlen( (const char *)tvi.pszText ) );	/* クリップボードコピー用テキスト */
 		m_cmemClipText.AppendSz( (const char *)tvi.pszText );	/* クリップボードコピー用テキスト */
-//		m_cmemClipText.Append( (const char *)"\r\n", 2 );	/* クリップボードコピー用テキスト */
-		m_cmemClipText.AppendSz( (const char *)"\r\n" );	/* クリップボードコピー用テキスト */
+//		m_cmemClipText.Append( (const char *)"\r\n", 2 );		/* クリップボードコピー用テキスト */
+		m_cmemClipText.AppendSz( (const char *)"\r\n" );		/* クリップボードコピー用テキスト */
 		GetTreeTextNext( hwndTree, htiItem, nDepth + 1 );
 
 		htiItem = TreeView_GetNextSibling( hwndTree, htiItem );
@@ -830,7 +830,7 @@ int CDlgFuncList::SetTreeTxtNest(
 			m_cmemClipText.AppendSz( "　" );	/* クリップボードコピー用テキスト */
 		}
 //		m_cmemClipText.Append( (const char *)pWork, lstrlen( (const char *)pWork ) );	/* クリップボードコピー用テキスト */
-		m_cmemClipText.AppendSz( (const char *)pWork );	/* クリップボードコピー用テキスト */
+		m_cmemClipText.AppendSz( (const char *)pWork );		/* クリップボードコピー用テキスト */
 //		m_cmemClipText.Append( (const char *)"\r\n", 2 );	/* クリップボードコピー用テキスト */
 		m_cmemClipText.AppendSz( (const char *)"\r\n" );	/* クリップボードコピー用テキスト */
 
@@ -947,8 +947,7 @@ BOOL CDlgFuncList::OnBnClicked( int wID )
 	switch( wID ){
 	case IDC_BUTTON_HELP:
 		/* 「アウトライン解析」のヘルプ */
-		//Stonee, 2001/03/12 第四引数を、機能番号からヘルプトピック番号を調べるようにした
-		::WinHelp( m_hWnd, m_szHelpFile, HELP_CONTEXT, ::FuncID_To_HelpContextID(F_OUTLINE) );
+		::WinHelp( m_hWnd, m_szHelpFile, HELP_CONTEXT, 64 );
 		return TRUE;
 	case IDOK:
 		return OnJump();
