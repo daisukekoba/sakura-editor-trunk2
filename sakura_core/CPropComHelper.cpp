@@ -4,6 +4,7 @@
 	共通設定：支援
 	Copyright (C) 1998-2000, Norio Nakatani
 ************************************************************************/
+
 #include "sakura_rc.h"
 #include "CPropCommon.h"
 #include "debug.h"
@@ -64,9 +65,9 @@ BOOL CPropCommon::DispatchEvent_p10(
 		::SetWindowLong( hwndDlg, DWL_USER, (LONG)lParam );
 
 		/* ユーザーがエディット コントロールに入力できるテキストの長さを制限する */
-		/* 入力補完　単語ファイル */
+		/* 入力補完 単語ファイル */
 		::SendMessage( ::GetDlgItem( hwndDlg, IDC_EDIT_HOKANFILE ), EM_LIMITTEXT, (WPARAM)(_MAX_PATH - 1 ), 0 );
-		/* キーワードヘルプ　辞書ファイル */
+		/* キーワードヘルプ 辞書ファイル */
 		::SendMessage( ::GetDlgItem( hwndDlg, IDC_EDIT_KEYWORDHELPFILE ), EM_LIMITTEXT, (WPARAM)(_MAX_PATH - 1 ), 0 );
 
 		/* ユーザーがエディット コントロールに入力できるテキストの長さを制限する */
@@ -87,7 +88,7 @@ BOOL CPropCommon::DispatchEvent_p10(
 			/* ダイアログデータの取得 p10 */
 			GetData_p10( hwndDlg );
 			switch( wID ){
-			case IDC_BUTTON_HOKANFILE_REF:	/* 入力補完　単語ファイルの「参照...」ボタン */
+			case IDC_BUTTON_HOKANFILE_REF:	/* 入力補完 単語ファイルの「参照...」ボタン */
 				{
 					CDlgOpenFile	cDlgOpenFile;
 					char*			pszMRU = NULL;;
@@ -125,7 +126,7 @@ BOOL CPropCommon::DispatchEvent_p10(
 				return TRUE;
 			//	To Here Sept. 12, 2000
 
-			case IDC_BUTTON_KEYWORDHELPFILE_REF:	/* キーワードヘルプ　辞書ファイルの「参照...」ボタン */
+			case IDC_BUTTON_KEYWORDHELPFILE_REF:	/* キーワードヘルプ 辞書ファイルの「参照...」ボタン */
 				{
 					CDlgOpenFile	cDlgOpenFile;
 					char*			pszMRU = NULL;;
@@ -276,10 +277,10 @@ void CPropCommon::SetData_p10( HWND hwndDlg )
 	::CheckDlgButton( hwndDlg, IDC_CHECK_HTMLHELPISSINGLE, m_Common.m_bHtmlHelpIsSingle );
 
 	/* 補完候補決定キー */
-	::CheckDlgButton( hwndDlg, IDC_CHECK_m_bHokanKey_RETURN, m_Common.m_bHokanKey_RETURN );//VK_RETURN 補完決定キーが有効/無効
-	::CheckDlgButton( hwndDlg, IDC_CHECK_m_bHokanKey_TAB, m_Common.m_bHokanKey_TAB );//VK_TAB    補完決定キーが有効/無効
-	::CheckDlgButton( hwndDlg, IDC_CHECK_m_bHokanKey_RIGHT, m_Common.m_bHokanKey_RIGHT );//VK_RIGHT  補完決定キーが有効/無効
-	::CheckDlgButton( hwndDlg, IDC_CHECK_m_bHokanKey_SPACE, m_Common.m_bHokanKey_SPACE );//VK_SPACE  補完決定キーが有効/無効
+	::CheckDlgButton( hwndDlg, IDC_CHECK_m_bHokanKey_RETURN, m_Common.m_bHokanKey_RETURN );	//VK_RETURN 補完決定キーが有効/無効
+	::CheckDlgButton( hwndDlg, IDC_CHECK_m_bHokanKey_TAB, m_Common.m_bHokanKey_TAB );		//VK_TAB    補完決定キーが有効/無効
+	::CheckDlgButton( hwndDlg, IDC_CHECK_m_bHokanKey_RIGHT, m_Common.m_bHokanKey_RIGHT );	//VK_RIGHT  補完決定キーが有効/無効
+	::CheckDlgButton( hwndDlg, IDC_CHECK_m_bHokanKey_SPACE, m_Common.m_bHokanKey_SPACE );	//VK_SPACE  補完決定キーが有効/無効
 
 	return;
 }
@@ -318,9 +319,9 @@ int CPropCommon::GetData_p10( HWND hwndDlg )
 
 	/* 補完候補決定キー */
 	m_Common.m_bHokanKey_RETURN = ::IsDlgButtonChecked( hwndDlg, IDC_CHECK_m_bHokanKey_RETURN );//VK_RETURN 補完決定キーが有効/無効
-	m_Common.m_bHokanKey_TAB = ::IsDlgButtonChecked( hwndDlg, IDC_CHECK_m_bHokanKey_TAB );//VK_TAB    補完決定キーが有効/無効
-	m_Common.m_bHokanKey_RIGHT = ::IsDlgButtonChecked( hwndDlg, IDC_CHECK_m_bHokanKey_RIGHT );//VK_RIGHT  補完決定キーが有効/無効
-	m_Common.m_bHokanKey_SPACE = ::IsDlgButtonChecked( hwndDlg, IDC_CHECK_m_bHokanKey_SPACE );//VK_SPACE  補完決定キーが有効/無効
+	m_Common.m_bHokanKey_TAB = ::IsDlgButtonChecked( hwndDlg, IDC_CHECK_m_bHokanKey_TAB );		//VK_TAB    補完決定キーが有効/無効
+	m_Common.m_bHokanKey_RIGHT = ::IsDlgButtonChecked( hwndDlg, IDC_CHECK_m_bHokanKey_RIGHT );	//VK_RIGHT  補完決定キーが有効/無効
+	m_Common.m_bHokanKey_SPACE = ::IsDlgButtonChecked( hwndDlg, IDC_CHECK_m_bHokanKey_SPACE );	//VK_SPACE  補完決定キーが有効/無効
 
 	return TRUE;
 }

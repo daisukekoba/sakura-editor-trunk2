@@ -1,13 +1,10 @@
 //	$Id$
 /************************************************************************
-
 	CPropComKeyword.cpp
-
 	共通設定：強調キーワード
 	Copyright (C) 1998-2000, Norio Nakatani
-
-
 ************************************************************************/
+
 #include "sakura_rc.h"
 #include "CPropCommon.h"
 #include "debug.h"

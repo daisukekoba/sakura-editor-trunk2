@@ -484,24 +484,24 @@ BOOL CEditDoc::FileRead(
 				case CODE_JIS:		/* JIS */		pszCodeName = "JIS";break;
 				case CODE_EUC:		/* EUC */		pszCodeName = "EUC";break;
 				case CODE_UNICODE:	/* Unicode */	pszCodeName = "Unicode";break;
-				case CODE_UTF8:	/* UTF-8 */			pszCodeName = "UTF-8";break;
-				case CODE_UTF7:	/* UTF-7 */			pszCodeName = "UTF-7";break;
+				case CODE_UTF8:		/* UTF-8 */		pszCodeName = "UTF-8";break;
+				case CODE_UTF7:		/* UTF-7 */		pszCodeName = "UTF-7";break;
 				}
 				switch( m_nCharCode ){
 				case CODE_SJIS:		/* SJIS */		pszCodeNameNew = "SJIS";break;	//Sept. 1, 2000 jepro 'シフト'を'S'に変更
 				case CODE_JIS:		/* JIS */		pszCodeNameNew = "JIS";break;
 				case CODE_EUC:		/* EUC */		pszCodeNameNew = "EUC";break;
 				case CODE_UNICODE:	/* Unicode */	pszCodeNameNew = "Unicode";break;
-				case CODE_UTF8:	/* UTF-8 */			pszCodeNameNew = "UTF-8";break;
-				case CODE_UTF7:	/* UTF-7 */			pszCodeNameNew = "UTF-7";break;
+				case CODE_UTF8:		/* UTF-8 */		pszCodeNameNew = "UTF-8";break;
+				case CODE_UTF7:		/* UTF-7 */		pszCodeNameNew = "UTF-7";break;
 				}
 				if( pszCodeName != NULL ){
 					::MessageBeep( MB_ICONQUESTION );
 					nRet = MYMESSAGEBOX(
 						m_hWnd,
 						MB_YESNOCANCEL | MB_ICONQUESTION | MB_TOPMOST,
-						"情報",
-						"%s\n\nこのファイルは、前回は別の文字コード（%s）で開かれています。\n\n前回と同じ文字コードを使いますか？\n\n・[はい]＝（%s）\n・[いいえ]＝（%s）\n・[キャンセル]＝（開きません）",
+						"文字コード情報",
+						"%s\n\nこのファイルは、前回は別の文字コード %s で開かれています。\n前回と同じ文字コードを使いますか？\n\n・[はい(Y)]　＝%s\n・[いいえ(N)]＝%s\n・[キャンセル]＝開きません",
 						m_szFilePath, pszCodeName, pszCodeName, pszCodeNameNew
 					);
 					if( IDYES == nRet ){
@@ -597,7 +597,8 @@ BOOL CEditDoc::FileRead(
 			m_hwndParent,
 			MB_OK | MB_ICONINFORMATION | MB_TOPMOST,
 			GSTR_APPNAME,
-			"\'%s\'\nファイルは存在しません。 ファイルを保存したときに、ディスク上にファイルが作成されます。",
+//			"\'%s\'\nファイルは存在しません。 ファイルを保存したときに、ディスク上にファイルが作成されます。",
+			"%s\nというファイルは存在しません。\n\nファイルを保存したときに、ディスク上にこのファイルが作成されます。",	//Mar. 24, 2001 jepro 若干修正
 			pszPath
 		);
 

@@ -19,8 +19,12 @@
 //#define REGCNV_CHAR2SZ	3
 #define STR_COLORDATA_HEAD3		" テキストエディタ色設定 Ver3"	//Jan. 15, 2001 Stonee  色設定Ver3ドラフト(設定ファイルのキーを連番→文字列に)	//Feb. 11, 2001 JEPRO 有効にした
 
-// iniの色設定を番号でなく文字列で書き出す。added by Stonee, 2001/01/12, 2001/01/15
-// 数値による内部的対応はCShareData.hで行っているので参照のこと。//Mar. 7, 2001 jepro noted
+/*!
+  iniの色設定を番号でなく文字列で書き出す。(added by Stonee, 2001/01/12, 2001/01/15)
+  配列の順番は共有メモリ中のデータの順番と一致している。
+    
+  @note 数値による内部的対応はCShareData.hで行っているので参照のこと。(Mar. 7, 2001 jepro)
+*/
 static char* colorIDXKeyName[] =
 {
 	"TXT",
@@ -931,7 +935,11 @@ Section02:;
 
 
 
-/* 共有データの読み込み/保存 2 */
+/*!
+	共有データの読み込み/保存 2 
+	
+	@param bRead [in] true: 読み込み / false: 書き込み
+*/
 BOOL CShareData::ShareData_IO_2( BOOL bRead )
 {
 	CRunningTimer cRunningTimer( "CShareData::ShareData_IO_2" );
@@ -1819,7 +1827,17 @@ BOOL CShareData::ShareData_IO_2( BOOL bRead )
 }
 
 
-/* 色設定 I/O */
+/*!
+	@brief 色設定 I/O
+	
+	指定された色設定を指定されたセクションに書き込む。または
+	指定されたセクションからいろ設定を読み込む。
+	
+	@param pcProfile [i/o] 書き出し、読み込み先Profile object (入出力方向はbReadに依存)
+	@param bRead [in] true: 読み出し / false: 書き込み
+	@param pszSecName [in] セクション名
+	@param pColorInfoArr [i/o] 書き出し、読み込み対象の色設定へのポインタ (入出力方向はbReadに依存)
+*/
 void CShareData::IO_ColorSet( CProfile* pcProfile, BOOL bRead, const char* pszSecName, ColorInfo* pColorInfoArr )
 {
 	char	szKeyName[256];

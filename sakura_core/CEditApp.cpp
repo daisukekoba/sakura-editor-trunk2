@@ -15,11 +15,11 @@
 //#include <ras.h>
 #include "debug.h"
 #include "CEditApp.h"
-#include "CEditView.h"		//Nov. 21, 2000 JEPROtestnow added
-#include "CEditDoc.h"		//Nov. 21, 2000 JEPROtestnow added
-#include "CEditWnd.h"		//Nov. 21, 2000 JEPROtestnow added
-#include "CDlgAbout.h"		//Nov. 21, 2000 JEPROtestnow added
-#include "CDlgTypeList.h"	//Nov. 21, 2000 JEPROtestnow added
+#include "CEditView.h"		//Nov. 21, 2000 JEPROtest
+#include "CEditDoc.h"		//Nov. 21, 2000 JEPROtest
+#include "CEditWnd.h"		//Nov. 21, 2000 JEPROtest
+#include "CDlgAbout.h"		//Nov. 21, 2000 JEPROtest
+#include "CDlgTypeList.h"	//Nov. 21, 2000 JEPROtest
 #include "sakura_rc.h"
 #include "mymessage.h"
 #include "CDlgOpenFile.h"
@@ -928,7 +928,7 @@ LRESULT CEditApp::DispatchEvent(
 								case CODE_UTF7:		/* UTF-7 */		pszCodeNameNew = "UTF-7";break;
 								}
 								::MYMESSAGEBOX( m_hWnd, MB_OK | MB_ICONEXCLAMATION | MB_TOPMOST, GSTR_APPNAME,
-									"%s\n\n\n既に開いているファイルを違う文字コードで開く場合は、\n一旦閉じてから開いてください。\n\n現在の文字コードセット=[%s]\n新しい文字コードセット=[%s]",
+									"%s\n\n既に開いているファイルを違う文字コードで開く場合は、\n一旦閉じてからでないと開けません。\n\n現在の文字コードセット＝%s\n新しい文字コードセット＝%s",
 									szPath, pszCodeNameCur, pszCodeNameNew
 								);
 							}
@@ -1202,7 +1202,7 @@ LRESULT CEditApp::DispatchEvent(
 									case CODE_UTF7:		/* UTF-7 */		pszCodeNameNew = "UTF-7";break;
 									}
 									::MYMESSAGEBOX( m_hWnd, MB_OK | MB_ICONEXCLAMATION | MB_TOPMOST, GSTR_APPNAME,
-										"%s\n\n\n既に開いているファイルを違う文字コードで開く場合は、\n一旦閉じてから開いてください。\n\n現在の文字コードセット=[%s]\n新しい文字コードセット=[%s]",
+										"%s\n\n既に開いているファイルを違う文字コードで開く場合は、\n一旦閉じてからでないと開けません。\n\n現在の文字コードセット＝%s\n新しい文字コードセット＝%s",
 										szPath, pszCodeNameCur, pszCodeNameNew
 									);
 								}
@@ -2282,11 +2282,14 @@ int	CEditApp::CreatePopUpMenu_R( void )
 
 
 
-/* コマンドラインの解析 */
+/*! コマンドラインの解析
+	
+	WinMain()から呼び出される。
+*/
 void CEditApp::ParseCommandLine(
-	const char*	pszCmdLineSrc,
-	BOOL*		pbGrepMode,
-	CMemory*	pcmGrepKey,
+	const char*	pszCmdLineSrc,	//!< [in]コマンドライン文字列
+	BOOL*		pbGrepMode,	//!< [out] TRUE: Grep Mode
+	CMemory*	pcmGrepKey,	//!< [out] GrepのKey
 	CMemory*	pcmGrepFile,
 	CMemory*	pcmGrepFolder,
 	BOOL*		pbGrepSubFolder,
@@ -2296,9 +2299,9 @@ void CEditApp::ParseCommandLine(
 	BOOL*		pbGrepOutputLine,
 	int	*		pnGrepOutputStyle,
 	BOOL*		pbDebugMode,
-	BOOL*		pbNoWindow,
+	BOOL*		pbNoWindow,	//!< [out] TRUE: 編集Windowを開かない
 	FileInfo*	pfi,
-	BOOL*		pbReadOnly
+	BOOL*		pbReadOnly	//!< [out] TRUE: Read Only
 )
 {
 	BOOL			bGrepMode;
@@ -2424,6 +2427,13 @@ void CEditApp::ParseCommandLine(
 				goto end_of_options;
 			}
 			pszOpt = "-Y=";
+			nOptLen = lstrlen( pszOpt );
+			if( ( (int)lstrlen( pszToken ) > nOptLen ) && ( 0 == memcmp( pszOpt, pszToken, nOptLen ) ) ){
+				/* 行桁指定を1開始にした */
+				fi.m_nY = atoi( pszToken + nOptLen ) - 1;
+				goto end_of_options;
+			}
+			pszOpt = "-Y:";		//Mar.24, 2001 JEPRO '='はあまりよくない
 			nOptLen = lstrlen( pszOpt );
 			if( ( (int)lstrlen( pszToken ) > nOptLen ) && ( 0 == memcmp( pszOpt, pszToken, nOptLen ) ) ){
 				/* 行桁指定を1開始にした */

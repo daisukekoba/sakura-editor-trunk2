@@ -478,7 +478,8 @@ int CDocLineMgr::ReadFile( const char* pszPath, HWND hWndParent, HWND hwndProgre
 				hWndParent,
 				MB_OK | MB_ICONSTOP,
 				GSTR_APPNAME,
-				"\'%s\'\nファイルを開けません。\nファイルが存在しません。",
+//				"\'%s\'\nファイルを開けません。\nファイルが存在しません。",
+				"%s\nというファイルを開けません。\nファイルが存在しません。",	//Mar. 24, 2001 jepro 若干修正
 				pszPath
 			 );
 		}else{
@@ -486,7 +487,7 @@ int CDocLineMgr::ReadFile( const char* pszPath, HWND hWndParent, HWND hwndProgre
 				hWndParent,
 				MB_OK | MB_ICONSTOP,
 				GSTR_APPNAME,
-				"\'%s\'\nファイルを開けません。\n他のアプリケーションで使用されている可能性があります。",
+				"\'%s\'\nというファイルを開けません。\n他のアプリケーションで使用されている可能性があります。",
 				pszPath
 			 );
 		}

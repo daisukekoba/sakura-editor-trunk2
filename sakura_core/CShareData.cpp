@@ -3237,11 +3237,15 @@ void CShareData::DeleteEditWndList( HWND hWnd )
 	return;
 }
 
-
-
-
-
-/* MRUリストへの登録 */
+//!	MRUリストへの登録
+/*!
+	@param pfi [in] 追加するファイルの情報
+	
+	該当ファイルがリムーバブルディスク上にある場合にはMRU Listへの登録は行わない。
+	
+	@par History
+	2001.03.29 リムーバブルディスク上のファイルを登録しないようにした。(by みく)
+*/
 void CShareData::AddMRUList( FileInfo* pfi )
 {
 	if( 0 == strlen( pfi->m_szPath ) ){
@@ -3249,13 +3253,31 @@ void CShareData::AddMRUList( FileInfo* pfi )
 	}
 	int		i;
 	int		j;
-	char*	pszWork = new char[_MAX_PATH + 1];
-	char*	pszFolder = new char[_MAX_PATH + 1];
-//	int		nCharChars;
 	char	szDrive[_MAX_DRIVE];
 	char	szDir[_MAX_DIR];
 
 	_splitpath( pfi->m_szPath, szDrive, szDir, NULL, NULL );
+
+	//@@@ 2001.03.29 Start by MIK
+	char	szDriveType[_MAX_DRIVE+1];	// "A:\"
+	long	lngRet;
+	char	c;
+
+	c = szDrive[0];
+	if( c >= 'a' && c <= 'z' ){
+		c = c - ('a' - 'A');
+	}
+	if( c >= 'A' && c <= 'Z' ){
+		sprintf( szDriveType, "%c:\\", c );
+		lngRet = GetDriveType( szDriveType );
+		if( DRIVE_REMOVABLE == lngRet
+		 || DRIVE_CDROM     == lngRet){
+			return;
+		}
+	}
+
+	char*	pszFolder = new char[_MAX_PATH + 1];
+	//@@@ 2001.03.29 End by MIK
 	strcpy( pszFolder, szDrive );
 	strcat( pszFolder, szDir );
 	if( 0 < strlen( pszFolder ) ){
@@ -3283,7 +3305,6 @@ void CShareData::AddMRUList( FileInfo* pfi )
 			m_pShareData->m_nMRUArrNum = MAX_MRU;
 		}
 	}
-	delete [] pszWork;
 	delete [] pszFolder;
 	return;
 }
@@ -3328,7 +3349,14 @@ void CShareData::AddOPENFOLDERList( const char* pszFolder )
 }
 
 
-/* MRUリストに存在するか調べる  存在するならばファイル情報を返す */
+/*!
+	指定された名前のファイルがMRUリストに存在するか調べる。存在するならばファイル情報を返す。
+	
+	@param pszPath [in] 検索するファイル名
+	@param pfi [out] データが見つかったときにファイル情報を格納する領域。
+		呼び出し側で領域をあらかじめ用意する必要がある。
+	@return TRUE: 見つかった。pfiにファイル情報が格納されている。 / FALSE: 見つからなかった
+*/
 BOOL CShareData::IsExistInMRUList( const char* pszPath, FileInfo* pfi )
 {
 	int		i;
@@ -3648,8 +3676,11 @@ int CShareData::GetOpenedWindowArr( EditNode** ppEditNode, BOOL bSort )
 	}
 //#endif
 
-/* MRUとOPENFOLDERリストの存在チェックなど
-存在しないファイルやフォルダはMRUやOPENFOLDERリストから削除する
+/*!
+	MRUとOPENFOLDERリストの存在チェックなど
+	存在しないファイルやフォルダはMRUやOPENFOLDERリストから削除する
+	
+	@note 現在は使われていないようだ。
 */
 void CShareData::CheckMRUandOPENFOLDERList( void )
 {
