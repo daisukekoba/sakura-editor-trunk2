@@ -19,7 +19,7 @@
 #include "global.h"
 
 #ifndef OFN_ENABLESIZING
-	#define OFN_ENABLESIZING             0x00800000
+	#define OFN_ENABLESIZING	0x00800000
 #endif
 
 WNDPROC			m_wpOpenDialogProc;
@@ -28,8 +28,8 @@ const char**	m_ppszMRU;
 const char**	m_ppszOPENFOLDER;
 char			m_szHelpFile[_MAX_PATH + 1];
 int				m_nHelpTopicID;
-BOOL			m_bReadOnly;					/* 読み取り専用か */
-BOOL			m_bIsSaveDialog;				/* 保存のダイアログか */
+BOOL			m_bReadOnly;		/* 読み取り専用か */
+BOOL			m_bIsSaveDialog;	/* 保存のダイアログか */
 
 
 
@@ -61,9 +61,9 @@ LRESULT APIENTRY OFNHookProcMain( HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lP
 //		MYTRACE( "WM_MOVE 1\n" );
 		break;
 	case WM_COMMAND:
-		wNotifyCode = HIWORD(wParam); // notification code 
-		wID = LOWORD(wParam);         // item, control, or accelerator identifier 
-		hwndCtl = (HWND) lParam;      // handle of control 
+		wNotifyCode = HIWORD(wParam);	// notification code
+		wID = LOWORD(wParam);			// item, control, or accelerator identifier
+		hwndCtl = (HWND) lParam;		// handle of control
 		switch( wNotifyCode ){
 //			break;
 		/* ボタン／チェックボックスがクリックされた */
@@ -73,7 +73,7 @@ LRESULT APIENTRY OFNHookProcMain( HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lP
 				/* ヘルプ */
 				::WinHelp( hwnd, m_szHelpFile, HELP_CONTEXT, m_nHelpTopicID );
 				break;
-			case chx1:			// The read-only check box
+			case chx1:	// The read-only check box
 				m_bReadOnly = ::IsDlgButtonChecked( hwnd , chx1 );
 				break;
 			}
@@ -81,7 +81,7 @@ LRESULT APIENTRY OFNHookProcMain( HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lP
 		}
 		break;
 	case WM_NOTIFY:
-		idCtrl = (int) wParam; 
+		idCtrl = (int) wParam;
 		pofn = (OFNOTIFY*) lParam;
 //		MYTRACE( "=========WM_NOTIFY=========\n" );
 //		MYTRACE( "pofn->hdr.hwndFrom=%xh\n", pofn->hdr.hwndFrom );
@@ -100,8 +100,8 @@ LRESULT APIENTRY OFNHookProcMain( HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lP
 || 開くダイアログのフックプロシージャ
 */
 UINT APIENTRY OFNHookProc(
-	HWND hdlg,	// handle to child dialog window
-	UINT uiMsg,	// message identifier
+	HWND hdlg,		// handle to child dialog window
+	UINT uiMsg,		// message identifier
 	WPARAM wParam,	// message parameter
 	LPARAM lParam 	// message parameter
 )
@@ -128,13 +128,13 @@ UINT APIENTRY OFNHookProc(
     const int				nControls = 9;    
 	char					szWork[_MAX_PATH + 1];
 	WORD					wNotifyCode;
-	WORD					wID;	
+	WORD					wID;
 	HWND					hwndCtl;
-	int						nIdx;			
+	int						nIdx;
 	int						nIdxSel;
-	int		fwSizeType;
-	int		nWidth;
-	int		nHeight;		
+	int						fwSizeType;
+	int						nWidth;
+	int						nHeight;
 	int						nCodeValueArr[] = {
 		CODE_AUTODETECT,	/* 文字コード自動判別 */
 		CODE_SJIS,
@@ -145,17 +145,15 @@ UINT APIENTRY OFNHookProc(
 		CODE_UTF7
 	};
 	char*					pCodeNameArr[] = {
-		"自動選択",	
-		"SJIS",	
-		"JIS",	
-		"EUC",	
+		"自動選択",
+		"SJIS",
+		"JIS",
+		"EUC",
 		"Unicode",
 		"UTF-8",
 		"UTF-7"
 	};
-	int nCodeNameArrNum = sizeof( pCodeNameArr ) / sizeof( pCodeNameArr[0] );   
-	
-	
+	int nCodeNameArrNum = sizeof( pCodeNameArr ) / sizeof( pCodeNameArr[0] );
 	int	Controls[nControls] = {
 		stc3, stc2,		// The two label controls
 		edt1, cmb1,		// The edit control and the drop-down box
@@ -165,17 +163,16 @@ UINT APIENTRY OFNHookProc(
 		chx1			// The read-only check box
 	};
 	int	nRightMargin = 24;
-
 	HWND	hwndFrame;
-		
+
 	switch (uiMsg){
 	case WM_MOVE:
 //		MYTRACE( "WM_MOVE 2\n" );
 		break;
 	case WM_SIZE:
-		fwSizeType = wParam;      // resizing flag 
-		nWidth = LOWORD(lParam);  // width of client area 
-		nHeight = HIWORD(lParam); // height of client area 
+		fwSizeType = wParam;		// resizing flag
+		nWidth = LOWORD(lParam);	// width of client area
+		nHeight = HIWORD(lParam);	// height of client area
 
 		/* 「開く」ダイアログのサイズと位置 */
 		hwndFrame = ::GetParent( hdlg );
@@ -196,7 +193,7 @@ UINT APIENTRY OFNHookProc(
 //From Here jeprotest Oct. 12, 2000 JEPRO デフォルトボタン名変更実験
 //        CommDlg_OpenSave_SetControlText( GetParent(hdlg), IDOK, "このﾌｧｲﾙを開く" );
 //To Here jeorotest
-		
+
 		// Save off the long pointer to the OPENFILENAME structure.
 		::SetWindowLong(hdlg, DWL_USER, lParam);
 		pOf = (OPENFILENAME*)lParam;
@@ -208,7 +205,7 @@ UINT APIENTRY OFNHookProc(
 		/* コントロールのハンドル */
 		hwndComboCODES = ::GetDlgItem( hdlg, IDC_COMBO_CODE );
 		hwndComboMRU = ::GetDlgItem( hdlg, IDC_COMBO_MRU );	
-		hwndComboOPENFOLDER = ::GetDlgItem( hdlg, IDC_COMBO_OPENFOLDER );	
+		hwndComboOPENFOLDER = ::GetDlgItem( hdlg, IDC_COMBO_OPENFOLDER );
 
 		/* コンボボックスのユーザー インターフェイスを拡張インターフェースにする */
 		::SendMessage( hwndComboCODES, CB_SETEXTENDEDUI, (WPARAM) (BOOL) TRUE, 0 );
@@ -221,11 +218,11 @@ UINT APIENTRY OFNHookProc(
 
 //		/* Explorerスタイルの「開く」ダイアログのスタイル */
 //		lStyle = ::GetWindowLong( hwndOpenDlg, GWL_STYLE );
-//		if( lStyle & WS_BORDER ) lStyle ^= WS_BORDER; 			
-//		if( lStyle & WS_DLGFRAME ) lStyle ^= WS_DLGFRAME; 			
-//		if( lStyle & WS_SYSMENU ) lStyle ^= WS_SYSMENU; 			
+//		if( lStyle & WS_BORDER ) lStyle ^= WS_BORDER; 
+//		if( lStyle & WS_DLGFRAME ) lStyle ^= WS_DLGFRAME; 
+//		if( lStyle & WS_SYSMENU ) lStyle ^= WS_SYSMENU; 
 //		::SetWindowLong( hwndOpenDlg, GWL_STYLE, lStyle );
-		
+
 //		lStyle = ::GetWindowLong( hwndOpenDlg, GWL_EXSTYLE );
 //		lStyle =~ WS_EX_DLGMODALFRAME;
 //		::SetWindowLong( hwndOpenDlg, GWL_EXSTYLE, lStyle );
@@ -274,7 +271,7 @@ UINT APIENTRY OFNHookProc(
 //			HWND_TOP,
 //			0, 0,
 //			rc0.right - rc0.left,
-//			(rc0.bottom - rc0.top)+ nExtraSize, 
+//			(rc0.bottom - rc0.top)+ nExtraSize,
 //			SWP_NOMOVE | SWP_NOOWNERZORDER | SWP_NOZORDER
 //		);
 
@@ -282,7 +279,7 @@ UINT APIENTRY OFNHookProc(
 		/* 読み取り専用の初期値セット */
 		hwndEdit1 = ::GetDlgItem( hwndOpenDlg, edt1 );
 		hwndExplororList = ::GetDlgItem( hwndOpenDlg, lst1 );
-		
+
 		::CheckDlgButton( hwndOpenDlg, chx1, m_bReadOnly );
 
 //		::ShowWindow( hwndEdit1, SW_HIDE );
@@ -303,35 +300,35 @@ UINT APIENTRY OFNHookProc(
 
 		hFont = (HFONT)::SendMessage( hdlg, WM_GETFONT, 0, 0 );
 
-		/* 最近開いたファイル　コンボボックス初期値設定 */
+		/* 最近開いたファイル コンボボックス初期値設定 */
 		for( i = 0; m_ppszMRU[i] != NULL; ++i ){
 			::SendMessage( hwndComboMRU, CB_ADDSTRING, 0, (LPARAM)m_ppszMRU[i] );
-		} 
+		}
 		::SetWindowPos( hwndComboMRU, 0, rc.left, rc.top, rc.right - rc.left + 100, rc.bottom - rc.top, SWP_NOMOVE | SWP_NOOWNERZORDER | SWP_NOZORDER );
 
-		/* 最近開いたフォルダ　コンボボックス初期値設定 */
+		/* 最近開いたフォルダ コンボボックス初期値設定 */
 		for( i = 0; m_ppszOPENFOLDER[i] != NULL; ++i ){
 			::SendMessage( hwndComboOPENFOLDER, CB_ADDSTRING, 0, (LPARAM)m_ppszOPENFOLDER[i] );
-		} 
+		}
 		::SetWindowPos( hwndComboOPENFOLDER, 0, rc.left, rc.top, rc.right - rc.left + 100, rc.bottom - rc.top, SWP_NOMOVE | SWP_NOOWNERZORDER | SWP_NOZORDER );
 
-		
+
 //		::SetWindowLong( hwndOpenDlg, DWL_USER, (LONG)pcDlgOpenFile );
 
 		/* サイズボックス */
 //		m_hwndSizeBox = ::CreateWindowEx(
-//			WS_EX_CONTROLPARENT, 						/* no extended styles			*/
-//			"SCROLLBAR",				/* scroll bar control class		*/
-//			(LPSTR) NULL,				/* text for window title bar	*/
-//			WS_VISIBLE | WS_CHILD | SBS_SIZEBOX | SBS_SIZEGRIP, /* scroll bar styles */
-//			0,							/* horizontal position			*/
-//			0,							/* vertical position			*/
-//			0,						/* width of the scroll bar		*/
-//			0,				/* default height				*/
-//			hwndOpenDlg/*hdlg*/, 				/* handle of main window		*/
-//			(HMENU) NULL,				/* no menu for a scroll bar 	*/
-//			pcDlgOpenFile->m_hInstance,				/* instance owning this window	*/
-//			(LPVOID) NULL			/* pointer not needed				*/
+//			WS_EX_CONTROLPARENT, 								/* no extended styles */
+//			"SCROLLBAR",										/* scroll bar control class */
+//			(LPSTR) NULL,										/* text for window title bar */
+//			WS_VISIBLE | WS_CHILD | SBS_SIZEBOX | SBS_SIZEGRIP,	/* scroll bar styles */
+//			0,													/* horizontal position */
+//			0,													/* vertical position */
+//			0,													/* width of the scroll bar */
+//			0,													/* default height */
+//			hwndOpenDlg/*hdlg*/, 								/* handle of main window */
+//			(HMENU) NULL,										/* no menu for a scroll bar */
+//			pcDlgOpenFile->m_hInstance,							/* instance owning this window */
+//			(LPVOID) NULL										/* pointer not needed */
 //		);
 //		::ShowWindow( m_hwndSizeBox, SW_SHOW );
 
@@ -343,20 +340,19 @@ UINT APIENTRY OFNHookProc(
 //NG		 && 0 != pcDlgOpenFile->m_pShareData->m_Common.m_rcOpenDialog.bottom
 //NG		){
 //NG			hwndFrame = ::GetParent( hdlg );
-//NG			::SetWindowPos( 
-//NG				hwndFrame, 
-//NG				0, 
-//NG				pcDlgOpenFile->m_pShareData->m_Common.m_rcOpenDialog.left, 
-//NG				pcDlgOpenFile->m_pShareData->m_Common.m_rcOpenDialog.top, 
-//NG				pcDlgOpenFile->m_pShareData->m_Common.m_rcOpenDialog.right - pcDlgOpenFile->m_pShareData->m_Common.m_rcOpenDialog.left, 
-//NG				pcDlgOpenFile->m_pShareData->m_Common.m_rcOpenDialog.bottom - pcDlgOpenFile->m_pShareData->m_Common.m_rcOpenDialog.top, 
-//NG				/*SWP_NOMOVE |*/ SWP_NOOWNERZORDER | SWP_NOZORDER 
+//NG			::SetWindowPos(
+//NG				hwndFrame,
+//NG				0,
+//NG				pcDlgOpenFile->m_pShareData->m_Common.m_rcOpenDialog.left,
+//NG				pcDlgOpenFile->m_pShareData->m_Common.m_rcOpenDialog.top,
+//NG				pcDlgOpenFile->m_pShareData->m_Common.m_rcOpenDialog.right - pcDlgOpenFile->m_pShareData->m_Common.m_rcOpenDialog.left,
+//NG				pcDlgOpenFile->m_pShareData->m_Common.m_rcOpenDialog.bottom - pcDlgOpenFile->m_pShareData->m_Common.m_rcOpenDialog.top,
+//NG				/*SWP_NOMOVE |*/ SWP_NOOWNERZORDER | SWP_NOZORDER
 //NG			);
 //NG		}
 //NG
 		break;
-		
-	
+
 
 	case WM_DESTROY:
 		/* フック解除 */
@@ -373,19 +369,19 @@ UINT APIENTRY OFNHookProc(
 
 		switch( pofn->hdr.code ){
 		case CDN_FILEOK:
-			/* 文字コード選択コンボボックス　値を取得 */
+			/* 文字コード選択コンボボックス 値を取得 */
 			nIdx = ::SendMessage( hwndComboCODES, CB_GETCURSEL, 0, 0 );
 			lRes = ::SendMessage( hwndComboCODES, CB_GETITEMDATA, nIdx, 0 );
 //			lRes = ::SendMessage( hwndComboCODES, CB_GETCURSEL, 0, 0 );
 			pcDlgOpenFile->m_nCharCode = lRes;	/* 文字コード */
-			
-//			MYTRACE( "文字コード　lRes=%d\n", lRes );
+
+//			MYTRACE( "文字コード  lRes=%d\n", lRes );
 //			MYTRACE( "pofn->hdr.code=CDN_FILEOK        \n" );break;
-		case CDN_FOLDERCHANGE  :	
+		case CDN_FOLDERCHANGE  :
 //			MYTRACE( "pofn->hdr.code=CDN_FOLDERCHANGE  \n" );
 			lRes = ::SendMessage( hwndOpenDlg, CDM_GETFOLDERPATH, sizeof(szFolder), (long)(char*)szFolder );
 //			MYTRACE( "\tlRes=%d\tszFolder=[%s]\n", lRes, szFolder );
-			
+
 			break;
 //		case CDN_HELP          :	MYTRACE( "pofn->hdr.code=CDN_HELP          \n" );break;
 //		case CDN_INITDONE      :	MYTRACE( "pofn->hdr.code=CDN_INITDONE      \n" );break;
@@ -396,11 +392,11 @@ UINT APIENTRY OFNHookProc(
 		}
 
 //		MYTRACE( "=======================\n" );
-		break;	
+		break;
 	case WM_COMMAND:
-		wNotifyCode = HIWORD(wParam); // notification code 
-		wID = LOWORD(wParam);         // item, control, or accelerator identifier 
-		hwndCtl = (HWND) lParam;      // handle of control 
+		wNotifyCode = HIWORD(wParam); // notification code
+		wID = LOWORD(wParam);         // item, control, or accelerator identifier
+		hwndCtl = (HWND) lParam;      // handle of control
 		switch( wNotifyCode ){
 		case CBN_SELCHANGE:
 			switch( (int) LOWORD(wParam) ){
@@ -443,13 +439,13 @@ CDlgOpenFile::CDlgOpenFile()
 //	int		nCharChars;
 	char	szDrive[_MAX_DRIVE];
 	char	szDir[_MAX_DIR];
-	
+
 	m_nCharCode = CODE_AUTODETECT;	/* 文字コード *//* 文字コード自動判別 */
 
-	
-	m_hInstance = NULL;	/* アプリケーションインスタンスのハンドル */
+
+	m_hInstance = NULL;		/* アプリケーションインスタンスのハンドル */
 	m_hwndParent = NULL;	/* オーナーウィンドウのハンドル */
-	m_hWnd = NULL;		/* このダイアログのハンドル */
+	m_hWnd = NULL;			/* このダイアログのハンドル */
 //	m_pShareData = NULL;
 //	m_cShareData = NULL;
 
@@ -470,9 +466,9 @@ CDlgOpenFile::CDlgOpenFile()
 	_splitpath( szFile, szDrive, szDir, NULL, NULL );
 	strcpy( m_szInitialDir, szDrive );
 	strcat( m_szInitialDir, szDir );
-	
-	
-	
+
+
+
 	strcpy( m_szDefaultWildCard, "*.*");	/*「開く」での最初のワイルドカード */
 
 	/* ヘルプファイルのフルパスを返す */
@@ -527,14 +523,14 @@ void CDlgOpenFile::Create(
 
 
 
-/* 「開く」ダイアログ　モーダルダイアログの表示 */
+/* 「開く」ダイアログ モーダルダイアログの表示 */
 BOOL CDlgOpenFile::DoModal_GetOpenFileName( char* pszPath )
 {
 	DWORD	dwError;
 	int		i;
 	char	szWork[256];
 	char	szFilter[1024];
-	char*	pszFilterArr[] =	{
+	char*	pszFilterArr[] = {
 			"テキストファイル",	"*.txt",
 			"すべてのファイル", "*.*",
 			"ユーザー指定", m_szDefaultWildCard
@@ -613,7 +609,7 @@ BOOL CDlgOpenFile::DoModal_GetOpenFileName( char* pszPath )
 		if( !bCancel ){
 			::MessageBeep( MB_ICONSTOP );
 			::MYMESSAGEBOX(	m_hwndParent, MB_OK | MB_ICONSTOP | MB_TOPMOST, GSTR_APPNAME,
-				"ダイアログが開けません\n\nエラー:%s", pszError 
+				"ダイアログが開けません。\n\nエラー:%s", pszError 
 			);
 		}
 		return FALSE;
@@ -621,14 +617,14 @@ BOOL CDlgOpenFile::DoModal_GetOpenFileName( char* pszPath )
 }
 
 
-/* 保存ダイアログ　モーダルダイアログの表示 */
+/* 保存ダイアログ モーダルダイアログの表示 */
 BOOL CDlgOpenFile::DoModal_GetSaveFileName( char* pszPath )
 {
 	DWORD	dwError;
 	int		i;
 	char	szWork[256];
 	char	szFilter[1024];
-	char*	pszFilterArr[] =	{
+	char*	pszFilterArr[] = {
 			"テキストファイル",	"*.txt",
 			"すべてのファイル", "*.*",
 			"ユーザー指定", m_szDefaultWildCard
@@ -710,7 +706,7 @@ BOOL CDlgOpenFile::DoModal_GetSaveFileName( char* pszPath )
 		if( !bCancel ){
 			::MessageBeep( MB_ICONSTOP );
 			::MYMESSAGEBOX(	m_hwndParent, MB_OK | MB_ICONSTOP | MB_TOPMOST, GSTR_APPNAME,
-				"ダイアログが開けません\n\nエラー:%s", pszError 
+				"ダイアログが開けません。\n\nエラー:%s", pszError 
 			);
 		}
 		return FALSE;
@@ -721,7 +717,7 @@ BOOL CDlgOpenFile::DoModal_GetSaveFileName( char* pszPath )
 
 
 
-/* 「開く」ダイアログ　モーダルダイアログの表示 */
+/* 「開く」ダイアログ モーダルダイアログの表示 */
 BOOL CDlgOpenFile::DoModalOpenDlg( char* pszPath, int* pnCharCode, BOOL* pbReadOnly )
 {
 	m_bIsSaveDialog = FALSE;	/* 保存のダイアログか */
@@ -730,7 +726,7 @@ BOOL CDlgOpenFile::DoModalOpenDlg( char* pszPath, int* pnCharCode, BOOL* pbReadO
 	int		i;
 	char	szWork[256];
 	char	szFilter[1024];
-	char*	pszFilterArr[] =	{
+	char*	pszFilterArr[] = {
 			"テキストファイル",	"*.txt",
 			"すべてのファイル", "*.*",
 			"ユーザー指定", m_szDefaultWildCard
@@ -791,7 +787,7 @@ BOOL CDlgOpenFile::DoModalOpenDlg( char* pszPath, int* pnCharCode, BOOL* pbReadO
 	m_nCharCode = CODE_AUTODETECT;	/* 文字コード自動判別 */
 	m_nHelpTopicID = 15;
 
-	
+
 	if( ::GetOpenFileName( &m_ofn ) ){
 
 //		MYTRACE( "m_nCharCode = %d\n", m_nCharCode );	/* 文字コード */
@@ -830,14 +826,14 @@ BOOL CDlgOpenFile::DoModalOpenDlg( char* pszPath, int* pnCharCode, BOOL* pbReadO
 		if( !bCancel ){
 			::MessageBeep( MB_ICONSTOP );
 			::MYMESSAGEBOX(	m_hwndParent, MB_OK | MB_ICONSTOP | MB_TOPMOST, GSTR_APPNAME,
-				"ダイアログが開けません\n\nエラー:%s", pszError 
+				"ダイアログが開けません。\n\nエラー:%s", pszError 
 			);
 		}
 		return FALSE;
 	}
 }
 
-/* 保存ダイアログ　モーダルダイアログの表示 */
+/* 保存ダイアログ モーダルダイアログの表示 */
 BOOL CDlgOpenFile::DoModalSaveDlg( char* pszPath, int* pnCharCode )
 {
 	m_bIsSaveDialog = TRUE;	/* 保存のダイアログか */
@@ -846,7 +842,7 @@ BOOL CDlgOpenFile::DoModalSaveDlg( char* pszPath, int* pnCharCode )
 	int		i;
 	char	szWork[256];
 	char	szFilter[1024];
-	char*	pszFilterArr[] =	{
+	char*	pszFilterArr[] = {
 			"テキストファイル",	"*.txt",
 			"すべてのファイル", "*.*",
 			"ユーザー指定", m_szDefaultWildCard
@@ -887,7 +883,7 @@ BOOL CDlgOpenFile::DoModalSaveDlg( char* pszPath, int* pnCharCode )
 //		/*OFN_CREATEPROMPT |*/ OFN_EXPLORER | OFN_FILEMUSTEXIST | OFN_HIDEREADONLY
 //		/* | OFN_ENABLETEMPLATE | OFN_ENABLEHOOK */
 	m_ofn.Flags =
-		OFN_CREATEPROMPT | OFN_EXPLORER | OFN_FILEMUSTEXIST | OFN_HIDEREADONLY | OFN_OVERWRITEPROMPT  
+		OFN_CREATEPROMPT | OFN_EXPLORER | OFN_FILEMUSTEXIST | OFN_HIDEREADONLY | OFN_OVERWRITEPROMPT 
 		 /*| OFN_ENABLETEMPLATE | OFN_ENABLEHOOK*/ | OFN_SHOWHELP | OFN_ENABLESIZING;
 	if( NULL != pnCharCode ){
 		m_ofn.Flags = m_ofn.Flags | OFN_ENABLETEMPLATE | OFN_ENABLEHOOK;
@@ -938,9 +934,12 @@ BOOL CDlgOpenFile::DoModalSaveDlg( char* pszPath, int* pnCharCode )
 		if( !bCancel ){
 			::MessageBeep( MB_ICONSTOP );
 			::MYMESSAGEBOX(	m_hwndParent, MB_OK | MB_ICONSTOP | MB_TOPMOST, GSTR_APPNAME,
-				"ダイアログが開けません\n\nエラー:%s", pszError 
+				"ダイアログが開けません。\n\nエラー:%s", pszError
 			);
 		}
 		return FALSE;
 	}
 }
+
+
+/*[EOF]*/

@@ -38,16 +38,16 @@ int	CPropCommon::SearchIntArr( int nKey, int* pnArr, int nArrNum )
 			return i;
 		}
 	}
-	return -1;	
+	return -1;
 }
 
 
 /* p1 ダイアログプロシージャ */
 BOOL CALLBACK Prop1P1Proc(
-    HWND hwndDlg,	// handle to dialog box
-    UINT uMsg,	// message
-    WPARAM wParam,	// first message parameter
-    LPARAM lParam 	// second message parameter
+	HWND hwndDlg,	// handle to dialog box
+	UINT uMsg,	// message
+	WPARAM wParam,	// first message parameter
+	LPARAM lParam 	// second message parameter
 )
 {
 	PROPSHEETPAGE*	pPsp;
@@ -76,10 +76,10 @@ BOOL CALLBACK Prop1P1Proc(
 
 /* p2 ダイアログプロシージャ */
 BOOL CALLBACK Prop1P2Proc(
-    HWND hwndDlg,	// handle to dialog box
-    UINT uMsg,	// message
-    WPARAM wParam,	// first message parameter
-    LPARAM lParam 	// second message parameter
+	HWND hwndDlg,	// handle to dialog box
+	UINT uMsg,		// message
+	WPARAM wParam,	// first message parameter
+	LPARAM lParam 	// second message parameter
 )
 {
 	PROPSHEETPAGE*	pPsp;
@@ -111,7 +111,7 @@ BOOL CALLBACK Prop1P2Proc(
 //	/* p4 ダイアログプロシージャ */
 //	BOOL CALLBACK Prop1P4Proc(
 //	    HWND hwndDlg,	// handle to dialog box
-//	    UINT uMsg,	// message
+//	    UINT uMsg,		// message
 //	    WPARAM wParam,	// first message parameter
 //	    LPARAM lParam 	// second message parameter
 //	)
@@ -141,10 +141,10 @@ BOOL CALLBACK Prop1P2Proc(
 
 /* p5 ダイアログプロシージャ */
 BOOL CALLBACK Prop1P5Proc(
-    HWND hwndDlg,	// handle to dialog box
-    UINT uMsg,	// message
-    WPARAM wParam,	// first message parameter
-    LPARAM lParam 	// second message parameter
+	HWND hwndDlg,	// handle to dialog box
+	UINT uMsg,		// message
+	WPARAM wParam,	// first message parameter
+	LPARAM lParam 	// second message parameter
 )
 {
 	PROPSHEETPAGE*	pPsp;
@@ -172,10 +172,10 @@ BOOL CALLBACK Prop1P5Proc(
 
 /* p6 ダイアログプロシージャ */
 BOOL CALLBACK Prop1P6Proc(
-    HWND hwndDlg,	// handle to dialog box
-    UINT uMsg,	// message
-    WPARAM wParam,	// first message parameter
-    LPARAM lParam 	// second message parameter
+	HWND hwndDlg,	// handle to dialog box
+	UINT uMsg,		// message
+	WPARAM wParam,	// first message parameter
+	LPARAM lParam 	// second message parameter
 )
 {
 	PROPSHEETPAGE*	pPsp;
@@ -201,10 +201,10 @@ BOOL CALLBACK Prop1P6Proc(
 
 /* p7 ダイアログプロシージャ */
 BOOL CALLBACK Prop1P7Proc(
-    HWND hwndDlg,	// handle to dialog box
-    UINT uMsg,	// message
-    WPARAM wParam,	// first message parameter
-    LPARAM lParam 	// second message parameter
+	HWND hwndDlg,	// handle to dialog box
+	UINT uMsg,		// message
+	WPARAM wParam,	// first message parameter
+	LPARAM lParam 	// second message parameter
 )
 {
 	PROPSHEETPAGE*	pPsp;
@@ -230,10 +230,10 @@ BOOL CALLBACK Prop1P7Proc(
 
 /* p8 ダイアログプロシージャ */
 BOOL CALLBACK Prop1P8Proc(
-    HWND hwndDlg,	// handle to dialog box
-    UINT uMsg,	// message
-    WPARAM wParam,	// first message parameter
-    LPARAM lParam 	// second message parameter
+	HWND hwndDlg,	// handle to dialog box
+	UINT uMsg,		// message
+	WPARAM wParam,	// first message parameter
+	LPARAM lParam 	// second message parameter
 )
 {
 	PROPSHEETPAGE*	pPsp;
@@ -259,10 +259,10 @@ BOOL CALLBACK Prop1P8Proc(
 
 /* p9 ダイアログプロシージャ */
 BOOL CALLBACK Prop1P9Proc(
-    HWND hwndDlg,	// handle to dialog box
-    UINT uMsg,	// message
-    WPARAM wParam,	// first message parameter
-    LPARAM lParam 	// second message parameter
+	HWND hwndDlg,	// handle to dialog box
+	UINT uMsg,		// message
+	WPARAM wParam,	// first message parameter
+	LPARAM lParam 	// second message parameter
 )
 {
 	PROPSHEETPAGE*	pPsp;
@@ -289,10 +289,10 @@ BOOL CALLBACK Prop1P9Proc(
 
 /* p10 ダイアログプロシージャ */
 BOOL CALLBACK Prop1P10Proc(
-    HWND hwndDlg,	// handle to dialog box
-    UINT uMsg,	// message
-    WPARAM wParam,	// first message parameter
-    LPARAM lParam 	// second message parameter
+	HWND hwndDlg,	// handle to dialog box
+	UINT uMsg,		// message
+	WPARAM wParam,	// first message parameter
+	LPARAM lParam 	// second message parameter
 )
 {
 	PROPSHEETPAGE*	pPsp;
@@ -320,10 +320,10 @@ BOOL CALLBACK Prop1P10Proc(
 
 /* ダイアログプロシージャ */
 BOOL CALLBACK DlgProc_PROP_WIN(
-    HWND hwndDlg,	// handle to dialog box
-    UINT uMsg,	// message
-    WPARAM wParam,	// first message parameter
-    LPARAM lParam 	// second message parameter
+	HWND hwndDlg,	// handle to dialog box
+	UINT uMsg,		// message
+	WPARAM wParam,	// first message parameter
+	LPARAM lParam 	// second message parameter
 )
 {
 	PROPSHEETPAGE*	pPsp;
@@ -350,10 +350,10 @@ BOOL CALLBACK DlgProc_PROP_WIN(
 
 /* ダイアログプロシージャ */
 BOOL CALLBACK DlgProc_PROP_URL(
-    HWND hwndDlg,	// handle to dialog box
-    UINT uMsg,	// message
-    WPARAM wParam,	// first message parameter
-    LPARAM lParam 	// second message parameter
+	HWND hwndDlg,	// handle to dialog box
+	UINT uMsg,		// message
+	WPARAM wParam,	// first message parameter
+	LPARAM lParam 	// second message parameter
 )
 {
 	PROPSHEETPAGE*	pPsp;
@@ -380,10 +380,10 @@ BOOL CALLBACK DlgProc_PROP_URL(
 
 /* ダイアログプロシージャ */
 BOOL CALLBACK DlgProc_PROP_EDIT(
-    HWND hwndDlg,	// handle to dialog box
-    UINT uMsg,	// message
-    WPARAM wParam,	// first message parameter
-    LPARAM lParam 	// second message parameter
+	HWND hwndDlg,	// handle to dialog box
+	UINT uMsg,		// message
+	WPARAM wParam,	// first message parameter
+	LPARAM lParam 	// second message parameter
 )
 {
 	PROPSHEETPAGE*	pPsp;
@@ -410,10 +410,10 @@ BOOL CALLBACK DlgProc_PROP_EDIT(
 
 /* ダイアログプロシージャ */
 BOOL CALLBACK DlgProc_PROP_GREP(
-    HWND hwndDlg,	// handle to dialog box
-    UINT uMsg,	// message
-    WPARAM wParam,	// first message parameter
-    LPARAM lParam 	// second message parameter
+	HWND hwndDlg,	// handle to dialog box
+	UINT uMsg,		// message
+	WPARAM wParam,	// first message parameter
+	LPARAM lParam 	// second message parameter
 )
 {
 	PROPSHEETPAGE*	pPsp;
@@ -441,10 +441,10 @@ BOOL CALLBACK DlgProc_PROP_GREP(
 
 /* ダイアログプロシージャ */
 BOOL CALLBACK DlgProc_PROP_BACKUP(
-    HWND hwndDlg,	// handle to dialog box
-    UINT uMsg,	// message
-    WPARAM wParam,	// first message parameter
-    LPARAM lParam 	// second message parameter
+	HWND hwndDlg,	// handle to dialog box
+	UINT uMsg,		// message
+	WPARAM wParam,	// first message parameter
+	LPARAM lParam 	// second message parameter
 )
 {
 	PROPSHEETPAGE*	pPsp;
@@ -480,7 +480,7 @@ CPropCommon::CPropCommon()
 	m_pShareData = m_cShareData.GetShareData( NULL, NULL );
 
 	m_hInstance = NULL;		/* アプリケーションインスタンスのハンドル */
-	m_hwndParent = NULL;		/* オーナーウィンドウのハンドル */
+	m_hwndParent = NULL;	/* オーナーウィンドウのハンドル */
 	m_hwndThis  = NULL;		/* このダイアログのハンドル */
 	m_nPageNum = 0;
 
@@ -524,15 +524,15 @@ BOOL CPropCommon::SelectColor( HWND hwndParent, COLORREF* pColor )
 	for( i = 0; i < 16; i++	){
 		dwCustColors[i] = (DWORD)RGB( 255, 255, 255 );
 	}
-    cc.lStructSize = sizeof( cc );
-    cc.hwndOwner = hwndParent;
-    cc.hInstance = NULL;
-    cc.rgbResult = *pColor;
-    cc.lpCustColors = (LPDWORD) dwCustColors;
-    cc.Flags = /*CC_PREVENTFULLOPEN |*/ CC_RGBINIT;
-    cc.lCustData = NULL;
-    cc.lpfnHook = NULL;
-    cc.lpTemplateName = NULL;
+	cc.lStructSize = sizeof( cc );
+	cc.hwndOwner = hwndParent;
+	cc.hInstance = NULL;
+	cc.rgbResult = *pColor;
+	cc.lpCustColors = (LPDWORD) dwCustColors;
+	cc.Flags = /*CC_PREVENTFULLOPEN |*/ CC_RGBINIT;
+	cc.lCustData = NULL;
+	cc.lpfnHook = NULL;
+	cc.lpTemplateName = NULL;
 	if( FALSE == ::ChooseColor( &cc ) ){
 		return FALSE;
 	}
@@ -550,10 +550,10 @@ void CPropCommon::DrawColorButton( DRAWITEMSTRUCT* pDis, COLORREF cColor )
 #ifdef _DEBUG
 	MYTRACE( "pDis->itemAction = " );
 #endif
-	COLORREF	cBtnHiLight  = (COLORREF)::GetSysColor(COLOR_3DHILIGHT);
-	COLORREF	cBtnShadow   = (COLORREF)::GetSysColor(COLOR_3DSHADOW);
-	COLORREF	cBtnDkShadow = (COLORREF)::GetSysColor(COLOR_3DDKSHADOW);
-	COLORREF	cBtnFace     = (COLORREF)::GetSysColor(COLOR_3DFACE);
+	COLORREF	cBtnHiLight		= (COLORREF)::GetSysColor(COLOR_3DHILIGHT);
+	COLORREF	cBtnShadow		= (COLORREF)::GetSysColor(COLOR_3DSHADOW);
+	COLORREF	cBtnDkShadow	= (COLORREF)::GetSysColor(COLOR_3DDKSHADOW);
+	COLORREF	cBtnFace		= (COLORREF)::GetSysColor(COLOR_3DFACE);
 	COLORREF	cRim; 
 	HBRUSH		hBrush;
 	HBRUSH		hBrushOld;
@@ -737,17 +737,17 @@ void CPropCommon::DrawToolBarItemList( DRAWITEMSTRUCT* pDis )
 
 			/* ビットマップ描画 */
 			::BitBlt(
-				pDis->hDC,	// handle to destination device context 
+				pDis->hDC,		// handle to destination device context
 				rc.left + 2,	// x-coordinate of destination rectangle's upper-left corner
 				rc.top  + 2,	// x-coordinate of destination rectangle's upper-left corner
 				16,	// width of destination rectangle 
 //	Sept. 17, 2000 JEPRO_16thdot アイコンの16dot目が表示されるように次行を変更
-//				15,	// height of destination rectangle 
-				16,	// height of destination rectangle 
-				hdcCompatDC,	// handle to source device context 
-				16 * tbb.iBitmap,	// x-coordinate of source rectangle's upper-left corner  
-				0,	// y-coordinate of source rectangle's upper-left corner
-				SRCCOPY 	// raster operation code 
+//				15,				// height of destination rectangle
+				16,				// height of destination rectangle
+				hdcCompatDC,	// handle to source device context
+				16 * tbb.iBitmap,// x-coordinate of source rectangle's upper-left corner
+				0,				// y-coordinate of source rectangle's upper-left corner
+				SRCCOPY 		// raster operation code
 			);
 //	Sept. 17,2000 JEPRO_16thdot アイコンの16dot目が表示されるように次行を変更する必要ある？
 //	とりあえずそのままで問題なさそうなので変更していない
@@ -824,7 +824,7 @@ int CPropCommon::DoPropertySheet( int nPageNum/*, int nActiveItem*/ )
 	/* 共有データ構造体のアドレスを返す */
 	m_cShareData.Init();
 	m_pShareData = m_cShareData.GetShareData( NULL, NULL );
-    
+
 	int				nRet;
 	PROPSHEETPAGE	psp[32];
     PROPSHEETHEADER	psh;
@@ -834,101 +834,101 @@ int CPropCommon::DoPropertySheet( int nPageNum/*, int nActiveItem*/ )
 
 
 	nIdx = 0;
-    memset( &psp[nIdx], 0, sizeof(PROPSHEETPAGE) );
-    psp[nIdx].dwSize = sizeof(PROPSHEETPAGE);
-    psp[nIdx].dwFlags = /*PSP_USEICONID |*/ PSP_USETITLE | PSP_HASHELP;
-    psp[nIdx].hInstance = m_hInstance;
-    psp[nIdx].pszTemplate = MAKEINTRESOURCE( IDD_PROP1P1 );
-    psp[nIdx].pszIcon = NULL/*MAKEINTRESOURCE(IDI_FONT)*/;
-    psp[nIdx].pfnDlgProc = (DLGPROC)Prop1P1Proc;
- //   psp[nIdx].pszTitle = "全般1";
-    psp[nIdx].pszTitle = "全般";	//	Oct. 1, 2000 jepro "全般2"が既に"書式"にタイトル変更されているのでここも`1'を取った
-    psp[nIdx].lParam = (LPARAM)this;
-    psp[nIdx].pfnCallback = NULL;
-	nIdx++;
-
-    memset( &psp[nIdx], 0, sizeof(PROPSHEETPAGE) );
+	memset( &psp[nIdx], 0, sizeof(PROPSHEETPAGE) );
 	psp[nIdx].dwSize = sizeof(PROPSHEETPAGE);
-    psp[nIdx].dwFlags = /*PSP_USEICONID |*/ PSP_USETITLE | PSP_HASHELP;
-    psp[nIdx].hInstance = m_hInstance;
-    psp[nIdx].pszTemplate = MAKEINTRESOURCE( IDD_PROP_WIN );
-    psp[nIdx].pszIcon = NULL /*MAKEINTRESOURCE(IDI_BORDER)*/;
-    psp[nIdx].pfnDlgProc = (DLGPROC)DlgProc_PROP_WIN;
-    psp[nIdx].pszTitle = "ウィンドウ";
-    psp[nIdx].lParam = (LPARAM)this;
-    psp[nIdx].pfnCallback = NULL;
+	psp[nIdx].dwFlags = /*PSP_USEICONID |*/ PSP_USETITLE | PSP_HASHELP;
+	psp[nIdx].hInstance = m_hInstance;
+	psp[nIdx].pszTemplate = MAKEINTRESOURCE( IDD_PROP1P1 );
+	psp[nIdx].pszIcon = NULL/*MAKEINTRESOURCE(IDI_FONT)*/;
+	psp[nIdx].pfnDlgProc = (DLGPROC)Prop1P1Proc;
+//	psp[nIdx].pszTitle = "全般1";
+	psp[nIdx].pszTitle = "全般";	//	Oct. 1, 2000 jepro "全般2"が既に"書式"にタイトル変更されているのでここも`1'を取った
+	psp[nIdx].lParam = (LPARAM)this;
+	psp[nIdx].pfnCallback = NULL;
 	nIdx++;
 
-    memset( &psp[nIdx], 0, sizeof(PROPSHEETPAGE) );
+	memset( &psp[nIdx], 0, sizeof(PROPSHEETPAGE) );
 	psp[nIdx].dwSize = sizeof(PROPSHEETPAGE);
-    psp[nIdx].dwFlags = /*PSP_USEICONID |*/ PSP_USETITLE | PSP_HASHELP;
-    psp[nIdx].hInstance = m_hInstance;
-    psp[nIdx].pszTemplate = MAKEINTRESOURCE( IDD_PROP_EDIT );
-    psp[nIdx].pszIcon = NULL /*MAKEINTRESOURCE(IDI_BORDER)*/;
-    psp[nIdx].pfnDlgProc = (DLGPROC)DlgProc_PROP_EDIT;
-    psp[nIdx].pszTitle = "編集";
-    psp[nIdx].lParam = (LPARAM)this;
-    psp[nIdx].pfnCallback = NULL;
+	psp[nIdx].dwFlags = /*PSP_USEICONID |*/ PSP_USETITLE | PSP_HASHELP;
+	psp[nIdx].hInstance = m_hInstance;
+	psp[nIdx].pszTemplate = MAKEINTRESOURCE( IDD_PROP_WIN );
+	psp[nIdx].pszIcon = NULL /*MAKEINTRESOURCE(IDI_BORDER)*/;
+	psp[nIdx].pfnDlgProc = (DLGPROC)DlgProc_PROP_WIN;
+	psp[nIdx].pszTitle = "ウィンドウ";
+	psp[nIdx].lParam = (LPARAM)this;
+	psp[nIdx].pfnCallback = NULL;
 	nIdx++;
 
-    memset( &psp[nIdx], 0, sizeof(PROPSHEETPAGE) );
+	memset( &psp[nIdx], 0, sizeof(PROPSHEETPAGE) );
 	psp[nIdx].dwSize = sizeof(PROPSHEETPAGE);
-    psp[nIdx].dwFlags = /*PSP_USEICONID |*/ PSP_USETITLE | PSP_HASHELP;
-    psp[nIdx].hInstance = m_hInstance;
-    psp[nIdx].pszTemplate = MAKEINTRESOURCE( IDD_PROP_FILE );
-    psp[nIdx].pszIcon = NULL /*MAKEINTRESOURCE(IDI_BORDER)*/;
-    psp[nIdx].pfnDlgProc = (DLGPROC)Prop1P2Proc;
-    psp[nIdx].pszTitle = "ファイル";
-    psp[nIdx].lParam = (LPARAM)this;
-    psp[nIdx].pfnCallback = NULL;
+	psp[nIdx].dwFlags = /*PSP_USEICONID |*/ PSP_USETITLE | PSP_HASHELP;
+	psp[nIdx].hInstance = m_hInstance;
+	psp[nIdx].pszTemplate = MAKEINTRESOURCE( IDD_PROP_EDIT );
+	psp[nIdx].pszIcon = NULL /*MAKEINTRESOURCE(IDI_BORDER)*/;
+	psp[nIdx].pfnDlgProc = (DLGPROC)DlgProc_PROP_EDIT;
+	psp[nIdx].pszTitle = "編集";
+	psp[nIdx].lParam = (LPARAM)this;
+	psp[nIdx].pfnCallback = NULL;
 	nIdx++;
 
-    memset( &psp[nIdx], 0, sizeof(PROPSHEETPAGE) );
+	memset( &psp[nIdx], 0, sizeof(PROPSHEETPAGE) );
 	psp[nIdx].dwSize = sizeof(PROPSHEETPAGE);
-    psp[nIdx].dwFlags = /*PSP_USEICONID |*/ PSP_USETITLE | PSP_HASHELP;
-    psp[nIdx].hInstance = m_hInstance;
-    psp[nIdx].pszTemplate = MAKEINTRESOURCE( IDD_PROP_BACKUP );
-    psp[nIdx].pszIcon = NULL /*MAKEINTRESOURCE(IDI_BORDER)*/;
-    psp[nIdx].pfnDlgProc = (DLGPROC)DlgProc_PROP_BACKUP;
-    psp[nIdx].pszTitle = "バックアップ";
-    psp[nIdx].lParam = (LPARAM)this;
-    psp[nIdx].pfnCallback = NULL;
+	psp[nIdx].dwFlags = /*PSP_USEICONID |*/ PSP_USETITLE | PSP_HASHELP;
+	psp[nIdx].hInstance = m_hInstance;
+	psp[nIdx].pszTemplate = MAKEINTRESOURCE( IDD_PROP_FILE );
+	psp[nIdx].pszIcon = NULL /*MAKEINTRESOURCE(IDI_BORDER)*/;
+	psp[nIdx].pfnDlgProc = (DLGPROC)Prop1P2Proc;
+	psp[nIdx].pszTitle = "ファイル";
+	psp[nIdx].lParam = (LPARAM)this;
+	psp[nIdx].pfnCallback = NULL;
 	nIdx++;
 
-    memset( &psp[nIdx], 0, sizeof(PROPSHEETPAGE) );
-    psp[nIdx].dwSize = sizeof(PROPSHEETPAGE);
-    psp[nIdx].dwFlags = /*PSP_USEICONID |*/ PSP_USETITLE | PSP_HASHELP;
-    psp[nIdx].hInstance = m_hInstance;
-    psp[nIdx].pszTemplate = MAKEINTRESOURCE( IDD_PROP_FORMAT );
-    psp[nIdx].pszIcon = NULL/*MAKEINTRESOURCE(IDI_FONT)*/;
-    psp[nIdx].pfnDlgProc = (DLGPROC)Prop1P9Proc;
-    psp[nIdx].pszTitle = "書式";
-    psp[nIdx].lParam = (LPARAM)this;
-    psp[nIdx].pfnCallback = NULL;
-	nIdx++;
-
-    memset( &psp[nIdx], 0, sizeof(PROPSHEETPAGE) );
+	memset( &psp[nIdx], 0, sizeof(PROPSHEETPAGE) );
 	psp[nIdx].dwSize = sizeof(PROPSHEETPAGE);
-    psp[nIdx].dwFlags = /*PSP_USEICONID |*/ PSP_USETITLE | PSP_HASHELP;
-    psp[nIdx].hInstance = m_hInstance;
-    psp[nIdx].pszTemplate = MAKEINTRESOURCE( IDD_PROP_URL );
-    psp[nIdx].pszIcon = NULL /*MAKEINTRESOURCE(IDI_BORDER)*/;
-    psp[nIdx].pfnDlgProc = (DLGPROC)DlgProc_PROP_URL;
-    psp[nIdx].pszTitle = "クリッカブルURL";
-    psp[nIdx].lParam = (LPARAM)this;
-    psp[nIdx].pfnCallback = NULL;
+	psp[nIdx].dwFlags = /*PSP_USEICONID |*/ PSP_USETITLE | PSP_HASHELP;
+	psp[nIdx].hInstance = m_hInstance;
+	psp[nIdx].pszTemplate = MAKEINTRESOURCE( IDD_PROP_BACKUP );
+	psp[nIdx].pszIcon = NULL /*MAKEINTRESOURCE(IDI_BORDER)*/;
+	psp[nIdx].pfnDlgProc = (DLGPROC)DlgProc_PROP_BACKUP;
+	psp[nIdx].pszTitle = "バックアップ";
+	psp[nIdx].lParam = (LPARAM)this;
+	psp[nIdx].pfnCallback = NULL;
 	nIdx++;
 
-    memset( &psp[nIdx], 0, sizeof(PROPSHEETPAGE) );
+	memset( &psp[nIdx], 0, sizeof(PROPSHEETPAGE) );
 	psp[nIdx].dwSize = sizeof(PROPSHEETPAGE);
-    psp[nIdx].dwFlags = /*PSP_USEICONID |*/ PSP_USETITLE | PSP_HASHELP;
-    psp[nIdx].hInstance = m_hInstance;
-    psp[nIdx].pszTemplate = MAKEINTRESOURCE( IDD_PROP_GREP );
-    psp[nIdx].pszIcon = NULL /*MAKEINTRESOURCE(IDI_BORDER)*/;
-    psp[nIdx].pfnDlgProc = (DLGPROC)DlgProc_PROP_GREP;
-    psp[nIdx].pszTitle = "Grep";
-    psp[nIdx].lParam = (LPARAM)this;
-    psp[nIdx].pfnCallback = NULL;
+	psp[nIdx].dwFlags = /*PSP_USEICONID |*/ PSP_USETITLE | PSP_HASHELP;
+	psp[nIdx].hInstance = m_hInstance;
+	psp[nIdx].pszTemplate = MAKEINTRESOURCE( IDD_PROP_FORMAT );
+	psp[nIdx].pszIcon = NULL/*MAKEINTRESOURCE(IDI_FONT)*/;
+	psp[nIdx].pfnDlgProc = (DLGPROC)Prop1P9Proc;
+	psp[nIdx].pszTitle = "書式";
+	psp[nIdx].lParam = (LPARAM)this;
+	psp[nIdx].pfnCallback = NULL;
+	nIdx++;
+
+	memset( &psp[nIdx], 0, sizeof(PROPSHEETPAGE) );
+	psp[nIdx].dwSize = sizeof(PROPSHEETPAGE);
+	psp[nIdx].dwFlags = /*PSP_USEICONID |*/ PSP_USETITLE | PSP_HASHELP;
+	psp[nIdx].hInstance = m_hInstance;
+	psp[nIdx].pszTemplate = MAKEINTRESOURCE( IDD_PROP_URL );
+	psp[nIdx].pszIcon = NULL /*MAKEINTRESOURCE(IDI_BORDER)*/;
+	psp[nIdx].pfnDlgProc = (DLGPROC)DlgProc_PROP_URL;
+	psp[nIdx].pszTitle = "クリッカブルURL";
+	psp[nIdx].lParam = (LPARAM)this;
+	psp[nIdx].pfnCallback = NULL;
+	nIdx++;
+
+	memset( &psp[nIdx], 0, sizeof(PROPSHEETPAGE) );
+	psp[nIdx].dwSize = sizeof(PROPSHEETPAGE);
+	psp[nIdx].dwFlags = /*PSP_USEICONID |*/ PSP_USETITLE | PSP_HASHELP;
+	psp[nIdx].hInstance = m_hInstance;
+	psp[nIdx].pszTemplate = MAKEINTRESOURCE( IDD_PROP_GREP );
+	psp[nIdx].pszIcon = NULL /*MAKEINTRESOURCE(IDI_BORDER)*/;
+	psp[nIdx].pfnDlgProc = (DLGPROC)DlgProc_PROP_GREP;
+	psp[nIdx].pszTitle = "Grep";
+	psp[nIdx].lParam = (LPARAM)this;
+	psp[nIdx].pfnCallback = NULL;
 	nIdx++;
 
 //  memset( &psp[nIdx], 0, sizeof(PROPSHEETPAGE) );
@@ -943,89 +943,89 @@ int CPropCommon::DoPropertySheet( int nPageNum/*, int nActiveItem*/ )
 //	psp[nIdx].pfnCallback = NULL;
 //	nIdx++;
 
-    memset( &psp[nIdx], 0, sizeof(PROPSHEETPAGE) );
+	memset( &psp[nIdx], 0, sizeof(PROPSHEETPAGE) );
 	psp[nIdx].dwSize = sizeof(PROPSHEETPAGE);
-    psp[nIdx].dwFlags = /*PSP_USEICONID |*/ PSP_USETITLE | PSP_HASHELP;
-    psp[nIdx].hInstance = m_hInstance;
-    psp[nIdx].pszTemplate = MAKEINTRESOURCE( /*IDD_PROP1P5*//*IDD_PROP1P5_NEW*/IDD_PROP_KEYBIND );
-    psp[nIdx].pszIcon = NULL /*MAKEINTRESOURCE(IDI_BORDER)*/;
-    psp[nIdx].pfnDlgProc = (DLGPROC)Prop1P5Proc;
-    psp[nIdx].pszTitle = "キー割り当て";
-    psp[nIdx].lParam = (LPARAM)this;
-    psp[nIdx].pfnCallback = NULL;
+	psp[nIdx].dwFlags = /*PSP_USEICONID |*/ PSP_USETITLE | PSP_HASHELP;
+	psp[nIdx].hInstance = m_hInstance;
+	psp[nIdx].pszTemplate = MAKEINTRESOURCE( /*IDD_PROP1P5*//*IDD_PROP1P5_NEW*/IDD_PROP_KEYBIND );
+	psp[nIdx].pszIcon = NULL /*MAKEINTRESOURCE(IDI_BORDER)*/;
+	psp[nIdx].pfnDlgProc = (DLGPROC)Prop1P5Proc;
+	psp[nIdx].pszTitle = "キー割り当て";
+	psp[nIdx].lParam = (LPARAM)this;
+	psp[nIdx].pfnCallback = NULL;
 	nIdx++;
 
-    memset( &psp[nIdx], 0, sizeof(PROPSHEETPAGE) );
+	memset( &psp[nIdx], 0, sizeof(PROPSHEETPAGE) );
 	psp[nIdx].dwSize = sizeof(PROPSHEETPAGE);
-    psp[nIdx].dwFlags = /*PSP_USEICONID |*/ PSP_USETITLE | PSP_HASHELP;
-    psp[nIdx].hInstance = m_hInstance;
-    psp[nIdx].pszTemplate = MAKEINTRESOURCE( IDD_PROP_CUSTMENU );
-    psp[nIdx].pszIcon = NULL /*MAKEINTRESOURCE(IDI_BORDER)*/;
-    psp[nIdx].pfnDlgProc = (DLGPROC)Prop1P8Proc;
-    psp[nIdx].pszTitle = "カスタムメニュー";
-    psp[nIdx].lParam = (LPARAM)this;
-    psp[nIdx].pfnCallback = NULL;
+	psp[nIdx].dwFlags = /*PSP_USEICONID |*/ PSP_USETITLE | PSP_HASHELP;
+	psp[nIdx].hInstance = m_hInstance;
+	psp[nIdx].pszTemplate = MAKEINTRESOURCE( IDD_PROP_CUSTMENU );
+	psp[nIdx].pszIcon = NULL /*MAKEINTRESOURCE(IDI_BORDER)*/;
+	psp[nIdx].pfnDlgProc = (DLGPROC)Prop1P8Proc;
+	psp[nIdx].pszTitle = "カスタムメニュー";
+	psp[nIdx].lParam = (LPARAM)this;
+	psp[nIdx].pfnCallback = NULL;
 	nIdx++;
 
-    memset( &psp[nIdx], 0, sizeof(PROPSHEETPAGE) );
+	memset( &psp[nIdx], 0, sizeof(PROPSHEETPAGE) );
 	psp[nIdx].dwSize = sizeof(PROPSHEETPAGE);
-    psp[nIdx].dwFlags = /*PSP_USEICONID |*/ PSP_USETITLE | PSP_HASHELP;
-    psp[nIdx].hInstance = m_hInstance;
-    psp[nIdx].pszTemplate = MAKEINTRESOURCE( IDD_PROP_TOOLBAR );
-    psp[nIdx].pszIcon = NULL /*MAKEINTRESOURCE(IDI_BORDER)*/;
-    psp[nIdx].pfnDlgProc = (DLGPROC)Prop1P6Proc;
-    psp[nIdx].pszTitle = "ツールバー";
-    psp[nIdx].lParam = (LPARAM)this;
-    psp[nIdx].pfnCallback = NULL;
+	psp[nIdx].dwFlags = /*PSP_USEICONID |*/ PSP_USETITLE | PSP_HASHELP;
+	psp[nIdx].hInstance = m_hInstance;
+	psp[nIdx].pszTemplate = MAKEINTRESOURCE( IDD_PROP_TOOLBAR );
+	psp[nIdx].pszIcon = NULL /*MAKEINTRESOURCE(IDI_BORDER)*/;
+	psp[nIdx].pfnDlgProc = (DLGPROC)Prop1P6Proc;
+	psp[nIdx].pszTitle = "ツールバー";
+	psp[nIdx].lParam = (LPARAM)this;
+	psp[nIdx].pfnCallback = NULL;
 	nIdx++;
 
-    memset( &psp[nIdx], 0, sizeof(PROPSHEETPAGE) );
+	memset( &psp[nIdx], 0, sizeof(PROPSHEETPAGE) );
 	psp[nIdx].dwSize = sizeof(PROPSHEETPAGE);
-    psp[nIdx].dwFlags = /*PSP_USEICONID |*/ PSP_USETITLE | PSP_HASHELP;
-    psp[nIdx].hInstance = m_hInstance;
-    psp[nIdx].pszTemplate = MAKEINTRESOURCE( IDD_PROP_KEYWORD );
-    psp[nIdx].pszIcon = NULL /*MAKEINTRESOURCE(IDI_BORDER)*/;
-    psp[nIdx].pfnDlgProc = (DLGPROC)Prop1P7Proc;
-    psp[nIdx].pszTitle = "強調キーワード";
-    psp[nIdx].lParam = (LPARAM)this;
-    psp[nIdx].pfnCallback = NULL;
+	psp[nIdx].dwFlags = /*PSP_USEICONID |*/ PSP_USETITLE | PSP_HASHELP;
+	psp[nIdx].hInstance = m_hInstance;
+	psp[nIdx].pszTemplate = MAKEINTRESOURCE( IDD_PROP_KEYWORD );
+	psp[nIdx].pszIcon = NULL /*MAKEINTRESOURCE(IDI_BORDER)*/;
+	psp[nIdx].pfnDlgProc = (DLGPROC)Prop1P7Proc;
+	psp[nIdx].pszTitle = "強調キーワード";
+	psp[nIdx].lParam = (LPARAM)this;
+	psp[nIdx].pfnCallback = NULL;
 	nIdx++;
 
-    memset( &psp[nIdx], 0, sizeof(PROPSHEETPAGE) );
+	memset( &psp[nIdx], 0, sizeof(PROPSHEETPAGE) );
 	psp[nIdx].dwSize = sizeof(PROPSHEETPAGE);
-    psp[nIdx].dwFlags = /*PSP_USEICONID |*/ PSP_USETITLE | PSP_HASHELP;
-    psp[nIdx].hInstance = m_hInstance;
-    psp[nIdx].pszTemplate = MAKEINTRESOURCE( IDD_PROP_HELPER );
-    psp[nIdx].pszIcon = NULL /*MAKEINTRESOURCE(IDI_BORDER)*/;
-    psp[nIdx].pfnDlgProc = (DLGPROC)Prop1P10Proc;
-    psp[nIdx].pszTitle = "支援";
-    psp[nIdx].lParam = (LPARAM)this;
-    psp[nIdx].pfnCallback = NULL;
+	psp[nIdx].dwFlags = /*PSP_USEICONID |*/ PSP_USETITLE | PSP_HASHELP;
+	psp[nIdx].hInstance = m_hInstance;
+	psp[nIdx].pszTemplate = MAKEINTRESOURCE( IDD_PROP_HELPER );
+	psp[nIdx].pszIcon = NULL /*MAKEINTRESOURCE(IDI_BORDER)*/;
+	psp[nIdx].pfnDlgProc = (DLGPROC)Prop1P10Proc;
+	psp[nIdx].pszTitle = "支援";
+	psp[nIdx].lParam = (LPARAM)this;
+	psp[nIdx].pfnCallback = NULL;
 	nIdx++;
 
-//		memset( &psp[nIdx], 0, sizeof(PROPSHEETPAGE) );
-//		psp[nIdx].dwSize = sizeof(PROPSHEETPAGE);
-//		psp[nIdx].dwFlags = /*PSP_USEICONID |*/ PSP_USETITLE | PSP_HASHELP;
-//		psp[nIdx].hInstance = m_hInstance;
-//		psp[nIdx].pszTemplate = MAKEINTRESOURCE( IDD_PROP_MAIL );
-//		psp[nIdx].pszIcon = NULL /*MAKEINTRESOURCE(IDI_BORDER)*/;
-//		psp[nIdx].pfnDlgProc = (DLGPROC)Prop1P4Proc;
-//		psp[nIdx].pszTitle = "メール";
-//		psp[nIdx].lParam = (LPARAM)this;
-//		psp[nIdx].pfnCallback = NULL;
-//		nIdx++;
-    memset( &psh, 0, sizeof(PROPSHEETHEADER) );
+//	memset( &psp[nIdx], 0, sizeof(PROPSHEETPAGE) );
+//	psp[nIdx].dwSize = sizeof(PROPSHEETPAGE);
+//	psp[nIdx].dwFlags = /*PSP_USEICONID |*/ PSP_USETITLE | PSP_HASHELP;
+//	psp[nIdx].hInstance = m_hInstance;
+//	psp[nIdx].pszTemplate = MAKEINTRESOURCE( IDD_PROP_MAIL );
+//	psp[nIdx].pszIcon = NULL /*MAKEINTRESOURCE(IDI_BORDER)*/;
+//	psp[nIdx].pfnDlgProc = (DLGPROC)Prop1P4Proc;
+//	psp[nIdx].pszTitle = "メール";
+//	psp[nIdx].lParam = (LPARAM)this;
+//	psp[nIdx].pfnCallback = NULL;
+//	nIdx++;
+	memset( &psh, 0, sizeof(PROPSHEETHEADER) );
 	psh.dwSize = sizeof(PROPSHEETHEADER);
-// JEPROtest Sept. 30, 2000 共通設定の隠れ[適用]ボタンの正体はここ。行頭のコメントアウトを入れ替えてみればわかる
-//  psh.dwFlags = /*PSH_USEICONID |*/ /*PSH_NOAPPLYNOW |*/ PSH_PROPSHEETPAGE/* | PSH_HASHELP*/;
+//	JEPROtest Sept. 30, 2000 共通設定の隠れ[適用]ボタンの正体はここ。行頭のコメントアウトを入れ替えてみればわかる
+//	psh.dwFlags = /*PSH_USEICONID |*/ /*PSH_NOAPPLYNOW |*/ PSH_PROPSHEETPAGE/* | PSH_HASHELP*/;
 	psh.dwFlags = /*PSH_USEICONID |*/ PSH_NOAPPLYNOW | PSH_PROPSHEETPAGE/* | PSH_HASHELP*/;
-    psh.hwndParent = m_hwndParent;
-    psh.hInstance = m_hInstance;
-    psh.pszIcon = NULL /*MAKEINTRESOURCE(IDI_CELL_PROPERTIES)*/;
-    psh.pszCaption = (LPSTR) "共通設定";
+	psh.hwndParent = m_hwndParent;
+	psh.hInstance = m_hInstance;
+	psh.pszIcon = NULL /*MAKEINTRESOURCE(IDI_CELL_PROPERTIES)*/;
+	psh.pszCaption = (LPSTR) "共通設定";
     psh.nPages = nIdx;
 
-    
+
 	if( -1 == nPageNum ){
 		psh.nStartPage = m_nPageNum;
     }else{
@@ -1039,9 +1039,9 @@ int CPropCommon::DoPropertySheet( int nPageNum/*, int nActiveItem*/ )
 	}
 
 	psh.ppsp = (LPCPROPSHEETPAGE)psp;
-    psh.pfnCallback = NULL;
+	psh.pfnCallback = NULL;
 
-    nRet = ::PropertySheet( &psh );
+	nRet = ::PropertySheet( &psh );
 	if( -1 == nRet ){
 		char*	pszMsgBuf;
 		::FormatMessage(
@@ -1050,10 +1050,10 @@ int CPropCommon::DoPropertySheet( int nPageNum/*, int nActiveItem*/ )
 			FORMAT_MESSAGE_IGNORE_INSERTS,
 			NULL,
 			::GetLastError(),
-			MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT), // デフォルト言語
+			MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT),	// デフォルト言語
 			(LPTSTR) &pszMsgBuf,
 			0,
-			NULL 
+			NULL
 		);
 		::MYMESSAGEBOX(	NULL, MB_OK | MB_ICONINFORMATION | MB_TOPMOST, "作者に教えて欲しいエラー",
 			"CPropCommon::DoPropertySheet()内でエラーが出ました。\npsh.nStartPage=[%d]\n::PropertySheet()失敗\n\n%s\n", psh.nStartPage, pszMsgBuf
@@ -1064,12 +1064,12 @@ int CPropCommon::DoPropertySheet( int nPageNum/*, int nActiveItem*/ )
 //		CDlgDebug	cDlgDebug;
 //		CMemory		cmemDebugInfo;
 //		char		szText[1024];
-//  
+//
 //		sprintf( szText, "aaaaaaaaa\r\nbbbbbbbbbbb\r\nccccccccccc\r\n" );
 //		cmemDebugInfo.Append( szText, strlen( szText ) );
 //		cDlgDebug.DoModal( m_hInstance, m_hwndParent, cmemDebugInfo );
 //	}
-    
+
 	return nRet;
 }
 
@@ -1079,10 +1079,10 @@ int CPropCommon::DoPropertySheet( int nPageNum/*, int nActiveItem*/ )
 
 /* p1 メッセージ処理 */
 BOOL CPropCommon::DispatchEvent_p1(
-    HWND	hwndDlg,	// handle to dialog box
-    UINT	uMsg,	// message
-    WPARAM	wParam,	// first message parameter
-    LPARAM	lParam 	// second message parameter
+	HWND	hwndDlg,	// handle to dialog box
+	UINT	uMsg,		// message
+	WPARAM	wParam,		// first message parameter
+	LPARAM	lParam 		// second message parameter
 )
 {
 	WORD		wNotifyCode;
@@ -1105,9 +1105,9 @@ BOOL CPropCommon::DispatchEvent_p1(
 
 		return TRUE;
 	case WM_COMMAND:
-		wNotifyCode = HIWORD(wParam);	/* 通知コード */
-		wID         = LOWORD(wParam);	/* 項目ID､ コントロールID､ またはアクセラレータID */
-		hwndCtl     = (HWND) lParam;	/* コントロールのハンドル */
+		wNotifyCode	= HIWORD(wParam);	/* 通知コード */
+		wID			= LOWORD(wParam);	/* 項目ID､ コントロールID､ またはアクセラレータID */
+		hwndCtl		= (HWND) lParam;	/* コントロールのハンドル */
 		switch( wNotifyCode ){
 		/* ボタン／チェックボックスがクリックされた */
 		case BN_CLICKED:
@@ -1121,7 +1121,7 @@ BOOL CPropCommon::DispatchEvent_p1(
 				if( ::IsDlgButtonChecked( hwndDlg, IDC_CHECK_USETRAYICON ) ){
 					::EnableWindow( ::GetDlgItem( hwndDlg, IDC_CHECK_STAYTASKTRAY ), TRUE );
 				}else{
-					::CheckDlgButton( hwndDlg, IDC_CHECK_STAYTASKTRAY, FALSE );	/* タスクトレイに常駐 */
+//					::CheckDlgButton( hwndDlg, IDC_CHECK_STAYTASKTRAY, FALSE );	/* タスクトレイに常駐 */	//Jan. 12, 2001 JEPRO 前のチェックが残るように変更(コメントアウトしただけ)
 					::EnableWindow( ::GetDlgItem( hwndDlg, IDC_CHECK_STAYTASKTRAY ), FALSE );
 				}
 				return TRUE;
@@ -1143,14 +1143,14 @@ BOOL CPropCommon::DispatchEvent_p1(
 					::EnableWindow( ::GetDlgItem( hwndDlg, IDC_CHECK_INDENT_WSPACE ), FALSE );
 				}
 				return TRUE;
-			
+
 			case IDC_BUTTON_CLEAR_MRU_FILE:
 				/* ファイルの履歴をクリア */
 				if( IDCANCEL == ::MYMESSAGEBOX(	hwndDlg, MB_OKCANCEL | MB_ICONQUESTION, GSTR_APPNAME,
 					"最近使ったファイルの履歴を削除します。\nよろしいですか？\n" ) ){
 					return TRUE;
 				}
-				
+
 				m_pShareData->m_nMRUArrNum = 0;
 				::MYMESSAGEBOX(	hwndDlg, MB_OK | MB_ICONINFORMATION, GSTR_APPNAME,
 					"最近使ったファイルの履歴を削除しました。\n" 
@@ -1429,10 +1429,10 @@ void CPropCommon::SetData_p1( HWND hwndDlg )
 	/* タスクトレイに常駐 */
 	::CheckDlgButton( hwndDlg, IDC_CHECK_STAYTASKTRAY, m_Common.m_bStayTaskTray );
 
-	/* タスクトレイメニューのショートカット */
+	/* タスクトレイ左クリックメニューのショートカット */
 	::SendMessage( ::GetDlgItem( hwndDlg, IDC_HOTKEY_TRAYMENU ), HKM_SETHOTKEY, MAKEWORD(m_Common.m_wTrayMenuHotKeyCode, m_Common.m_wTrayMenuHotKeyMods), 0 );
 
-	
+
 	return;
 }
 
@@ -1453,7 +1453,7 @@ int CPropCommon::GetData_p1( HWND hwndDlg )
 //	if( m_Common.m_nMAXLINELEN > 10240 ){
 //		m_Common.m_nMAXLINELEN = 10240;
 //	}
-  
+
 //	/* 文字の隙間 */
 //	m_Common.m_nCHARSPACE = ::GetDlgItemInt( hwndDlg, IDC_EDIT_CHARSPACE, NULL, FALSE );
 //	if( m_Common.m_nCHARSPACE < 0 ){
@@ -1562,7 +1562,7 @@ int CPropCommon::GetData_p1( HWND hwndDlg )
 	/* タスクトレイに常駐 */
 	m_Common.m_bStayTaskTray = ::IsDlgButtonChecked( hwndDlg, IDC_CHECK_STAYTASKTRAY );
 
-	/* タスクトレイメニューのショートカット */
+	/* タスクトレイ左クリックメニューのショートカット */
 	LRESULT	lResult; 
 	lResult = ::SendMessage( ::GetDlgItem( hwndDlg, IDC_HOTKEY_TRAYMENU ), HKM_GETHOTKEY, 0, 0 );
 	m_Common.m_wTrayMenuHotKeyCode = LOBYTE( lResult );
@@ -1614,7 +1614,7 @@ void CPropCommon::OnHelp( HWND hwndParent, int nPageID )
 		nContextID = 88;
 		break;
 
-	// From Here Sept. 9, 2000 JEPRO　共通設定のヘルプボタンが効かなくなっていた部分を以下の追加によって修正
+	// From Here Sept. 9, 2000 JEPRO 共通設定のヘルプボタンが効かなくなっていた部分を以下の追加によって修正
 	case IDD_PROP_EDIT:
 		nContextID = 144;
 		break;
@@ -1644,12 +1644,6 @@ void CPropCommon::OnHelp( HWND hwndParent, int nPageID )
 	}
 	return;
 }
-
-
-
-
-
-
 
 
 /*[EOF]*/

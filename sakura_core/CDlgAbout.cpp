@@ -134,16 +134,18 @@ BOOL CDlgAbout::OnBnClicked( int wID )
 {
 	switch( wID ){
 	case IDC_BUTTON_CONTACT:
-		/* 「作者連絡先」のヘルプ */
+		/* 「原作者連絡先」のヘルプ */	//Jan. 12, 2001 jepro `作者'の前に`原'を付けた
 		::WinHelp( m_hWnd, m_szHelpFile, HELP_CONTEXT, 8 );
 		return TRUE;
-	case IDC_BUTTON_DOWNLOAD:
-		/* 「最新バージョンのダウンロード」のヘルプ  */
-		::WinHelp( m_hWnd, m_szHelpFile, HELP_CONTEXT, 112 );
-		return TRUE;
+//Jan. 12, 2000 JEPRO UR1.2.20.2 (Nov. 7, 2000) から以下のボタンは削除されているのでコメントアウトした
+//	case IDC_BUTTON_DOWNLOAD:
+//		/* 「最新バージョンのダウンロード」のヘルプ  */
+//		::WinHelp( m_hWnd, m_szHelpFile, HELP_CONTEXT, 112 );
+//		return TRUE;
 	}
 	/* 基底クラスメンバ */
 	return CDialog::OnBnClicked( wID );
 }
+
 
 /*[EOF]*/

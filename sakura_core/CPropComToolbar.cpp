@@ -7,9 +7,9 @@
 /* p6 メッセージ処理 */
 BOOL CPropCommon::DispatchEvent_p6(
     HWND	hwndDlg,	// handle to dialog box
-    UINT	uMsg,	// message
-    WPARAM	wParam,	// first message parameter
-    LPARAM	lParam 	// second message parameter
+    UINT	uMsg,		// message
+    WPARAM	wParam,		// first message parameter
+    LPARAM	lParam 		// second message parameter
 )
 {
 	WORD				wNotifyCode;
@@ -92,8 +92,8 @@ BOOL CPropCommon::DispatchEvent_p6(
 
 	case WM_COMMAND:
 		wNotifyCode = HIWORD(wParam);	/* 通知コード */
-		wID = LOWORD(wParam);	/* 項目ID､ コントロールID､ またはアクセラレータID */
-		hwndCtl = (HWND) lParam;	/* コントロールのハンドル */
+		wID = LOWORD(wParam);			/* 項目ID､ コントロールID､ またはアクセラレータID */
+		hwndCtl = (HWND) lParam;		/* コントロールのハンドル */
 
 		if( hwndResList == hwndCtl ){
 			switch( wNotifyCode ){
@@ -112,7 +112,7 @@ BOOL CPropCommon::DispatchEvent_p6(
 //				for( i = 0; i < nNum; ++i ){
 //					::SendMessage( hwndFuncList, LB_DELETESTRING, 0, 0 );
 //				}
-				/* 機能一覧に文字列をセット(リストボックス)*/
+				/* 機能一覧に文字列をセット (リストボックス) */
 				for( i = 0; i < nsFuncCode::pnFuncListNumArr[nIndex2]; ++i ){
 					for( j = 0; j < m_cShareData.m_nMyButtonNum; ++j ){
 						if( m_cShareData.m_tbMyButton[j].idCommand == (nsFuncCode::ppnFuncListArr[nIndex2])[i] ){
@@ -122,7 +122,7 @@ BOOL CPropCommon::DispatchEvent_p6(
 //jepro note: 次行不要???
 					if( j < m_cShareData.m_nMyButtonNum ){
 
-//						/* ツールバーボタンの情報をセット(リストボックス)*/
+//						/* ツールバーボタンの情報をセット (リストボックス) */
 //						for( i = 0; i < m_Common.m_nToolBarButtonNum; ++i ){
 							lResult = ::SendMessage( hwndFuncList, LB_ADDSTRING, 0, (LPARAM)j );
 							lResult = ::SendMessage( hwndFuncList, LB_SETITEMHEIGHT , lResult, (LPARAM)MAKELPARAM(nListItemHeight, 0) );
@@ -164,7 +164,7 @@ BOOL CPropCommon::DispatchEvent_p6(
 					i = ::SendMessage( hwndResList, LB_DELETESTRING, nIndex1, 0 );
 					if( i == LB_ERR ){
 						break;
-					} 
+					}
 					if( nIndex1 >= i ){
 						if( i == 0 ){
 							i = ::SendMessage( hwndResList, LB_SETCURSEL, 0, 0 );
@@ -371,5 +371,4 @@ int CPropCommon::GetData_p6( HWND hwndDlg )
 }
 
 
-
-
+/*[EOF]*/

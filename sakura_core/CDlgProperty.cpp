@@ -46,10 +46,10 @@ void CDlgProperty::SetData( void )
 //	char*			pWork;
 	char			szWork[100];
 	char*			pCodeNameArr[] = {
-		"SJIS",	
-		"JIS",	
-		"EUC",	
-		"Unicode",	
+		"SJIS",
+		"JIS",
+		"EUC",
+		"Unicode",
 		"UTF-8",
 		"UTF-7"
 	};
@@ -63,34 +63,34 @@ void CDlgProperty::SetData( void )
 	m_pShareData = m_cShareData.GetShareData( NULL, NULL );
 
 	//	Aug. 16, 2000 genta	全角化
-	cmemProp.AppendSz( "ファイル名　" );
+	cmemProp.AppendSz( "ファイル名  " );
 	cmemProp.AppendSz( pCEditDoc->m_szFilePath );
 	cmemProp.AppendSz( "\r\n" );
 
-	cmemProp.AppendSz( "設定のタイプ　" );
+	cmemProp.AppendSz( "設定のタイプ  " );
 	cmemProp.AppendSz( pCEditDoc->GetDocumentAttribute().m_szTypeName );
 	cmemProp.AppendSz( "\r\n" );
 
-	cmemProp.AppendSz( "文字コード　" );
+	cmemProp.AppendSz( "文字コード  " );
 	cmemProp.AppendSz( pCodeNameArr[pCEditDoc->m_nCharCode] );
 	cmemProp.AppendSz( "\r\n" );
 
-	wsprintf( szWork, "行数　%d行\r\n", pCEditDoc->m_cDocLineMgr.GetLineCount() );
+	wsprintf( szWork, "行数  %d行\r\n", pCEditDoc->m_cDocLineMgr.GetLineCount() );
 	cmemProp.AppendSz( szWork );
 
-	wsprintf( szWork, "レイアウト行数　%d行\r\n", pCEditDoc->m_cLayoutMgr.GetLineCount() );
+	wsprintf( szWork, "レイアウト行数  %d行\r\n", pCEditDoc->m_cLayoutMgr.GetLineCount() );
 	cmemProp.AppendSz( szWork );
 
 	if( pCEditDoc->m_bReadOnly ){
-		cmemProp.AppendSz( "上書き禁止モードで開いています\r\n" );
+		cmemProp.AppendSz( "上書き禁止モードで開いています。\r\n" );
 	}
 	if( pCEditDoc->m_bIsModified ){
-		cmemProp.AppendSz( "変更されています\r\n" );
+		cmemProp.AppendSz( "変更されています。\r\n" );
 	}else{
-		cmemProp.AppendSz( "変更されていません\r\n" );
+		cmemProp.AppendSz( "変更されていません。\r\n" );
 	}
 
-	wsprintf( szWork, "\r\nコマンド実行回数　　%d回\r\n", pCEditDoc->m_nCommandExecNum );
+	wsprintf( szWork, "\r\nコマンド実行回数    %d回\r\n", pCEditDoc->m_nCommandExecNum );
 	cmemProp.AppendSz( szWork );
 
 	wsprintf( szWork, "--ファイル情報-----------------\r\n", pCEditDoc->m_cDocLineMgr.GetLineCount() );
@@ -99,52 +99,52 @@ void CDlgProperty::SetData( void )
 	if( INVALID_HANDLE_VALUE != ( nFind = ::FindFirstFile( pCEditDoc->m_szFilePath, (WIN32_FIND_DATA*)&wfd ) ) ){
 		if( pCEditDoc->m_hLockedFile ){
 			if( m_pShareData->m_Common.m_nFileShareMode == OF_SHARE_DENY_WRITE ){
-				wsprintf( szWork, "あなたはこのファイルを、他プロセスからの上書き禁止モードでロックしています\r\n" );
+				wsprintf( szWork, "あなたはこのファイルを、他プロセスからの上書き禁止モードでロックしています。\r\n" );
 			}else
 			if( m_pShareData->m_Common.m_nFileShareMode == OF_SHARE_EXCLUSIVE ){
-				wsprintf( szWork, "あなたはこのファイルを、他プロセスからの読み書き禁止モードでロックしています\r\n" );
+				wsprintf( szWork, "あなたはこのファイルを、他プロセスからの読み書き禁止モードでロックしています。\r\n" );
 			}else{
-				wsprintf( szWork, "あなたはこのファイルをロックしています\r\n" );
+				wsprintf( szWork, "あなたはこのファイルをロックしています。\r\n" );
 			}
 			cmemProp.AppendSz( szWork );
 		}else{
-			wsprintf( szWork, "あなたはこのファイルをロックしていません\r\n" );
+			wsprintf( szWork, "あなたはこのファイルをロックしていません。\r\n" );
 			cmemProp.AppendSz( szWork );
 		}
 		
-		wsprintf( szWork, "ファイル属性　", pCEditDoc->m_cDocLineMgr.GetLineCount() );
+		wsprintf( szWork, "ファイル属性  ", pCEditDoc->m_cDocLineMgr.GetLineCount() );
 		cmemProp.AppendSz( szWork );
-		if( wfd.dwFileAttributes & FILE_ATTRIBUTE_ARCHIVE ){ 
+		if( wfd.dwFileAttributes & FILE_ATTRIBUTE_ARCHIVE ){
 			cmemProp.AppendSz( "/アーカイブ" );
 		}
-		if( wfd.dwFileAttributes & FILE_ATTRIBUTE_COMPRESSED ){ 
+		if( wfd.dwFileAttributes & FILE_ATTRIBUTE_COMPRESSED ){
 			cmemProp.AppendSz( "/圧縮" );
 		}
-		if( wfd.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY ){ 
+		if( wfd.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY ){
 			cmemProp.AppendSz( "/フォルダ" );
 		}
-		if( wfd.dwFileAttributes & FILE_ATTRIBUTE_HIDDEN ){ 
+		if( wfd.dwFileAttributes & FILE_ATTRIBUTE_HIDDEN ){
 			cmemProp.AppendSz( "/隠し" );
 		}
-		if( wfd.dwFileAttributes & FILE_ATTRIBUTE_NORMAL ){ 
+		if( wfd.dwFileAttributes & FILE_ATTRIBUTE_NORMAL ){
 			cmemProp.AppendSz( "/ノーマル" );
 		}
-		if( wfd.dwFileAttributes & FILE_ATTRIBUTE_OFFLINE ){ 
+		if( wfd.dwFileAttributes & FILE_ATTRIBUTE_OFFLINE ){
 			cmemProp.AppendSz( "/オフライン" );
 		}
-		if( wfd.dwFileAttributes & FILE_ATTRIBUTE_READONLY ){ 
+		if( wfd.dwFileAttributes & FILE_ATTRIBUTE_READONLY ){
 			cmemProp.AppendSz( "/読み取り専用" );
 		}
-		if( wfd.dwFileAttributes & FILE_ATTRIBUTE_SYSTEM ){ 
+		if( wfd.dwFileAttributes & FILE_ATTRIBUTE_SYSTEM ){
 			cmemProp.AppendSz( "/システム" );
 		}
-		if( wfd.dwFileAttributes & FILE_ATTRIBUTE_TEMPORARY ){ 
+		if( wfd.dwFileAttributes & FILE_ATTRIBUTE_TEMPORARY ){
 			cmemProp.AppendSz( "/テンポラリ" );
 		}
 		cmemProp.AppendSz( "\r\n" );
 
 
-		cmemProp.AppendSz( "作成日時　" );
+		cmemProp.AppendSz( "作成日時  " );
 		::FileTimeToLocalFileTime( &wfd.ftCreationTime, &wfd.ftCreationTime );
 		::FileTimeToSystemTime( &wfd.ftCreationTime, &systimeL );
 		wsprintf( szWork, "%d年%d月%d日 %02d:%02d:%02d",
@@ -158,7 +158,7 @@ void CDlgProperty::SetData( void )
 		cmemProp.AppendSz( szWork );
 		cmemProp.AppendSz( "\r\n" );
 
-		cmemProp.AppendSz( "更新日時　" );
+		cmemProp.AppendSz( "更新日時  " );
 		::FileTimeToLocalFileTime( &wfd.ftLastWriteTime, &wfd.ftLastWriteTime );
 		::FileTimeToSystemTime( &wfd.ftLastWriteTime, &systimeL );
 		wsprintf( szWork, "%d年%d月%d日 %02d:%02d:%02d",
@@ -173,7 +173,7 @@ void CDlgProperty::SetData( void )
 		cmemProp.AppendSz( "\r\n" );
 
 
-		cmemProp.AppendSz( "アクセス日　" );
+		cmemProp.AppendSz( "アクセス日  " );
 		::FileTimeToLocalFileTime( &wfd.ftLastAccessTime, &wfd.ftLastAccessTime );
 		::FileTimeToSystemTime( &wfd.ftLastAccessTime, &systimeL );
 		wsprintf( szWork, "%d年%d月%d日",
@@ -184,10 +184,10 @@ void CDlgProperty::SetData( void )
 		cmemProp.AppendSz( szWork );
 		cmemProp.AppendSz( "\r\n" );
 
-		wsprintf( szWork, "MS-DOSファイル名　%s\r\n", wfd.cAlternateFileName );
+		wsprintf( szWork, "MS-DOSファイル名  %s\r\n", wfd.cAlternateFileName );
 		cmemProp.AppendSz( szWork );
 
-		wsprintf( szWork, "ファイルサイズ　%d バイト\r\n", wfd.nFileSizeLow );
+		wsprintf( szWork, "ファイルサイズ  %d バイト\r\n", wfd.nFileSizeLow );
 		cmemProp.AppendSz( szWork );
 
 		::FindClose( nFind );
@@ -196,7 +196,7 @@ void CDlgProperty::SetData( void )
 	
 	
 	
-#ifdef _DEBUG/////////////////////////////////////////////////////		
+#ifdef _DEBUG/////////////////////////////////////////////////////
 	int				nEUCMojiNum, nEUCCodeNum;
 	int				nSJISMojiNum, nSJISCodeNum;
 	int				nUNICODEMojiNum, nUNICODECodeNum;
@@ -229,7 +229,7 @@ void CDlgProperty::SetData( void )
 	_lclose( hFile );
 	
 	/* 
-	||ファイルの日本語コードセット判別:　Unicodeか？ 
+	||ファイルの日本語コードセット判別: Unicodeか？
 	|| エラーの場合、FALSEを返す
 	*/
 	if( CMemory::CheckKanjiCode_UNICODE( pBuf, nBufLen, &nUNICODEMojiNum, &nUNICODECodeNum ) ){
@@ -241,7 +241,7 @@ void CDlgProperty::SetData( void )
 		cmemProp.AppendSz( szWork );
 	}
 	/* 
-	||ファイルの日本語コードセット判別:　EUCか？ 
+	||ファイルの日本語コードセット判別: EUCか？
 	|| エラーの場合、FALSEを返す
 	*/
 	if( CMemory::CheckKanjiCode_EUC( pBuf, nBufLen, &nEUCMojiNum, &nEUCCodeNum ) ){
@@ -253,7 +253,7 @@ void CDlgProperty::SetData( void )
 		cmemProp.AppendSz( szWork );
 	}
 	/* 
-	||ファイルの日本語コードセット判別:　SJISか？ 
+	||ファイルの日本語コードセット判別: SJISか？
 	|| エラーの場合、FALSEを返す
 	*/
 	if( CMemory::CheckKanjiCode_SJIS( pBuf, nBufLen, &nSJISMojiNum, &nSJISCodeNum ) ){
@@ -267,7 +267,7 @@ void CDlgProperty::SetData( void )
 
 
 	/* 
-	||ファイルの日本語コードセット判別:　JISか？ 
+	||ファイルの日本語コードセット判別: JISか？
 	|| エラーの場合、FALSEを返す
 	*/
 	if( CMemory::CheckKanjiCode_JIS( pBuf, nBufLen, &nJISMojiNum, &nJISCodeNum ) ){
@@ -280,7 +280,7 @@ void CDlgProperty::SetData( void )
 	}
 
 	/* 
-	||ファイルの日本語コードセット判別:　UTF-8Sか？ 
+	||ファイルの日本語コードセット判別: UTF-8Sか？
 	|| エラーの場合、FALSEを返す
 	*/
 	if( CMemory::CheckKanjiCode_UTF8( pBuf, nBufLen, &nUTF8MojiNum, &nUTF8CodeNum ) ){
@@ -293,7 +293,7 @@ void CDlgProperty::SetData( void )
 	}
 
 	/* 
-	||ファイルの日本語コードセット判別:　UTF-7Sか？ 
+	||ファイルの日本語コードセット判別: UTF-7Sか？
 	|| エラーの場合、FALSEを返す
 	*/
 	if( CMemory::CheckKanjiCode_UTF7( pBuf, nBufLen, &nUTF7MojiNum, &nUTF7CodeNum ) ){
@@ -310,7 +310,7 @@ void CDlgProperty::SetData( void )
 		hgData = NULL;
 	}
 end_of_CodeTest:;
-#endif //ifdef _DEBUG/////////////////////////////////////////////////////		
+#endif //ifdef _DEBUG/////////////////////////////////////////////////////
 	::SetDlgItemText( m_hWnd, IDC_EDIT1, cmemProp.GetPtr( NULL ) );
 
 	return;
@@ -318,4 +318,3 @@ end_of_CodeTest:;
 
 
 /*[EOF]*/
-

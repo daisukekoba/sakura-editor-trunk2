@@ -18,11 +18,11 @@
 
 CDlgReplace::CDlgReplace()
 {
-	m_bLoHiCase = FALSE;	/* 英大文字と英小文字を区別する */
-	m_bWordOnly = FALSE;	/* 一致する単語のみ検索する */
-	m_bRegularExp = FALSE;	/* 正規表現 */
+	m_bLoHiCase = FALSE;		/* 英大文字と英小文字を区別する */
+	m_bWordOnly = FALSE;		/* 一致する単語のみ検索する */
+	m_bRegularExp = FALSE;		/* 正規表現 */
 	m_bSelectedArea = FALSE;	/* 選択範囲内置換 */
-	m_szText[0] = '\0';		/* 検索文字列 */
+	m_szText[0] = '\0';			/* 検索文字列 */
 	m_szText2[0] = '\0';		/* 置換後文字列 */
 	return;
 }
@@ -30,10 +30,10 @@ CDlgReplace::CDlgReplace()
 /* モーダルダイアログの表示 */
 HWND CDlgReplace::DoModeless( HINSTANCE hInstance, HWND hwndParent, LPARAM lParam, BOOL bSelected )
 {
-	m_bRegularExp = m_pShareData->m_Common.m_bRegularExp;	/* 1==正規表現 */
-	m_bLoHiCase = m_pShareData->m_Common.m_bLoHiCase;		/* 1==英大文字小文字の区別 */
-	m_bWordOnly = m_pShareData->m_Common.m_bWordOnly;		/* 1==単語のみ検索 */
-	m_bSelectedArea = m_pShareData->m_Common.m_bSelectedArea;	/* 選択範囲内置換 */
+	m_bRegularExp = m_pShareData->m_Common.m_bRegularExp;			/* 1==正規表現 */
+	m_bLoHiCase = m_pShareData->m_Common.m_bLoHiCase;				/* 1==英大文字小文字の区別 */
+	m_bWordOnly = m_pShareData->m_Common.m_bWordOnly;				/* 1==単語のみ検索 */
+	m_bSelectedArea = m_pShareData->m_Common.m_bSelectedArea;		/* 選択範囲内置換 */
 	m_bNOTIFYNOTFOUND = m_pShareData->m_Common.m_bNOTIFYNOTFOUND;	/* 検索／置換  見つからないときメッセージを表示 */
 	m_bSelected = bSelected;
 	return CDialog::DoModeless( hInstance, hwndParent, IDD_REPLACE, lParam, SW_SHOW );
@@ -91,7 +91,7 @@ void CDlgReplace::SetData( void )
 		cJre.Init();
 		if( FALSE == cJre.IsExist() ){
 			::MessageBeep( MB_ICONEXCLAMATION );
-			::MessageBox( m_hWnd, "jre32.dllが見つかりません。\n正規表現を利用するには、jre32.dllが必要です。\n", "情報", MB_OK | MB_ICONEXCLAMATION );
+			::MessageBox( m_hWnd, "jre32.dllが見つかりません。\n正規表現を利用するにはjre32.dllが必要です。\n", "情報", MB_OK | MB_ICONEXCLAMATION );
 			::CheckDlgButton( m_hWnd, IDC_CHK_REGULAREXP, 0 );
 		}else{
 			/* 英大文字と英小文字を区別する */
@@ -113,13 +113,13 @@ void CDlgReplace::SetData( void )
 
 
 /* ダイアログデータの取得 */
-/* 　0==条件未入力 　0より大きい==正常　 0より小さい==入力エラー  */
+/* 0==条件未入力  0より大きい==正常   0より小さい==入力エラー  */
 int CDlgReplace::GetData( void )
 {
 	int			i;
 	int			j;
 	CMemory*	pcmWork;
-	CJre	cJre;
+	CJre		cJre;
 
 	/* 置換 ダイアログを自動的に閉じる */
 	m_pShareData->m_Common.m_bAutoCloseDlgReplace = ::IsDlgButtonChecked( m_hWnd, IDC_CHECK_bAutoCloseDlgReplace );
@@ -136,10 +136,10 @@ int CDlgReplace::GetData( void )
 	/* 検索／置換  見つからないときメッセージを表示 */
 	m_bNOTIFYNOTFOUND = ::IsDlgButtonChecked( m_hWnd, IDC_CHECK_NOTIFYNOTFOUND );
 
-	m_pShareData->m_Common.m_bRegularExp = m_bRegularExp;		/* 1==正規表現 */
-	m_pShareData->m_Common.m_bLoHiCase = m_bLoHiCase;			/* 1==英大文字小文字の区別 */
-	m_pShareData->m_Common.m_bWordOnly = m_bWordOnly;			/* 1==単語のみ検索 */
-	m_pShareData->m_Common.m_bSelectedArea = m_bSelectedArea;	/* 選択範囲内置換 */
+	m_pShareData->m_Common.m_bRegularExp = m_bRegularExp;			/* 1==正規表現 */
+	m_pShareData->m_Common.m_bLoHiCase = m_bLoHiCase;				/* 1==英大文字小文字の区別 */
+	m_pShareData->m_Common.m_bWordOnly = m_bWordOnly;				/* 1==単語のみ検索 */
+	m_pShareData->m_Common.m_bSelectedArea = m_bSelectedArea;		/* 選択範囲内置換 */
 	m_pShareData->m_Common.m_bNOTIFYNOTFOUND = m_bNOTIFYNOTFOUND;	/* 検索／置換  見つからないときメッセージを表示 */
 
 
@@ -157,7 +157,7 @@ int CDlgReplace::GetData( void )
 			cJre.Init();
 			/* jre32.dllの存在チェック */
 			if( FALSE == cJre.IsExist() ){
-				::MessageBox( m_hWnd, "jre32.dllが見つかりません。\n正規表現を利用するには、jre32.dllが必要です。\n", "情報", MB_OK | MB_ICONEXCLAMATION );
+				::MessageBox( m_hWnd, "jre32.dllが見つかりません。\n正規表現を利用するにはjre32.dllが必要です。\n", "情報", MB_OK | MB_ICONEXCLAMATION );
 				return -1;
 			}
 			/* 検索パターンのコンパイル */
@@ -247,7 +247,7 @@ BOOL CDlgReplace::OnInitDialog( HWND hwndDlg, WPARAM wParam, LPARAM lParam )
 	::SendMessage( ::GetDlgItem( m_hWnd, IDC_COMBO_TEXT ), CB_SETEXTENDEDUI, (WPARAM) (BOOL) TRUE, 0 );
 	::SendMessage( ::GetDlgItem( m_hWnd, IDC_COMBO_TEXT2 ), CB_SETEXTENDEDUI, (WPARAM) (BOOL) TRUE, 0 );
 
-	
+
 	/* テキスト選択中か */
 	if( m_bSelected ){
 //		::EnableWindow( ::GetDlgItem( hwndDlg, IDC_BUTTON_SEARCHPREV ), FALSE );
@@ -305,7 +305,7 @@ BOOL CDlgReplace::OnBnClicked( int wID )
 				::SetDlgItemText( m_hWnd, IDC_STATIC_JRE32VER, "" );
 
 				::MessageBeep( MB_ICONEXCLAMATION );
-				::MessageBox( m_hWnd, "jre32.dllが見つかりません。\n正規表現を利用するには、jre32.dllが必要です。\n", "情報", MB_OK | MB_ICONEXCLAMATION );
+				::MessageBox( m_hWnd, "jre32.dllが見つかりません。\n正規表現を利用するにはjre32.dllが必要です。\n", "情報", MB_OK | MB_ICONEXCLAMATION );
 				::CheckDlgButton( m_hWnd, IDC_CHK_REGULAREXP, 0 );
 
 			}else{
@@ -399,7 +399,7 @@ BOOL CDlgReplace::OnBnClicked( int wID )
 		if( 0 < GetData() ){
 
 			
-			/* 表示処理ON/OFF */			
+			/* 表示処理ON/OFF */
 			BOOL bDisplayUpdate = FALSE;
 
 
@@ -459,7 +459,7 @@ BOOL CDlgReplace::OnBnClicked( int wID )
 //				}
 				if( 0 == ( nReplaceNum % 8 ) ){
 
-					
+
 //					if( 0 < nAllLineNum ){
 						nNewPos = (pcEditView->m_nSelectLineFrom * 100) / nAllLineNum;
 						::PostMessage( hwndProgress, PBM_SETPOS, nNewPos, 0 );
@@ -516,15 +516,15 @@ BOOL CDlgReplace::OnBnClicked( int wID )
 				::SendMessage( hwndProgress, PBM_SETPOS, nNewPos, 0 );
 			}
 //			cDlgCancel.Close();	 
-			cDlgCancel.CloseDialog( 0 );	 
+			cDlgCancel.CloseDialog( 0 );
 			::EnableWindow( m_hWnd, TRUE );
 			::EnableWindow( ::GetParent( m_hWnd ), TRUE );
 			::EnableWindow( ::GetParent( ::GetParent( m_hWnd ) ), TRUE );
 
-			
+
 			/* 再描画 */
 			pcEditView->HandleCommand( F_REDRAW, TRUE, 0, 0, 0, 0 );
-			
+
 			/* アクティブにする */
 			ActivateFrameWindow( m_hWnd );
 
@@ -538,7 +538,7 @@ BOOL CDlgReplace::OnBnClicked( int wID )
 //			::ShowWindow( ::GetDlgItem( m_hWnd, IDC_PROGRESS_REPLACE ), SW_HIDE );
 
 			if( !cDlgCancel.IsCanceled() ){
-				if(	m_bModal ){		/* モーダル　ダイアログか */
+				if(	m_bModal ){		/* モーダルダイアログか */
 					/* 置換ダイアログを閉じる */
 					::EndDialog( m_hWnd, 0 );
 				}else{
@@ -549,7 +549,7 @@ BOOL CDlgReplace::OnBnClicked( int wID )
 				}
 			}
 
-			
+
 			return TRUE;
 		}else{
 			::MYMESSAGEBOX(	m_hWnd,	MB_OK , GSTR_APPNAME,
@@ -565,4 +565,6 @@ BOOL CDlgReplace::OnBnClicked( int wID )
 	/* 基底クラスメンバ */
 	return CDialog::OnBnClicked( wID );
 }
+
+
 /*[EOF]*/

@@ -16,29 +16,29 @@
 
 
 /* ファイル操作系 */
-#define	F_FILENEW			30101	//新規作成
-#define	F_FILEOPEN			30102	//ファイルを開く
-#define	F_FILESAVE			30103	//上書き保存
-#define	F_FILESAVEAS		30104	//名前を付けて保存
-#define	F_FILECLOSE			30105	//閉じて(無題)	//Oct. 17, 2000 jepro 「ファイルを閉じる」というキャプションを変更
-#define	F_FILECLOSE_OPEN	30107	//閉じて開く
-#define	F_FILE_REOPEN_SJIS		30111	//SJISで開く
-#define	F_FILE_REOPEN_JIS		30112	//JISで開く
-#define	F_FILE_REOPEN_EUC		30113	//EUCで開く
-#define	F_FILE_REOPEN_UNICODE	30114	//Unicodeで開く
-#define	F_FILE_REOPEN_UTF8		30115	//UTF-8で開く
-#define	F_FILE_REOPEN_UTF7		30116	//UTF-7で開く
-#define	F_PRINT				30150	//印刷
-#define	F_PRINT_PREVIEW		30151	//印刷プレビュー
-#define	F_PRINT_PAGESETUP	30152	//印刷ページ設定	//	Sept. 14, 2000 jepro 「印刷のページレイアウトの設定」から「印刷ページ設定」に変更
-//#define	F_PRINT_DIALOG		30151	//印刷ダイアログ
-#define	F_OPENINCLUDEFILE	30160	//同名のインクルードファイルを開く
-#define	F_OPENCCPP			30161	//同名のC/C++ソースファイルを開く
-#define F_ACTIVATE_SQLPLUS			30170  /* Oracle SQL*Plusをアクティブ表示 */
-#define F_PLSQL_COMPILE_ON_SQLPLUS	30171  /* Oracle SQL*Plusで実行 */	//	Sept. 17, 2000 jepro 説明の「コンパイル」を「実行」に統一
-#define	F_BROWSE			30180	//ブラウズ
-#define F_PROPERTY_FILE		30190	/* ファイルのプロパティ */
-#define	F_EXITALL			30195	/* テキストエディタの全終了 */	//Dec. 27, 2000 JEPRO 追加
+#define	F_FILENEW					30101	//新規作成
+#define	F_FILEOPEN					30102	//ファイルを開く
+#define	F_FILESAVE					30103	//上書き保存
+#define	F_FILESAVEAS				30104	//名前を付けて保存
+#define	F_FILECLOSE					30105	//閉じて(無題)	//Oct. 17, 2000 jepro 「ファイルを閉じる」というキャプションを変更
+#define	F_FILECLOSE_OPEN			30107	//閉じて開く
+#define	F_FILE_REOPEN_SJIS			30111	//SJISで開き直す
+#define	F_FILE_REOPEN_JIS			30112	//JISで開き直す
+#define	F_FILE_REOPEN_EUC			30113	//EUCで開き直す
+#define	F_FILE_REOPEN_UNICODE		30114	//Unicodeで開き直す
+#define	F_FILE_REOPEN_UTF8			30115	//UTF-8で開き直す
+#define	F_FILE_REOPEN_UTF7			30116	//UTF-7で開き直す
+#define	F_PRINT						30150	//印刷
+#define	F_PRINT_PREVIEW				30151	//印刷プレビュー
+#define	F_PRINT_PAGESETUP			30152	//印刷ページ設定	//Sept. 14, 2000 jepro 「印刷のページレイアウトの設定」から「印刷ページ設定」に変更
+//#define	F_PRINT_DIALOG				30151	//印刷ダイアログ
+#define	F_OPENINCLUDEFILE			30160	//.cまたは.cppと同名の.hを開く
+#define	F_OPENCCPP					30161	//.hと同名の.c(なければ.cpp)を開く
+#define F_ACTIVATE_SQLPLUS			30170 	/* Oracle SQL*Plusをアクティブ表示 */
+#define F_PLSQL_COMPILE_ON_SQLPLUS	30171 	/* Oracle SQL*Plusで実行 */	//Sept. 17, 2000 jepro 説明の「コンパイル」を「実行」に統一
+#define	F_BROWSE					30180	//ブラウズ
+#define F_PROPERTY_FILE				30190	/* ファイルのプロパティ */
+#define	F_EXITALL					30195	/* テキストエディタの全終了 */	//Dec. 27, 2000 JEPRO 追加
 
 
 /* 編集系 */
@@ -50,14 +50,14 @@
 #define	F_DELETE_BACK		30222	//カーソルの前を削除
 #define	F_WordDeleteToStart	30230	//単語の左端まで削除
 #define	F_WordDeleteToEnd	30231	//単語の右端まで削除
-#define	F_WordDelete		30232	//単語を削除
-#define	F_WordCut			30233	//単語を切り取り
-#define	F_LineDeleteToStart	30240	//行頭まで削除(改行単位)
-#define	F_LineDeleteToEnd	30241	//行末まで削除(改行単位)
-#define	F_LineCutToStart	30242	//行頭まで切り取り(改行単位)
-#define	F_LineCutToEnd		30243	//行末まで切り取り(改行単位)
-#define	F_DELETE_LINE		30244	//行削除(折り返し単位)
-#define	F_CUT_LINE			30245	//行切り取り(折り返し単位)
+#define	F_WordCut			30232	//単語を切り取り
+#define	F_WordDelete		30233	//単語を削除
+#define	F_LineCutToStart	30240	//行頭まで切り取り(改行単位)
+#define	F_LineCutToEnd		30241	//行末まで切り取り(改行単位)
+#define	F_LineDeleteToStart	30242	//行頭まで削除(改行単位)
+#define	F_LineDeleteToEnd	30243	//行末まで削除(改行単位)
+#define	F_CUT_LINE			30244	//行切り取り(折り返し単位)
+#define	F_DELETE_LINE		30245	//行削除(折り返し単位)
 #define	F_DUPLICATELINE		30250	//行の二重化(折り返し単位)
 #define	F_INDENT_TAB		30260	//TABインデント
 #define	F_UNINDENT_TAB		30261	//逆TABインデント
@@ -149,26 +149,26 @@
 
 
 /* クリップボード系 */
-#define	F_CUT				30601	//切り取り(選択範囲をクリップボードにコピーして削除)
-#define	F_COPY				30602	//コピー(選択範囲をクリップボードにコピー)
-#define F_COPY_CRLF			30603	//CRLF改行でコピー
-#define	F_PASTE				30604	//貼り付け(クリップボードから貼り付け)
-#define	F_PASTEBOX			30605	//矩形貼り付け(クリップボードから矩形貼り付け)
-#define	F_INSTEXT			30606	//テキストを貼り付け
-#define	F_ADDTAIL			30607	//最後にテキストを追加
-#define	F_COPYLINES               30610	//選択範囲内全行コピー
-#define	F_COPYLINESASPASSAGE	  30611	//選択範囲内全行引用符付きコピー
-#define	F_COPYLINESWITHLINENUMBER 30612	//選択範囲内全行行番号付きコピー
-#define	F_COPYPATH          30620	//このファイルのパス名をクリップボードにコピー
-#define	F_COPYTAG           30621	//このファイルのパス名とカーソル位置をコピー
+#define	F_CUT						30601	//切り取り(選択範囲をクリップボードにコピーして削除)
+#define	F_COPY						30602	//コピー(選択範囲をクリップボードにコピー)
+#define F_COPY_CRLF					30603	//CRLF改行でコピー
+#define	F_PASTE						30604	//貼り付け(クリップボードから貼り付け)
+#define	F_PASTEBOX					30605	//矩形貼り付け(クリップボードから矩形貼り付け)
+#define	F_INSTEXT					30606	//テキストを貼り付け
+#define	F_ADDTAIL					30607	//最後にテキストを追加
+#define	F_COPYLINES					30610	//選択範囲内全行コピー
+#define	F_COPYLINESASPASSAGE		30611	//選択範囲内全行引用符付きコピー
+#define	F_COPYLINESWITHLINENUMBER	30612	//選択範囲内全行行番号付きコピー
+#define	F_COPYPATH					30620	//このファイルのパス名をクリップボードにコピー
+#define	F_COPYTAG					30621	//このファイルのパス名とカーソル位置をコピー
 //jeprotest	Sept. 16, 2000 JEPRO
 //ショートカットキーがうまく働かないので次行は殺してある(ショートカットを登録しなければ以下の設定で使えるが...)
-#define	F_CREATEKEYBINDLIST	30630	// キー割り当て一覧をコピー //Sept. 15, 2000 JEPRO　上の行はIDM_TESTのままではうまくいかないのでFに変えて登録
+#define	F_CREATEKEYBINDLIST			30630	//キー割り当て一覧をコピー //Sept. 15, 2000 JEPRO 上の行はIDM_TESTのままではうまくいかないのでFに変えて登録
 
 
 /* 挿入系 */
-#define F_INS_DATE			30790	//日付挿入
-#define F_INS_TIME			30791	//時刻挿入
+#define F_INS_DATE				30790	//日付挿入
+#define F_INS_TIME				30791	//時刻挿入
 
 
 /* 変換系 */
@@ -191,7 +191,7 @@
 #define F_CODECNV_SJIS2UTF8		30862	/* SJIS→UTF-8コード変換 */
 #define F_CODECNV_SJIS2UTF7		30863	/* SJIS→UTF-7コード変換 */
 #define F_BASE64DECODE			30870	//Base64デコードして保存
-#define F_UUDECODE				30880	//uudecodeしてファイルに保存	//Oct. 17, 2000 jepro 説明を「選択部分をUUENCODEデコード」から変更
+#define F_UUDECODE				30880	//uudecodeして保存	//Oct. 17, 2000 jepro 説明を「選択部分をUUENCODEデコード」から変更
 
 
 /* 検索系 */
@@ -222,7 +222,7 @@
 #define	F_OPTION_TYPE		31111	/* タイプ別設定 */
 #define	F_OPTION			31112	/* 共通設定 */
 #define F_FONT				31120	/* フォント設定 */
-#define	F_WRAPWINDOWWIDTH	31140	//現在のウィンドウ幅で折り返し */	//	Oct. 7, 2000 JEPRO WRAPWINDIWWIDTH を WRAPWINDOWWIDTH に変更
+#define	F_WRAPWINDOWWIDTH	31140	//現在のウィンドウ幅で折り返し */	//Oct. 7, 2000 JEPRO WRAPWINDIWWIDTH を WRAPWINDOWWIDTH に変更
 
 
 /* マクロ系 */
@@ -297,7 +297,7 @@
 
 
 /* その他 */
-//#define	F_SENDMAIL		31570	/* メール送信 */	//Oct. 17, 2000 JEPRO メール機能は死んでいるのでコメントアウトにした
+//#define	F_SENDMAIL		31570		/* メール送信 */	//Oct. 17, 2000 JEPRO メール機能は死んでいるのでコメントアウトにした
 
 
 
@@ -312,5 +312,6 @@ namespace nsFuncCode{
 };
 ///////////////////////////////////////////////////////////////////////
 #endif /* _FUNCCODE_H_ */
+
 
 /*[EOF]*/

@@ -26,7 +26,7 @@ struct TYPE_NAME {
 	char*	pszName;
 };
 TYPE_NAME OlmArr[] = {
-//	OUTLINE_C,		"C",
+//	{ OUTLINE_C,		"C" },
 	{ OUTLINE_CPP,	"C/C++" },
 	{ OUTLINE_PLSQL,"PL/SQL" },
 	{ OUTLINE_JAVA,	"Java" },
@@ -65,17 +65,18 @@ const int nImeSwitchArrNum = sizeof( ImeSwitchArr ) / sizeof( ImeSwitchArr[0] );
 WNDPROC	m_wpColorListProc;
 
 //	Sept. 5, 2000 JEPRO 半角カタカナの全角化に伴い文字長を変更(21→32)
-#define STR_COLORDATA_HEAD_LEN  32
-#define STR_COLORDATA_HEAD      "テキストエディタ 色設定ファイル\x1a"
+#define STR_COLORDATA_HEAD_LEN	32
+#define STR_COLORDATA_HEAD		"テキストエディタ 色設定ファイル\x1a"
 
-//#define	STR_COLORDATA_HEAD2		" テキストエディタ色設定 Ver2"
-#define	STR_COLORDATA_HEAD21	 " テキストエディタ色設定 Ver2.1"	//Nov. 2, 2000 JEPRO 変更 [注]. 0.3.9.0:ur3β10以降、設定項目の番号を入れ替えたため
-#define	STR_COLORDATA_SECTION	"SakuraColor"
+//#define STR_COLORDATA_HEAD2		" テキストエディタ色設定 Ver2"
+#define STR_COLORDATA_HEAD21	" テキストエディタ色設定 Ver2.1"	//Nov. 2, 2000 JEPRO 変更 [注]. 0.3.9.0:ur3β10以降、設定項目の番号を入れ替えたため
+//#define STR_COLORDATA_HEAD3		" テキストエディタ色設定 Ver3"		//Jan. 15, 2001 Stonee  色設定Ver3ドラフト(設定ファイルのキーを連番→文字列に)
+#define STR_COLORDATA_SECTION	"SakuraColor"
 
-#define BOOL2STR( b )           TRUE==(b)?"TRUE":"FALSE"
+#define BOOL2STR( b )			TRUE==(b)?"TRUE":"FALSE"
 char* MakeRGBStr( DWORD dwRGB, char* pszText )
 {
-	wsprintf( pszText, "RGB( %d, %d, %d )", 
+	wsprintf( pszText, "RGB( %d, %d, %d )",
 		GetRValue( dwRGB ),
 		GetGValue( dwRGB ),
 		GetBValue( dwRGB )
@@ -86,10 +87,10 @@ char* MakeRGBStr( DWORD dwRGB, char* pszText )
 
 /* p1 ダイアログプロシージャ */
 BOOL CALLBACK PropTypesP1Proc(
-    HWND hwndDlg,	// handle to dialog box
-    UINT uMsg,	// message
-    WPARAM wParam,	// first message parameter
-    LPARAM lParam 	// second message parameter
+	HWND	hwndDlg,	// handle to dialog box
+	UINT	uMsg,		// message
+	WPARAM	wParam,		// first message parameter
+	LPARAM	lParam 		// second message parameter
 )
 {
 	PROPSHEETPAGE*	pPsp;
@@ -120,10 +121,10 @@ BOOL CALLBACK PropTypesP1Proc(
 
 //	/* p3 ダイアログプロシージャ */
 //	BOOL CALLBACK PropTypesP3Proc(
-//	    HWND hwndDlg,	// handle to dialog box
-//	    UINT uMsg,	// message
-//	    WPARAM wParam,	// first message parameter
-//	    LPARAM lParam 	// second message parameter
+//	    HWND	hwndDlg,	// handle to dialog box
+//	    UINT	uMsg,		// message
+//	    WPARAM	wParam,		// first message parameter
+//	    LPARAM	lParam 		// second message parameter
 //	)
 //	{
 //	PROPSHEETPAGE*	pPsp;
@@ -151,10 +152,10 @@ BOOL CALLBACK PropTypesP1Proc(
 
 /* p3 ダイアログプロシージャ */
 BOOL CALLBACK PropTypesP3_newProc(
-    HWND hwndDlg,	// handle to dialog box
-    UINT uMsg,	// message
-    WPARAM wParam,	// first message parameter
-    LPARAM lParam 	// second message parameter
+	HWND	hwndDlg,	// handle to dialog box
+	UINT	uMsg,		// message
+	WPARAM	wParam,		// first message parameter
+	LPARAM	lParam 		// second message parameter
 )
 {
 	PROPSHEETPAGE*	pPsp;
@@ -197,7 +198,7 @@ CPropTypes::CPropTypes()
 	m_pShareData = m_cShareData.GetShareData( NULL, NULL );
 
 	m_hInstance = NULL;		/* アプリケーションインスタンスのハンドル */
-	m_hwndParent = NULL;		/* オーナーウィンドウのハンドル */
+	m_hwndParent = NULL;	/* オーナーウィンドウのハンドル */
 	m_hwndThis  = NULL;		/* このダイアログのハンドル */
 	m_nPageNum = 0;
 
@@ -215,7 +216,7 @@ CPropTypes::~CPropTypes()
 {
 //	if( NULL != m_hbmpToolButtons ){
 //		/* ビットマップ破棄 */
-//		::DeleteObject( m_hbmpToolButtons );	
+//		::DeleteObject( m_hbmpToolButtons );
 //	}
 	return;
 }
@@ -257,7 +258,7 @@ BOOL CPropTypes::SelectColor( HWND hwndParent, COLORREF* pColor )
 	if( FALSE == ::ChooseColor( &cc ) ){
 		return FALSE;
 	}
-	*pColor	= cc.rgbResult;
+	*pColor = cc.rgbResult;
 	return TRUE;
 }
 
@@ -426,7 +427,7 @@ int CPropTypes::DoPropertySheet( int nPageNum )
 //	/* 共有データ構造体のアドレスを返す */
 //	m_cShareData.Init();
 //	m_pShareData = m_cShareData.GetShareData( NULL, NULL );
-    
+
 	int				nRet;
 	PROPSHEETPAGE	psp[16];
     PROPSHEETHEADER	psh;
@@ -436,53 +437,53 @@ int CPropTypes::DoPropertySheet( int nPageNum )
 
 
 	nIdx = 0;
-    memset( &psp[nIdx], 0, sizeof(PROPSHEETPAGE) );
-    psp[nIdx].dwSize = sizeof(PROPSHEETPAGE);
-    psp[nIdx].dwFlags = /*PSP_USEICONID |*/ PSP_USETITLE | PSP_HASHELP;
-    psp[nIdx].hInstance = m_hInstance;
-    psp[nIdx].pszTemplate = MAKEINTRESOURCE( IDD_PROPTYPESP1 );
-    psp[nIdx].pszIcon = NULL/*MAKEINTRESOURCE(IDI_FONT)*/;
-    psp[nIdx].pfnDlgProc = (DLGPROC)PropTypesP1Proc;
-    psp[nIdx].pszTitle = "スクリーン";
-    psp[nIdx].lParam = (LPARAM)this;
-    psp[nIdx].pfnCallback = NULL;
+	memset( &psp[nIdx], 0, sizeof(PROPSHEETPAGE) );
+	psp[nIdx].dwSize = sizeof(PROPSHEETPAGE);
+	psp[nIdx].dwFlags = /*PSP_USEICONID |*/ PSP_USETITLE | PSP_HASHELP;
+	psp[nIdx].hInstance = m_hInstance;
+	psp[nIdx].pszTemplate = MAKEINTRESOURCE( IDD_PROPTYPESP1 );
+	psp[nIdx].pszIcon = NULL/*MAKEINTRESOURCE(IDI_FONT)*/;
+	psp[nIdx].pfnDlgProc = (DLGPROC)PropTypesP1Proc;
+	psp[nIdx].pszTitle = "スクリーン";
+	psp[nIdx].lParam = (LPARAM)this;
+	psp[nIdx].pfnCallback = NULL;
 	nIdx++;
 
-//		memset( &psp[nIdx], 0, sizeof(PROPSHEETPAGE) );
-//		psp[nIdx].dwSize = sizeof(PROPSHEETPAGE);
-//    psp[nIdx].dwFlags = /*PSP_USEICONID |*/ PSP_USETITLE | PSP_HASHELP;
-//    psp[nIdx].hInstance = m_hInstance;
-//    psp[nIdx].pszTemplate = MAKEINTRESOURCE( IDD_PROP1P3 );
-//    psp[nIdx].pszIcon = NULL /*MAKEINTRESOURCE(IDI_BORDER)*/;
-//    psp[nIdx].pfnDlgProc = (DLGPROC)PropTypesP3Proc;
-//    psp[nIdx].pszTitle = "カラー";
-//    psp[nIdx].lParam = (LPARAM)this;
-//    psp[nIdx].pfnCallback = NULL;
+//	memset( &psp[nIdx], 0, sizeof(PROPSHEETPAGE) );
+//	psp[nIdx].dwSize = sizeof(PROPSHEETPAGE);
+//	psp[nIdx].dwFlags = /*PSP_USEICONID |*/ PSP_USETITLE | PSP_HASHELP;
+//	psp[nIdx].hInstance = m_hInstance;
+//	psp[nIdx].pszTemplate = MAKEINTRESOURCE( IDD_PROP1P3 );
+//	psp[nIdx].pszIcon = NULL /*MAKEINTRESOURCE(IDI_BORDER)*/;
+//	psp[nIdx].pfnDlgProc = (DLGPROC)PropTypesP3Proc;
+//	psp[nIdx].pszTitle = "カラー";
+//	psp[nIdx].lParam = (LPARAM)this;
+//	psp[nIdx].pfnCallback = NULL;
 //	nIdx++;
 
 	memset( &psp[nIdx], 0, sizeof(PROPSHEETPAGE) );
 	psp[nIdx].dwSize = sizeof(PROPSHEETPAGE);
-    psp[nIdx].dwFlags = /*PSP_USEICONID |*/ PSP_USETITLE | PSP_HASHELP;
-    psp[nIdx].hInstance = m_hInstance;
-    psp[nIdx].pszTemplate = MAKEINTRESOURCE( IDD_PROP_COLOR );
-    psp[nIdx].pszIcon = NULL /*MAKEINTRESOURCE(IDI_BORDER)*/;
-    psp[nIdx].pfnDlgProc = (DLGPROC)PropTypesP3_newProc;
-    psp[nIdx].pszTitle = "カラー";
-    psp[nIdx].lParam = (LPARAM)this;
-    psp[nIdx].pfnCallback = NULL;
+	psp[nIdx].dwFlags = /*PSP_USEICONID |*/ PSP_USETITLE | PSP_HASHELP;
+	psp[nIdx].hInstance = m_hInstance;
+	psp[nIdx].pszTemplate = MAKEINTRESOURCE( IDD_PROP_COLOR );
+	psp[nIdx].pszIcon = NULL /*MAKEINTRESOURCE(IDI_BORDER)*/;
+	psp[nIdx].pfnDlgProc = (DLGPROC)PropTypesP3_newProc;
+	psp[nIdx].pszTitle = "カラー";
+	psp[nIdx].lParam = (LPARAM)this;
+	psp[nIdx].pfnCallback = NULL;
 	nIdx++;
 
 	memset( &psh, 0, sizeof(PROPSHEETHEADER) );
-    psh.dwSize = sizeof(PROPSHEETHEADER);
+	psh.dwSize = sizeof(PROPSHEETHEADER);
 // JEPROtest Sept. 30, 2000 タイプ別設定の隠れ[適用]ボタンの正体はここ。行頭のコメントアウトを入れ替えてみればわかる
 //  psh.dwFlags = /*PSH_USEICONID |*/ /*PSH_NOAPPLYNOW |*/ PSH_PROPSHEETPAGE/* | PSH_HASHELP*/;
-    psh.dwFlags = /*PSH_USEICONID |*/ PSH_NOAPPLYNOW | PSH_PROPSHEETPAGE/* | PSH_HASHELP*/;
-    psh.hwndParent = m_hwndParent;
-    psh.hInstance = m_hInstance;
-    psh.pszIcon = NULL /*MAKEINTRESOURCE(IDI_CELL_PROPERTIES)*/;
-    psh.pszCaption = (LPSTR) "タイプ別設定";	// Sept. 8, 2000 jepro 単なる「設定」から変更
-    psh.nPages = nIdx;
-    
+	psh.dwFlags = /*PSH_USEICONID |*/ PSH_NOAPPLYNOW | PSH_PROPSHEETPAGE/* | PSH_HASHELP*/;
+	psh.hwndParent = m_hwndParent;
+	psh.hInstance = m_hInstance;
+	psh.pszIcon = NULL /*MAKEINTRESOURCE(IDI_CELL_PROPERTIES)*/;
+	psh.pszCaption = (LPSTR) "タイプ別設定";	// Sept. 8, 2000 jepro 単なる「設定」から変更
+	psh.nPages = nIdx;
+
 	if( -1 == nPageNum ){
 		psh.nStartPage = m_nPageNum;
     }else{
@@ -499,22 +500,22 @@ int CPropTypes::DoPropertySheet( int nPageNum )
 
 //	m_hbmpToolButtons = ::LoadBitmap( m_hInstance, MAKEINTRESOURCE(IDB_MYTOOL) );
 
-    nRet = ::PropertySheet( &psh );
+	nRet = ::PropertySheet( &psh );
 	if( -1 == nRet ){
 		char*	pszMsgBuf;
 		::FormatMessage(
-			FORMAT_MESSAGE_ALLOCATE_BUFFER | 
-			FORMAT_MESSAGE_FROM_SYSTEM | 
+			FORMAT_MESSAGE_ALLOCATE_BUFFER |
+			FORMAT_MESSAGE_FROM_SYSTEM |
 			FORMAT_MESSAGE_IGNORE_INSERTS,
 			NULL,
 			::GetLastError(),
 			MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT), // デフォルト言語
 			(LPTSTR) &pszMsgBuf,
 			0,
-			NULL 
+			NULL
 		);
 		::MYMESSAGEBOX(	NULL, MB_OK | MB_ICONINFORMATION | MB_TOPMOST, "作者に教えて欲しいエラー",
-			"CPropTypes::DoPropertySheet()内でエラーが出ました。\npsh.nStartPage=[%d]\n::PropertySheet()失敗\n\n%s\n", psh.nStartPage, pszMsgBuf
+			"CPropTypes::DoPropertySheet()内でエラーが出ました。\npsh.nStartPage=[%d]\n::PropertySheet()失敗。\n\n%s\n", psh.nStartPage, pszMsgBuf
 		);
 		::LocalFree( pszMsgBuf );
 	}
@@ -530,10 +531,10 @@ int CPropTypes::DoPropertySheet( int nPageNum )
 
 /* p1 メッセージ処理 */
 BOOL CPropTypes::DispatchEvent_p1(
-    HWND	hwndDlg,	// handle to dialog box
-    UINT	uMsg,	// message
-    WPARAM	wParam,	// first message parameter
-    LPARAM	lParam 	// second message parameter
+	HWND	hwndDlg,	// handle to dialog box
+	UINT	uMsg,		// message
+	WPARAM	wParam,		// first message parameter
+	LPARAM	lParam 		// second message parameter
 )
 {
 	WORD		wNotifyCode;
@@ -689,11 +690,11 @@ BOOL CPropTypes::DispatchEvent_p1(
 			break;
 		}
 
-//		MYTRACE( "pNMHDR->hwndFrom=%xh\n", pNMHDR->hwndFrom );
-//		MYTRACE( "pNMHDR->idFrom  =%xh\n", pNMHDR->idFrom   );
-//		MYTRACE( "pNMHDR->code    =%xh\n", pNMHDR->code     );
-//		MYTRACE( "pMNUD->iPos    =%d\n", pMNUD->iPos      );
-//		MYTRACE( "pMNUD->iDelta  =%d\n", pMNUD->iDelta    );
+//		MYTRACE( "pNMHDR->hwndFrom	=%xh\n",	pNMHDR->hwndFrom );
+//		MYTRACE( "pNMHDR->idFrom	=%xh\n",	pNMHDR->idFrom );
+//		MYTRACE( "pNMHDR->code		=%xh\n",	pNMHDR->code );
+//		MYTRACE( "pMNUD->iPos		=%d\n",		pMNUD->iPos );
+//		MYTRACE( "pMNUD->iDelta		=%d\n",		pMNUD->iDelta );
 		break;
 	}
 	return FALSE;
@@ -712,7 +713,7 @@ void CPropTypes::SetData_p1( HWND hwndDlg )
 	int		i, j;
 	char	szWork[32];
 
-	/* タイプ属性：名称 */        
+	/* タイプ属性：名称 */
 	::SetDlgItemText( hwndDlg, IDC_EDIT_TYPENAME, m_Types.m_szTypeName );
 
 	/* タイプ属性：拡張子リスト */
@@ -895,19 +896,19 @@ int CPropTypes::GetData_p1( HWND hwndDlg )
 //	/* p3 メッセージ処理 */
 //	BOOL CPropTypes::DispatchEvent_p3(
 //	    HWND	hwndDlg,	// handle to dialog box
-//	    UINT	uMsg,	// message
-//	    WPARAM	wParam,	// first message parameter
-//	    LPARAM	lParam 	// second message parameter
+//	    UINT	uMsg,		// message
+//	    WPARAM	wParam,		// first message parameter
+//	    LPARAM	lParam 		// second message parameter
 //	)
 //	{
-//		WORD		wNotifyCode;
-//		WORD		wID;
-//		HWND		hwndCtl;
-//		NMHDR*		pNMHDR;
-//		NM_UPDOWN*	pMNUD;
-//		int			idCtrl;
-//	//	int			nVal;
-//	    LPDRAWITEMSTRUCT pDis;
+//		WORD				wNotifyCode;
+//		WORD				wID;
+//		HWND				hwndCtl;
+//		NMHDR*				pNMHDR;
+//		NM_UPDOWN*			pMNUD;
+//		int					idCtrl;
+//	//	int					nVal;
+//	    LPDRAWITEMSTRUCT	pDis;
 //
 //		switch( uMsg ){
 //		case WM_INITDIALOG:
@@ -917,9 +918,9 @@ int CPropTypes::GetData_p1( HWND hwndDlg )
 //			return TRUE;
 //
 //		case WM_COMMAND:
-//			wNotifyCode = HIWORD(wParam);	/* 通知コード */
-//			wID         = LOWORD(wParam);	/* 項目ID､ コントロールID､ またはアクセラレータID */
-//			hwndCtl     = (HWND) lParam;	/* コントロールのハンドル */
+//			wNotifyCode	= HIWORD(wParam);	/* 通知コード */
+//			wID			= LOWORD(wParam);	/* 項目ID､ コントロールID､ またはアクセラレータID */
+//			hwndCtl		= (HWND) lParam;	/* コントロールのハンドル */
 //			switch( wNotifyCode ){
 //			/* ボタン／チェックボックスがクリックされた */
 //			case BN_CLICKED:
@@ -1254,11 +1255,11 @@ int CPropTypes::GetData_p1( HWND hwndDlg )
 //		::SendMessage( ::GetDlgItem( hwndDlg, IDC_EDIT_BLOCKCOMMENT_FROM ), EM_LIMITTEXT, (WPARAM)(sizeof(m_Types.m_szBlockCommentFrom) - 1 ), 0 );
 //		::SendMessage( ::GetDlgItem( hwndDlg, IDC_EDIT_BLOCKCOMMENT_TO ), EM_LIMITTEXT, (WPARAM)(sizeof(m_Types.m_szBlockCommentTo) - 1 ), 0 );
 //
-//		::SetDlgItemText( hwndDlg, IDC_EDIT_LINECOMMENT, m_Types.m_szLineComment );	/* 行コメントデリミタ */             
-//		::SetDlgItemText( hwndDlg, IDC_EDIT_BLOCKCOMMENT_FROM, m_Types.m_szBlockCommentFrom );	/* ブロックコメントデリミタ(From) */ 
-//		::SetDlgItemText( hwndDlg, IDC_EDIT_BLOCKCOMMENT_TO, m_Types.m_szBlockCommentTo );	/* ブロックコメントデリミタ(To) */   
+//		::SetDlgItemText( hwndDlg, IDC_EDIT_LINECOMMENT, m_Types.m_szLineComment );				/* 行コメントデリミタ */
+//		::SetDlgItemText( hwndDlg, IDC_EDIT_BLOCKCOMMENT_FROM, m_Types.m_szBlockCommentFrom );	/* ブロックコメントデリミタ(From) */
+//		::SetDlgItemText( hwndDlg, IDC_EDIT_BLOCKCOMMENT_TO, m_Types.m_szBlockCommentTo );		/* ブロックコメントデリミタ(To) */
 //
-//		if( 0 == m_Types.m_nStringType ){	/* 文字列区切り記号エスケープ方法　0=[\"][\'] 1=[""][''] */
+//		if( 0 == m_Types.m_nStringType ){	/* 文字列区切り記号エスケープ方法  0=[\"][\'] 1=[""][''] */
 //			::CheckDlgButton( hwndDlg, IDC_RADIO_ESCAPETYPE_1, TRUE );
 //			::CheckDlgButton( hwndDlg, IDC_RADIO_ESCAPETYPE_2, FALSE );
 //		}else{
@@ -1340,11 +1341,11 @@ int CPropTypes::GetData_p1( HWND hwndDlg )
 //		/* Grepモード: ダブルクリックでタグジャンプ */
 //	//	m_bGTJW_LDBLCLK = ::IsDlgButtonChecked( hwndDlg, IDC_CHECK_GTJW_LDBLCLK );
 //
-//		::GetDlgItemText( hwndDlg, IDC_EDIT_LINECOMMENT, m_Types.m_szLineComment, sizeof(m_Types.m_szLineComment) );	/* 行コメントデリミタ */             
-//		::GetDlgItemText( hwndDlg, IDC_EDIT_BLOCKCOMMENT_FROM, m_Types.m_szBlockCommentFrom, sizeof(m_Types.m_szBlockCommentFrom) );	/* ブロックコメントデリミタ(From) */ 
-//		::GetDlgItemText( hwndDlg, IDC_EDIT_BLOCKCOMMENT_TO, m_Types.m_szBlockCommentTo, sizeof(m_Types.m_szBlockCommentTo) );	/* ブロックコメントデリミタ(To) */   
+//		::GetDlgItemText( hwndDlg, IDC_EDIT_LINECOMMENT, m_Types.m_szLineComment, sizeof(m_Types.m_szLineComment) );					/* 行コメントデリミタ */
+//		::GetDlgItemText( hwndDlg, IDC_EDIT_BLOCKCOMMENT_FROM, m_Types.m_szBlockCommentFrom, sizeof(m_Types.m_szBlockCommentFrom) );	/* ブロックコメントデリミタ(From) */
+//		::GetDlgItemText( hwndDlg, IDC_EDIT_BLOCKCOMMENT_TO, m_Types.m_szBlockCommentTo, sizeof(m_Types.m_szBlockCommentTo) );			/* ブロックコメントデリミタ(To) */
 //
-//		/* 文字列区切り記号エスケープ方法　0=[\"][\'] 1=[""][''] */
+//		/* 文字列区切り記号エスケープ方法  0=[\"][\'] 1=[""][''] */
 //		if( ::IsDlgButtonChecked( hwndDlg, IDC_RADIO_ESCAPETYPE_1 ) ){
 //			m_Types.m_nStringType = 0;
 //		}else{
@@ -1380,9 +1381,9 @@ void CPropTypes::p3_Import_Colors( HWND hwndDlg )
 //	char			szLine[1024];
 //	int				i;
 	int				i;
-	
+
 	char			pHeader[1024];
-	int				nColorInfoArrNum;				/* キー割り当て表の有効データ数 */
+	int				nColorInfoArrNum;						/* キー割り当て表の有効データ数 */
 	ColorInfo		ColorInfoArr[64];
 	char			szInitDir[_MAX_PATH + 1];
 //	HWND			hwndCtrl;
@@ -1392,12 +1393,12 @@ void CPropTypes::p3_Import_Colors( HWND hwndDlg )
 	strcpy( szInitDir, m_pShareData->m_szIMPORTFOLDER );	/* インポート用フォルダ */
 
 	/* ファイルオープンダイアログの初期化 */
-	cDlgOpenFile.Create( 
-		m_hInstance, 
-		hwndDlg, 
-		"*.col", 
+	cDlgOpenFile.Create(
+		m_hInstance,
+		hwndDlg,
+		"*.col",
 		szInitDir, 
-		(const char **)&pszMRU, 
+		(const char **)&pszMRU,
 		(const char **)&pszOPENFOLDER
 	);
 	if( !cDlgOpenFile.DoModal_GetOpenFileName( szPath ) ){
@@ -1438,7 +1439,11 @@ void CPropTypes::p3_Import_Colors( HWND hwndDlg )
 		char	szWork[256];
 		int		nWorkLen;
 //		wsprintf( szWork, "//%s\r\n", STR_COLORDATA_HEAD2 );
+#ifdef STR_COLORDATA_HEAD3
+		wsprintf( szWork, "//%s\r\n", STR_COLORDATA_HEAD3 );	//Jan. 15, 2000 Stonee
+#else
 		wsprintf( szWork, "//%s\r\n", STR_COLORDATA_HEAD21 );	//Nov. 2, 2000 JEPRO 変更 [注]. 0.3.9.0:ur3β10以降、設定項目の番号を入れ替えたため
+#endif
 		nWorkLen = strlen( szWork );
 		if( nWorkLen == (int)_lread( hFile, pHeader, nWorkLen ) &&
 			0 == memcmp( pHeader, szWork, nWorkLen )
@@ -1450,17 +1455,22 @@ void CPropTypes::p3_Import_Colors( HWND hwndDlg )
 //				Dec. 26, 2000 JEPRO UR1.2.24.0で強調キーワード2が入ってきたためCI[13]が追加された. それに伴い13番以降を1つづらした
 				"色設定ファイルの形式が違います。\n古い形式はサポートされなくなりました。\n%s\n\n"
 				"上記の色設定ファイルをエディタなどで確認してください。\n"
+#ifdef STR_COLORDATA_HEAD3
+				"色設定ファイルの変更内容はヘルプをご覧ください。"
+#else
 				"もし一行目に\"色設定Ver2\"と書かれていて、かつ\n\n"
 				"・0.3.9.0 UR1.2.24.0 (00/12/04) 以降で使っていた場合は\n"
-				"　(1) Ver2 を Ver2.1 と書き換える\n\n"
+				"  (1) Ver2 を Ver2.1 と書き換える\n\n"
 				"・0.3.9.0:ur3β10 (00/09/28)～UR1.2.23.0 (00/11/29) で使っていた場合は\n"
-				"　(2) (1)に加えてCI[12]の次行にC[12]の設定をコピーしてCI[13]とし\n"
+				"  (2) (1)に加えてCI[12]の次行にCI[12]の設定をコピーしてCI[13]とし\n"
 				"      元のCI[13]以降の番号を1つづつ17までずらす\n\n"
 				"・0.3.9.0:ur3β9 (00/09/26) 以前で使っていた場合は\n"
-				"　(3) (1)に加えてCIの[ ]内を順に\n"
+				"  (3) (1)に加えてCIの[ ]内を順に\n"
 				"      00,17,10,01,16,03,04,12,02,11,05,15,06,08,09,14\n"
-				"      と書き換えた後、C[12]の設定をコピーしてCI[13]とする\n\n"
-				"以上のうち該当する手順を行い、別名保存してからインポートしてください。", szPath
+				"      と書き換えた後、CI[12]の設定をコピーしてCI[13]とする\n\n"
+				"以上のうち該当する手順を行い、別名保存してからインポートしてください。"
+#endif
+				, szPath
 			);
 			_lclose( hFile );
 			return;
@@ -1492,13 +1502,13 @@ void CPropTypes::p3_Import_Colors( HWND hwndDlg )
 	for( i = 0; i < m_Types.m_nColorInfoArrNum; ++i ){
 		m_Types.m_ColorInfoArr[i] =  ColorInfoArr[i];
 		strcpy( m_Types.m_ColorInfoArr[i].m_szName, ColorInfoArr[i].m_szName );
-	} 
+	}
 	/* ダイアログデータの設定 p5 */
 	SetData_p3_new( hwndDlg );
 	return;
 }
 
-			
+
 /* 色の設定をエクスポート */
 void CPropTypes::p3_Export_Colors( HWND hwndDlg )
 {
@@ -1531,7 +1541,7 @@ void CPropTypes::p3_Export_Colors( HWND hwndDlg )
 	if( !cDlgOpenFile.DoModal_GetSaveFileName( szPath ) ){
 		return;
 	}
-	/* ファイルのフルパスを、フォルダとファイル名に分割 */
+	/* ファイルのフルパスをフォルダとファイル名に分割 */
 	/* [c:\work\test\aaa.txt] → [c:\work\test] + [aaa.txt] */
 	::SplitPath_FolderAndFile( szPath, m_pShareData->m_szIMPORTFOLDER, NULL );
 	strcat( m_pShareData->m_szIMPORTFOLDER, "\\" );
@@ -1543,8 +1553,8 @@ void CPropTypes::p3_Export_Colors( HWND hwndDlg )
 //		);
 //		return;
 //	}
-//	if( STR_COLORDATA_HEAD_LEN               != _lwrite( hFile, (LPCSTR)STR_COLORDATA_HEAD, STR_COLORDATA_HEAD_LEN ) 
-//	 || sizeof( m_Types.m_nColorInfoArrNum ) != _lwrite( hFile, (LPCSTR)&m_Types.m_nColorInfoArrNum, sizeof( m_Types.m_nColorInfoArrNum ) ) 
+//	if( STR_COLORDATA_HEAD_LEN					!= _lwrite( hFile, (LPCSTR)STR_COLORDATA_HEAD, STR_COLORDATA_HEAD_LEN )
+//	 || sizeof( m_Types.m_nColorInfoArrNum )	!= _lwrite( hFile, (LPCSTR)&m_Types.m_nColorInfoArrNum, sizeof( m_Types.m_nColorInfoArrNum ) )
 //	){
 //		::MYMESSAGEBOX(	hwndDlg, MB_OK | MB_ICONSTOP, GSTR_APPNAME,
 //			"ファイルの書き込みに失敗しました。\n\n%s", szPath
@@ -1564,16 +1574,20 @@ void CPropTypes::p3_Export_Colors( HWND hwndDlg )
 	/* 色設定 I/O */
 	CShareData::IO_ColorSet( &cProfile, FALSE, STR_COLORDATA_SECTION, m_Types.m_ColorInfoArr );
 //	cProfile.WriteProfile( szPath, STR_COLORDATA_HEAD2 );
+#ifdef STR_COLORDATA_HEAD3
+	cProfile.WriteProfile( szPath, STR_COLORDATA_HEAD3 );	//Jan. 15, 2001 Stonee
+#else
 	cProfile.WriteProfile( szPath, STR_COLORDATA_HEAD21 );	//Nov. 2, 2000 JEPRO 変更 [注]. 0.3.9.0:ur3β10以降、設定項目の番号を入れ替えたため
+#endif
 	return;
 }
 
 
 LRESULT APIENTRY ColorList_SubclassProc( HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam )
 {
-//	WPARAM		fwKeys;        // key flags 
-//	int			xPos;  // horizontal position of cursor 
-//	int			yPos;  // vertical position of cursor 
+//	WPARAM		fwKeys;	// key flags
+//	int			xPos;	// horizontal position of cursor
+//	int			yPos;	// vertical position of cursor
 //	HWND		hwndLoseFocus;
 //	HWND		hwndGetFocus;
 	int			fwKeys;
@@ -1590,9 +1604,9 @@ LRESULT APIENTRY ColorList_SubclassProc( HWND hwnd, UINT uMsg, WPARAM wParam, LP
 	case WM_RBUTTONDOWN:
 	case WM_LBUTTONDBLCLK:
 	case WM_LBUTTONUP:
-		fwKeys = wParam;        // key flags 
-		xPos = LOWORD(lParam);  // horizontal position of cursor 
-		yPos = HIWORD(lParam);  // vertical position of cursor 
+		fwKeys = wParam;		// key flags
+		xPos = LOWORD(lParam);	// horizontal position of cursor
+		yPos = HIWORD(lParam);	// vertical position of cursor
 //		nIndex = ::SendMessage( hwnd, LB_GETCURSEL, 0, 0 );
 //		MYTRACE( "fwKeys=%d\n", fwKeys);
 //		MYTRACE( "xPos  =%d\n", xPos  );
@@ -1624,9 +1638,9 @@ LRESULT APIENTRY ColorList_SubclassProc( HWND hwnd, UINT uMsg, WPARAM wParam, LP
 		::SendMessage( ::GetParent( hwnd ), WM_COMMAND, MAKELONG( IDC_LIST_COLORS, LBN_SELCHANGE ), (LPARAM)hwnd );
 		pColorInfo = (ColorInfo*)::SendMessage( hwnd, LB_GETITEMDATA, nIndex, 0 );
 		/* 下線 */
-		if( nIndex != COLORIDX_UNDERLINE	/* カーソル行アンダーライン	*/
-		 && nIndex != COLORIDX_TEXT	/* テキスト */
-		 && nIndex != COLORIDX_RULER	/* ルーラー */
+		if( nIndex != COLORIDX_UNDERLINE	/* カーソル行アンダーライン */
+		 && nIndex != COLORIDX_TEXT			/* テキスト */
+		 && nIndex != COLORIDX_RULER		/* ルーラー */
 		){
 			if( pColorInfo->m_bUnderLine ){	/* 下線で表示 */
 				pColorInfo->m_bUnderLine = FALSE;
@@ -1645,9 +1659,9 @@ LRESULT APIENTRY ColorList_SubclassProc( HWND hwnd, UINT uMsg, WPARAM wParam, LP
 		}
 		pColorInfo = (ColorInfo*)::SendMessage( hwnd, LB_GETITEMDATA, nIndex, 0 );
 		/* 太字で表示 */
-		if( nIndex != COLORIDX_UNDERLINE	/* カーソル行アンダーライン	*/
-		 && nIndex != COLORIDX_TEXT	/* テキスト */
-		 && nIndex != COLORIDX_RULER	/* ルーラー */
+		if( nIndex != COLORIDX_UNDERLINE	/* カーソル行アンダーライン */
+		 && nIndex != COLORIDX_TEXT			/* テキスト */
+		 && nIndex != COLORIDX_RULER		/* ルーラー */
 		){
 			if( pColorInfo->m_bFatFont ){	/* 太字で表示 */
 				pColorInfo->m_bFatFont = FALSE;
@@ -1673,12 +1687,12 @@ LRESULT APIENTRY ColorList_SubclassProc( HWND hwnd, UINT uMsg, WPARAM wParam, LP
 			}
 			if( COLORIDX_GYOU == nIndex ){
 				pColorInfo = (ColorInfo*)::SendMessage( hwnd, LB_GETITEMDATA, nIndex, 0 );
-				
+
 			}
 
 			::InvalidateRect( hwnd, &rcItem, TRUE );
 		}else
-		/* 前景色見本　矩形 */
+		/* 前景色見本 矩形 */
 		if( rcItem.right - 27 <= xPos && xPos <= rcItem.right - 27 + 12 ){
 			/* 色選択ダイアログ */
 			if( CPropTypes::SelectColor( hwnd, &pColorInfo->m_colTEXT ) ){
@@ -1686,8 +1700,8 @@ LRESULT APIENTRY ColorList_SubclassProc( HWND hwnd, UINT uMsg, WPARAM wParam, LP
 				::InvalidateRect( ::GetDlgItem( ::GetParent( hwnd ), IDC_BUTTON_TEXTCOLOR ), NULL, TRUE );
 			}
 		}else
-		/* 前景色見本　矩形 */
-		if( rcItem.right - 13 <= xPos && xPos <= rcItem.right - 13 + 12 && nIndex != COLORIDX_UNDERLINE ){	/* カーソル行アンダーライン	*/
+		/* 前景色見本 矩形 */
+		if( rcItem.right - 13 <= xPos && xPos <= rcItem.right - 13 + 12 && nIndex != COLORIDX_UNDERLINE ){	/* カーソル行アンダーライン */
 			/* 色選択ダイアログ */
 			if( CPropTypes::SelectColor( hwnd, &pColorInfo->m_colBACK ) ){
 				::InvalidateRect( hwnd, &rcItem, TRUE );
@@ -1696,8 +1710,8 @@ LRESULT APIENTRY ColorList_SubclassProc( HWND hwnd, UINT uMsg, WPARAM wParam, LP
 		}
 		break;
 	}
-//	return CallWindowProc( (int (__stdcall *)(void))(WNDPROC)m_wpColorListProc, hwnd, uMsg, wParam, lParam);
-	return CallWindowProc( (WNDPROC)m_wpColorListProc, hwnd, uMsg, wParam, lParam);
+//	return CallWindowProc( (int (__stdcall *)(void))(WNDPROC)m_wpColorListProc, hwnd, uMsg, wParam, lParam );
+	return CallWindowProc( (WNDPROC)m_wpColorListProc, hwnd, uMsg, wParam, lParam );
 }
 
 
@@ -1706,10 +1720,10 @@ LRESULT APIENTRY ColorList_SubclassProc( HWND hwnd, UINT uMsg, WPARAM wParam, LP
 
 /* p3 メッセージ処理 */
 BOOL CPropTypes::DispatchEvent_p3_new(
-    HWND	hwndDlg,	// handle to dialog box
-    UINT	uMsg,	// message
-    WPARAM	wParam,	// first message parameter
-    LPARAM	lParam 	// second message parameter
+	HWND				hwndDlg,	// handle to dialog box
+	UINT				uMsg,		// message
+	WPARAM				wParam,		// first message parameter
+	LPARAM				lParam 		// second message parameter
 )
 {
 	WORD				wNotifyCode;
@@ -1735,10 +1749,10 @@ BOOL CPropTypes::DispatchEvent_p3_new(
 
 		/* ユーザーがエディット コントロールに入力できるテキストの長さを制限する */
 		::SendMessage( ::GetDlgItem( hwndDlg, IDC_EDIT_LINETERMCHAR ), EM_LIMITTEXT, (WPARAM)1, 0 );
-		
-		
+
+
 		/* 色リストをフック */
-		m_wpColorListProc = (WNDPROC) ::SetWindowLong( hwndListColor, GWL_WNDPROC, (LONG)ColorList_SubclassProc  );
+		m_wpColorListProc = (WNDPROC) ::SetWindowLong( hwndListColor, GWL_WNDPROC, (LONG)ColorList_SubclassProc );
 		
 		return TRUE;
 
@@ -1752,17 +1766,17 @@ BOOL CPropTypes::DispatchEvent_p3_new(
 				nIndex = ::SendMessage( hwndListColor, LB_GETCURSEL, 0, 0 );
 				m_nCurrentColorType = nIndex;		/* 現在選択されている色タイプ */
 				switch( m_nCurrentColorType ){
-				case COLORIDX_UNDERLINE:	/* カーソル行アンダーライン	*/					
-					::EnableWindow(  ::GetDlgItem( hwndDlg, IDC_CHECK_DISP ), TRUE );
-					::EnableWindow(  ::GetDlgItem( hwndDlg, IDC_CHECK_FAT ), FALSE );
-					::EnableWindow(  ::GetDlgItem( hwndDlg, IDC_CHECK_UNDERLINE ), FALSE );
+				case COLORIDX_UNDERLINE:	/* カーソル行アンダーライン */
+					::EnableWindow( ::GetDlgItem( hwndDlg, IDC_CHECK_DISP ), TRUE );
+					::EnableWindow( ::GetDlgItem( hwndDlg, IDC_CHECK_FAT ), FALSE );
+					::EnableWindow( ::GetDlgItem( hwndDlg, IDC_CHECK_UNDERLINE ), FALSE );
 
-					::EnableWindow(  ::GetDlgItem( hwndDlg, IDC_STATIC_HAIKEI ), FALSE );
-					::EnableWindow(  ::GetDlgItem( hwndDlg, IDC_BUTTON_BACKCOLOR ), FALSE );
-					::EnableWindow(  ::GetDlgItem( hwndDlg, IDC_BUTTON_SAMETEXTCOLOR ), TRUE );
-					::EnableWindow(  ::GetDlgItem( hwndDlg, IDC_BUTTON_SAMEBKCOLOR ), FALSE );
+					::EnableWindow( ::GetDlgItem( hwndDlg, IDC_STATIC_HAIKEI ), FALSE );
+					::EnableWindow( ::GetDlgItem( hwndDlg, IDC_BUTTON_BACKCOLOR ), FALSE );
+					::EnableWindow( ::GetDlgItem( hwndDlg, IDC_BUTTON_SAMETEXTCOLOR ), TRUE );
+					::EnableWindow( ::GetDlgItem( hwndDlg, IDC_BUTTON_SAMEBKCOLOR ), FALSE );
 
-					
+
 //					::ShowWindow( ::GetDlgItem( hwndDlg, IDC_CHECK_DISP ), SW_SHOW );
 //					::ShowWindow( ::GetDlgItem( hwndDlg, IDC_CHECK_FAT ), SW_HIDE );
 //					::ShowWindow( ::GetDlgItem( hwndDlg, IDC_STATIC_HAIKEI ), SW_HIDE );
@@ -1771,14 +1785,14 @@ BOOL CPropTypes::DispatchEvent_p3_new(
 //					::ShowWindow( ::GetDlgItem( hwndDlg, IDC_BUTTON_SAMEBKCOLOR ), SW_HIDE );
 					break;
 				case COLORIDX_TEXT:	/* テキスト */
-					::EnableWindow(  ::GetDlgItem( hwndDlg, IDC_CHECK_DISP ), FALSE );
-					::EnableWindow(  ::GetDlgItem( hwndDlg, IDC_CHECK_FAT ), FALSE );
-					::EnableWindow(  ::GetDlgItem( hwndDlg, IDC_CHECK_UNDERLINE ), FALSE );
+					::EnableWindow( ::GetDlgItem( hwndDlg, IDC_CHECK_DISP ), FALSE );
+					::EnableWindow( ::GetDlgItem( hwndDlg, IDC_CHECK_FAT ), FALSE );
+					::EnableWindow( ::GetDlgItem( hwndDlg, IDC_CHECK_UNDERLINE ), FALSE );
 
-					::EnableWindow(  ::GetDlgItem( hwndDlg, IDC_STATIC_HAIKEI ), TRUE );
-					::EnableWindow(  ::GetDlgItem( hwndDlg, IDC_BUTTON_BACKCOLOR ), TRUE );
-					::EnableWindow(  ::GetDlgItem( hwndDlg, IDC_BUTTON_SAMETEXTCOLOR ), TRUE );
-					::EnableWindow(  ::GetDlgItem( hwndDlg, IDC_BUTTON_SAMEBKCOLOR ), TRUE );
+					::EnableWindow( ::GetDlgItem( hwndDlg, IDC_STATIC_HAIKEI ), TRUE );
+					::EnableWindow( ::GetDlgItem( hwndDlg, IDC_BUTTON_BACKCOLOR ), TRUE );
+					::EnableWindow( ::GetDlgItem( hwndDlg, IDC_BUTTON_SAMETEXTCOLOR ), TRUE );
+					::EnableWindow( ::GetDlgItem( hwndDlg, IDC_BUTTON_SAMEBKCOLOR ), TRUE );
 
 //					::ShowWindow( ::GetDlgItem( hwndDlg, IDC_CHECK_DISP ), SW_HIDE );
 //					::ShowWindow( ::GetDlgItem( hwndDlg, IDC_CHECK_FAT ), SW_HIDE );
@@ -1795,14 +1809,14 @@ BOOL CPropTypes::DispatchEvent_p3_new(
 //					::ShowWindow( ::GetDlgItem( hwndDlg, IDC_BUTTON_SAMETEXTCOLOR ), SW_SHOW );
 //					::ShowWindow( ::GetDlgItem( hwndDlg, IDC_BUTTON_SAMEBKCOLOR ), SW_SHOW );
 //					break;
-				default:	
-					::EnableWindow(  ::GetDlgItem( hwndDlg, IDC_CHECK_DISP ), TRUE );
-					::EnableWindow(  ::GetDlgItem( hwndDlg, IDC_CHECK_FAT ), TRUE );
-					::EnableWindow(  ::GetDlgItem( hwndDlg, IDC_CHECK_UNDERLINE ), TRUE );
-					::EnableWindow(  ::GetDlgItem( hwndDlg, IDC_STATIC_HAIKEI ), TRUE );
-					::EnableWindow(  ::GetDlgItem( hwndDlg, IDC_BUTTON_BACKCOLOR ), TRUE );
-					::EnableWindow(  ::GetDlgItem( hwndDlg, IDC_BUTTON_SAMETEXTCOLOR ), TRUE );
-					::EnableWindow(  ::GetDlgItem( hwndDlg, IDC_BUTTON_SAMEBKCOLOR ), TRUE );
+				default:
+					::EnableWindow( ::GetDlgItem( hwndDlg, IDC_CHECK_DISP ), TRUE );
+					::EnableWindow( ::GetDlgItem( hwndDlg, IDC_CHECK_FAT ), TRUE );
+					::EnableWindow( ::GetDlgItem( hwndDlg, IDC_CHECK_UNDERLINE ), TRUE );
+					::EnableWindow( ::GetDlgItem( hwndDlg, IDC_STATIC_HAIKEI ), TRUE );
+					::EnableWindow( ::GetDlgItem( hwndDlg, IDC_BUTTON_BACKCOLOR ), TRUE );
+					::EnableWindow( ::GetDlgItem( hwndDlg, IDC_BUTTON_SAMETEXTCOLOR ), TRUE );
+					::EnableWindow( ::GetDlgItem( hwndDlg, IDC_BUTTON_SAMEBKCOLOR ), TRUE );
 
 //					::ShowWindow( ::GetDlgItem( hwndDlg, IDC_CHECK_DISP ), SW_SHOW );
 //					::ShowWindow( ::GetDlgItem( hwndDlg, IDC_CHECK_FAT ), SW_SHOW );
@@ -1833,7 +1847,7 @@ BOOL CPropTypes::DispatchEvent_p3_new(
 					::CheckDlgButton( hwndDlg, IDC_CHECK_UNDERLINE, FALSE );
 				}
 
-				
+
 				::InvalidateRect( ::GetDlgItem( hwndDlg, IDC_BUTTON_TEXTCOLOR ), NULL, TRUE );
 				::InvalidateRect( ::GetDlgItem( hwndDlg, IDC_BUTTON_BACKCOLOR ), NULL, TRUE );
 				return TRUE;
@@ -1846,7 +1860,7 @@ BOOL CPropTypes::DispatchEvent_p3_new(
 			case IDC_BUTTON_SAMETEXTCOLOR: /* 文字色統一 */
 				for( i = 0; i < COLORIDX_LAST; ++i ){
 					if( i != m_nCurrentColorType ){
-						m_Types.m_ColorInfoArr[i].m_colTEXT = m_Types.m_ColorInfoArr[m_nCurrentColorType].m_colTEXT; 
+						m_Types.m_ColorInfoArr[i].m_colTEXT = m_Types.m_ColorInfoArr[m_nCurrentColorType].m_colTEXT;
 					}
 				}
 				::InvalidateRect( hwndListColor, NULL, TRUE );
@@ -1855,7 +1869,7 @@ BOOL CPropTypes::DispatchEvent_p3_new(
 			case IDC_BUTTON_SAMEBKCOLOR:	/* 背景色統一 */
 				for( i = 0; i < COLORIDX_LAST; ++i ){
 					if( i != m_nCurrentColorType ){
-						m_Types.m_ColorInfoArr[i].m_colBACK = m_Types.m_ColorInfoArr[m_nCurrentColorType].m_colBACK; 
+						m_Types.m_ColorInfoArr[i].m_colBACK = m_Types.m_ColorInfoArr[m_nCurrentColorType].m_colBACK;
 					}
 				}
 				::InvalidateRect( hwndListColor, NULL, TRUE );
@@ -1867,7 +1881,7 @@ BOOL CPropTypes::DispatchEvent_p3_new(
 					::InvalidateRect( ::GetDlgItem( hwndDlg, IDC_BUTTON_TEXTCOLOR ), NULL, TRUE );
 				}
 				/* 現在選択されている色タイプ */
-				::SendMessage( hwndListColor, LB_SETCURSEL, m_nCurrentColorType, 0 ); 
+				::SendMessage( hwndListColor, LB_SETCURSEL, m_nCurrentColorType, 0 );
 				return TRUE;
 			case IDC_BUTTON_BACKCOLOR:	/* 背景色 */
 				/* 色選択ダイアログ */
@@ -1875,7 +1889,7 @@ BOOL CPropTypes::DispatchEvent_p3_new(
 					::InvalidateRect( ::GetDlgItem( hwndDlg, IDC_BUTTON_BACKCOLOR ), NULL, TRUE );
 				}
 				/* 現在選択されている色タイプ */
-				::SendMessage( hwndListColor, LB_SETCURSEL, m_nCurrentColorType, 0 ); 
+				::SendMessage( hwndListColor, LB_SETCURSEL, m_nCurrentColorType, 0 );
 				return TRUE;
 			case IDC_CHECK_DISP:  /* 色分け/表示 をする */
 				if( ::IsDlgButtonChecked( hwndDlg, IDC_CHECK_DISP ) ){
@@ -1884,7 +1898,7 @@ BOOL CPropTypes::DispatchEvent_p3_new(
 					m_Types.m_ColorInfoArr[m_nCurrentColorType].m_bDisp = FALSE;
 				}
 				/* 現在選択されている色タイプ */
-				::SendMessage( hwndListColor, LB_SETCURSEL, m_nCurrentColorType, 0 ); 
+				::SendMessage( hwndListColor, LB_SETCURSEL, m_nCurrentColorType, 0 );
 				return TRUE;
 			case IDC_CHECK_FAT:	/* 太字か */
 				if( ::IsDlgButtonChecked( hwndDlg, IDC_CHECK_FAT ) ){
@@ -1893,7 +1907,7 @@ BOOL CPropTypes::DispatchEvent_p3_new(
 					m_Types.m_ColorInfoArr[m_nCurrentColorType].m_bFatFont = FALSE;
 				}
 				/* 現在選択されている色タイプ */
-				::SendMessage( hwndListColor, LB_SETCURSEL, m_nCurrentColorType, 0 ); 
+				::SendMessage( hwndListColor, LB_SETCURSEL, m_nCurrentColorType, 0 );
 				return TRUE;
 			case IDC_CHECK_UNDERLINE:	/* 下線を表示 */
 				if( ::IsDlgButtonChecked( hwndDlg, IDC_CHECK_UNDERLINE ) ){
@@ -1902,7 +1916,7 @@ BOOL CPropTypes::DispatchEvent_p3_new(
 					m_Types.m_ColorInfoArr[m_nCurrentColorType].m_bUnderLine = FALSE;
 				}
 				/* 現在選択されている色タイプ */
-				::SendMessage( hwndListColor, LB_SETCURSEL, m_nCurrentColorType, 0 ); 
+				::SendMessage( hwndListColor, LB_SETCURSEL, m_nCurrentColorType, 0 );
 				return TRUE;
 
 			case IDC_BUTTON_IMPORT:	/* 色の設定をインポート */
@@ -1946,8 +1960,8 @@ BOOL CPropTypes::DispatchEvent_p3_new(
 //		}
 		break;
 	case WM_DRAWITEM:
-		idCtrl = (UINT) wParam;	/* コントロールのID	*/
-		pDis = (LPDRAWITEMSTRUCT) lParam;	/* 項目描画情報	*/
+		idCtrl = (UINT) wParam;				/* コントロールのID */
+		pDis = (LPDRAWITEMSTRUCT) lParam;	/* 項目描画情報 */
 		switch( idCtrl ){
 
 		case IDC_BUTTON_TEXTCOLOR:	/* テキスト色 */
@@ -1956,7 +1970,7 @@ BOOL CPropTypes::DispatchEvent_p3_new(
 		case IDC_BUTTON_BACKCOLOR:	/* 背景色 */
 			DrawColorButton( pDis, m_Types.m_ColorInfoArr[m_nCurrentColorType].m_colBACK );
 			return TRUE;
-		case IDC_LIST_COLORS:	/* 色種別リスト */
+		case IDC_LIST_COLORS:		/* 色種別リスト */
 			DrawColorListItem( pDis );
 		}
 		break;
@@ -1974,8 +1988,8 @@ void CPropTypes::SetData_p3_new( HWND hwndDlg )
 
 	HWND	hwndWork;
 	int		i;
-    int		nItem; 
- 
+    int		nItem;
+
 	m_nCurrentColorType = 0;		/* 現在選択されている色タイプ */
 
 	/* ユーザーがエディット コントロールに入力できるテキストの長さを制限する */
@@ -1984,12 +1998,12 @@ void CPropTypes::SetData_p3_new( HWND hwndDlg )
 	::SendMessage( ::GetDlgItem( hwndDlg, IDC_EDIT_BLOCKCOMMENT_FROM ), EM_LIMITTEXT, (WPARAM)(sizeof(m_Types.m_szBlockCommentFrom) - 1 ), 0 );
 	::SendMessage( ::GetDlgItem( hwndDlg, IDC_EDIT_BLOCKCOMMENT_TO ), EM_LIMITTEXT, (WPARAM)(sizeof(m_Types.m_szBlockCommentTo) - 1 ), 0 );
 
-	::SetDlgItemText( hwndDlg, IDC_EDIT_LINECOMMENT, m_Types.m_szLineComment );	/* 行コメントデリミタ */             
-	::SetDlgItemText( hwndDlg, IDC_EDIT_LINECOMMENT2, m_Types.m_szLineComment2 );	/* 行コメントデリミタ2 */             
-	::SetDlgItemText( hwndDlg, IDC_EDIT_BLOCKCOMMENT_FROM, m_Types.m_szBlockCommentFrom );	/* ブロックコメントデリミタ(From) */ 
-	::SetDlgItemText( hwndDlg, IDC_EDIT_BLOCKCOMMENT_TO, m_Types.m_szBlockCommentTo );	/* ブロックコメントデリミタ(To) */   
+	::SetDlgItemText( hwndDlg, IDC_EDIT_LINECOMMENT, m_Types.m_szLineComment );				/* 行コメントデリミタ */
+	::SetDlgItemText( hwndDlg, IDC_EDIT_LINECOMMENT2, m_Types.m_szLineComment2 );			/* 行コメントデリミタ2 */
+	::SetDlgItemText( hwndDlg, IDC_EDIT_BLOCKCOMMENT_FROM, m_Types.m_szBlockCommentFrom );	/* ブロックコメントデリミタ(From) */
+	::SetDlgItemText( hwndDlg, IDC_EDIT_BLOCKCOMMENT_TO, m_Types.m_szBlockCommentTo );		/* ブロックコメントデリミタ(To) */
 
-	if( 0 == m_Types.m_nStringType ){	/* 文字列区切り記号エスケープ方法　0=[\"][\'] 1=[""][''] */
+	if( 0 == m_Types.m_nStringType ){	/* 文字列区切り記号エスケープ方法  0=[\"][\'] 1=[""][''] */
 		::CheckDlgButton( hwndDlg, IDC_RADIO_ESCAPETYPE_1, TRUE );
 		::CheckDlgButton( hwndDlg, IDC_RADIO_ESCAPETYPE_2, FALSE );
 	}else{
@@ -2026,37 +2040,37 @@ void CPropTypes::SetData_p3_new( HWND hwndDlg )
 	}
 
 	//MIK START 2000.12.01 second keyword
-	/* セット名コンボボックスの値セット */														//MIK
-	hwndWork = ::GetDlgItem( hwndDlg, IDC_COMBO_SET2 );											//MIK
-	::SendMessage( hwndWork, CB_RESETCONTENT, 0, 0 );  /* コンボボックスを空にする */			//MIK
-	/* 一行目は空白 */																			//MIK
-	::SendMessage( hwndWork, CB_ADDSTRING, 0, (LPARAM)(LPCTSTR)" " );							//MIK
-	if( 0 < m_CKeyWordSetMgr.m_nKeyWordSetNum ){												//MIK
-		for( i = 0; i < m_CKeyWordSetMgr.m_nKeyWordSetNum; ++i ){								//MIK
+	/* セット名コンボボックスの値セット */																		//MIK
+	hwndWork = ::GetDlgItem( hwndDlg, IDC_COMBO_SET2 );															//MIK
+	::SendMessage( hwndWork, CB_RESETCONTENT, 0, 0 );  /* コンボボックスを空にする */							//MIK
+	/* 一行目は空白 */																							//MIK
+	::SendMessage( hwndWork, CB_ADDSTRING, 0, (LPARAM)(LPCTSTR)" " );											//MIK
+	if( 0 < m_CKeyWordSetMgr.m_nKeyWordSetNum ){																//MIK
+		for( i = 0; i < m_CKeyWordSetMgr.m_nKeyWordSetNum; ++i ){												//MIK
 			::SendMessage( hwndWork, CB_ADDSTRING, 0, (LPARAM) (LPCTSTR)m_CKeyWordSetMgr.GetTypeName( i ) );	//MIK
-		}																						//MIK
-		if( -1 == m_Types.m_nKeyWordSetIdx2 ){													//MIK
-			/* セット名コンボボックスのデフォルト選択 */										//MIK
-			::SendMessage( hwndWork, CB_SETCURSEL, (WPARAM)0, 0 );								//MIK
-		}else{																					//MIK
-			/* セット名コンボボックスのデフォルト選択 */										//MIK
-			::SendMessage( hwndWork, CB_SETCURSEL, (WPARAM)m_Types.m_nKeyWordSetIdx2 + 1, 0 );	//MIK
-		}																						//MIK
-	}																							//MIK
+		}																										//MIK
+		if( -1 == m_Types.m_nKeyWordSetIdx2 ){																	//MIK
+			/* セット名コンボボックスのデフォルト選択 */														//MIK
+			::SendMessage( hwndWork, CB_SETCURSEL, (WPARAM)0, 0 );												//MIK
+		}else{																									//MIK
+			/* セット名コンボボックスのデフォルト選択 */														//MIK
+			::SendMessage( hwndWork, CB_SETCURSEL, (WPARAM)m_Types.m_nKeyWordSetIdx2 + 1, 0 );					//MIK
+		}																										//MIK
+	}																											//MIK
 	//MIK END
 
 	/* 色をつける文字種類のリスト */
 	hwndWork = ::GetDlgItem( hwndDlg, IDC_LIST_COLORS );
 	::SendMessage( hwndWork, LB_RESETCONTENT, 0, 0 );  /* コンボボックスを空にする */
 	for( i = 0; i < COLORIDX_LAST; ++i ){
-		nItem = ::SendMessage( hwndWork, LB_ADDSTRING, 0, (LPARAM)(char*)m_Types.m_ColorInfoArr[i].m_szName ); 
-		::SendMessage( hwndWork, LB_SETITEMDATA, nItem, (LPARAM)(void*)&m_Types.m_ColorInfoArr[i] ); 
+		nItem = ::SendMessage( hwndWork, LB_ADDSTRING, 0, (LPARAM)(char*)m_Types.m_ColorInfoArr[i].m_szName );
+		::SendMessage( hwndWork, LB_SETITEMDATA, nItem, (LPARAM)(void*)&m_Types.m_ColorInfoArr[i] );
 	}
 	/* 現在選択されている色タイプ */
-	::SendMessage( hwndWork, LB_SETCURSEL, m_nCurrentColorType, 0 ); 
+	::SendMessage( hwndWork, LB_SETCURSEL, m_nCurrentColorType, 0 );
 	::SendMessage( hwndDlg, WM_COMMAND, MAKELONG( IDC_LIST_COLORS, LBN_SELCHANGE ), (LPARAM)hwndWork );
 
-	/* 行番号区切り　0=なし 1=縦線 2=任意 */
+	/* 行番号区切り  0=なし 1=縦線 2=任意 */
 	if( 0 == m_Types.m_nLineTermType ){
 		::CheckDlgButton( hwndDlg, IDC_RADIO_LINETERMTYPE0, TRUE );
 		::CheckDlgButton( hwndDlg, IDC_RADIO_LINETERMTYPE1, FALSE );
@@ -2072,11 +2086,11 @@ void CPropTypes::SetData_p3_new( HWND hwndDlg )
 		::CheckDlgButton( hwndDlg, IDC_RADIO_LINETERMTYPE1, FALSE );
 		::CheckDlgButton( hwndDlg, IDC_RADIO_LINETERMTYPE2, TRUE );
 	}
-	
+
 	/* 行番号区切り文字 */
 	char	szLineTermChar[2];
 	wsprintf( szLineTermChar, "%c", m_Types.m_cLineTermChar );
-	::SetDlgItemText( hwndDlg, IDC_EDIT_LINETERMCHAR, szLineTermChar );	
+	::SetDlgItemText( hwndDlg, IDC_EDIT_LINETERMCHAR, szLineTermChar );
 
 	//	From Here Sept. 10, 2000 JEPRO
 	//	行番号区切りを任意の半角文字にするときだけ指定文字入力をEnableに設定
@@ -2098,12 +2112,12 @@ int CPropTypes::GetData_p3_new( HWND hwndDlg )
 	m_nPageNum = 1;
 
 
-	::GetDlgItemText( hwndDlg, IDC_EDIT_LINECOMMENT, m_Types.m_szLineComment, sizeof(m_Types.m_szLineComment) );	/* 行コメントデリミタ */             
-	::GetDlgItemText( hwndDlg, IDC_EDIT_LINECOMMENT2, m_Types.m_szLineComment2, sizeof(m_Types.m_szLineComment2) );	/* 行コメントデリミタ2 */             
-	::GetDlgItemText( hwndDlg, IDC_EDIT_BLOCKCOMMENT_FROM, m_Types.m_szBlockCommentFrom, sizeof(m_Types.m_szBlockCommentFrom) );	/* ブロックコメントデリミタ(From) */ 
-	::GetDlgItemText( hwndDlg, IDC_EDIT_BLOCKCOMMENT_TO, m_Types.m_szBlockCommentTo, sizeof(m_Types.m_szBlockCommentTo) );	/* ブロックコメントデリミタ(To) */   
+	::GetDlgItemText( hwndDlg, IDC_EDIT_LINECOMMENT, m_Types.m_szLineComment, sizeof(m_Types.m_szLineComment) );					/* 行コメントデリミタ */
+	::GetDlgItemText( hwndDlg, IDC_EDIT_LINECOMMENT2, m_Types.m_szLineComment2, sizeof(m_Types.m_szLineComment2) );					/* 行コメントデリミタ2 */
+	::GetDlgItemText( hwndDlg, IDC_EDIT_BLOCKCOMMENT_FROM, m_Types.m_szBlockCommentFrom, sizeof(m_Types.m_szBlockCommentFrom) );	/* ブロックコメントデリミタ(From) */
+	::GetDlgItemText( hwndDlg, IDC_EDIT_BLOCKCOMMENT_TO, m_Types.m_szBlockCommentTo, sizeof(m_Types.m_szBlockCommentTo) );			/* ブロックコメントデリミタ(To) */
 
-	/* 文字列区切り記号エスケープ方法　0=[\"][\'] 1=[""][''] */
+	/* 文字列区切り記号エスケープ方法  0=[\"][\'] 1=[""][''] */
 	if( ::IsDlgButtonChecked( hwndDlg, IDC_RADIO_ESCAPETYPE_1 ) ){
 		m_Types.m_nStringType = 0;
 	}else{
@@ -2119,7 +2133,7 @@ int CPropTypes::GetData_p3_new( HWND hwndDlg )
 	/* セット名コンボボックスの値セット */
 	hwndWork = ::GetDlgItem( hwndDlg, IDC_COMBO_SET );
 	nIdx = ::SendMessage( hwndWork, CB_GETCURSEL, 0, 0 );
-	if( CB_ERR == nIdx || 
+	if( CB_ERR == nIdx ||
 		0 == nIdx ){
 		m_Types.m_nKeyWordSetIdx = -1;
 	}else{
@@ -2139,7 +2153,7 @@ int CPropTypes::GetData_p3_new( HWND hwndDlg )
 	}														//MIK
 	//MIK END
 
-	/* 行番号区切り　0=なし 1=縦線 2=任意 */
+	/* 行番号区切り  0=なし 1=縦線 2=任意 */
 	if( ::IsDlgButtonChecked( hwndDlg, IDC_RADIO_LINETERMTYPE0 ) ){
 		m_Types.m_nLineTermType = 0;
 	}else
@@ -2153,13 +2167,9 @@ int CPropTypes::GetData_p3_new( HWND hwndDlg )
 
 	/* 行番号区切り文字 */
 	char	szLineTermChar[2];
-//	sprintf( szLineTermChar, "%c", m_Types.m_cLineTermChar ); 
-	::GetDlgItemText( hwndDlg, IDC_EDIT_LINETERMCHAR, szLineTermChar, 2 );	
+//	sprintf( szLineTermChar, "%c", m_Types.m_cLineTermChar );
+	::GetDlgItemText( hwndDlg, IDC_EDIT_LINETERMCHAR, szLineTermChar, 2 );
 	m_Types.m_cLineTermChar = szLineTermChar[0];
-
-
-
-
 
 	return TRUE;
 }
@@ -2177,7 +2187,7 @@ void CPropTypes::DrawColorListItem( DRAWITEMSTRUCT* pDis )
 	HPEN		hPenOld;
 	ColorInfo*	pColorInfo;
 	RECT		rc0,rc1,rc2;
-	COLORREF	cRim = (COLORREF)::GetSysColor(COLOR_3DSHADOW);
+	COLORREF	cRim = (COLORREF)::GetSysColor( COLOR_3DSHADOW );
 
 	rc0 = pDis->rcItem;
 	rc1 = pDis->rcItem;
@@ -2199,13 +2209,13 @@ void CPropTypes::DrawColorListItem( DRAWITEMSTRUCT* pDis )
 	}else{
 		hBrush = ::CreateSolidBrush( ::GetSysColor( COLOR_WINDOW ) );
 		::SetTextColor( pDis->hDC, ::GetSysColor( COLOR_WINDOWTEXT ) );
-	}	
+	}
 
 //	/* 選択ハイライト矩形 */
 //	::FillRect( pDis->hDC, &rc1, hBrush );
 //	::DeleteObject( hBrush );
 //	/* テキスト */
-//	::SetBkMode( pDis->hDC, TRANSPARENT	);
+//	::SetBkMode( pDis->hDC, TRANSPARENT );
 //	::TextOut( pDis->hDC, rc1.left, rc1.top, pColorInfo->m_szName, strlen(pColorInfo->m_szName) );
 //	if( pColorInfo->m_bFatFont ){	/* 太字か */
 //		::TextOut( pDis->hDC, rc1.left + 1, rc1.top, pColorInfo->m_szName, strlen(pColorInfo->m_szName) );
@@ -2221,7 +2231,7 @@ void CPropTypes::DrawColorListItem( DRAWITEMSTRUCT* pDis )
 	::FillRect( pDis->hDC, &rc1, hBrush );
 	::DeleteObject( hBrush );
 	/* テキスト */
-	::SetBkMode( pDis->hDC, TRANSPARENT	);
+	::SetBkMode( pDis->hDC, TRANSPARENT );
 	::TextOut( pDis->hDC, rc1.left, rc1.top, pColorInfo->m_szName, strlen(pColorInfo->m_szName) );
 	if( pColorInfo->m_bFatFont ){	/* 太字か */
 		::TextOut( pDis->hDC, rc1.left + 1, rc1.top, pColorInfo->m_szName, strlen(pColorInfo->m_szName) );
@@ -2264,13 +2274,13 @@ void CPropTypes::DrawColorListItem( DRAWITEMSTRUCT* pDis )
 		::MoveToEx( pDis->hDC, rc1.left + 2, rc1.top + 6, NULL );
 		::LineTo( pDis->hDC,   rc1.left + 5, rc1.bottom - 3 );
 		::LineTo( pDis->hDC, rc1.right - 2, rc1.top + 4 );
-	}	
+	}
 //	return;
 
 
 
 	if( 0 != strcmp( "カーソル行アンダーライン", pColorInfo->m_szName ) ){
-		/* 背景色見本　矩形 */
+		/* 背景色 見本矩形 */
 		rc1 = pDis->rcItem;
 		rc1.left = rc1.right - 13;
 		rc1.top+=2;
@@ -2288,8 +2298,8 @@ void CPropTypes::DrawColorListItem( DRAWITEMSTRUCT* pDis )
 		::DeleteObject( hBrush );
 	}
 
-	
-	/* 前景色見本　矩形 */
+
+	/* 前景色 見本矩形 */
 	rc1 = pDis->rcItem;
 	rc1.left = rc1.right - 27;
 	rc1.top+=2;
@@ -2309,13 +2319,13 @@ void CPropTypes::DrawColorListItem( DRAWITEMSTRUCT* pDis )
 
 
 
-//	::SetTextColor( pDis->hDC, ::GetSysColor( COLOR_WINDOWTEXT ));
+//	::SetTextColor( pDis->hDC, ::GetSysColor( COLOR_WINDOWTEXT ) );
 //	::SetBkColor( pDis->hDC, ::GetSysColor( COLOR_WINDOW ) );
-//	::TextOut( pDis->hDC, pDis->rcItem.left + 3, pDis->rcItem.top + 3,  pColorInfo->m_szName, strlen(pColorInfo->m_szName) );
+//	::TextOut( pDis->hDC, pDis->rcItem.left + 3, pDis->rcItem.top + 3, pColorInfo->m_szName, strlen(pColorInfo->m_szName) );
 
 //	::SetTextColor( pDis->hDC, pColorInfo->m_colTEXT );
 //	::SetBkColor( pDis->hDC, pColorInfo->m_colBACK );
-//	::TextOut( pDis->hDC, pDis->rcItem.left + 3 + 128, pDis->rcItem.top + 3,  pColorInfo->m_szName, strlen(pColorInfo->m_szName) );
+//	::TextOut( pDis->hDC, pDis->rcItem.left + 3 + 128, pDis->rcItem.top + 3, gpColorInfo->m_szName, strlen(pColorInfo->m_szName) );
 	return;
 }
 
@@ -2362,7 +2372,6 @@ void CPropTypes::EnableTypesPropInput( HWND hwndDlg )
 	}
 }
 //	To Here Sept. 10, 2000
-
 
 
 /*[EOF]*/

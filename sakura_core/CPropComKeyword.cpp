@@ -79,7 +79,7 @@ BOOL CPropCommon::DispatchEvent_p7(
 		::SetWindowLong( hwndLIST_KEYWORD, GWL_STYLE, dwStyle | LVS_SHOWSELALWAYS );
 //            (dwStyle & ~LVS_TYPEMASK) | dwView); 
 
-		
+
 		/* コントロール更新のタイミング用のタイマーを起動 */
 		::SetTimer( hwndDlg, 1, 300, NULL );
 
@@ -88,7 +88,7 @@ BOOL CPropCommon::DispatchEvent_p7(
 	case WM_NOTIFY:
 		idCtrl = (int)wParam;
 		pNMHDR = (NMHDR*)lParam;
-		pnkd = (LV_KEYDOWN *)lParam; 
+		pnkd = (LV_KEYDOWN *)lParam;
 		pMNUD  = (NM_UPDOWN*)lParam;
 		plvdi = (LV_DISPINFO*)lParam;
 		plvi = &plvdi->item;
@@ -133,7 +133,7 @@ BOOL CPropCommon::DispatchEvent_p7(
 				if( 0 < strlen( plvi->pszText )	){
 					if( MAX_KEYWORDLEN < strlen( plvi->pszText ) ){
 						::MYMESSAGEBOX(	hwndDlg, MB_OK | MB_ICONINFORMATION, GSTR_APPNAME,
-							"キーワードの長さは%dバイトまでです。", MAX_KEYWORDLEN 
+							"キーワードの長さは%dバイトまでです。", MAX_KEYWORDLEN
 						);
 						return TRUE;
 					}
@@ -147,7 +147,7 @@ BOOL CPropCommon::DispatchEvent_p7(
 				SetData_p7_KeyWordSet( hwndDlg, m_CKeyWordSetMgr.m_nCurrentKeyWordSetIdx );
 
 				ListView_SetItemState( hwndLIST_KEYWORD, plvi->iItem, LVIS_SELECTED | LVIS_FOCUSED, LVIS_SELECTED | LVIS_FOCUSED );
-				
+
 				return TRUE;
 			case LVN_KEYDOWN:
 //				MYTRACE( "LVN_KEYDOWN\n" );
@@ -179,9 +179,9 @@ BOOL CPropCommon::DispatchEvent_p7(
 		}
 		break;
 	case WM_COMMAND:
-		wNotifyCode = HIWORD(wParam);	/* 通知コード	*/
-		wID = LOWORD(wParam);	/* 項目ID､ コントロールID､ またはアクセラレータID	*/
-		hwndCtl = (HWND) lParam;	/* コントロールのハンドル	*/
+		wNotifyCode = HIWORD(wParam);	/* 通知コード */
+		wID = LOWORD(wParam);	/* 項目ID､ コントロールID､ またはアクセラレータID */
+		hwndCtl = (HWND) lParam;	/* コントロールのハンドル */
 		if( hwndCOMBO_SET == hwndCtl){
 			switch( wNotifyCode ){
 			case CBN_SELCHANGE:
@@ -236,7 +236,7 @@ BOOL CPropCommon::DispatchEvent_p7(
 						}
 					}
 					if( IDCANCEL == ::MYMESSAGEBOX(	hwndDlg, MB_OKCANCEL | MB_ICONQUESTION, GSTR_APPNAME,
-						"「%s」のセットを削除します。\nよろしいですか？\n削除しようとするセットは、以下のファイルタイプに割り当てられています。\n削除したセットは、無効になります。\n\n%s", 
+						"「%s」のセットを削除します。\nよろしいですか？\n削除しようとするセットは、以下のファイルタイプに割り当てられています。\n削除したセットは無効になります。\n\n%s", 
 						m_CKeyWordSetMgr.GetTypeName( nIndex1 ),
 						pszLabel
 					) ){
@@ -415,7 +415,7 @@ void CPropCommon::p7_Import_List_KeyWord( HWND hwndDlg, HWND hwndLIST_KEYWORD )
 	pFile = fopen( szPath, "r" );
 	if( NULL == pFile ){
 		::MYMESSAGEBOX(	hwndDlg, MB_OK | MB_ICONSTOP, GSTR_APPNAME,
-			"ファイルを開けませんでした\n\n%s", szPath
+			"ファイルを開けませんでした。\n\n%s", szPath
 		);
 		return;
 	}
@@ -475,7 +475,7 @@ void CPropCommon::p7_Export_List_KeyWord( HWND hwndDlg, HWND hwndLIST_KEYWORD )
 	pFile = fopen( szPath, "w" );
 	if( NULL == pFile ){
 		::MYMESSAGEBOX(	hwndDlg, MB_OK | MB_ICONSTOP, GSTR_APPNAME,
-			"ファイルを開けませんでした\n\n%s", szPath
+			"ファイルを開けませんでした。\n\n%s", szPath
 		);
 		return;
 	}
@@ -605,10 +605,10 @@ void CPropCommon::SetData_p7_KeyWordSet( HWND hwndDlg, int nIdx )
 /* ダイアログデータの取得 p7 */
 int CPropCommon::GetData_p7( HWND hwndDlg )
 {
-//	HWND		hwndResList;
-//	int			i;
-//	int			j;
-//	int			k;
+//	HWND	hwndResList;
+//	int		i;
+//	int		j;
+//	int		k;
 
 	m_nPageNum = ID_PAGENUM_KEYWORD;
 

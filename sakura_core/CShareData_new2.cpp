@@ -46,7 +46,7 @@ CShareData::CShareData()
 //	Sept. 16, 2000 見やすいように横に20個(あるいは32個)づつに配列しようとしたが配列構造を変えなければうまく格納できないので
 //	それを解決するのが先決(→げんた氏改修版ur3β13で解決)
 //
-//	Sept. 16, 2000 JEPRO できるだけ系ごとに集まるように順番を大幅に入れ替えた　それに伴いCShareData.cppで設定している初期設定値も変更
+//	Sept. 16, 2000 JEPRO できるだけ系ごとに集まるように順番を大幅に入れ替えた  それに伴いCShareData.cppで設定している初期設定値も変更
 //	Oct. 22, 2000 JEPRO アイコンのビットマップリソースの2次元配置が可能になったため根本的に配置転換した
 //	・配置の基本は「コマンド一覧」に入っている機能(コマンド)順	なお「コマンド一覧」自体は「メニューバー」の順におおよそ準拠している
 //	・アイコンビットマップファイルには横32個X13段あるが有効にしてあるのは11段まで(12段目は基本的に作業用, 13段目は試作品など保管用)
@@ -68,7 +68,7 @@ CShareData::CShareData()
 //		ヘルプ------- 支援				(11段目残りの10個: 343-352)
 //			★その他					(12段目32個: 353-384)
 //	注1. 「挿入系」はメニューでは「編集」に入っている
-//	注2．「その他」はメニューには入っていないものを入れる　(現在何もないので12段目を設定してない)
+//	注2．「その他」はメニューには入っていないものを入れる (現在何もないので12段目を設定してない)
 //	注3. 「コマンド一覧」で敢えて重複していれてあるコマンドはその「本家」の方に配置した
 //	注4. 「コマンド一覧」に入ってないコマンドもわかっている範囲で位置予約にしておいた
 //  注5. F_DISABLE は未定義用(ダミーとしても使う)
@@ -82,19 +82,19 @@ CShareData::CShareData()
 /*  4 */		F_FILESAVEAS				, TBSTATE_ENABLED, TBSTYLE_BUTTON, 0, 0,	//名前を付けて保存	//Sept. 18, 2000 JEPRO 追加 
 /*  5 */		F_FILECLOSE					, TBSTATE_ENABLED, TBSTYLE_BUTTON, 0, 0,	//閉じて(無題)	//Oct. 17, 2000 jepro 「ファイルを閉じる」というキャプションを変更
 /*  6 */		F_FILECLOSE_OPEN			, TBSTATE_ENABLED, TBSTYLE_BUTTON, 0, 0,	//閉じて開く
-/*  7 */		F_FILE_REOPEN_SJIS			, TBSTATE_ENABLED, TBSTYLE_BUTTON, 0, 0,	//SJISで開く
-/*  8 */		F_FILE_REOPEN_JIS			, TBSTATE_ENABLED, TBSTYLE_BUTTON, 0, 0,	//JISで開く
-/*  9 */		F_FILE_REOPEN_EUC			, TBSTATE_ENABLED, TBSTYLE_BUTTON, 0, 0,	//EUCで開く
-/* 10 */		F_FILE_REOPEN_UNICODE		, TBSTATE_ENABLED, TBSTYLE_BUTTON, 0, 0,	//Unicodeで開く
-/* 11 */		F_FILE_REOPEN_UTF8			, TBSTATE_ENABLED, TBSTYLE_BUTTON, 0, 0,	//UTF-8で開く
-/* 12 */		F_FILE_REOPEN_UTF7			, TBSTATE_ENABLED, TBSTYLE_BUTTON, 0, 0,	//UTF-7で開く
+/*  7 */		F_FILE_REOPEN_SJIS			, TBSTATE_ENABLED, TBSTYLE_BUTTON, 0, 0,	//SJISで開き直す
+/*  8 */		F_FILE_REOPEN_JIS			, TBSTATE_ENABLED, TBSTYLE_BUTTON, 0, 0,	//JISで開き直す
+/*  9 */		F_FILE_REOPEN_EUC			, TBSTATE_ENABLED, TBSTYLE_BUTTON, 0, 0,	//EUCで開き直す
+/* 10 */		F_FILE_REOPEN_UNICODE		, TBSTATE_ENABLED, TBSTYLE_BUTTON, 0, 0,	//Unicodeで開き直す
+/* 11 */		F_FILE_REOPEN_UTF8			, TBSTATE_ENABLED, TBSTYLE_BUTTON, 0, 0,	//UTF-8で開き直す
+/* 12 */		F_FILE_REOPEN_UTF7			, TBSTATE_ENABLED, TBSTYLE_BUTTON, 0, 0,	//UTF-7で開き直す
 /* 13 */		F_PRINT						, TBSTATE_ENABLED, TBSTYLE_BUTTON, 0, 0,	//印刷
 /* 14 */		F_PRINT_PREVIEW				, TBSTATE_ENABLED, TBSTYLE_BUTTON, 0, 0,	//印刷プレビュー
 /* 15 */		F_PRINT_PAGESETUP			, TBSTATE_ENABLED, TBSTYLE_BUTTON, 0, 0,	//印刷ページ設定	//Sept. 21, 2000 JEPRO 追加
-/* 16 */		F_OPENINCLUDEFILE			, TBSTATE_ENABLED, TBSTYLE_BUTTON, 0, 0,	//同名のインクルードファイルを開く
-/* 17 */		F_OPENCCPP					, TBSTATE_ENABLED, TBSTYLE_BUTTON, 0, 0,	//同名のC/C++ソースを開く
-/* 18 */		F_ACTIVATE_SQLPLUS			, TBSTATE_ENABLED, TBSTYLE_BUTTON, 0, 0,	//Oracle SQL*Plusをアクティブ表示 */	//	Sept. 20, 2000 JEPRO 追加
-/* 19 */		F_PLSQL_COMPILE_ON_SQLPLUS	, TBSTATE_ENABLED, TBSTYLE_BUTTON, 0, 0,	//Oracle SQL*Plusで実行 */	//	Sept. 17, 2000 jepro 説明の「コンパイル」を「実行」に統一
+/* 16 */		F_OPENINCLUDEFILE			, TBSTATE_ENABLED, TBSTYLE_BUTTON, 0, 0,	//.cまたは.cppと同名の.hを開く
+/* 17 */		F_OPENCCPP					, TBSTATE_ENABLED, TBSTYLE_BUTTON, 0, 0,	//.hと同名の.c(なければ.cpp)を開く
+/* 18 */		F_ACTIVATE_SQLPLUS			, TBSTATE_ENABLED, TBSTYLE_BUTTON, 0, 0,	//Oracle SQL*Plusをアクティブ表示 */	//Sept. 20, 2000 JEPRO 追加
+/* 19 */		F_PLSQL_COMPILE_ON_SQLPLUS	, TBSTATE_ENABLED, TBSTYLE_BUTTON, 0, 0,	//Oracle SQL*Plusで実行 */	//Sept. 17, 2000 jepro 説明の「コンパイル」を「実行」に統一
 /* 20 */		F_BROWSE					, TBSTATE_ENABLED, TBSTYLE_BUTTON, 0, 0,	//ブラウズ
 /* 21 */		F_PROPERTY_FILE				, TBSTATE_ENABLED, TBSTYLE_BUTTON, 0, 0,	//ファイルのプロパティ//Sept. 16, 2000 JEPRO mytool1.bmpにあった「ファイルのプロパティ」アイコンをIDB_MYTOOLにコピー
 /* 22 */		F_DISABLE	, TBSTATE_ENABLED, TBSTYLE_BUTTON, 0, 0,	//ダミー
@@ -507,3 +507,6 @@ CShareData::CShareData()
 	m_nMyButtonNum = tbd_num + 1;
 	return;
 }
+
+
+/*[EOF]*/

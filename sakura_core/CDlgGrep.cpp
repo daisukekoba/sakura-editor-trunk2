@@ -20,12 +20,12 @@
 
 CDlgGrep::CDlgGrep()
 {
-	m_bSubFolder = FALSE;	/* サブフォルダからも検索する */
-	m_bFromThisText = FALSE;	/* この編集中のテキストから検索する */
-	m_bLoHiCase = FALSE;	/* 英大文字と英小文字を区別する */
-	m_bRegularExp = FALSE;	/* 正規表現 */
+	m_bSubFolder = FALSE;				/* サブフォルダからも検索する */
+	m_bFromThisText = FALSE;			/* この編集中のテキストから検索する */
+	m_bLoHiCase = FALSE;				/* 英大文字と英小文字を区別する */
+	m_bRegularExp = FALSE;				/* 正規表現 */
 	m_bKanjiCode_AutoDetect = FALSE;	/* 文字コード自動判別 */
-	m_bGrepOutputLine = TRUE;	/* 行を出力するか該当部分だけ出力するか */
+	m_bGrepOutputLine = TRUE;			/* 行を出力するか該当部分だけ出力するか */
 	m_nGrepOutputStyle = 1;				/* Grep: 出力形式 */
 
 	strcpy( m_szText, m_pShareData->m_szSEARCHKEYArr[0] );		/* 検索文字列 */
@@ -39,12 +39,12 @@ CDlgGrep::CDlgGrep()
 /* モーダルダイアログの表示 */
 int CDlgGrep::DoModal( HINSTANCE hInstance, HWND hwndParent, const char* pszCurrentFilePath )
 {
-	m_bSubFolder = m_pShareData->m_Common.m_bGrepSubFolder;	/* Grep: サブフォルダも検索 */
-	m_bRegularExp = m_pShareData->m_Common.m_bRegularExp;	/* 1==正規表現 */
+	m_bSubFolder = m_pShareData->m_Common.m_bGrepSubFolder;							/* Grep: サブフォルダも検索 */
+	m_bRegularExp = m_pShareData->m_Common.m_bRegularExp;							/* 1==正規表現 */
 	m_bKanjiCode_AutoDetect = m_pShareData->m_Common.m_bGrepKanjiCode_AutoDetect;	/* 文字コード自動判別 */
-	m_bLoHiCase = m_pShareData->m_Common.m_bLoHiCase;		/* 1==大文字小文字の区別 */
-	m_bGrepOutputLine = m_pShareData->m_Common.m_bGrepOutputLine;	/* 行を出力するか該当部分だけ出力するか */
-	m_nGrepOutputStyle = m_pShareData->m_Common.m_nGrepOutputStyle;	/* Grep: 出力形式 */
+	m_bLoHiCase = m_pShareData->m_Common.m_bLoHiCase;								/* 1==大文字小文字の区別 */
+	m_bGrepOutputLine = m_pShareData->m_Common.m_bGrepOutputLine;					/* 行を出力するか該当部分だけ出力するか */
+	m_nGrepOutputStyle = m_pShareData->m_Common.m_nGrepOutputStyle;					/* Grep: 出力形式 */
 	lstrcpy( m_szCurrentFilePath, pszCurrentFilePath );
 
 	return CDialog::DoModal( hInstance, hwndParent, IDD_GREP, NULL );
@@ -53,12 +53,12 @@ int CDlgGrep::DoModal( HINSTANCE hInstance, HWND hwndParent, const char* pszCurr
 //	/* モードレスダイアログの表示 */
 //	HWND CDlgGrep::DoModeless( HINSTANCE hInstance, HWND hwndParent, const char* pszCurrentFilePath )
 //	{
-//		m_bSubFolder = m_pShareData->m_Common.m_bGrepSubFolder;	/* Grep: サブフォルダも検索 */
-//		m_bRegularExp = m_pShareData->m_Common.m_bRegularExp;	/* 1==正規表現 */
+//		m_bSubFolder = m_pShareData->m_Common.m_bGrepSubFolder;							/* Grep: サブフォルダも検索 */
+//		m_bRegularExp = m_pShareData->m_Common.m_bRegularExp;							/* 1==正規表現 */
 //		m_bKanjiCode_AutoDetect = m_pShareData->m_Common.m_bGrepKanjiCode_AutoDetect;	/* 文字コード自動判別 */
-//		m_bLoHiCase = m_pShareData->m_Common.m_bLoHiCase;		/* 1==英大文字小文字の区別 */
-//		m_bGrepOutputLine = m_pShareData->m_Common.m_bGrepOutputLine;	/* 行を出力するか該当部分だけ出力するか */
-//		m_nGrepOutputStyle = m_pShareData->m_Common.m_nGrepOutputStyle;	/* Grep: 出力形式 */
+//		m_bLoHiCase = m_pShareData->m_Common.m_bLoHiCase;								/* 1==英大文字小文字の区別 */
+//		m_bGrepOutputLine = m_pShareData->m_Common.m_bGrepOutputLine;					/* 行を出力するか該当部分だけ出力するか */
+//		m_nGrepOutputStyle = m_pShareData->m_Common.m_nGrepOutputStyle;					/* Grep: 出力形式 */
 //		lstrcpy( m_szCurrentFilePath, pszCurrentFilePath );
 //  
 //		return CDialog::DoModeless( hInstance, hwndParent, IDD_GREP, NULL );
@@ -157,7 +157,7 @@ BOOL CDlgGrep::OnBnClicked( int wID )
 				::SetDlgItemText( m_hWnd, IDC_STATIC_JRE32VER, "" );
 
 				::MessageBeep( MB_ICONEXCLAMATION );
-				::MessageBox( m_hWnd, "jre32.dllが見つかりません。\n正規表現を利用するには、jre32.dllが必要です。\n", "情報", MB_OK | MB_ICONEXCLAMATION );
+				::MessageBox( m_hWnd, "jre32.dllが見つかりません。\n正規表現を利用するにはjre32.dllが必要です。\n", "情報", MB_OK | MB_ICONEXCLAMATION );
 				::CheckDlgButton( m_hWnd, IDC_CHK_REGULAREXP, 0 );
 			}else{
 				CJre	cJre;
@@ -206,8 +206,8 @@ BOOL CDlgGrep::OnBnClicked( int wID )
 //		::EndDialog( hwndDlg, FALSE );
 		CloseDialog( FALSE );
 		return TRUE;
-	}	
-	
+	}
+
 	/* 基底クラスメンバ */
 	return CDialog::OnBnClicked( wID );
 }
@@ -312,11 +312,11 @@ void CDlgGrep::SetData( void )
 		cJre.Init();
 		if( FALSE == cJre.IsExist() ){
 			::MessageBeep( MB_ICONEXCLAMATION );
-			::MessageBox( m_hWnd, "jre32.dllが見つかりません。\n正規表現を利用するには、jre32.dllが必要です。\n", "情報", MB_OK | MB_ICONEXCLAMATION );
+			::MessageBox( m_hWnd, "jre32.dllが見つかりません。\n正規表現を利用するにはjre32.dllが必要です。\n", "情報", MB_OK | MB_ICONEXCLAMATION );
 			::CheckDlgButton( m_hWnd, IDC_CHK_REGULAREXP, 0 );
 		}else{
 			/* JRE32.DLLのバージョン */
-			int	wJreVersion;
+			int		wJreVersion;
 			char	szMsg[256];
 
 			wJreVersion = cJre.GetVersion();
@@ -330,9 +330,9 @@ void CDlgGrep::SetData( void )
 	}
 
 	if( 0 < lstrlen( m_szCurrentFilePath ) ){
-		::EnableWindow( ::GetDlgItem( m_hWnd, IDC_CHK_FROMTHISTEXT ), TRUE ); 
+		::EnableWindow( ::GetDlgItem( m_hWnd, IDC_CHK_FROMTHISTEXT ), TRUE );
 	}else{
-		::EnableWindow( ::GetDlgItem( m_hWnd, IDC_CHK_FROMTHISTEXT ), FALSE ); 
+		::EnableWindow( ::GetDlgItem( m_hWnd, IDC_CHK_FROMTHISTEXT ), FALSE );
 	}
 
 
@@ -343,7 +343,7 @@ void CDlgGrep::SetData( void )
 
 
 /* ダイアログデータの取得 */
-/* 　TRUE==正常　 FALSE==入力エラー  */
+/* TRUE==正常  FALSE==入力エラー  */
 int CDlgGrep::GetData( void )
 {
 	int			i;
@@ -391,11 +391,11 @@ int CDlgGrep::GetData( void )
 	/* 検索フォルダ */
 	::GetDlgItemText( m_hWnd, IDC_COMBO_FOLDER, m_szFolder, _MAX_PATH - 1 );
 
-	m_pShareData->m_Common.m_bRegularExp = m_bRegularExp;	/* 1==正規表現 */
+	m_pShareData->m_Common.m_bRegularExp = m_bRegularExp;							/* 1==正規表現 */
 	m_pShareData->m_Common.m_bGrepKanjiCode_AutoDetect = m_bKanjiCode_AutoDetect;	/* 文字コード自動判別 */
-	m_pShareData->m_Common.m_bLoHiCase = m_bLoHiCase;		/* 1==英大文字小文字の区別 */
-	m_pShareData->m_Common.m_bGrepOutputLine = m_bGrepOutputLine;		/* 行を出力するか該当部分だけ出力するか */
-	m_pShareData->m_Common.m_nGrepOutputStyle = m_nGrepOutputStyle;		/* Grep: 出力形式 */
+	m_pShareData->m_Common.m_bLoHiCase = m_bLoHiCase;								/* 1==英大文字小文字の区別 */
+	m_pShareData->m_Common.m_bGrepOutputLine = m_bGrepOutputLine;					/* 行を出力するか該当部分だけ出力するか */
+	m_pShareData->m_Common.m_nGrepOutputStyle = m_nGrepOutputStyle;					/* Grep: 出力形式 */
 
 
 
@@ -444,7 +444,7 @@ int CDlgGrep::GetData( void )
 			cJre.Init();
 			/* jre32.dllの存在チェック */
 			if( FALSE == cJre.IsExist() ){
-				::MessageBox( m_hWnd, "jre32.dllが見つかりません。\n正規表現を利用するには、jre32.dllが必要です。\n", "情報", MB_OK | MB_ICONEXCLAMATION );
+				::MessageBox( m_hWnd, "jre32.dllが見つかりません。\n正規表現を利用するにはjre32.dllが必要です。\n", "情報", MB_OK | MB_ICONEXCLAMATION );
 				return FALSE;
 			}
 			/* 検索パターンのコンパイル */
@@ -530,5 +530,6 @@ int CDlgGrep::GetData( void )
 //	}
 	return TRUE;
 }
+
 
 /*[EOF]*/

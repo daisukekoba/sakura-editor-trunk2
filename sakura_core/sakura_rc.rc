@@ -146,8 +146,8 @@ BEGIN
                     BS_AUTOCHECKBOX | WS_GROUP | WS_TABSTOP,8,128,75,10
     CONTROL         "タスクトレイに常駐(&R)",IDC_CHECK_STAYTASKTRAY,"Button",
                     BS_AUTOCHECKBOX | WS_TABSTOP,8,143,78,10
-    LTEXT           "タスクトレイメニューのショートカットキー(&K)",
-                    IDC_STATIC,8,158,125,8
+    LTEXT           "左クリックメニューのショートカットキー(&K)",IDC_STATIC,
+                    8,158,120,8
     CONTROL         "HotKey1",IDC_HOTKEY_TRAYMENU,"msctls_hotkey32",
                     WS_BORDER | WS_TABSTOP,8,168,95,12
     GROUPBOX        "スクロール",IDC_STATIC,150,3,117,65,WS_GROUP
@@ -253,12 +253,12 @@ BEGIN
     CONTROL         "ファイルを開いたときにカーソル位置を復元する(&C)",
                     IDC_CHECK_RestoreCurPosition,"Button",BS_AUTOCHECKBOX | 
                     WS_TABSTOP,8,118,162,10
-    CONTROL         "ファイルを開いたときにMIME Encodeされたヘッダをデコードする(&B)",
+    CONTROL         "ファイルを開いたときにMIMEエンコードされたヘッダをデコードする(&B)",
                     IDC_CHECK_AutoMIMEDecode,"Button",BS_AUTOCHECKBOX | 
-                    WS_TABSTOP,8,133,207,10
+                    WS_TABSTOP,8,133,214,10
 END
 
-IDD_ABOUT DIALOG DISCARDABLE  0, 0, 239, 105
+IDD_ABOUT DIALOG DISCARDABLE  0, 0, 239, 109
 STYLE DS_CENTER | WS_POPUP | WS_CAPTION | WS_SYSMENU
 CAPTION "バージョン情報"
 FONT 9, "ＭＳ Ｐゴシック"
@@ -267,21 +267,21 @@ BEGIN
     CONTROL         "テキストエディタ Ver. 0.3.9.0",IDC_STATIC,"Static",
                     SS_LEFTNOWORDWRAP,30,7,80,8
     LTEXT           "UR 8.8.8.8",IDC_STATIC_VER,113,7,60,8,NOT WS_GROUP
-    LTEXT           "Copyright (C) 1998-2000  by Norio Nakatani && others",
-                    IDC_STATIC,38,30,162,8,NOT WS_GROUP
+    LTEXT           "Copyright (C) 1998-2001  by Norio Nakatani && Collaborators",
+                    IDC_STATIC,38,33,182,8,NOT WS_GROUP
     LTEXT           "Last Update:1999/99/99 99:99:99",IDC_STATIC_UPDATE,40,
-                    18,97,8,NOT WS_GROUP
+                    20,97,8,NOT WS_GROUP
     LTEXT           "このソフトはフリーソフトです。ご自由にお使い下さい。",
-                    IDC_STATIC,41,72,156,8,NOT WS_GROUP
-    DEFPUSHBUTTON   "&OK",IDOK,94,87,50,14
+                    IDC_STATIC,41,76,156,8,NOT WS_GROUP
+    DEFPUSHBUTTON   "&OK",IDOK,94,91,50,14
     PUSHBUTTON      "原作者連絡先(&A)...",IDC_BUTTON_CONTACT,175,7,59,14
-    LTEXT           "Project Sakura Editor:",IDC_STATIC_URL_CAPTION,12,57,64,
+    LTEXT           "Project Sakura Editor:",IDC_STATIC_URL_CAPTION,12,60,64,
                     8
     LTEXT           "http://sakura-editor.sourceforge.net/",
-                    IDC_STATIC_URL_UR,80,57,109,8,SS_NOTIFY
+                    IDC_STATIC_URL_UR,80,60,109,8,SS_NOTIFY
     LTEXT           "http://hp.vector.co.jp/authors/VA016528/",
-                    IDC_STATIC_URL_ORG,80,45,123,8,SS_NOTIFY
-    LTEXT           "原作者ホームページ:",IDC_STATIC,12,45,61,8
+                    IDC_STATIC_URL_ORG,80,48,123,8,SS_NOTIFY
+    LTEXT           "原作者ホームページ:",IDC_STATIC,12,48,61,8
 END
 
 IDD_JUMP DIALOG DISCARDABLE  0, 0, 245, 121
@@ -319,9 +319,9 @@ BEGIN
     PUSHBUTTON      "ヘルプ(&H)",IDC_BUTTON_HELP,190,101,50,14
 END
 
-IDD_FUNCLIST DIALOG DISCARDABLE  0, 0, 221, 290
-STYLE DS_CENTER | WS_MAXIMIZEBOX | WS_CLIPCHILDREN | WS_CAPTION | WS_SYSMENU | 
-    WS_THICKFRAME
+IDD_FUNCLIST DIALOG DISCARDABLE  0, 0, 222, 290
+STYLE DS_CENTER | WS_MINIMIZEBOX | WS_MAXIMIZEBOX | WS_CLIPCHILDREN | 
+    WS_CAPTION | WS_SYSMENU | WS_THICKFRAME
 CAPTION "x"
 FONT 9, "ＭＳ Ｐゴシック"
 BEGIN
@@ -335,7 +335,7 @@ BEGIN
     DEFPUSHBUTTON   "ジャンプ(&J)",IDOK,58,235,50,14
     PUSHBUTTON      "キャンセル(&X)",IDCANCEL,112,235,50,14
     PUSHBUTTON      "ヘルプ(&H)",IDC_BUTTON_HELP,165,235,50,14
-    CONTROL         "このダイアログを自動的に閉じる(&C)",
+    CONTROL         "このダイアログを自動的に閉じる(&D)",
                     IDC_CHECK_bAutoCloseDlgFuncList,"Button",BS_AUTOCHECKBOX | 
                     WS_TABSTOP,5,255,118,10
 END
@@ -756,7 +756,7 @@ BEGIN
     LTEXT           "起動時のIME入力状態(&K)",IDC_STATIC,8,156,75,8
     COMBOBOX        IDC_COMBO_IMESTATE,30,166,92,80,CBS_DROPDOWNLIST | 
                     WS_VSCROLL | WS_TABSTOP
-    GROUPBOX        "IME",IDC_STATIC,3,125,125,65
+    GROUPBOX        "IME (日本語入力変換)",IDC_STATIC,3,125,125,65
     LTEXT           "スマートインデント(&S)",IDC_STATIC,137,56,62,8
     COMBOBOX        IDC_COMBO_SMARTINDENT,168,66,90,80,CBS_DROPDOWNLIST | 
                     WS_VSCROLL | WS_TABSTOP
@@ -961,11 +961,11 @@ END
 IDD_SETUP DIALOG DISCARDABLE  0, 0, 225, 127
 STYLE DS_MODALFRAME | DS_SETFOREGROUND | DS_CENTER | WS_POPUP | WS_CAPTION | 
     WS_SYSMENU
-CAPTION "テキストエディタ　セットアップ"
+CAPTION "テキストエディタ セットアップ"
 FONT 9, "ＭＳ Ｐゴシック"
 BEGIN
-    LTEXT           "テキストエディタ　x.x.x.x　のセットアップを行います。",
-                    IDC_STATIC_MESSAGE,5,5,151,10,NOT WS_GROUP
+    LTEXT           "テキストエディタ x.x.x.x のセットアップを行います。",
+                    IDC_STATIC_MESSAGE,5,5,147,8,NOT WS_GROUP
     ICON            IDI_ICON_STD,IDC_STATIC,5,25,20,20
     LTEXT           "旧バージョンの設定データが検出されました。\n旧バージョンの設定を引き継ぐことができます。\n設定を引き継ぐバージョンを選択してください。",
                     IDC_STATIC,30,25,140,25,NOT WS_GROUP
@@ -1315,11 +1315,12 @@ BEGIN
                     IDC_CHECK_COPYnDISABLESELECTEDAREA,"Button",
                     BS_AUTOCHECKBOX | WS_TABSTOP,8,33,88,10
     GROUPBOX        "コピー",IDC_STATIC,3,3,130,50,WS_GROUP
-    CONTROL         "Drag && Drop編集する(&D)",IDC_CHECK_DRAGDROP,"Button",
-                    BS_AUTOCHECKBOX | WS_GROUP | WS_TABSTOP,8,73,91,10
+    CONTROL         "ドラッグ && ドロップ編集する(&D)",IDC_CHECK_DRAGDROP,
+                    "Button",BS_AUTOCHECKBOX | WS_GROUP | WS_TABSTOP,8,73,
+                    107,10
     CONTROL         "ドロップ元にする(&S)",IDC_CHECK_DROPSOURCE,"Button",
                     BS_AUTOCHECKBOX | WS_TABSTOP,8,88,72,10
-    GROUPBOX        "Drag && Drop",IDC_STATIC,3,58,130,50,WS_GROUP
+    GROUPBOX        "ドラッグ && ドロップ",IDC_STATIC,3,58,130,50,WS_GROUP
     CONTROL         "改行コードは上書きしない(&N)",
                     IDC_CHECK_bNotOverWriteCRLF,"Button",BS_AUTOCHECKBOX | 
                     WS_GROUP | WS_TABSTOP,8,128,100,10
@@ -1546,7 +1547,7 @@ BEGIN
         LEFTMARGIN, 7
         RIGHTMARGIN, 232
         TOPMARGIN, 7
-        BOTTOMMARGIN, 98
+        BOTTOMMARGIN, 102
     END
 
     IDD_JUMP, DIALOG
@@ -1560,7 +1561,7 @@ BEGIN
     IDD_FUNCLIST, DIALOG
     BEGIN
         LEFTMARGIN, 7
-        RIGHTMARGIN, 214
+        RIGHTMARGIN, 215
         TOPMARGIN, 7
         BOTTOMMARGIN, 283
     END
@@ -1932,8 +1933,8 @@ END
 //
 
 VS_VERSION_INFO VERSIONINFO
- FILEVERSION 1,2,25,0
- PRODUCTVERSION 1,2,25,0
+ FILEVERSION 1,2,25,1
+ PRODUCTVERSION 1,2,25,1
  FILEFLAGSMASK 0x3fL
 #ifdef _DEBUG
  FILEFLAGS 0x21L
@@ -1948,16 +1949,16 @@ BEGIN
     BEGIN
         BLOCK "041104b0"
         BEGIN
-            VALUE "Comments", "フリーソフトです。\0"
+            VALUE "Comments", "このソフトはフリーソフトです。\0"
             VALUE "CompanyName", "Project: Sakura Editor\0"
             VALUE "FileDescription", "テキストエディタ SAKURA\0"
-            VALUE "FileVersion", "1.2.25.0\0"
+            VALUE "FileVersion", "1.2.25.1\0"
             VALUE "InternalName", "sakura\0"
-            VALUE "LegalCopyright", "Copyright (C) Norio Nakatani & others\0"
-            VALUE "LegalTrademarks", "　\0"
+            VALUE "LegalCopyright", "Copyright (C) Norio Nakatani & Collaborators\0"
+            VALUE "LegalTrademarks", " \0"
             VALUE "OriginalFilename", "sakura.exe\0"
             VALUE "ProductName", "テキストエディタ SAKURA\0"
-            VALUE "ProductVersion", "1.2.25.0\0"
+            VALUE "ProductVersion", "1.2.25.1\0"
         END
     END
     BLOCK "VarFileInfo"
@@ -2032,8 +2033,8 @@ END
 
 STRINGTABLE DISCARDABLE 
 BEGIN
-    F_OPENINCLUDEFILE       "同名の.hを開く"
-    F_OPENCCPP              "同名の.c(なければ.cpp)を開く"
+    F_OPENINCLUDEFILE       ".cまたは.cppと同名の.hを開く"
+    F_OPENCCPP              ".hと同名の.c(なければ.cpp)を開く"
     F_ACTIVATE_SQLPLUS      "SQL*Plusをアクティブ表示"
     F_PLSQL_COMPILE_ON_SQLPLUS "SQL*Plusで実行"
 END
@@ -2109,18 +2110,18 @@ STRINGTABLE DISCARDABLE
 BEGIN
     F_WordDeleteToStart     "単語の左端まで削除"
     F_WordDeleteToEnd       "単語の右端まで削除"
-    F_WordDelete            "単語を削除"
     F_WordCut               "単語を切り取り"
+    F_WordDelete            "単語を削除"
 END
 
 STRINGTABLE DISCARDABLE 
 BEGIN
-    F_LineDeleteToStart     "行頭まで削除(改行単位)"
-    F_LineDeleteToEnd       "行末まで削除(改行単位)"
     F_LineCutToStart        "行頭まで切り取り(改行単位)"
     F_LineCutToEnd          "行末まで切り取り(改行単位)"
-    F_DELETE_LINE           "行削除(折り返し単位)"
+    F_LineDeleteToStart     "行頭まで削除(改行単位)"
+    F_LineDeleteToEnd       "行末まで削除(改行単位)"
     F_CUT_LINE              "行切り取り(折り返し単位)"
+    F_DELETE_LINE           "行削除(折り返し単位)"
     F_DUPLICATELINE         "行の二重化(折り返し単位)"
 END
 

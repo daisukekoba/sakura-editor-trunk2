@@ -17,12 +17,38 @@
 #include "CRunningTimer.h"
 #include "CProfile.h"
 
-//#define REGCNV_INT2SZ	1
-//#define REGCNV_SZ2SZ	2
-//#define	REGCNV_CHAR2SZ	3
+//#define REGCNV_INT2SZ		1
+//#define REGCNV_SZ2SZ		2
+//#define REGCNV_CHAR2SZ	3
+
+// added by Stonee, 2001/01/12, 2001/01/15
+// iniの色設定を番号でなく文字列で書き出す。
+static char* colorIDXKeyName[] =
+{
+	"TXT",		//0
+	"RUL",		//1
+	"UND",		//2
+	"LNO",		//3
+	"MOD",		//4
+	"TAB",		//5
+	"ZEN",		//6
+	"CTL",		//7
+	"CAR",		//8
+	"RAP",		//9
+	"EOF",		//10
+	"FND",		//11
+	"KW1",		//12
+	"KW2",		//13
+	"CMT",		//14
+	"SQT",		//15
+	"WQT",		//16
+	"URL",		//17
+	"LAST"		// Not Used
+};
+
 
 #if 0
-/* レジストリ項目　値の読み込み/書き込み */
+/* レジストリ項目 値の読み込み/書き込み */
 LONG CShareData::MY_RegVal_IO(
 	BOOL			bRead,
 	HKEY			hKey,			// handle of key to set value for
@@ -71,15 +97,15 @@ LONG CShareData::MY_RegVal_IO(
 //				FORMAT_MESSAGE_IGNORE_INSERTS,
 //				NULL,
 //				::GetLastError(),
-//				MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT), // デフォルト言語
+//				MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT),	// デフォルト言語
 //				(LPTSTR) &pszMsgBuf,
 //				0,
 //				NULL
 //			);
 //			::MYMESSAGEBOX(	NULL, MB_OK | MB_ICONINFORMATION | MB_TOPMOST, "作者に教えて欲しいエラー",
-//				"レジストリ項目　値の読み込み失敗 lpValueName=[%s]%s\n", lpValueName, pszMsgBuf
+//				"レジストリ項目 値の読み込み失敗 lpValueName=[%s]%s\n", lpValueName, pszMsgBuf
 //			);
-//			MYTRACE( "レジストリ項目　値の読み込み失敗 lpValueName=[%s]%s\n", lpValueName, pszMsgBuf );
+//			MYTRACE( "レジストリ項目 値の読み込み失敗 lpValueName=[%s]%s\n", lpValueName, pszMsgBuf );
 //			::LocalFree( pszMsgBuf );
 		}else{
 			switch( nRegCnvID ){
@@ -133,15 +159,15 @@ LONG CShareData::MY_RegVal_IO(
 				FORMAT_MESSAGE_IGNORE_INSERTS,
 				NULL,
 				::GetLastError(),
-				MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT), // デフォルト言語
+				MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT),	// デフォルト言語
 				(LPTSTR) &pszMsgBuf,
 				0,
 				NULL
 			);
 			::MYMESSAGEBOX(	NULL, MB_OK | MB_ICONINFORMATION | MB_TOPMOST, "作者に教えて欲しいエラー",
-				"レジストリ項目　値の書き込み()失敗 lpValueName=[%s]%s\n", lpValueName, pszMsgBuf
+				"レジストリ項目 値の書き込み()失敗 lpValueName=[%s]%s\n", lpValueName, pszMsgBuf
 			);
-//			MYTRACE( "レジストリ項目　値の書き込み()失敗 lpValueName=[%s]%s\n", lpValueName, pszMsgBuf );
+//			MYTRACE( "レジストリ項目 値の書き込み()失敗 lpValueName=[%s]%s\n", lpValueName, pszMsgBuf );
 			::LocalFree( pszMsgBuf );
 		}
 		return lRet;
@@ -488,7 +514,7 @@ BOOL CShareData::ShareData_IO( BOOL bRead )
 	//保存不要	MY_RegVal_IO( bRead, hkReg, "nKeyNameArrNum", REGCNV_INT2SZ, (BYTE *)&m_pShareData->m_nKeyNameArrNum, 0 );
 	//	for( i = 0; i < sizeof( m_pShareData->m_pKeyNameArr ) / sizeof( m_pShareData->m_pKeyNameArr[0] ); ++i ){
 		for( i = 0; i < m_pShareData->m_nKeyNameArrNum; ++i ){
-//			if( !bRead && FALSE == m_pShareData->m_bKeyBindModifyArr[i] ){	/* 変更フラグ　キー割り当て(キーごと) */
+//			if( !bRead && FALSE == m_pShareData->m_bKeyBindModifyArr[i] ){	/* 変更フラグ キー割り当て(キーごと) */
 //				/* 書き込みしない */
 //				continue;
 //			}
@@ -790,7 +816,8 @@ BOOL CShareData::ShareData_IO( BOOL bRead )
 		for( j = 0; j < m_pShareData->m_Types[i].m_nColorInfoArrNum; ++j ){
 //			static const char* pszForm = "%d,%d,%06x,%06x,%s";
 			static const char* pszForm = "%d,%d,%06x,%06x";
-			wsprintf( szKeyName, "CI[%02d]", j );
+			wsprintf( szKeyName, "CI[%02d]", j );				//Jan. 15, 2001 Stonee commented out
+//			wsprintf( szKeyName, "C[%s]", colorIDXKeyName[j] );	//Jan. 15, 2001 Stonee added
 //			strcpy( szKeyName, "CI[" );
 //			itoa( j, szNum, 10 );
 //			strcat( szKeyName, szNum );
@@ -1720,12 +1747,12 @@ BOOL CShareData::ShareData_IO_2( BOOL bRead )
 //	/* 変更フラグ(共通設定の全体)のクリア */
 //	m_pShareData->m_nCommonModify = FALSE;
 
-//	/* 変更フラグ　フォント */
+//	/* 変更フラグ フォント */
 //	m_pShareData->m_bFontModify = FALSE;
 
 //	m_pShareData->m_bKeyBindModify = FALSE;	/* 変更フラグ キー割り当て */
 //	for( i = 0; i < sizeof( m_pShareData->m_pKeyNameArr ) / sizeof( m_pShareData->m_pKeyNameArr[0] ); ++i ){
-//		m_pShareData->m_bKeyBindModifyArr[i] = FALSE;	/* 変更フラグ　キー割り当て(キーごと) */
+//		m_pShareData->m_bKeyBindModifyArr[i] = FALSE;	/* 変更フラグ キー割り当て(キーごと) */
 //	}
 //	/* 変更フラグ(印刷の全体)のクリア */
 //	m_pShareData->m_bPrintSettingModify = FALSE;
@@ -1764,7 +1791,8 @@ void CShareData::IO_ColorSet( CProfile* pcProfile, BOOL bRead, const char* pszSe
 	int		j;
 	for( j = 0; j < COLORIDX_LAST; ++j ){
 		static const char* pszForm = "%d,%d,%06x,%06x,%d";
-		wsprintf( szKeyName, "CI[%02d]", j ); 
+		wsprintf( szKeyName, "CI[%02d]", j );
+//		wsprintf( szKeyName, "C[%s]", colorIDXKeyName[j] );	//Stonee, 2001/01/12, 2001/01/15
 		if( bRead ){
 			if( TRUE == pcProfile->IOProfileData( bRead, pszSecName, szKeyName, REGCNV_SZ2SZ, (char*)szKeyData, 0 ) ){
 				pColorInfoArr[j].m_bUnderLine = FALSE;
@@ -1790,3 +1818,5 @@ void CShareData::IO_ColorSet( CProfile* pcProfile, BOOL bRead, const char* pszSe
 	return;
 }
 
+
+/*[EOF]*/
