@@ -32,7 +32,10 @@ BOOL CDlgTypeList::OnLbnDblclk( int wID )
 {
 	switch( wID ){
 	case IDC_LIST_TYPES:
-		::EndDialog( m_hWnd, ::SendMessage( GetDlgItem( m_hWnd, IDC_LIST_TYPES ), LB_GETCURSEL, (WPARAM)0, (LPARAM)0 ) );
+		//	Nov. 29, 2000	genta
+		//	動作変更: 指定タイプの設定ダイアログ→一時的に別の設定を適用
+		::EndDialog( m_hWnd, ::SendMessage( GetDlgItem( m_hWnd, IDC_LIST_TYPES ), LB_GETCURSEL, (WPARAM)0, (LPARAM)0 )
+			| PROP_TEMPCHANGE_FLAG );
 		return TRUE;
 	}
 	return FALSE;
@@ -45,6 +48,13 @@ BOOL CDlgTypeList::OnBnClicked( int wID )
 		/* 「タイプ別設定一覧」のヘルプ */
 		::WinHelp( m_hWnd, m_szHelpFile, HELP_CONTEXT, 72 );
 		return TRUE;
+	//	Nov. 29, 2000	From Here	genta
+	//	適用する型の一時的変更
+	case IDC_BUTTON_TEMPCHANGE:
+		::EndDialog( m_hWnd, ::SendMessage( GetDlgItem( m_hWnd, IDC_LIST_TYPES ), LB_GETCURSEL, (WPARAM)0, (LPARAM)0 )
+			| PROP_TEMPCHANGE_FLAG );
+		return TRUE;
+	//	Nov. 29, 2000	To Here
 	case IDOK:
 		::EndDialog( m_hWnd, ::SendMessage( GetDlgItem( m_hWnd, IDC_LIST_TYPES ), LB_GETCURSEL, (WPARAM)0, (LPARAM)0 ) );
 		return TRUE;

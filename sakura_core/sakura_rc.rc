@@ -702,9 +702,10 @@ BEGIN
                     8
     LISTBOX         IDC_LIST_TYPES,5,15,120,132,LBS_NOINTEGRALHEIGHT | 
                     WS_VSCROLL | WS_TABSTOP
-    DEFPUSHBUTTON   "設定(&S)...",IDOK,130,15,50,14
-    PUSHBUTTON      "キャンセル",IDCANCEL,130,34,50,14
+    DEFPUSHBUTTON   "設定変更(&S)...",IDOK,129,17,50,15
+    PUSHBUTTON      "キャンセル",IDCANCEL,129,54,50,14
     PUSHBUTTON      "ヘルプ(&H)",IDC_BUTTON_HELP,130,133,50,14
+    PUSHBUTTON      "一時適用(&R)",IDC_BUTTON_TEMPCHANGE,129,35,50,15
 END
 
 IDD_TYPELIST_PROP DIALOG DISCARDABLE  0, 0, 201, 59
@@ -723,7 +724,7 @@ END
 IDD_PROPTYPESP1 DIALOGEX 0, 0, 270, 213
 STYLE DS_MODALFRAME | DS_3DLOOK | DS_CENTER | WS_POPUP | WS_CAPTION | 
     WS_SYSMENU
-FONT 9, "ＭＳ Ｐゴシック"
+FONT 9, "ＭＳ Ｐゴシック", 0, 0, 0x1
 BEGIN
     LTEXT           "設定の名前(&N)",IDC_STATIC,5,6,44,8
     EDITTEXT        IDC_EDIT_TYPENAME,61,4,165,12,ES_AUTOHSCROLL
@@ -1927,8 +1928,8 @@ END
 //
 
 VS_VERSION_INFO VERSIONINFO
- FILEVERSION 1,2,22,0
- PRODUCTVERSION 1,2,22,0
+ FILEVERSION 1,2,23,0
+ PRODUCTVERSION 1,2,23,0
  FILEFLAGSMASK 0x3fL
 #ifdef _DEBUG
  FILEFLAGS 0x21L
@@ -1946,14 +1947,14 @@ BEGIN
             VALUE "Comments", "フリーソフトです。ご自由にお使い下さい。\0"
             VALUE "CompanyName", "Norio Nakatani\0"
             VALUE "FileDescription", "\0"
-            VALUE "FileVersion", "1.2.22.0\0"
+            VALUE "FileVersion", "1.2.23.0\0"
             VALUE "InternalName", "sakura\0"
             VALUE "LegalCopyright", "Copyright (C) Norio Nakatani\0"
             VALUE "LegalTrademarks", "\0"
             VALUE "OriginalFilename", "sakura.exe\0"
             VALUE "PrivateBuild", "\0"
             VALUE "ProductName", "テキストエディタ SAKURA\0"
-            VALUE "ProductVersion", "1.2.22.0\0"
+            VALUE "ProductVersion", "1.2.23.0\0"
             VALUE "SpecialBuild", "unofficial release 3\0"
         END
     END

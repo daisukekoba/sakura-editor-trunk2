@@ -7053,8 +7053,18 @@ void CEditView::Command_TYPE_LIST( void )
 //	cDlgTypeList.Create( m_hInstance, m_hWnd );
 	nSettingType = m_pcEditDoc->GetDocumentType();
 	if( cDlgTypeList.DoModal( m_hInstance, m_hWnd, &nSettingType ) ){
-		/* タイプ別設定 */
-		m_pcEditDoc->OpenPropertySheetTypes( -1, nSettingType );
+		//	Nov. 29, 2000 genta
+		//	一時的な設定適用機能を無理矢理追加
+		if( nSettingType & PROP_TEMPCHANGE_FLAG ){
+			m_pcEditDoc->SetDocumentType( nSettingType & ~PROP_TEMPCHANGE_FLAG, true );
+			m_pcEditDoc->LockDocumentType();
+			/* 設定変更を反映させる */
+			m_pcEditDoc->OnChangeSetting();
+		}
+		else {
+			/* タイプ別設定 */
+			m_pcEditDoc->OpenPropertySheetTypes( -1, nSettingType );
+		}
 	}
 	return;
 }

@@ -48,6 +48,7 @@ CEditDoc::CEditDoc() :
 	m_pszAppName( "EditorClient" ),
 	m_hInstance( NULL ),
 	m_hWnd( NULL ),
+	m_nSettingTypeLocked( false ),	//	設定値変更可能フラグ
 	m_bIsModified( FALSE )		/* 変更フラグ */
 {
 //	m_pcDlgTest = new CDlgTest;
@@ -59,7 +60,7 @@ CEditDoc::CEditDoc() :
 
 	int doctype;
 	m_pShareData = m_cShareData.GetShareData( m_szFilePath, &doctype );
-	SetDocumentType( doctype );
+	SetDocumentType( doctype, true );
 
 	/* OPENFILENAMEの初期化 */
 	memset( &m_ofn, 0, sizeof( OPENFILENAME ) );
@@ -585,7 +586,7 @@ BOOL CEditDoc::FileRead(
 	/* 共有データ構造体のアドレスを返す */
 	int doctype;
 	m_pShareData = m_cShareData.GetShareData( m_szFilePath, &doctype );
-	SetDocumentType( doctype );
+	SetDocumentType( doctype, true );
 
 	/* ファイルが存在しない */
 	if( FALSE == bFileIsExist ){
@@ -813,7 +814,7 @@ BOOL CEditDoc::FileWrite( const char* pszPath )
 		/* 共有データ構造体のアドレスを返す */
 		int doctype;
 		m_pShareData = m_cShareData.GetShareData( m_szFilePath, &doctype );
-		SetDocumentType( doctype );
+		SetDocumentType( doctype, false );
 		
 		/* レイアウト情報の変更 */
 		Types& ref = GetDocumentAttribute();
@@ -3011,7 +3012,7 @@ void CEditDoc::OnChangeSetting( void )
 	/* 共有データ構造体のアドレスを返す */
 	int doctype;
 	m_pShareData = m_cShareData.GetShareData( m_szFilePath, &doctype );
-	SetDocumentType( doctype );
+	SetDocumentType( doctype, false );
 
 	/*
 	  カーソル位置変換
@@ -3266,7 +3267,7 @@ void CEditDoc::Init( void )
 
 	/* 共有データ構造体のアドレスを返す */
 	m_pShareData = m_cShareData.GetShareData( m_szFilePath, &types );
-	int SetDocumentType( types );
+	SetDocumentType( types, true );
 
 	/* レイアウト管理情報の初期化 */
 	//	m_cLayoutMgr.Create( &m_cDocLineMgr, GetDocumentAttribute().m_nMaxLineSize, GetDocumentAttribute().m_nTabSpace ) ;

@@ -113,10 +113,20 @@ public:
 	//	Nov. 20, 2000 genta
 	void SetImeMode(int mode);	//	IME状態の設定
 
-	//	Nov. 23,  2000 genta
-	void SetDocumentType(int type)	//	文書種別の設定
+	//	Nov. 29, 2000 From Here	genta
+	//	設定の一時変更時に拡張子による強制的な設定変更を無効にする
+	void LockDocumentType(void){ m_nSettingTypeLocked = true; }
+	void UnlockDocumentType(void){ m_nSettingTypeLocked = false; }
+	bool GetDocumentLockState(void){ return m_nSettingTypeLocked; }
+	//	Nov. 29, 2000 To Here
+	//	Nov. 23, 2000 From Here	genta
+	//	文書種別情報の設定，取得Interface
+	void SetDocumentType(int type, bool force)	//	文書種別の設定
 	{
-		m_nSettingType = type;
+		if( (!m_nSettingTypeLocked) || force ){
+			m_nSettingType = type;
+			UnlockDocumentType();
+		}
 	}
 	int GetDocumentType(void) const	//	文書種別の読み出し
 	{
@@ -126,10 +136,12 @@ public:
 	{
 		return m_pShareData->m_Types[m_nSettingType];
 	}
+	//	Nov. 23, 2000 To Here
 
 
 protected:
 	int				m_nSettingType;
+	bool			m_nSettingTypeLocked;	//	文書種別の一時設定状態
 
 public: /* テスト用にアクセス属性を変更 */
 	/* 補完 */
