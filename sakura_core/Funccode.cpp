@@ -1,11 +1,16 @@
 //	$Id$
-//	Copyright (C) 1998-2000, Norio Nakatani
+/************************************************************************
+	funccode.cpp
+	機能に関するいろいろ
+	Copyright (C) 1998-2000, Norio Nakatani
+************************************************************************/
 
 //	Sept. 14, 2000 Jepro note: functions & commands list
 //	キーワード：コマンド一覧順序
 //	ここに登録されているコマンドが共通設定の機能種別に表示され、キー割り当てにも設定できるようになる
 //	このファイルは「コマンド一覧」のメニューの順番や表示にも使われている
 //	sakura_rc.rcファイルの下のほうにあるString Tableも参照のこと
+
 #include "funccode.h"
 
 //using namespace nsFuncCode;
@@ -48,6 +53,7 @@ const int pnFuncList_File[] = {	//Oct. 16, 2000 JEPRO 変数名変更(List5→List_Fil
 	F_FILESAVEAS		,	//名前を付けて保存
 	F_FILECLOSE			,	//閉じて(無題)	//Oct. 17, 2000 jepro 「ファイルを閉じる」というキャプションを変更
 	F_FILECLOSE_OPEN	,	//閉じて開く
+	F_WINCLOSE			,	//ウィンドウを閉じる	//Oct.17,2000 コマンド本家は「ウィンドウ系」	//Feb. 18, 2001	JEPRO 下から移動した
 	F_FILE_REOPEN_SJIS		,//SJISで開き直す
 	F_FILE_REOPEN_JIS		,//JISで開き直す
 	F_FILE_REOPEN_EUC		,//EUCで開き直す
@@ -62,10 +68,9 @@ const int pnFuncList_File[] = {	//Oct. 16, 2000 JEPRO 変数名変更(List5→List_Fil
 	F_OPEN_CCPP			,	//同名のC/C++ソースファイルを開く	//Feb. 9, 2001 jepro「.hと同名の.c(なければ.cpp)を開く」から変更
 	F_ACTIVATE_SQLPLUS			,	/* Oracle SQL*Plusをアクティブ表示 */	//Sept. 20, 2000 「コンパイル」JEPRO アクティブ表示を上に移動した
 	F_PLSQL_COMPILE_ON_SQLPLUS	,	/* Oracle SQL*Plusで実行 */	//Sept. 20, 2000 jepro 説明の「コンパイル」を「実行」に統一
-	F_WINCLOSE			,	//ウィンドウを閉じる	//Oct.17,2000 コマンド本家は「ウィンドウ系」
-	F_WIN_CLOSEALL		,	//すべてのウィンドウを閉じる	//Oct. 17, 2000 JEPRO 名前を変更(F_FILECLOSEALL→F_WIN_CLOSEALL)	//Oct.17,2000 コマンド本家は「ウィンドウ系」
 	F_BROWSE			,	//ブラウズ
 	F_PROPERTY_FILE		,	/* ファイルのプロパティ */
+	F_WIN_CLOSEALL		,	//すべてのウィンドウを閉じる	//Oct. 17, 2000 JEPRO 名前を変更(F_FILECLOSEALL→F_WIN_CLOSEALL)	//Oct.17,2000 コマンド本家は「ウィンドウ系」	//Feb. 18, 2001	JEPRO 上から移動した
 	F_EXITALL				//テキストエディタの全終了	//Dec. 27, 2000 JEPRO 追加
 };
 const int nFincList_File_Num = sizeof( pnFuncList_File ) / sizeof( pnFuncList_File[0] );	//Oct. 16, 2000 JEPRO 配列名変更(FuncList5→FuncList_File)
@@ -79,8 +84,8 @@ const int pnFuncList_Edit[] = {	//Oct. 16, 2000 JEPRO 変数名変更(List3→List_Edi
 	F_DELETE_BACK		,	//カーソルの前を削除
 	F_WordDeleteToStart	,	//単語の左端まで削除
 	F_WordDeleteToEnd	,	//単語の右端まで削除
-	F_WordCut			,	//単語を切り取り
-	F_WordDelete		,	//単語を削除
+	F_WordCut			,	//単語切り取り
+	F_WordDelete		,	//単語削除
 	F_LineCutToStart	,	//行頭まで切り取り(改行単位)
 	F_LineCutToEnd		,	//行末まで切り取り(改行単位)
 	F_LineDeleteToStart	,	//行頭まで削除(改行単位)
@@ -192,7 +197,7 @@ const int pnFuncList_Clip[] = {	//Oct. 16, 2000 JEPRO 変数名変更(List2→List_Cli
 	F_COPYLINESWITHLINENUMBER	,	//選択範囲内全行行番号付きコピー
 	F_COPYPATH					,	//このファイルのパス名をクリップボードにコピー
 	F_COPYTAG					,	//このファイルのパス名とカーソル位置をコピー	//Sept. 14, 2000 JEPRO メニューに合わせて下に移動
-	F_CREATEKEYBINDLIST				//キー割り当て一覧をコピー	//Sept. 15, 2000 JEPRO IDM_TESTのままではうまくいかないのでFに変えて登録
+	F_CREATEKEYBINDLIST				//キー割り当て一覧をコピー	//Sept. 15, 2000 JEPRO IDM_TESTのままではうまくいかないのでFに変えて登録	//Dec. 25, 2000 復活
 };
 const int nFincList_Clip_Num = sizeof( pnFuncList_Clip ) / sizeof( pnFuncList_Clip[0] );	//Oct. 16, 2000 JEPRO 変数名変更(List1→List_Move)
 

@@ -71,14 +71,6 @@ BEGIN
     BEGIN
         MENUITEM SEPARATOR
     END
-    POPUP "移動(&M)"
-    BEGIN
-        MENUITEM SEPARATOR
-    END
-    POPUP "選択(&R)"
-    BEGIN
-        MENUITEM SEPARATOR
-    END
     POPUP "変換(&C)"
     BEGIN
         MENUITEM SEPARATOR
@@ -133,7 +125,7 @@ IDD_PROP1P1 DIALOGEX 0, 0, 270, 213
 STYLE DS_MODALFRAME | DS_3DLOOK | DS_CENTER | DS_CONTEXTHELP | WS_POPUP | 
     WS_CAPTION | WS_SYSMENU
 EXSTYLE WS_EX_CONTEXTHELP
-FONT 9, "ＭＳ Ｐゴシック"
+FONT 9, "ＭＳ Ｐゴシック", 0, 0, 0x1
 BEGIN
     GROUPBOX        "カーソル",IDC_STATIC,3,3,140,65
     CONTROL         "フリーカーソル(&F)",IDC_CHECK_FREECARET,"Button",
@@ -329,7 +321,7 @@ BEGIN
                     WS_VSCROLL | WS_TABSTOP
     GROUPBOX        "PL/SQLコンパイルエラー行",IDC_STATIC,5,35,180,80,
                     WS_GROUP
-    DEFPUSHBUTTON   "ジャンプ(&J)",IDOK,190,5,50,14,WS_GROUP
+    DEFPUSHBUTTON   "ジャンプ(&J)",IDC_BUTTON_JUMP,190,5,50,14,WS_GROUP
     PUSHBUTTON      "キャンセル(&X)",IDCANCEL,190,24,50,14
     PUSHBUTTON      "ヘルプ(&H)",IDC_BUTTON_HELP,190,101,50,14
 END
@@ -718,7 +710,7 @@ END
 
 IDD_TYPELIST DIALOG DISCARDABLE  0, 0, 186, 155
 STYLE DS_MODALFRAME | WS_POPUP | WS_CAPTION | WS_SYSMENU
-CAPTION "タイプ別設定の一覧"
+CAPTION "タイプ別設定一覧"
 FONT 9, "ＭＳ Ｐゴシック"
 BEGIN
     LTEXT           "下からタイプを選択してください(&T):",IDC_STATIC,5,5,100,
@@ -2031,7 +2023,7 @@ END
 
 VS_VERSION_INFO VERSIONINFO
  FILEVERSION 1,2,0,0
- PRODUCTVERSION 1,2,30,0
+ PRODUCTVERSION 1,2,31,0
  FILEFLAGSMASK 0x3fL
 #ifdef _DEBUG
  FILEFLAGS 0x21L
@@ -2056,7 +2048,7 @@ BEGIN
             VALUE "OriginalFilename", "sakura.exe\0"
             VALUE "PrivateBuild", "\0"
             VALUE "ProductName", "テキストエディタ SAKURA\0"
-            VALUE "ProductVersion", "1.2.30.0\0"
+            VALUE "ProductVersion", "1.2.31.0\0"
             VALUE "SpecialBuild", "\0"
         END
     END
@@ -2132,9 +2124,9 @@ END
 
 STRINGTABLE DISCARDABLE 
 BEGIN
-    F_OPEN_HfromtoC         "同名のC/C++ヘッダ(ソース)を開く"
     F_OPEN_HHPP             "同名のC/C++ヘッダファイルを開く"
     F_OPEN_CCPP             "同名のC/C++ソースファイルを開く"
+    F_OPEN_HfromtoC         "同名のC/C++ヘッダ(ソース)を開く"
     F_ACTIVATE_SQLPLUS      "SQL*Plusをアクティブ表示"
     F_PLSQL_COMPILE_ON_SQLPLUS "SQL*Plusで実行"
 END
@@ -2210,8 +2202,8 @@ STRINGTABLE DISCARDABLE
 BEGIN
     F_WordDeleteToStart     "単語の左端まで削除"
     F_WordDeleteToEnd       "単語の右端まで削除"
-    F_WordCut               "単語を切り取り"
-    F_WordDelete            "単語を削除"
+    F_WordCut               "単語切り取り"
+    F_WordDelete            "単語削除"
 END
 
 STRINGTABLE DISCARDABLE 

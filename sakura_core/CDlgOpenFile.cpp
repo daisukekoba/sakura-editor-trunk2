@@ -1,16 +1,13 @@
 //	$Id$
 /************************************************************************
-
 	CDlgOpenFile.cpp
-
 	ファイルオープンダイアログ
 	Copyright (C) 1998-2000, Norio Nakatani
 
 	UPDATE:
 	CREATE: 1998/08/10  新規作成
-
-
 ************************************************************************/
+
 #include "CDlgOpenFile.h"
 //#include <stdio.h>
 #include "debug.h"
@@ -40,8 +37,8 @@ BOOL			m_bIsSaveDialog;	/* 保存のダイアログか */
 */
 LRESULT APIENTRY OFNHookProcMain( HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam )
 {
-//	WPARAM					wCtlFocus;	/* フォーカスを持つコントロールのID	*/
-//	BOOL					fHandle;	/* wParamが処理するフラグ	*/
+//	WPARAM					wCtlFocus;	/* フォーカスを持つコントロールのID */
+//	BOOL					fHandle;	/* wParamが処理するフラグ */
 	int						idCtrl;
 	OFNOTIFY*				pofn;
 //	int						nIdx;
@@ -89,8 +86,8 @@ LRESULT APIENTRY OFNHookProcMain( HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lP
 //		MYTRACE( "pofn->hdr.code=%xh(%d)\n", pofn->hdr.code, pofn->hdr.code );
 		break;
 	}
-//	return ::CallWindowProc( (int (__stdcall *)(void))(WNDPROC)m_wpOpenDialogProc, hwnd, uMsg, wParam, lParam);
-	return ::CallWindowProc( (WNDPROC)m_wpOpenDialogProc, hwnd, uMsg, wParam, lParam);
+//	return ::CallWindowProc( (int (__stdcall *)( void ))(WNDPROC)m_wpOpenDialogProc, hwnd, uMsg, wParam, lParam );
+	return ::CallWindowProc( (WNDPROC)m_wpOpenDialogProc, hwnd, uMsg, wParam, lParam );
 }
 
 
@@ -125,8 +122,8 @@ UINT APIENTRY OFNHookProc(
 //	HWND					hwndCtrl;
 	char					szFolder[_MAX_PATH];
 	LRESULT					lRes;
-    const int				nExtraSize = 100;
-    const int				nControls = 9;    
+	const int				nExtraSize = 100;
+	const int				nControls = 9;
 	char					szWork[_MAX_PATH + 1];
 	WORD					wNotifyCode;
 	WORD					wID;
@@ -164,10 +161,10 @@ UINT APIENTRY OFNHookProc(
 	};
 	//	文字列はResource内に入れる
 	char*					pEolNameArr[] = {
-		"変換無し",
+		"変換なし",
 		"CR+LF",
-		"LF(Unix)",
-		"CR(Mac)",
+		"LF (UNIX)",
+		"CR (Mac)",
 	};
 	int nEolNameArrNum = sizeof( pEolNameArr ) / sizeof( pEolNameArr[0] );
 //	To Here	Feb. 9, 2001 genta
@@ -221,7 +218,7 @@ UINT APIENTRY OFNHookProc(
 		hwndOpenDlg = ::GetParent( hdlg );
 		/* コントロールのハンドル */
 		hwndComboCODES = ::GetDlgItem( hdlg, IDC_COMBO_CODE );
-		hwndComboMRU = ::GetDlgItem( hdlg, IDC_COMBO_MRU );	
+		hwndComboMRU = ::GetDlgItem( hdlg, IDC_COMBO_MRU );
 		hwndComboOPENFOLDER = ::GetDlgItem( hdlg, IDC_COMBO_OPENFOLDER );
 		hwndComboEOL = ::GetDlgItem( hdlg, IDC_COMBO_EOL );
 
@@ -255,9 +252,9 @@ UINT APIENTRY OFNHookProc(
 
 //		/* Explorerスタイルの「開く」ダイアログのスタイル */
 //		lStyle = ::GetWindowLong( hwndOpenDlg, GWL_STYLE );
-//		if( lStyle & WS_BORDER )	lStyle = WS_BORDER; 
-//		if( lStyle & WS_DLGFRAME )	lStyle = WS_DLGFRAME; 
-//		if( lStyle & WS_SYSMENU )	lStyle = WS_SYSMENU; 
+//		if( lStyle & WS_BORDER )	lStyle = WS_BORDER;
+//		if( lStyle & WS_DLGFRAME )	lStyle = WS_DLGFRAME;
+//		if( lStyle & WS_SYSMENU )	lStyle = WS_SYSMENU;
 //		::SetWindowLong( hwndOpenDlg, GWL_STYLE, lStyle );
 
 //		lStyle = ::GetWindowLong( hwndOpenDlg, GWL_EXSTYLE );
@@ -284,7 +281,7 @@ UINT APIENTRY OFNHookProc(
 
 
 //		::GetWindowRect( hwndOpenDlg, &rc0 );
-//		for ( i = 0; i < nControls; ++i ){
+//		for( i = 0; i < nControls; ++i ){
 //			hwndCtrl = ::GetDlgItem( hwndOpenDlg, Controls[i] );
 //			::GetWindowRect( hwndCtrl, &rc );
 //			po.x = rc.left;
@@ -297,7 +294,7 @@ UINT APIENTRY OFNHookProc(
 //			::ScreenToClient( hwndOpenDlg, &po );
 //			rc.right = po.x;
 //			rc.bottom  = po.y;
-//			if (Controls[i] != lst1){
+//			if( Controls[i] != lst1 ){
 //				::SetWindowPos( hwndCtrl, NULL, rc.left, rc.top + nExtraSize, 0, 0, SWP_NOSIZE | SWP_NOOWNERZORDER | SWP_NOZORDER );
 //			}else{
 //				::SetWindowPos( hwndCtrl, NULL, 0, 0, rc.right - rc.left, rc.bottom - rc.top + nExtraSize, SWP_NOMOVE | SWP_NOOWNERZORDER | SWP_NOZORDER );
@@ -397,7 +394,7 @@ UINT APIENTRY OFNHookProc(
 		return FALSE;
 
 	case WM_NOTIFY:
-		idCtrl = (int) wParam; 
+		idCtrl = (int) wParam;
 		pofn = (OFNOTIFY*) lParam;
 //		MYTRACE( "=========WM_NOTIFY=========\n" );
 //		MYTRACE( "pofn->hdr.hwndFrom=%xh\n", pofn->hdr.hwndFrom );
@@ -472,9 +469,6 @@ UINT APIENTRY OFNHookProc(
 
 
 
-
-
-
 CDlgOpenFile::CDlgOpenFile()
 {
 	/* メンバの初期化 */
@@ -513,7 +507,7 @@ CDlgOpenFile::CDlgOpenFile()
 
 
 
-	strcpy( m_szDefaultWildCard, "*.*");	/*「開く」での最初のワイルドカード */
+	strcpy( m_szDefaultWildCard, "*.*" );	/*「開く」での最初のワイルドカード */
 
 	/* ヘルプファイルのフルパスを返す */
 	::GetHelpFilePath( m_szHelpFile );
@@ -652,8 +646,8 @@ BOOL CDlgOpenFile::DoModal_GetOpenFileName( char* pszPath )
 		}
 		if( !bCancel ){
 			::MessageBeep( MB_ICONSTOP );
-			::MYMESSAGEBOX(	m_hwndParent, MB_OK | MB_ICONSTOP | MB_TOPMOST, GSTR_APPNAME,
-				"ダイアログが開けません。\n\nエラー:%s", pszError 
+			::MYMESSAGEBOX( m_hwndParent, MB_OK | MB_ICONSTOP | MB_TOPMOST, GSTR_APPNAME,
+				"ダイアログが開けません。\n\nエラー:%s", pszError
 			);
 		}
 		return FALSE;
@@ -765,7 +759,7 @@ BOOL CDlgOpenFile::DoModal_GetSaveFileName( char* pszPath )
 BOOL CDlgOpenFile::DoModalOpenDlg( char* pszPath, int* pnCharCode, BOOL* pbReadOnly )
 {
 	m_bIsSaveDialog = FALSE;	/* 保存のダイアログか */
-	
+
 	DWORD	dwError;
 	int		i;
 	char	szWork[256];
@@ -827,7 +821,7 @@ BOOL CDlgOpenFile::DoModalOpenDlg( char* pszPath, int* pnCharCode, BOOL* pbReadO
 	m_ofn.lpfnHook = OFNHookProc;
 	m_ofn.lpTemplateName = "IDD_FILEOPEN";
 //	m_ofn.lpTemplateName = MAKEINTRESOURCE( 149 );
-	
+
 	m_nCharCode = CODE_AUTODETECT;	/* 文字コード自動判別 */
 	m_nHelpTopicID = 15;
 	m_bUseEol = false;	//	Feb. 9, 2001 genta
@@ -871,7 +865,7 @@ BOOL CDlgOpenFile::DoModalOpenDlg( char* pszPath, int* pnCharCode, BOOL* pbReadO
 		if( !bCancel ){
 			::MessageBeep( MB_ICONSTOP );
 			::MYMESSAGEBOX( m_hwndParent, MB_OK | MB_ICONSTOP | MB_TOPMOST, GSTR_APPNAME,
-				"ダイアログが開けません。\n\nエラー:%s", pszError 
+				"ダイアログが開けません。\n\nエラー:%s", pszError
 			);
 		}
 		return FALSE;
@@ -882,7 +876,7 @@ BOOL CDlgOpenFile::DoModalOpenDlg( char* pszPath, int* pnCharCode, BOOL* pbReadO
 BOOL CDlgOpenFile::DoModalSaveDlg( char* pszPath, int* pnCharCode, CEOL* pcEol )
 {
 	m_bIsSaveDialog = TRUE;	/* 保存のダイアログか */
-	
+
 	DWORD	dwError;
 	int		i;
 	char	szWork[256];
@@ -939,7 +933,7 @@ BOOL CDlgOpenFile::DoModalSaveDlg( char* pszPath, int* pnCharCode, CEOL* pcEol )
 	m_ofn.lCustData = (DWORD)this;
 	m_ofn.lpfnHook = OFNHookProc;
 	m_ofn.lpTemplateName = "IDD_FILEOPEN";
-	
+
 	if( NULL != pnCharCode ){
 		m_nCharCode = *pnCharCode;
 	}
@@ -948,7 +942,7 @@ BOOL CDlgOpenFile::DoModalSaveDlg( char* pszPath, int* pnCharCode, CEOL* pcEol )
 		m_cEol = EOL_NONE;	//	初期値は「改行コードを保存」に固定
 		m_bUseEol = true;
 	}
-	else {
+	else{
 		m_bUseEol = false;
 	}
 	//	To Here Feb. 9, 2001 genta

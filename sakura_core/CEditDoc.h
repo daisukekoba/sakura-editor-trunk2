@@ -1,13 +1,12 @@
 //	$Id$
 /************************************************************************
-
 	CEditDoc.h
 	Copyright (C) 1998-2000, Norio Nakatani
 
-    UPDATE:
-    CREATE: 1998/3/13  新規作成
-
+	UPDATE:
+	CREATE: 1998/3/13  新規作成
 ************************************************************************/
+
 class CEditDoc;
 
 #ifndef _CEDITDOC_H_
@@ -100,7 +99,7 @@ public:
 	//	May 15, 2000 genta
 	CEOL  GetNewLineCode() const { return m_cNewLineCode; }
 	void  SetNewLineCode(const CEOL& t){ m_cNewLineCode = t; }
-	
+
 	//	Aug. 14, 2000 genta
 	bool IsModificationForbidden( int nCommand );
 
@@ -145,7 +144,7 @@ protected:
 	bool			m_nSettingTypeLocked;	//	文書種別の一時設定状態
 
 public: /* テスト用にアクセス属性を変更 */
-	/* 補完 */
+	/* 入力補完 */
 	CHokanMgr		m_cHokanMgr;
 	BOOL			m_bGrepRunning;				/* Grep処理中 */
 	BOOL			m_bPrintPreviewMode;		/* 印刷プレビューモードか */
@@ -161,8 +160,8 @@ public: /* テスト用にアクセス属性を変更 */
 	CEOL 			m_cNewLineCode;		//	Enter押下時に挿入する改行コード種別
 
 
-	BOOL			m_bReadOnly;				/* 読み取り専用モード */ 
-	BOOL			m_bDebugMode;				/* デバッグモニタモード */ 
+	BOOL			m_bReadOnly;				/* 読み取り専用モード */
+	BOOL			m_bDebugMode;				/* デバッグモニタモード */
 	BOOL			m_bGrepMode;				/* Grepモードか */
 	char			m_szGrepKey[1024];			/* Grepモードの場合、その検索キー */
 	HWND			m_hWnd;						/* 編集ウィンドウハンドル */
@@ -178,7 +177,7 @@ public: /* テスト用にアクセス属性を変更 */
 
 
 	CSplitterWnd	m_cSplitterWnd;				/* 分割フレーム */
-	CEditView	m_cEditViewArr[4];	/* ビュー */
+	CEditView		m_cEditViewArr[4];			/* ビュー */
 	int				m_nActivePaneIndex;			/* アクティブなビュー */
 //	HWND			m_hwndActiveDialog;			/* アクティブな子ダイアログ */
 	CDlgFind		m_cDlgFind;					/* 「検索」ダイアログ */
@@ -201,7 +200,7 @@ public: /* テスト用にアクセス属性を変更 */
 	BOOL			m_bDoing_UndoRedo;	/* アンドゥ・リドゥの実行中か */
 	CDlgOpenFile	m_cDlgOpenFile;	/* ファイルオープンダイアログ */
 	char			m_szDefaultWildCard[_MAX_PATH + 1];	/* 「開く」での最初のワイルドカード */
-	char			m_szInitialDir[_MAX_PATH + 1];		/* 「開く」での初期ディレクトリ	*/
+	char			m_szInitialDir[_MAX_PATH + 1];		/* 「開く」での初期ディレクトリ */
 	OPENFILENAME	m_ofn;							/* 「ファイルを開く」ダイアログ用構造体 */
 	CHOOSEFONT		m_cf;				/* フォント選択ダイアログ用 */
 
@@ -213,8 +212,8 @@ public: /* テスト用にアクセス属性を変更 */
 	HFILE			m_hLockedFile;			/* ロックしているファイルのハンドル */
 
 	HWND			m_hwndReferer;	/* 参照元ウィンドウ */
-	int				m_nRefererX;	/* 参照元　行頭からのバイト位置桁 */	
-	int				m_nRefererLine;	/* 参照元行　折り返し無しの物理行位置 */
+	int				m_nRefererX;	/* 参照元 行頭からのバイト位置桁 */
+	int				m_nRefererLine;	/* 参照元行 折り返し無しの物理行位置 */
 
 //	CDlgTest*		m_pcDlgTest;
 
@@ -230,5 +229,6 @@ protected:
 
 ///////////////////////////////////////////////////////////////////////
 #endif /* _CEDITDOC_H_ */
+
 
 /*[EOF]*/

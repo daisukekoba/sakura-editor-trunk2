@@ -1,11 +1,8 @@
 //	$Id$
 /************************************************************************
-
 	CShareData_new.cpp		LOGFON
-
 	プロセス間共有データへのアクセス new
 	Copyright (C) 1998-2000, Norio Nakatani
-
 ************************************************************************/
 
 #include <stdio.h>
@@ -22,32 +19,32 @@
 //#define REGCNV_CHAR2SZ	3
 #define STR_COLORDATA_HEAD3		" テキストエディタ色設定 Ver3"	//Jan. 15, 2001 Stonee  色設定Ver3ドラフト(設定ファイルのキーを連番→文字列に)	//Feb. 11, 2001 JEPRO 有効にした
 
-// added by Stonee, 2001/01/12, 2001/01/15
-// iniの色設定を番号でなく文字列で書き出す。
+// iniの色設定を番号でなく文字列で書き出す。added by Stonee, 2001/01/12, 2001/01/15
+// 数値による内部的対応はCShareData.hで行っているので参照のこと。//Mar. 7, 2001 jepro noted
 static char* colorIDXKeyName[] =
 {
-	"TXT",		//0
-	"RUL",		//1
-	"UND",		//2
-	"LNO",		//3
-	"MOD",		//4
-	"TAB",		//5
-	"ZEN",		//6
-	"CTL",		//7
-	"EOL",		//8
-	"RAP",		//9
-	"EOF",		//10
-	"FND",		//11
-	"KW1",		//12
-	"KW2",		//13
-	"CMT",		//14
-	"SQT",		//15
-	"WQT",		//16
-	"URL",		//17
+	"TXT",
+	"RUL",
+	"UND",
+	"LNO",
+	"MOD",
+	"TAB",
+	"ZEN",
+	"CTL",
+	"EOL",
+	"RAP",
+	"EOF",
 //#ifdef COMPILE_COLOR_DIGIT
-	"NUM",		//18 //@@@ 2001.02.17 by MIK 半角数字の強調
+	"NUM",	//@@@ 2001.02.17 by MIK 半角数値の強調
 //#endif
-	"LAST"		// Not Used
+	"FND",
+	"KW1",
+	"KW2",
+	"CMT",
+	"SQT",
+	"WQT",
+	"URL",
+	"LAST"	// Not Used
 };
 
 
@@ -421,7 +418,7 @@ BOOL CShareData::ShareData_IO( BOOL bRead )
 		MY_RegVal_IO( bRead, hkReg, "bTaskTrayStay"			, REGCNV_INT2SZ, (BYTE *)&m_pShareData->m_Common.m_bStayTaskTray, 0 );
 		if( bRead ){
 			/* タスクトレイに常駐するときは、必ずタスクトレイアイコンを使う */
-			if( m_pShareData->m_Common.m_bStayTaskTray ){  
+			if( m_pShareData->m_Common.m_bStayTaskTray ){
 				m_pShareData->m_Common.m_bUseTaskTray = TRUE;
 			}
 		}
@@ -551,7 +548,7 @@ BOOL CShareData::ShareData_IO( BOOL bRead )
 					 );
 				}
 			}else{
-				wsprintf( szKeyData, "%d,%d,%d,%d,%d,%d,%d,%d", 
+				wsprintf( szKeyData, "%d,%d,%d,%d,%d,%d,%d,%d",
 					m_pShareData->m_pKeyNameArr[i].m_nFuncCodeArr[0],
 					m_pShareData->m_pKeyNameArr[i].m_nFuncCodeArr[1],
 					m_pShareData->m_pKeyNameArr[i].m_nFuncCodeArr[2],
@@ -771,7 +768,7 @@ BOOL CShareData::ShareData_IO( BOOL bRead )
 		strcpy( szKeyName, "nInts" );
 		if( bRead ){
 			if( ERROR_SUCCESS == MY_RegVal_IO( bRead, hkReg, szKeyName, REGCNV_SZ2SZ, (BYTE *)szKeyData, 0 ) ){
-				sscanf( szKeyData, pszForm, 
+				sscanf( szKeyData, pszForm,
 					&m_pShareData->m_Types[i].m_nIdx,
 					&m_pShareData->m_Types[i].m_nMaxLineSize,
 					&m_pShareData->m_Types[i].m_nColmSpace,
@@ -820,8 +817,8 @@ BOOL CShareData::ShareData_IO( BOOL bRead )
 		for( j = 0; j < m_pShareData->m_Types[i].m_nColorInfoArrNum; ++j ){
 //			static const char* pszForm = "%d,%d,%06x,%06x,%s";
 			static const char* pszForm = "%d,%d,%06x,%06x";
-			wsprintf( szKeyName, "CI[%02d]", j );				//Jan. 15, 2001 Stonee commented out
-//			wsprintf( szKeyName, "C[%s]", colorIDXKeyName[j] );	//Jan. 15, 2001 Stonee added
+//			wsprintf( szKeyName, "CI[%02d]", j );				//Jan. 15, 2001 Stonee commented out
+			wsprintf( szKeyName, "C[%s]", colorIDXKeyName[j] );	//Jan. 15, 2001 Stonee added
 //			strcpy( szKeyName, "CI[" );
 //			itoa( j, szNum, 10 );
 //			strcat( szKeyName, szNum );
@@ -829,7 +826,7 @@ BOOL CShareData::ShareData_IO( BOOL bRead )
 
 			if( bRead ){
 				if( ERROR_SUCCESS == MY_RegVal_IO( bRead, hkReg, szKeyName, REGCNV_SZ2SZ, (BYTE *)szKeyData, 0 ) ){
-					sscanf( szKeyData, pszForm, 
+					sscanf( szKeyData, pszForm,
 						&m_pShareData->m_Types[i].m_ColorInfoArr[j].m_bDisp   ,
 						&m_pShareData->m_Types[i].m_ColorInfoArr[j].m_bFatFont,
 						&m_pShareData->m_Types[i].m_ColorInfoArr[j].m_colTEXT ,
@@ -865,7 +862,7 @@ BOOL CShareData::ShareData_IO( BOOL bRead )
 Section02:;
 //	/* 変更フラグ(共通設定の全体)のクリア */
 //	m_pShareData->m_nCommonModify = FALSE;
-//  
+//
 //	/* 変更フラグ フォント */
 //	m_pShareData->m_bFontModify = FALSE;
 //
@@ -932,7 +929,7 @@ BOOL CShareData::ShareData_IO_2( BOOL bRead )
 	char			szIniFileName[_MAX_PATH + 1];
 	CProfile		cProfile;
 	const char*		pszSecName;
-	
+
 //	DWORD			dwTimeStart;
 //	DWORD			dwTime;
 //	CRunningTimer	cRunningTimerStart;
@@ -1186,7 +1183,7 @@ BOOL CShareData::ShareData_IO_2( BOOL bRead )
 		cProfile.IOProfileData( bRead, pszSecName, "bTaskTrayStay"				, REGCNV_INT2SZ, (char*)&m_pShareData->m_Common.m_bStayTaskTray, 0 );
 		if( bRead ){
 			/* タスクトレイに常駐するときは、必ずタスクトレイアイコンを使う */
-			if( m_pShareData->m_Common.m_bStayTaskTray ){ 
+			if( m_pShareData->m_Common.m_bStayTaskTray ){
 				m_pShareData->m_Common.m_bUseTaskTray = TRUE;
 			}
 		}
@@ -1383,7 +1380,7 @@ BOOL CShareData::ShareData_IO_2( BOOL bRead )
 //				/* 書き込みしない */
 //				continue;
 //			}
-			
+
 //			wsprintf( szKeyName, "Key[%03d].nKC", i );
 //			cProfile.IOProfileData( bRead, pszSecName, szKeyName, REGCNV_INT2SZ, (char*)&m_pShareData->m_pKeyNameArr[i].m_nKeyCode, 0 );
 //			wsprintf( szKeyName, "Key[%03d].szKN", i );
@@ -1453,7 +1450,7 @@ BOOL CShareData::ShareData_IO_2( BOOL bRead )
 			static const char* pszForm = "%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d";
 			if( bRead ){
 				if( TRUE == cProfile.IOProfileData( bRead, pszSecName, szKeyName, REGCNV_SZ2SZ, (char*)szKeyData, 0 ) ){
-					sscanf( szKeyData, pszForm, 
+					sscanf( szKeyData, pszForm,
 						&m_pShareData->m_PrintSettingArr[i].m_nPrintFontWidth		,
 						&m_pShareData->m_PrintSettingArr[i].m_nPrintFontHeight		,
 						&m_pShareData->m_PrintSettingArr[i].m_nPrintDansuu			,
@@ -1812,7 +1809,7 @@ void CShareData::IO_ColorSet( CProfile* pcProfile, BOOL bRead, const char* pszSe
 				 );
 			}
 		}else{
-			wsprintf( szKeyData, pszForm, 
+			wsprintf( szKeyData, pszForm,
 				pColorInfoArr[j].m_bDisp   ,
 				pColorInfoArr[j].m_bFatFont,
 				pColorInfoArr[j].m_colTEXT ,

@@ -1,12 +1,8 @@
 //	$Id$
 /************************************************************************
-
 	CPropComHelp.cpp
-
 	共通設定：支援
 	Copyright (C) 1998-2000, Norio Nakatani
-
-
 ************************************************************************/
 #include "sakura_rc.h"
 #include "CPropCommon.h"
@@ -48,9 +44,9 @@ const DWORD p_helpids[] = {	//10600
 /* p10 メッセージ処理 */
 BOOL CPropCommon::DispatchEvent_p10(
     HWND	hwndDlg,	// handle to dialog box
-    UINT	uMsg,	// message
-    WPARAM	wParam,	// first message parameter
-    LPARAM	lParam 	// second message parameter
+    UINT	uMsg,		// message
+    WPARAM	wParam,		// first message parameter
+    LPARAM	lParam 		// second message parameter
 )
 {
 	WORD		wNotifyCode;
@@ -83,8 +79,8 @@ BOOL CPropCommon::DispatchEvent_p10(
 		return TRUE;
 	case WM_COMMAND:
 		wNotifyCode = HIWORD(wParam);	/* 通知コード */
-		wID         = LOWORD(wParam);	/* 項目ID､ コントロールID､ またはアクセラレータID */
-		hwndCtl     = (HWND) lParam;	/* コントロールのハンドル */
+		wID			= LOWORD(wParam);	/* 項目ID､ コントロールID､ またはアクセラレータID */
+		hwndCtl		= (HWND) lParam;	/* コントロールのハンドル */
 		switch( wNotifyCode ){
 		/* ボタン／チェックボックスがクリックされた */
 		case BN_CLICKED:
@@ -99,12 +95,12 @@ BOOL CPropCommon::DispatchEvent_p10(
 					char			szPath[_MAX_PATH + 1];
 					strcpy( szPath, m_Common.m_szHokanFile );
 					/* ファイルオープンダイアログの初期化 */
-					cDlgOpenFile.Create( 
-						m_hInstance, 
-						hwndDlg, 
-						"*.*", 
-						m_Common.m_szHokanFile, 
-						(const char **)&pszMRU, 
+					cDlgOpenFile.Create(
+						m_hInstance,
+						hwndDlg,
+						"*.*",
+						m_Common.m_szHokanFile,
+						(const char **)&pszMRU,
 						(const char **)&pszOPENFOLDER
 					);
 					if( cDlgOpenFile.DoModal_GetOpenFileName( szPath ) ){
@@ -114,7 +110,7 @@ BOOL CPropCommon::DispatchEvent_p10(
 				}
 				return TRUE;
 
-			//	From Here Sept. 12, 2000 JEPRO	
+			//	From Here Sept. 12, 2000 JEPRO
 			case IDC_CHECK_USEKEYWORDHELP:	/* キーワードヘルプ機能を使う時だけ辞書ファイル指定と参照ボタンをEnableにする */
 				::CheckDlgButton( hwndDlg, IDC_CHECK_USEKEYWORDHELP, m_Common.m_bUseKeyWordHelp );
 				if( BST_CHECKED == m_Common.m_bUseKeyWordHelp ){
@@ -128,7 +124,7 @@ BOOL CPropCommon::DispatchEvent_p10(
 				}
 				return TRUE;
 			//	To Here Sept. 12, 2000
-		
+
 			case IDC_BUTTON_KEYWORDHELPFILE_REF:	/* キーワードヘルプ　辞書ファイルの「参照...」ボタン */
 				{
 					CDlgOpenFile	cDlgOpenFile;
@@ -137,12 +133,12 @@ BOOL CPropCommon::DispatchEvent_p10(
 					char			szPath[_MAX_PATH + 1];
 					strcpy( szPath, m_Common.m_szKeyWordHelpFile );
 					/* ファイルオープンダイアログの初期化 */
-					cDlgOpenFile.Create( 
-						m_hInstance, 
-						hwndDlg, 
-						"*.*", 
-						m_Common.m_szKeyWordHelpFile, 
-						(const char **)&pszMRU, 
+					cDlgOpenFile.Create(
+						m_hInstance,
+						hwndDlg,
+						"*.*",
+						m_Common.m_szKeyWordHelpFile,
+						(const char **)&pszMRU,
 						(const char **)&pszOPENFOLDER
 					);
 					if( cDlgOpenFile.DoModal_GetOpenFileName( szPath ) ){
@@ -159,12 +155,12 @@ BOOL CPropCommon::DispatchEvent_p10(
 					char			szPath[_MAX_PATH + 1];
 					strcpy( szPath, m_Common.m_szExtHelp1 );
 					/* ファイルオープンダイアログの初期化 */
-					cDlgOpenFile.Create( 
-						m_hInstance, 
-						hwndDlg, 
-						"*.hlp", 
-						m_Common.m_szExtHelp1, 
-						(const char **)&pszMRU, 
+					cDlgOpenFile.Create(
+						m_hInstance,
+						hwndDlg,
+						"*.hlp",
+						m_Common.m_szExtHelp1,
+						(const char **)&pszMRU,
 						(const char **)&pszOPENFOLDER
 					);
 					if( cDlgOpenFile.DoModal_GetOpenFileName( szPath ) ){
@@ -181,12 +177,12 @@ BOOL CPropCommon::DispatchEvent_p10(
 					char			szPath[_MAX_PATH + 1];
 					strcpy( szPath, m_Common.m_szExtHtmlHelp );
 					/* ファイルオープンダイアログの初期化 */
-					cDlgOpenFile.Create( 
-						m_hInstance, 
-						hwndDlg, 
-						"*.chm;*.col", 
-						m_Common.m_szExtHtmlHelp, 
-						(const char **)&pszMRU, 
+					cDlgOpenFile.Create(
+						m_hInstance,
+						hwndDlg,
+						"*.chm;*.col",
+						m_Common.m_szExtHtmlHelp,
+						(const char **)&pszMRU,
 						(const char **)&pszOPENFOLDER
 					);
 					if( cDlgOpenFile.DoModal_GetOpenFileName( szPath ) ){
@@ -250,7 +246,7 @@ void CPropCommon::SetData_p10( HWND hwndDlg )
 	/* 入力補完機能：英大文字小文字を同一視する */
 	::CheckDlgButton( hwndDlg, IDC_CHECK_HOKANLOHICASE, m_Common.m_bHokanLoHiCase );
 
-	/* 入力補完 単語ファイル */
+	/* 入力補完用単語ファイル */
 	::SetDlgItemText( hwndDlg, IDC_EDIT_HOKANFILE, m_Common.m_szHokanFile );
 
 	/* キーワードヘルプを使用する  */
@@ -267,7 +263,7 @@ void CPropCommon::SetData_p10( HWND hwndDlg )
 	}
 //	To Here Sept. 12, 2000
 
-	/* キーワードヘルプ　辞書ファイル */
+	/* キーワードヘルプ 辞書ファイル */
 	::SetDlgItemText( hwndDlg, IDC_EDIT_KEYWORDHELPFILE, m_Common.m_szKeyWordHelpFile );
 
 	/* 外部ヘルプ１ */
@@ -303,11 +299,11 @@ int CPropCommon::GetData_p10( HWND hwndDlg )
 	/* 入力補完 単語ファイル */
 	::GetDlgItemText( hwndDlg, IDC_EDIT_HOKANFILE, m_Common.m_szHokanFile, MAX_PATH - 1 );
 
-	
-	/* キーワードヘルプを使用する  */
+
+	/* キーワードヘルプを使用する */
 	m_Common.m_bUseKeyWordHelp = ::IsDlgButtonChecked( hwndDlg, IDC_CHECK_USEKEYWORDHELP );
-	
-	/* キーワードヘルプ　辞書ファイル */
+
+	/* キーワードヘルプ 辞書ファイル */
 	::GetDlgItemText( hwndDlg, IDC_EDIT_KEYWORDHELPFILE, m_Common.m_szKeyWordHelpFile, MAX_PATH - 1 );
 
 	/* 外部ヘルプ１ */
@@ -319,7 +315,7 @@ int CPropCommon::GetData_p10( HWND hwndDlg )
 	/* HtmlHelpビューアはひとつ */
 	m_Common.m_bHtmlHelpIsSingle = ::IsDlgButtonChecked( hwndDlg, IDC_CHECK_HTMLHELPISSINGLE );
 
-	
+
 	/* 補完候補決定キー */
 	m_Common.m_bHokanKey_RETURN = ::IsDlgButtonChecked( hwndDlg, IDC_CHECK_m_bHokanKey_RETURN );//VK_RETURN 補完決定キーが有効/無効
 	m_Common.m_bHokanKey_TAB = ::IsDlgButtonChecked( hwndDlg, IDC_CHECK_m_bHokanKey_TAB );//VK_TAB    補完決定キーが有効/無効
@@ -328,3 +324,6 @@ int CPropCommon::GetData_p10( HWND hwndDlg )
 
 	return TRUE;
 }
+
+
+/*[EOF]*/

@@ -1,11 +1,10 @@
 //	$Id$
 /************************************************************************
-        CEditView_New.cpp
+	CEditView_New.cpp
 	Copyright (C) 1998-2000, Norio Nakatani
 
-        CREATE: 1998/12/8
+	CREATE: 1998/12/8
 ************************************************************************/
-
 
 //#include <stdio.h>
 #include <stdlib.h>
@@ -288,11 +287,11 @@ void CEditView::OnPaint( HDC hdc, PAINTSTRUCT *pPs, BOOL bUseMemoryDC )
  *  4: ダブルコーテーション
  *  5: 強調キーワード１
  *  6: コントロールコード
- *  9: 半角数字
+ *  9: 半角数値
  *  50: 強調キーワード２
  *  80: URL
  *  90: 検索
- */ 
+ */
 //@@@ 2001.02.17 End by MIK
 
 
@@ -368,7 +367,7 @@ int CEditView::DispLineNew(
 	if( NULL != pcLayout ){
 		nLineLen = pcLayout->m_pCDocLine->m_pLine->m_nDataLen - pcLayout->m_nOffset;
 		pLine = (const unsigned char *)pcLayout->m_pCDocLine->m_pLine->m_pData + pcLayout->m_nOffset;
-		
+
 //		pCDocLine = pcLayout->m_pCDocLine;
 //		if( NULL == pCDocLine ){
 //			nLineLen = 0;
@@ -437,7 +436,7 @@ int CEditView::DispLineNew(
 				 && TypeDataPtr->m_ColorInfoArr[COLORIDX_SEARCH].m_bDisp ){
 searchnext:;
 					if( !bSearchStringMode
-					 && IsSeaechString( (const char*)pLine, nLineLen, nPos, &nSearchEnd  )
+					 && IsSeaechString( (const char*)pLine, nLineLen, nPos, &nSearchEnd )
 					){
 						if( y/* + nLineHeight*/ >= m_nViewAlignTop ){
 							/* テキスト表示 */
@@ -453,7 +452,7 @@ searchnext:;
 						SetCurrentColor( hdc, 90 );
 					}else
 					if( bSearchStringMode
-					 && nSearchEnd == nPos 
+					 && nSearchEnd == nPos
 					){
 						if( y/* + nLineHeight*/ >= m_nViewAlignTop ){
 //							SetCurrentColor( hdc, 90 );
@@ -496,16 +495,16 @@ searchnext:;
 						}else{
 							nColorIdx = COLORIDX_CRLF;
 						}
-						HFONT	hFontOld;	
+						HFONT	hFontOld;
 						/* フォントを選ぶ */
-						hFontOld = (HFONT)::SelectObject( hdc, 
-							ChooseFontHandle( 
+						hFontOld = (HFONT)::SelectObject( hdc,
+							ChooseFontHandle(
 								TypeDataPtr->m_ColorInfoArr[nColorIdx].m_bFatFont,
 								TypeDataPtr->m_ColorInfoArr[nColorIdx].m_bUnderLine
 							)
 						);
 						colTextColorOld = ::SetTextColor( hdc, TypeDataPtr->m_ColorInfoArr[nColorIdx].m_colTEXT );	/* TAB文字の色 */
-						colBkColorOld = ::SetBkColor( hdc, TypeDataPtr->m_ColorInfoArr[nColorIdx].m_colBACK );	/* TAB文字背景の色 */
+						colBkColorOld = ::SetBkColor( hdc, TypeDataPtr->m_ColorInfoArr[nColorIdx].m_colBACK );		/* TAB文字背景の色 */
 
 						rcClip2.left = x + nX * ( nCharWidth );
 						rcClip2.right = rcClip2.left + ( nCharWidth ) * ( 1 );
@@ -539,13 +538,13 @@ searchnext:;
 
 						nX++;
 
-					
+
 						if( bSelected ){
 							/* テキスト反転 */
 							DispTextSelected( hdc, nLineNum, x, y, nX );
 						}
 					}
-					
+
 					goto end_of_line;
 				}
 				SEARCH_START:;
@@ -554,24 +553,24 @@ searchnext:;
 					//	Mar. 15, 2000 genta
 					if( TypeDataPtr->m_ColorInfoArr[COLORIDX_COMMENT].m_bDisp && (
 						(
-							NULL != TypeDataPtr->m_szLineComment &&	/* 行コメントデリミタ */
+							NULL != TypeDataPtr->m_szLineComment &&									/* 行コメントデリミタ */
 							0 < lstrlen( TypeDataPtr->m_szLineComment ) &&
-							nPos <= nLineLen - (int)lstrlen( TypeDataPtr->m_szLineComment ) &&	/* 行コメントデリミタ */
+							nPos <= nLineLen - (int)lstrlen( TypeDataPtr->m_szLineComment ) &&		/* 行コメントデリミタ */
 							0 == memicmp( &pLine[nPos], TypeDataPtr->m_szLineComment, (int)lstrlen( TypeDataPtr->m_szLineComment ) )
 						) ||
 						(
-							NULL != TypeDataPtr->m_szLineComment2 &&	/* 行コメントデリミタ2 */
+							NULL != TypeDataPtr->m_szLineComment2 &&								/* 行コメントデリミタ2 */
 							0 < lstrlen( TypeDataPtr->m_szLineComment2 ) &&
 							//	Mar. 15, 2000 genta for Fortran
 							(
-								TypeDataPtr->m_szLineComment2[0] == 'C' ? 
+								TypeDataPtr->m_szLineComment2[0] == 'C' ?
 								nPos == 0 ? ( pLine[0] == 'C' || pLine[0] == 'c' || pLine[0] == '*' ) : false
 								:
 								nPos <= nLineLen - (int)lstrlen( TypeDataPtr->m_szLineComment2 ) &&	/* 行コメントデリミタ2 */
 								0 == memicmp( &pLine[nPos], TypeDataPtr->m_szLineComment2, (int)lstrlen( TypeDataPtr->m_szLineComment2 ) )
 							)
 						)
-					)){
+					) ){
 						if( y/* + nLineHeight*/ >= m_nViewAlignTop ){
 							/* テキスト表示 */
 							nX += DispText( hdc, x + nX * ( nCharWidth ), y, &pLine[nBgn], nPos - nBgn );
@@ -588,7 +587,7 @@ searchnext:;
 //						}
 					}else
 					//	Mar. 15, 2000 genta
-					if(TypeDataPtr->m_ColorInfoArr[COLORIDX_COMMENT].m_bDisp && (
+					if( TypeDataPtr->m_ColorInfoArr[COLORIDX_COMMENT].m_bDisp && (
 						NULL !=     TypeDataPtr->m_szBlockCommentFrom &&	/* ブロックコメントデリミタ(From) */
 //						0 < lstrlen( TypeDataPtr->m_szBlockCommentFrom ) &&
 						'\0' != TypeDataPtr->m_szBlockCommentFrom[0] &&
@@ -597,7 +596,7 @@ searchnext:;
 						'\0' != TypeDataPtr->m_szBlockCommentTo[0]  &&
 						nPos <= nLineLen - (int)lstrlen( TypeDataPtr->m_szBlockCommentFrom ) &&	/* ブロックコメントデリミタ(From) */
 						0 == memicmp( &pLine[nPos], TypeDataPtr->m_szBlockCommentFrom, (int)lstrlen( TypeDataPtr->m_szBlockCommentFrom ) )
-					)){
+					) ){
 						if( y/* + nLineHeight*/ >= m_nViewAlignTop ){
 							/* テキスト表示 */
 							nX += DispText( hdc, x + nX * ( nCharWidth ), y, &pLine[nBgn], nPos - nBgn );
@@ -638,7 +637,7 @@ searchnext:;
 						}
 						nBgn = nPos;
 						nCOMMENTMODE = 3;	/* シングルクォーテーション文字列である */
-						
+
 //						if( TypeDataPtr->m_ColorInfoArr[COLORIDX_SSTRING].m_bDisp ){	/* シングルクォーテーション文字列を表示する */
 							/* 現在の色を指定 */
 							if( !bSearchStringMode ){
@@ -653,7 +652,7 @@ searchnext:;
 							if( 0 == nCharChars_2 ){
 								nCharChars_2 = 1;
 							}
-							if(	TypeDataPtr->m_nStringType == 0 ){	/* 文字列区切り記号エスケープ方法　0=[\"][\'] 1=[""][''] */
+							if( TypeDataPtr->m_nStringType == 0 ){	/* 文字列区切り記号エスケープ方法 0=[\"][\'] 1=[""][''] */
 								if( 1 == nCharChars_2 && pLine[i] == '\\' ){
 									++i;
 								}else
@@ -662,7 +661,7 @@ searchnext:;
 									break;
 								}
 							}else
-							if(	TypeDataPtr->m_nStringType == 1 ){	/* 文字列区切り記号エスケープ方法　0=[\"][\'] 1=[""][''] */
+							if( TypeDataPtr->m_nStringType == 1 ){	/* 文字列区切り記号エスケープ方法 0=[\"][\'] 1=[""][''] */
 								if( 1 == nCharChars_2 && pLine[i] == '\'' ){
 									if( i + 1 < nLineLen && pLine[i + 1] == '\'' ){
 										++i;
@@ -698,7 +697,7 @@ searchnext:;
 							if( 0 == nCharChars_2 ){
 								nCharChars_2 = 1;
 							}
-							if(	TypeDataPtr->m_nStringType == 0 ){	/* 文字列区切り記号エスケープ方法　0=[\"][\'] 1=[""][''] */
+							if( TypeDataPtr->m_nStringType == 0 ){	/* 文字列区切り記号エスケープ方法 0=[\"][\'] 1=[""][''] */
 								if( 1 == nCharChars_2 && pLine[i] == '\\' ){
 									++i;
 								}else
@@ -707,7 +706,7 @@ searchnext:;
 									break;
 								}
 							}else
-							if(	TypeDataPtr->m_nStringType == 1 ){	/* 文字列区切り記号エスケープ方法　0=[\"][\'] 1=[""][''] */
+							if( TypeDataPtr->m_nStringType == 1 ){	/* 文字列区切り記号エスケープ方法 0=[\"][\'] 1=[""][''] */
 								if( 1 == nCharChars_2 && pLine[i] == '"' ){
 									if( i + 1 < nLineLen && pLine[i + 1] == '"' ){
 										++i;
@@ -722,8 +721,8 @@ searchnext:;
 							}
 						}
 					}else
-					if( bKeyWordTop && TypeDataPtr->m_ColorInfoArr[COLORIDX_URL].m_bDisp	/* URLを表示する */
-					 && ( TRUE == IsURL( (const char *)&pLine[nPos], nLineLen - nPos, &nUrlLen ) )/* 指定アドレスがURLの先頭ならばTRUEとその長さを返す */
+					if( bKeyWordTop && TypeDataPtr->m_ColorInfoArr[COLORIDX_URL].m_bDisp			/* URLを表示する */
+					 && ( TRUE == IsURL( (const char *)&pLine[nPos], nLineLen - nPos, &nUrlLen ) )	/* 指定アドレスがURLの先頭ならばTRUEとその長さを返す */
 					){
 						if( y/* + nLineHeight*/ >= m_nViewAlignTop ){
 							/* テキスト表示 */
@@ -736,10 +735,10 @@ searchnext:;
 						if( !bSearchStringMode ){
 							SetCurrentColor( hdc, nCOMMENTMODE );
 						}
-//@@@ 2001.02.17 Start by MIK: 半角数字を強調表示
+//@@@ 2001.02.17 Start by MIK: 半角数値を強調表示
 //#ifdef COMPILE_COLOR_DIGIT
-					}else if(bKeyWordTop && TypeDataPtr->m_ColorInfoArr[COLORIDX_DIGIT].m_bDisp
-					    && (i = IsNumber((const char*)pLine, nPos, nLineLen)) > 0)     /* 半角数字を表示する */
+					}else if( bKeyWordTop && TypeDataPtr->m_ColorInfoArr[COLORIDX_DIGIT].m_bDisp
+						&& (i = IsNumber( (const char*)pLine, nPos, nLineLen )) > 0 )		/* 半角数字を表示する */
 					{
 						/* キーワード文字列の終端をセットする */
 						i = nPos + i;
@@ -750,13 +749,13 @@ searchnext:;
 						}
 						/* 現在の色を指定 */
 						nBgn = nPos;
-						nCOMMENTMODE = 9;	/* 半角数字である */
+						nCOMMENTMODE = 9;	/* 半角数値である */
 						nCOMMENTEND = i;
 						if( !bSearchStringMode ){
 							SetCurrentColor( hdc, nCOMMENTMODE );
 						}
 //#endif
-//@@@ 2001.02.17 End by MIK: 半角数字を強調表示
+//@@@ 2001.02.17 End by MIK: 半角数値を強調表示
 					}else
 					if( bKeyWordTop && TypeDataPtr->m_nKeyWordSetIdx != -1 && /* キーワードセット */
 						TypeDataPtr->m_ColorInfoArr[COLORIDX_KEYWORD].m_bDisp &&  /* 強調キーワードを表示する */
@@ -777,7 +776,7 @@ searchnext:;
 						j = i - nPos;
 						/* ｎ番目のセットから指定キーワードをサーチ 無いときは-1を返す */
 						nIdx = m_pShareData->m_CKeyWordSetMgr.SearchKeyWord2(		//MIK UPDATE 2000.12.01 binary search
-							TypeDataPtr->m_nKeyWordSetIdx ,
+							TypeDataPtr->m_nKeyWordSetIdx,
 							(const char *)&pLine[nPos],
 							j
 						);
@@ -827,7 +826,7 @@ searchnext:;
 					break;
 				case 80:	/* URLモードである */
 				case 5:		/* キーワードモードである */
-				case 9:		/* 半角数字である */  //@@@ 2001.02.17 by MIK
+				case 9:		/* 半角数値である */  //@@@ 2001.02.17 by MIK
 				case 50:	/* キーワード2モードである */	//MIK
 					if( nPos == nCOMMENTEND ){
 						if( y/* + nLineHeight*/ >= m_nViewAlignTop ){
@@ -905,7 +904,7 @@ searchnext:;
 							if( 0 == nCharChars_2 ){
 								nCharChars_2 = 1;
 							}
-							if(	TypeDataPtr->m_nStringType == 0 ){	/* 文字列区切り記号エスケープ方法　0=[\"][\'] 1=[""][''] */
+							if( TypeDataPtr->m_nStringType == 0 ){	/* 文字列区切り記号エスケープ方法 0=[\"][\'] 1=[""][''] */
 								if( 1 == nCharChars_2 && pLine[i] == '\\' ){
 									++i;
 								}else
@@ -914,7 +913,7 @@ searchnext:;
 									break;
 								}
 							}else
-							if(	TypeDataPtr->m_nStringType == 1 ){	/* 文字列区切り記号エスケープ方法　0=[\"][\'] 1=[""][''] */
+							if( TypeDataPtr->m_nStringType == 1 ){	/* 文字列区切り記号エスケープ方法 0=[\"][\'] 1=[""][''] */
 								if( 1 == nCharChars_2 && pLine[i] == '\'' ){
 									if( i + 1 < nLineLen && pLine[i + 1] == '\'' ){
 										++i;
@@ -953,7 +952,7 @@ searchnext:;
 							if( 0 == nCharChars_2 ){
 								nCharChars_2 = 1;
 							}
-							if(	TypeDataPtr->m_nStringType == 0 ){	/* 文字列区切り記号エスケープ方法　0=[\"][\'] 1=[""][''] */
+							if( TypeDataPtr->m_nStringType == 0 ){	/* 文字列区切り記号エスケープ方法 0=[\"][\'] 1=[""][''] */
 								if( 1 == nCharChars_2 && pLine[i] == '\\' ){
 									++i;
 								}else
@@ -962,7 +961,7 @@ searchnext:;
 									break;
 								}
 							}else
-							if(	TypeDataPtr->m_nStringType == 1 ){	/* 文字列区切り記号エスケープ方法　0=[\"][\'] 1=[""][''] */
+							if( TypeDataPtr->m_nStringType == 1 ){	/* 文字列区切り記号エスケープ方法 0=[\"][\'] 1=[""][''] */
 								if( 1 == nCharChars_2 && pLine[i] == '"' ){
 									if( i + 1 < nLineLen && pLine[i + 1] == '"' ){
 										++i;
@@ -1014,7 +1013,7 @@ searchnext:;
 									nColorIdx = COLORIDX_TAB;
 								}
 								colTextColorOld = ::SetTextColor( hdc, TypeDataPtr->m_ColorInfoArr[nColorIdx].m_colTEXT );	/* TAB文字の色 */
-								colBkColorOld = ::SetBkColor( hdc, TypeDataPtr->m_ColorInfoArr[nColorIdx].m_colBACK );	/* TAB文字背景の色 */
+								colBkColorOld = ::SetBkColor( hdc, TypeDataPtr->m_ColorInfoArr[nColorIdx].m_colBACK );		/* TAB文字背景の色 */
 
 								HFONT	hFontOld;
 								/* フォントを選ぶ */
@@ -1074,7 +1073,7 @@ searchnext:;
 									nColorIdx = COLORIDX_ZENSPACE;
 								}
 								colTextColorOld = ::SetTextColor( hdc, TypeDataPtr->m_ColorInfoArr[nColorIdx].m_colTEXT );	/* 全角スペース文字の色 */
-								colBkColorOld = ::SetBkColor( hdc, TypeDataPtr->m_ColorInfoArr[nColorIdx].m_colBACK );	/* 全角スペース文字背景の色 */
+								colBkColorOld = ::SetBkColor( hdc, TypeDataPtr->m_ColorInfoArr[nColorIdx].m_colBACK );		/* 全角スペース文字背景の色 */
 
 
 								HFONT	hFontOld;
@@ -1137,7 +1136,7 @@ searchnext:;
 						nBgn = nPos;
 						nCOMMENTMODE_OLD = nCOMMENTMODE;
 						nCOMMENTEND_OLD = nCOMMENTEND;
-						nCOMMENTMODE = 6;	/* コントロールコード　モード */
+						nCOMMENTMODE = 6;	/* コントロールコード モード */
 						/* コントロールコード列の終端を探す */
 						for( i = nPos + 1; i <= nLineLen - 1; ++i ){
 							nCharChars_2 = CMemory::MemCharNext( (const char *)pLine, nLineLen, (const char *)&pLine[i] ) - (const char *)&pLine[i];
@@ -1147,12 +1146,12 @@ searchnext:;
 							if( nCharChars_2 != 1 ){
 								break;
 							}
-							if( 						(
+							if( (
 								( (unsigned char)0x0 <= pLine[i] && pLine[i] <= (unsigned char)0x1F ) ||
 									( (unsigned char)'~' < pLine[i] && pLine[i] < (unsigned char)'｡' ) ||
 									( (unsigned char)'ﾟ' < pLine[i] && pLine[i] <= (unsigned char)0xff )
-								) && 
-								pLine[i] != TAB && pLine[i] != CR && pLine[i] != LF 
+								) &&
+								pLine[i] != TAB && pLine[i] != CR && pLine[i] != LF
 							){
 							}else{
 								break;
@@ -1206,7 +1205,7 @@ searchnext:;
 					if( TypeDataPtr->m_ColorInfoArr[COLORIDX_WRAP].m_bDisp ){
 						HFONT	hFontOld;
 						colTextColorOld = ::SetTextColor( hdc, TypeDataPtr->m_ColorInfoArr[COLORIDX_WRAP].m_colTEXT );	/* 折り返し記号の色 */
-						colBkColorOld = ::SetBkColor( hdc, TypeDataPtr->m_ColorInfoArr[COLORIDX_WRAP].m_colBACK );	/* 折り返し記号背景の色 */
+						colBkColorOld = ::SetBkColor( hdc, TypeDataPtr->m_ColorInfoArr[COLORIDX_WRAP].m_colBACK );		/* 折り返し記号背景の色 */
 						/* フォントを選ぶ */
 						hFontOld = (HFONT)::SelectObject( hdc,
 							ChooseFontHandle(
@@ -1250,7 +1249,7 @@ searchnext:;
 			if( TypeDataPtr->m_ColorInfoArr[COLORIDX_EOF].m_bDisp ){
 
 				colTextColorOld = ::SetTextColor( hdc, TypeDataPtr->m_ColorInfoArr[COLORIDX_EOF].m_colTEXT );	/* EOFの色 */
-				colBkColorOld = ::SetBkColor( hdc, TypeDataPtr->m_ColorInfoArr[COLORIDX_EOF].m_colBACK );	/* EOF背景の色 */
+				colBkColorOld = ::SetBkColor( hdc, TypeDataPtr->m_ColorInfoArr[COLORIDX_EOF].m_colBACK );		/* EOF背景の色 */
 				rcClip.left = x + nX * ( nCharWidth );
 				rcClip.right = rcClip.left + ( nCharWidth ) * ( lstrlen( pszEOF ) );
 				if( rcClip.left < m_nViewAlignLeft ){
@@ -1275,7 +1274,7 @@ searchnext:;
 //						hFontOld = (HFONT)::SelectObject( hdc, m_hFont_HAN );
 //					}
 
-					::ExtTextOut( hdc, x + nX * ( nCharWidth ) , y, fuOptions,
+					::ExtTextOut( hdc, x + nX * ( nCharWidth ), y, fuOptions,
 						&rcClip, pszEOF, lstrlen( pszEOF ), m_pnDx );
 
 					::SelectObject( hdc, hFontOld );
@@ -1326,7 +1325,7 @@ end_of_line:;
 				/* EOF記号の表示 */
 				if( TypeDataPtr->m_ColorInfoArr[COLORIDX_EOF].m_bDisp ){
 					colTextColorOld = ::SetTextColor( hdc, TypeDataPtr->m_ColorInfoArr[COLORIDX_EOF].m_colTEXT );	/* EOFの色 */
-					colBkColorOld = ::SetBkColor( hdc, TypeDataPtr->m_ColorInfoArr[COLORIDX_EOF].m_colBACK );	/* EOF背景の色 */
+					colBkColorOld = ::SetBkColor( hdc, TypeDataPtr->m_ColorInfoArr[COLORIDX_EOF].m_colBACK );		/* EOF背景の色 */
 					rcClip.left = /*m_nViewAlignLeft*/x;
 					rcClip.right = rcClip.left + ( nCharWidth ) * ( lstrlen( pszEOF ) );
 					if( rcClip.left < m_nViewAlignLeft ){
@@ -1376,7 +1375,7 @@ end_of_line:;
 						/* EOF記号の表示 */
 						if( TypeDataPtr->m_ColorInfoArr[COLORIDX_EOF].m_bDisp ){
 							colTextColorOld = ::SetTextColor( hdc, TypeDataPtr->m_ColorInfoArr[COLORIDX_EOF].m_colTEXT );	/* EOFの色 */
-							colBkColorOld = ::SetBkColor( hdc, TypeDataPtr->m_ColorInfoArr[COLORIDX_EOF].m_colBACK );	/* EOF背景の色 */
+							colBkColorOld = ::SetBkColor( hdc, TypeDataPtr->m_ColorInfoArr[COLORIDX_EOF].m_colBACK );		/* EOF背景の色 */
 							rcClip.left = /*m_nViewAlignLeft*/x;
 							rcClip.right = rcClip.left + ( nCharWidth ) * ( lstrlen( pszEOF ) );
 							if( rcClip.left < m_nViewAlignLeft ){
@@ -1419,7 +1418,7 @@ end_of_line:;
 		}
 	}
 
-end_of_func:;	
+end_of_func:;
 //	MYTRACE( "m_nOldUnderLineY=%d\n", m_nOldUnderLineY );
 	if( -1 != m_nOldUnderLineY ){
 		/* カーソル行アンダーラインのON */
@@ -1434,14 +1433,14 @@ end_of_func:;
 //		HDC			hdc;
 //		HPEN		hPen, hPenOld;
 //		hdc = ::GetDC( m_hWnd );
-//		
+//
 //		MYTRACE( "□カーソル行アンダーラインの描画\n" );
 //		/* カーソル行アンダーラインの描画 */
 //		hPen = ::CreatePen( PS_SOLID, 0, TypeDataPtr->m_ColorInfoArr[COLORIDX_UNDERLINE].m_colTEXT );
 //		hPenOld = (HPEN)::SelectObject( hdc, hPen );
 //		m_nOldUnderLineY = m_nViewAlignTop  + (m_nCaretPosY - m_nViewTopLine) * ( TypeDataPtr->m_nLineSpace + m_nCharHeight ) + m_nCharHeight;
 //		::MoveToEx(
-//			hdc, 
+//			hdc,
 //			m_nViewAlignLeft,
 //			m_nOldUnderLineY,
 //			NULL
@@ -1469,10 +1468,10 @@ end_of_func:;
 	nWidth, nHeight: 描画エリアのサイズ
 	cEol: 行末コード種別
 */
-void CEditView::DrawEOL(HDC hdc, HANDLE hPen, int nPosX, int nPosY, int nWidth, int nHeight, CEOL cEol, int bBold)
+void CEditView::DrawEOL( HDC hdc, HANDLE hPen, int nPosX, int nPosY, int nWidth, int nHeight, CEOL cEol, int bBold )
 {
 	int sx, sy;
-	switch( cEol.GetType()){
+	switch( cEol.GetType() ){
 	case EOL_CRLF:
 		sx = nPosX + ( nWidth / 2 );
 		sy = nPosY + ( nHeight * 3 / 4 );
@@ -1566,4 +1565,6 @@ void CEditView::DrawEOL(HDC hdc, HANDLE hPen, int nPosX, int nPosY, int nWidth, 
 		break;
 	}
 }
+
+
 /*[EOF]*/

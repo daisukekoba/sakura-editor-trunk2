@@ -1,14 +1,10 @@
 //	$Id$
 /************************************************************************
-*
 *	CEditApp.cpp
-*
 *	タスクトレイアイコンの管理
 *	Copyright (C) 1998-2000, Norio Nakatani
 *
-*
 *	CREATE: 1998/5/13
-*
 ************************************************************************/
 
 #define ID_HOTKEY_TRAYMENU	0x1234
@@ -297,24 +293,24 @@ void CEditApp::MessageLoop( void )
 
 
 /* タスクトレイのアイコンに関する処理 */
-BOOL CEditApp::TrayMessage(HWND hDlg, DWORD dwMessage, UINT uID, HICON hIcon, const char* pszTip)
+BOOL CEditApp::TrayMessage( HWND hDlg, DWORD dwMessage, UINT uID, HICON hIcon, const char* pszTip )
 {
     BOOL			res;
 	NOTIFYICONDATA	tnd;
-	tnd.cbSize				= sizeof(NOTIFYICONDATA);
+	tnd.cbSize				= sizeof( NOTIFYICONDATA );
 	tnd.hWnd				= hDlg;
 	tnd.uID					= uID;
 	tnd.uFlags				= NIF_MESSAGE|NIF_ICON|NIF_TIP;
 	tnd.uCallbackMessage	= MYWM_NOTIFYICON;
 	tnd.hIcon				= hIcon;
 	if( pszTip ){
-		lstrcpyn(tnd.szTip, pszTip, sizeof(tnd.szTip));
+		lstrcpyn( tnd.szTip, pszTip, sizeof( tnd.szTip ) );
 	}else{
 		tnd.szTip[0] = '\0';
 	}
-	res = Shell_NotifyIcon(dwMessage, &tnd);
-	if (hIcon){
-	    DestroyIcon(hIcon);
+	res = Shell_NotifyIcon( dwMessage, &tnd );
+	if( hIcon ){
+	    DestroyIcon( hIcon );
 	}
 	return res;
 }
@@ -372,7 +368,7 @@ LRESULT CEditApp::DispatchEvent(
 	char			szClassName[100];
 	char			szText[256];
 	UINT				idCtl;	/* コントロールのID */
-	MEASUREITEMSTRUCT*	lpmis;	
+	MEASUREITEMSTRUCT*	lpmis;
 //	char				szLabel[1024];
 //	LPMEASUREITEMSTRUCT	lpmis;	/* 項目サイズ情報 */
 //	char*				pszwork;
@@ -413,7 +409,7 @@ LRESULT CEditApp::DispatchEvent(
 			}
 			return TRUE;
 		}
-		return FALSE; 
+		return FALSE;
 
 	/* タスクトレイ左クリックメニューへのショートカットキー登録 */
 	case WM_HOTKEY:
@@ -484,7 +480,7 @@ LRESULT CEditApp::DispatchEvent(
 //				}
 //			}
 //			if( hwndHtmlHelp != NULL ){
-//				DWORD	dwPID; 
+//				DWORD	dwPID;
 //				DWORD	dwTID = ::GetWindowThreadProcessId( hwndHtmlHelp, &dwPID );
 //				::AttachThreadInput( ::GetCurrentThreadId(), dwTID, TRUE );
 //				::SetFocus( hwndHtmlHelp );
@@ -848,7 +844,7 @@ LRESULT CEditApp::DispatchEvent(
 							for( i = 0; i < m_pShareData->m_nOPENFOLDERArrNum; ++i ){
 								if( m_pShareData->m_Common.m_nOPENFOLDERArrNum_MAX <= i ){
 									break;
-								} 
+								}
 								++j;
 							}
 						}
@@ -895,7 +891,7 @@ LRESULT CEditApp::DispatchEvent(
 
 							int nCharCodeNew;
 							if( CODE_AUTODETECT == nCharCode ){	/* 文字コード自動判別 */
-								/* 
+								/*
 								|| ファイルの日本語コードセット判別
 								||
 								|| 【戻り値】
@@ -931,7 +927,7 @@ LRESULT CEditApp::DispatchEvent(
 								case CODE_UTF8:		/* UTF-8 */		pszCodeNameNew = "UTF-8";break;
 								case CODE_UTF7:		/* UTF-7 */		pszCodeNameNew = "UTF-7";break;
 								}
-								::MYMESSAGEBOX(	m_hWnd,	MB_OK | MB_ICONEXCLAMATION | MB_TOPMOST, GSTR_APPNAME,
+								::MYMESSAGEBOX( m_hWnd, MB_OK | MB_ICONEXCLAMATION | MB_TOPMOST, GSTR_APPNAME,
 									"%s\n\n\n既に開いているファイルを違う文字コードで開く場合は、\n一旦閉じてから開いてください。\n\n現在の文字コードセット=[%s]\n新しい文字コードセット=[%s]",
 									szPath, pszCodeNameCur, pszCodeNameNew
 								);
@@ -989,7 +985,7 @@ LRESULT CEditApp::DispatchEvent(
 						cmWork2.GetPtr( &nDataLen ),
 						cmWork3.GetPtr( &nDataLen )
 					);
-					
+
 					pOpt[0] = '\0';
 					if( cDlgGrep.m_bSubFolder ){			/* サブフォルダからも検索する */
 						strcat( pOpt, "S" );
@@ -1007,14 +1003,14 @@ LRESULT CEditApp::DispatchEvent(
 						strcat( pOpt, "K" );
 					}
 					if( cDlgGrep.m_bGrepOutputLine ){		/* 行を出力するか該当部分だけ出力するか */
-						strcat( pOpt, "P" ); 
+						strcat( pOpt, "P" );
 					}
 
 					if( 1 == cDlgGrep.m_nGrepOutputStyle ){	/* Grep: 出力形式 */
-						strcat( pOpt, "1" ); 
+						strcat( pOpt, "1" );
 					}
 					if( 2 == cDlgGrep.m_nGrepOutputStyle ){	/* Grep: 出力形式 */
-						strcat( pOpt, "2" ); 
+						strcat( pOpt, "2" );
 					}
 
 
@@ -1050,12 +1046,12 @@ LRESULT CEditApp::DispatchEvent(
 //							::ShowWindow( hwndWork, SW_RESTORE );
 //						}else{
 //							::ShowWindow( hwndWork, SW_SHOW );
-//						}	
+//						}
 //						::SetForegroundWindow( hwndWork );
 //						::SetActiveWindow( hwndWork );
 					}else
 					if( nId - IDM_SELMRU  >= 0 &&
-//					    nId - IDM_SELMRU  < (( m_pShareData->m_nMRUArrNum < m_pShareData->m_Common.m_nMRUArrNum_MAX )?m_pShareData->m_nMRUArrNum :m_pShareData->m_Common.m_nMRUArrNum_MAX ) 
+//					    nId - IDM_SELMRU  < (( m_pShareData->m_nMRUArrNum < m_pShareData->m_Common.m_nMRUArrNum_MAX )?m_pShareData->m_nMRUArrNum :m_pShareData->m_Common.m_nMRUArrNum_MAX )
 						nId - IDM_SELMRU  < 999
 					){
 
@@ -1081,8 +1077,8 @@ LRESULT CEditApp::DispatchEvent(
 						//	To Here Oct. 27, 2000 genta
 					}else
 					if( nId - IDM_SELOPENFOLDER  >= 0 &&
-//						nId - IDM_SELOPENFOLDER  < (( m_pShareData->m_nOPENFOLDERArrNum < m_pShareData->m_Common.m_nOPENFOLDERArrNum_MAX )?m_pShareData->m_nOPENFOLDERArrNum:m_pShareData->m_Common.m_nOPENFOLDERArrNum_MAX ) 
-						nId - IDM_SELOPENFOLDER  < 999 
+//						nId - IDM_SELOPENFOLDER  < (( m_pShareData->m_nOPENFOLDERArrNum < m_pShareData->m_Common.m_nOPENFOLDERArrNum_MAX )?m_pShareData->m_nOPENFOLDERArrNum:m_pShareData->m_Common.m_nOPENFOLDERArrNum_MAX )
+						nId - IDM_SELOPENFOLDER  < 999
 					){
 						{
 							CDlgOpenFile	cDlgOpenFile;
@@ -1169,7 +1165,7 @@ LRESULT CEditApp::DispatchEvent(
 
 								int nCharCodeNew;
 								if( CODE_AUTODETECT == nCharCode ){	/* 文字コード自動判別 */
-									/* 
+									/*
 									|| ファイルの日本語コードセット判別
 									||
 									|| 【戻り値】
@@ -1205,8 +1201,8 @@ LRESULT CEditApp::DispatchEvent(
 									case CODE_UTF8:		/* UTF-8 */		pszCodeNameNew = "UTF-8";break;
 									case CODE_UTF7:		/* UTF-7 */		pszCodeNameNew = "UTF-7";break;
 									}
-									::MYMESSAGEBOX(	m_hWnd,	MB_OK | MB_ICONEXCLAMATION | MB_TOPMOST, GSTR_APPNAME,
-										"%s\n\n\n既に開いているファイルを違う文字コードで開く場合は、\n一旦閉じてから開いてください。\n\n現在の文字コードセット=[%s]\n新しい文字コードセット=[%s]", 
+									::MYMESSAGEBOX( m_hWnd, MB_OK | MB_ICONEXCLAMATION | MB_TOPMOST, GSTR_APPNAME,
+										"%s\n\n\n既に開いているファイルを違う文字コードで開く場合は、\n一旦閉じてから開いてください。\n\n現在の文字コードセット=[%s]\n新しい文字コードセット=[%s]",
 										szPath, pszCodeNameCur, pszCodeNameNew
 									);
 								}
@@ -1274,15 +1270,15 @@ LRESULT CEditApp::DispatchEvent(
 
 			//	ホットキーの破棄
 			::UnregisterHotKey( m_hWnd, ID_HOTKEY_TRAYMENU );
-			
+
 			//	どうせExplorerも終了するのでトレイアイコンは処理しない．
-			
+
 			//	終了処理中に新しいウィンドウを作るのもいやな感じなので
 			//	オプションに関わらず終了ダイアログの表示は行わない
-			
+
 			//	共有データの保存(重要)
 			m_cShareData.SaveShareData();
-		
+
 			return 0;	//	もうこのプロセスに制御が戻ることはない
 		//	To Here Jan. 31, 2000 genta
 		case WM_DESTROY:
@@ -1354,7 +1350,7 @@ bool CEditApp::OpenNewEditor( HINSTANCE hInstance, HWND hWndParent, char* pszPat
 	cShareData.Init();
 	pShareData = cShareData.GetShareData( NULL, NULL );
 
-	/* 編集ウィンドウの上限チェック */	
+	/* 編集ウィンドウの上限チェック */
 	if( pShareData->m_nEditArrNum + 1 > MAX_EDITWINDOWS ){
 		char szMsg[512];
 		wsprintf( szMsg, "編集ウィンドウ数の上限は%dです。\nこれ以上は同時に開けません。", MAX_EDITWINDOWS );
@@ -1374,6 +1370,10 @@ bool CEditApp::OpenNewEditor( HINSTANCE hInstance, HWND hWndParent, char* pszPat
 	if( nCharCode != CODE_AUTODETECT ){
 		nPos += wsprintf( szCmdLineBuf + nPos, " -CODE=%d", nCharCode );
 	}
+	//	読み取り専用指定がある場合		//From Here Feb. 26, 2001 JEPRO 追加 (direcited by genta)
+	if( bReadOnly ){
+		nPos += wsprintf( szCmdLineBuf + nPos, " -R" );
+	}		//To Here Feb. 26, 2001
 
 	//	DEBUG
 	//	::MessageBox( NULL, szCmdLineBuf, "OpenNewEditor", MB_OK );
@@ -1466,7 +1466,7 @@ bool CEditApp::OpenNewEditor( HINSTANCE hInstance, HWND hWndParent, char* pszPat
 	cShareData.Init();
 	pShareData = cShareData.GetShareData( NULL, NULL );
 
-	/* 編集ウィンドウの上限チェック */	
+	/* 編集ウィンドウの上限チェック */
 	if( pShareData->m_nEditArrNum + 1 > MAX_EDITWINDOWS ){
 		char szMsg[512];
 		wsprintf( szMsg, "編集ウィンドウ数の上限は%dです。\nこれ以上は同時に開けません。", MAX_EDITWINDOWS );
@@ -1534,7 +1534,7 @@ bool CEditApp::OpenNewEditor2( HINSTANCE hInstance, HWND hWndParent, FileInfo* p
 	cShareData.Init();
 	pShareData = cShareData.GetShareData( NULL, NULL );
 
-	/* 編集ウィンドウの上限チェック */	
+	/* 編集ウィンドウの上限チェック */
 	if( pShareData->m_nEditArrNum + 1 > MAX_EDITWINDOWS ){
 		char szMsg[512];
 		wsprintf( szMsg, "編集ウィンドウ数の上限は%dです。\nこれ以上は同時に開けません。", MAX_EDITWINDOWS );
@@ -1571,12 +1571,12 @@ bool CEditApp::OpenNewEditor2( HINSTANCE hInstance, HWND hWndParent, FileInfo* p
 	return OpenNewEditor( hInstance, hWndParent, pszCmdLine, CODE_AUTODETECT, bReadOnly, sync );
 
 }
-//	To Here	Oct. 24, 2000 genta
+//	To Here Oct. 24, 2000 genta
 
 
 //シングルプロセス版用
 //	/* 新規編集ウィンドウの追加 ver 2 */
-//	HWND CEditApp::OpenNewEditor3( 
+//	HWND CEditApp::OpenNewEditor3(
 //		HINSTANCE hInstance, HWND hWndParent, const char* pszCommandLine, BOOL bActivate )
 //	{
 //		/* システムリソースのチェック */
@@ -1747,7 +1747,7 @@ void CEditApp::TerminateApplication( void )
 				MB_YESNO | MB_APPLMODAL | MB_ICONQUESTION,
 				GSTR_APPNAME,
 				"現在開いている編集用のウィンドウをすべて閉じて終了しますか?"
-			)){
+			) ){
 				return;
 			}
 		}
@@ -1968,7 +1968,7 @@ int	CEditApp::CreatePopUpMenu_L( void )
 
 
 	m_CMenuDrawer.MyAppendMenu( hMenu, MF_BYPOSITION | MF_SEPARATOR, 0, NULL, FALSE );
-	m_CMenuDrawer.MyAppendMenu( hMenu, MF_BYPOSITION | MF_STRING, F_WIN_CLOSEALL, "すべてのウィンドウを閉じる(&L)", FALSE );	//Oct. 17, 2000 JEPRO 名前を変更(F_FILECLOSEALL→F_WIN_CLOSEALL)
+	m_CMenuDrawer.MyAppendMenu( hMenu, MF_BYPOSITION | MF_STRING, F_WIN_CLOSEALL, "すべてのウィンドウを閉じる(&Q)", FALSE );	//Oct. 17, 2000 JEPRO 名前を変更(F_FILECLOSEALL→F_WIN_CLOSEALL)	//Feb. 18, 2001 JEPRO アクセスキー変更(L→Q)
 
 
 
@@ -2007,7 +2007,7 @@ int	CEditApp::CreatePopUpMenu_L( void )
 //						);
 //					}else{
 //						wsprintf( szMemu, "&%d %s %s", ((i + 1) <= 9)? (i + 1):9,
-//							(0 < lstrlen(pfi->m_szPath))?pfi->m_szPath:"（無題）",
+//							(0 < lstrlen( pfi->m_szPath ))?pfi->m_szPath:"（無題）",
 //							pfi->m_bIsModified ? "*":" "
 //						);
 //		j >= 10 + 26 の時の考慮を省いた(に近い)が開くファイル数が36個を越えることはまずないので事実上OKでしょう
@@ -2016,7 +2016,7 @@ int	CEditApp::CreatePopUpMenu_L( void )
 						);
 					}else{
 						wsprintf( szMemu, "&%c %s %s", ((1 + i) <= 9)?('1' + i):('A' + i - 9),
-							(0 < lstrlen(pfi->m_szPath))?pfi->m_szPath:"（無題）",
+							(0 < lstrlen( pfi->m_szPath ))?pfi->m_szPath:"（無題）",
 							pfi->m_bIsModified ? "*":" "
 						);
 //		To Here Oct. 4, 2000
@@ -2043,11 +2043,11 @@ int	CEditApp::CreatePopUpMenu_L( void )
 //
 //				if( j <= 9 ){
 //					wsprintf( szMemu, "&%d %s %s", j,
-//						(0 < lstrlen(pfi->m_szPath))?pfi->m_szPath:"（無題）",
+//						(0 < lstrlen( pfi->m_szPath ))?pfi->m_szPath:"（無題）",
 //						pfi->m_bIsModified ? "*":" " );
 //				}else{
 //					wsprintf( szMemu, "&%c %s %s", 'A' + j - 10,
-//						(0 < lstrlen(pfi->m_szPath))?pfi->m_szPath:"（無題）",
+//						(0 < lstrlen( pfi->m_szPath ))?pfi->m_szPath:"（無題）",
 //						pfi->m_bIsModified ? "*":" " );
 //				}
 //				if( 0 != pfi->m_nCharCode ){		/* 文字コード種別 */
@@ -2235,14 +2235,14 @@ int	CEditApp::CreatePopUpMenu_R( void )
 //	m_CMenuDrawer.MyAppendMenu( hMenu, MF_BYPOSITION | MF_SEPARATOR, 0, NULL, FALSE );
 //	m_CMenuDrawer.MyAppendMenu( hMenu, MF_BYPOSITION | MF_STRING, F_MENU_ALLFUNC , "コマンド一覧(&M)", FALSE );	//Jan. 12, 2001 JEPRO まずコメントアウト第一号 (T_T)
 	m_CMenuDrawer.MyAppendMenu( hMenu, MF_BYPOSITION | MF_SEPARATOR, 0, NULL, FALSE );
-		
+
 	m_CMenuDrawer.MyAppendMenu( hMenu, MF_BYPOSITION | MF_STRING | MF_GRAYED, F_EXTHELP1 , "外部ヘルプ１(&E)", FALSE );			//Jan. 12, 2001 JEPRO このメニュー項目を無効化した
 	m_CMenuDrawer.MyAppendMenu( hMenu, MF_BYPOSITION | MF_STRING | MF_GRAYED, F_EXTHTMLHELP , "外部HTMLヘルプ(&H)", FALSE );	//Jan. 12, 2001 JEPRO このメニュー項目を無効化した
 	m_CMenuDrawer.MyAppendMenu( hMenu, MF_BYPOSITION | MF_SEPARATOR, 0, NULL, FALSE );
 
 //	m_CMenuDrawer.MyAppendMenu( hMenu, MF_BYPOSITION | MF_STRING, IDM_ABOUT, "バージョン情報(&A)", FALSE );
 	m_CMenuDrawer.MyAppendMenu( hMenu, MF_BYPOSITION | MF_STRING, F_ABOUT, "バージョン情報(&A)", FALSE );	//Dec. 25, 2000 JEPRO F_に変更
-	
+
 	m_CMenuDrawer.MyAppendMenu( hMenu, MF_BYPOSITION | MF_SEPARATOR, 0, NULL, FALSE );
 //	m_CMenuDrawer.MyAppendMenu( hMenu, MF_BYPOSITION | MF_STRING, IDM_EXITALL, "テキストエディタの全終了(&X)", FALSE );
 	m_CMenuDrawer.MyAppendMenu( hMenu, MF_BYPOSITION | MF_STRING, F_EXITALL, "テキストエディタの全終了(&X)", FALSE );	//Dec. 26, 2000 JEPRO F_に変更
@@ -2500,7 +2500,7 @@ void CEditApp::ParseCommandLine(
 						bGrepLoHiCase = TRUE;	break;
 					case 'R':	/* 正規表現 */
 						bGrepRegularExp = TRUE;	break;
-					case 'K':	/* 文字コード自動判別 */ 
+					case 'K':	/* 文字コード自動判別 */
 						bGrepKanjiCode_AutoDetect = TRUE;	break;
 					case 'P':	/* 行を出力するか該当部分だけ出力するか */
 						bGrepOutputLine = TRUE;	break;
@@ -2538,7 +2538,7 @@ void CEditApp::ParseCommandLine(
 		/* MRUから情報取得 */
 
 	}
-	
+
 	/* 処理結果を格納 */
 	*pbGrepMode					= bGrepMode;
 	*pcmGrepKey					= cmGrepKey;

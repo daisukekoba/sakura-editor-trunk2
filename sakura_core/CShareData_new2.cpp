@@ -3,8 +3,8 @@
 	CShareData_new2.cpp
 	プロセス間共有データへのアクセス
 	Copyright (C) 1998-2000, Norio Nakatani
-
 ************************************************************************/
+
 #include "CShareData.h"
 #include "global.h"
 
@@ -23,8 +23,8 @@ CShareData::CShareData()
 		DWORD dwData;	// アプリケーション-定義された値
 		int iString;	// ボタンのラベル文字列の 0 から始まるインデックス
 	} TBBUTTON;
-	*/  
-	SetTBBUTTONVal( &m_tbMyButton[ 0], 0, 0, 0, TBSTYLE_SEP, 0, 0);		//セパレータ
+	*/
+	SetTBBUTTONVal( &m_tbMyButton[0], 0, 0, 0, TBSTYLE_SEP, 0, 0 );		//セパレータ
 	struct TBUTTONDATA {
 	    int			idCommand;
 	    BYTE		fsState;
@@ -79,7 +79,7 @@ CShareData::CShareData()
 /*  1 */		F_FILENEW					, TBSTATE_ENABLED, TBSTYLE_BUTTON, 0, 0,	//新規作成
 /*  2 */		F_FILEOPEN					, TBSTATE_ENABLED, TBSTYLE_BUTTON, 0, 0,	//ファイルを開く
 /*  3 */		F_FILESAVE					, TBSTATE_ENABLED, TBSTYLE_BUTTON, 0, 0,	//上書き保存
-/*  4 */		F_FILESAVEAS				, TBSTATE_ENABLED, TBSTYLE_BUTTON, 0, 0,	//名前を付けて保存	//Sept. 18, 2000 JEPRO 追加 
+/*  4 */		F_FILESAVEAS				, TBSTATE_ENABLED, TBSTYLE_BUTTON, 0, 0,	//名前を付けて保存	//Sept. 18, 2000 JEPRO 追加
 /*  5 */		F_FILECLOSE					, TBSTATE_ENABLED, TBSTYLE_BUTTON, 0, 0,	//閉じて(無題)	//Oct. 17, 2000 jepro 「ファイルを閉じる」というキャプションを変更
 /*  6 */		F_FILECLOSE_OPEN			, TBSTATE_ENABLED, TBSTYLE_BUTTON, 0, 0,	//閉じて開く
 /*  7 */		F_FILE_REOPEN_SJIS			, TBSTATE_ENABLED, TBSTYLE_BUTTON, 0, 0,	//SJISで開き直す
@@ -116,8 +116,8 @@ CShareData::CShareData()
 /* 36 */		F_DELETE_BACK		, TBSTATE_ENABLED, TBSTYLE_BUTTON, 0, 0,	//カーソルの前を削除
 /* 37 */		F_WordDeleteToStart	, TBSTATE_ENABLED, TBSTYLE_BUTTON, 0, 0,	//単語の左端まで削除
 /* 38 */		F_WordDeleteToEnd	, TBSTATE_ENABLED, TBSTYLE_BUTTON, 0, 0,	//単語の右端まで削除
-/* 39 */		F_WordDelete		, TBSTATE_ENABLED, TBSTYLE_BUTTON, 0, 0,	//単語を削除
-/* 40 */		F_WordCut			, TBSTATE_ENABLED, TBSTYLE_BUTTON, 0, 0,	//単語を切り取り
+/* 39 */		F_WordDelete		, TBSTATE_ENABLED, TBSTYLE_BUTTON, 0, 0,	//単語削除
+/* 40 */		F_WordCut			, TBSTATE_ENABLED, TBSTYLE_BUTTON, 0, 0,	//単語切り取り
 /* 41 */		F_LineDeleteToStart	, TBSTATE_ENABLED, TBSTYLE_BUTTON, 0, 0,	//行頭まで削除(改行単位)
 /* 42 */		F_LineDeleteToEnd	, TBSTATE_ENABLED, TBSTYLE_BUTTON, 0, 0,	//行末まで削除(改行単位)
 /* 43 */		F_LineCutToStart	, TBSTATE_ENABLED, TBSTYLE_BUTTON, 0, 0,	//行頭まで切り取り(改行単位)
@@ -180,7 +180,7 @@ CShareData::CShareData()
 /* 選択系(4段目32個: 97-128) */
 /* 97 */		F_SELECTWORD		, TBSTATE_ENABLED, TBSTYLE_BUTTON, 0, 0,	//現在位置の単語選択
 /* 98 */		F_SELECTALL			, TBSTATE_ENABLED, TBSTYLE_BUTTON, 0, 0,	//すべて選択	//Sept. 21, 2000 JEPRO 追加
-/* 99 */		F_BEGIN_SEL			, TBSTATE_ENABLED, TBSTYLE_BUTTON, 0, 0,	//選択範囲開始
+/* 99 */		F_BEGIN_SEL			, TBSTATE_ENABLED, TBSTYLE_BUTTON, 0, 0,	//範囲選択開始
 /* 100 */		F_UP_SEL			, TBSTATE_ENABLED, TBSTYLE_BUTTON, 0, 0,	//(範囲選択)カーソル上移動
 /* 101 */		F_DOWN_SEL			, TBSTATE_ENABLED, TBSTYLE_BUTTON, 0, 0,	//(範囲選択)カーソル下移動
 /* 102 */		F_LEFT_SEL			, TBSTATE_ENABLED, TBSTYLE_BUTTON, 0, 0,	//(範囲選択)カーソル左移動
@@ -214,7 +214,7 @@ CShareData::CShareData()
 /* 矩形選択系(5段目32個: 129-160) */ //(注. 矩形選択系のほとんどは未実装)
 /* 129 */		F_DISABLE	, TBSTATE_ENABLED, TBSTYLE_BUTTON, 0, 0,	//ダミー
 /* 130 */		F_DISABLE/*F_BOXSELALL*/		, TBSTATE_ENABLED, TBSTYLE_BUTTON, 0, 0,	//矩形ですべて選択
-/* 131 */		F_BEGIN_BOX						, TBSTATE_ENABLED, TBSTYLE_BUTTON, 0, 0,	//矩形選択範囲開始	//Sept. 29, 2000 JEPRO 追加
+/* 131 */		F_BEGIN_BOX						, TBSTATE_ENABLED, TBSTYLE_BUTTON, 0, 0,	//矩形範囲選択開始	//Sept. 29, 2000 JEPRO 追加
 /* 132 */		F_DISABLE/*F_UP_BOX*/			, TBSTATE_ENABLED, TBSTYLE_BUTTON, 0, 0,	//(矩形選択)カーソル上移動
 /* 133 */		F_DISABLE/*F_DOWN_BOX*/			, TBSTATE_ENABLED, TBSTYLE_BUTTON, 0, 0,	//(矩形選択)カーソル下移動
 /* 134 */		F_DISABLE/*F_LEFT_BOX*/			, TBSTATE_ENABLED, TBSTYLE_BUTTON, 0, 0,	//(矩形選択)カーソル左移動
@@ -258,7 +258,7 @@ CShareData::CShareData()
 /* 170 */		F_COPYLINESWITHLINENUMBER	, TBSTATE_ENABLED, TBSTYLE_BUTTON, 0, 0,	//選択範囲内全行行番号付きコピー	//Sept. 30, 2000 JEPRO 追加
 /* 171 */		F_COPYPATH	, TBSTATE_ENABLED, TBSTYLE_BUTTON, 0, 0,	//このファイルのパス名をコピー //added Oct. 22, 2000 JEPRO				//Nov. 5, 2000 JEPRO 追加
 /* 172 */		F_COPYTAG	, TBSTATE_ENABLED, TBSTYLE_BUTTON, 0, 0,	//このファイルのパス名とカーソル位置をコピー //added Oct. 22, 2000 JEPRO	//Nov. 5, 2000 JEPRO 追加
-/* 173 */		F_CREATEKEYBINDLIST			, TBSTATE_ENABLED, TBSTYLE_BUTTON, 0, 0,	//キー割り当て一覧をコピー //added Oct. 22, 2000 JEPRO		//アイコン未作
+/* 173 */		F_CREATEKEYBINDLIST			, TBSTATE_ENABLED, TBSTYLE_BUTTON, 0, 0,	//キー割り当て一覧をコピー //added Oct. 22, 2000 JEPRO	//Dec. 25, 2000 JEPRO アイコン追加
 /* 174 */		F_DISABLE	, TBSTATE_ENABLED, TBSTYLE_BUTTON, 0, 0,	//ダミー
 /* 175 */		F_DISABLE	, TBSTATE_ENABLED, TBSTYLE_BUTTON, 0, 0,	//ダミー
 /* 176 */		F_DISABLE	, TBSTATE_ENABLED, TBSTYLE_BUTTON, 0, 0,	//ダミー
@@ -287,7 +287,7 @@ CShareData::CShareData()
 /* 195 */		F_TOHANKAKU				, TBSTATE_ENABLED, TBSTYLE_BUTTON, 0, 0,	//全角→半角
 /* 196 */		F_TOZENKAKUKATA			, TBSTATE_ENABLED, TBSTYLE_BUTTON, 0, 0,	//半角＋全ひら→全角・カタカナ	//Sept. 17, 2000 jepro 説明を「半角→全角カタカナ」から変更
 /* 197 */		F_TOZENKAKUHIRA			, TBSTATE_ENABLED, TBSTYLE_BUTTON, 0, 0,	//半角＋全カタ→全角・ひらがな	//Sept. 17, 2000 jepro 説明を「半角→全角ひらがな」から変更
-/* 198 */		F_HANKATATOZENKAKUKATA	, TBSTATE_ENABLED, TBSTYLE_BUTTON, 0, 0,	//半角カタカナ→全角カタカナ	//Sept. 18, 2000 JEPRO 追加	
+/* 198 */		F_HANKATATOZENKAKUKATA	, TBSTATE_ENABLED, TBSTYLE_BUTTON, 0, 0,	//半角カタカナ→全角カタカナ	//Sept. 18, 2000 JEPRO 追加
 /* 199 */		F_HANKATATOZENKAKUHIRA	, TBSTATE_ENABLED, TBSTYLE_BUTTON, 0, 0,	//半角カタカナ→全角ひらがな	//Sept. 18, 2000 JEPRO 追加
 /* 200 */		F_TABTOSPACE			, TBSTATE_ENABLED, TBSTYLE_BUTTON, 0, 0,	//TAB→空白	//Sept. 20, 2000 JEPRO 追加
 /* 201 */		F_CODECNV_AUTO2SJIS		, TBSTATE_ENABLED, TBSTYLE_BUTTON, 0, 0,	//自動判別→SJISコード変換
@@ -361,7 +361,7 @@ CShareData::CShareData()
 /* 263 */		F_SHOWSTATUSBAR		, TBSTATE_ENABLED, TBSTYLE_BUTTON, 0, 0,	//ステータスバーの表示
 /* 264 */		F_TYPE_LIST			, TBSTATE_ENABLED, TBSTYLE_BUTTON, 0, 0,	//タイプ別設定一覧	//Sept. 18, 2000 JEPRO 追加
 /* 265 */		F_OPTION_TYPE		, TBSTATE_ENABLED, TBSTYLE_BUTTON, 0, 0,	//タイプ別設定
-/* 266 */		F_OPTION			, TBSTATE_ENABLED, TBSTYLE_BUTTON, 0, 0,	//共通設定 //Sept. 16, 2000 jepro 説明を「設定プロパティシート」から変更
+/* 266 */		F_OPTION			, TBSTATE_ENABLED, TBSTYLE_BUTTON, 0, 0,	//共通設定			//Sept. 16, 2000 jepro 説明を「設定プロパティシート」から変更
 /* 267 */		F_FONT				, TBSTATE_ENABLED, TBSTYLE_BUTTON, 0, 0,	//フォント設定
 /* 268 */		F_WRAPWINDOWWIDTH	, TBSTATE_ENABLED, TBSTYLE_BUTTON, 0, 0,	//現在のウィンドウ幅で折り返し	//	Oct. 7, 2000 JEPRO WRAPWINDIWWIDTH を WRAPWINDOWWIDTH に変更
 /* 269 */		F_DISABLE	, TBSTATE_ENABLED, TBSTYLE_BUTTON, 0, 0,	//ダミー

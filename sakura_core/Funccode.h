@@ -1,18 +1,15 @@
 //	$Id$
 /************************************************************************
-
 	funccode.h
-
 	機能に関するいろいろ
 	Copyright (C) 1998-2000, Norio Nakatani
-
 ************************************************************************/
 
 #ifndef _FUNCCODE_H_
 #define _FUNCCODE_H_
 
 /* 未定義用(ダミーとしても使う) */	//Oct. 17, 2000 jepro noted
-#define	F_DISABLE		0	//未使用
+#define F_DISABLE		0	//未使用
 
 
 /* ファイル操作系 */
@@ -35,8 +32,8 @@
 #define F_OPEN_HHPP					30160	//同名のC/C++ヘッダファイルを開く	//Feb. 9, 2001 jepro「.cまたは.cppと同名の.hを開く」から変更
 #define F_OPEN_CCPP					30161	//同名のC/C++ソースファイルを開く	//Feb. 9, 2001 jepro「.hと同名の.c(なければ.cpp)を開く」から変更
 #define	F_OPEN_HfromtoC				30162	//同名のC/C++ヘッダ(ソース)を開く	//Feb. 7, 2001 JEPRO 追加
-#define F_ACTIVATE_SQLPLUS			30170 	/* Oracle SQL*Plusをアクティブ表示 */
-#define F_PLSQL_COMPILE_ON_SQLPLUS	30171 	/* Oracle SQL*Plusで実行 */	//Sept. 17, 2000 jepro 説明の「コンパイル」を「実行」に統一
+#define F_ACTIVATE_SQLPLUS			30170	/* Oracle SQL*Plusをアクティブ表示 */
+#define F_PLSQL_COMPILE_ON_SQLPLUS	30171	/* Oracle SQL*Plusで実行 */	//Sept. 17, 2000 jepro 説明の「コンパイル」を「実行」に統一
 #define F_BROWSE					30180	//ブラウズ
 #define F_PROPERTY_FILE				30190	/* ファイルのプロパティ */
 #define F_EXITALL					30195	/* テキストエディタの全終了 */	//Dec. 27, 2000 JEPRO 追加
@@ -51,8 +48,8 @@
 #define F_DELETE_BACK		30222	//カーソルの前を削除
 #define F_WordDeleteToStart	30230	//単語の左端まで削除
 #define F_WordDeleteToEnd	30231	//単語の右端まで削除
-#define F_WordCut			30232	//単語を切り取り
-#define F_WordDelete		30233	//単語を削除
+#define F_WordCut			30232	//単語切り取り
+#define F_WordDelete		30233	//単語削除
 #define F_LineCutToStart	30240	//行頭まで切り取り(改行単位)
 #define F_LineCutToEnd		30241	//行末まで切り取り(改行単位)
 #define F_LineDeleteToStart	30242	//行頭まで削除(改行単位)
@@ -162,8 +159,7 @@
 #define F_COPYLINESWITHLINENUMBER	30612	//選択範囲内全行行番号付きコピー
 #define F_COPYPATH					30620	//このファイルのパス名をクリップボードにコピー
 #define F_COPYTAG					30621	//このファイルのパス名とカーソル位置をコピー
-//jeprotest	Sept. 16, 2000 JEPRO
-//ショートカットキーがうまく働かないので次行は殺してある(ショートカットを登録しなければ以下の設定で使えるが...)
+//Sept. 16, 2000 JEPRO ショートカットキーがうまく働かないので次行は殺してある	//Dec. 25, 2000 復活
 #define F_CREATEKEYBINDLIST			30630	//キー割り当て一覧をコピー //Sept. 15, 2000 JEPRO 上の行はIDM_TESTのままではうまくいかないのでFに変えて登録
 
 
@@ -227,18 +223,18 @@
 
 
 /* マクロ系 */
-#define F_RECKEYMACRO		31250  /* キーマクロの記録開始／終了 */
-#define F_SAVEKEYMACRO		31251  /* キーマクロの保存 */
-#define F_LOADKEYMACRO		31252  /* キーマクロの読み込み */
-#define F_EXECKEYMACRO		31253  /* キーマクロの実行 */
+#define F_RECKEYMACRO		31250	/* キーマクロの記録開始／終了 */
+#define F_SAVEKEYMACRO		31251	/* キーマクロの保存 */
+#define F_LOADKEYMACRO		31252	/* キーマクロの読み込み */
+#define F_EXECKEYMACRO		31253	/* キーマクロの実行 */
 //	From Here Sept. 20, 2000 JEPRO 名称CMMANDをCOMMANDに変更
-//	#define F_EXECCMMAND		31270  /* 外部コマンド実行 */
-#define F_EXECCOMMAND		31270  /* 外部コマンド実行 */
+//	#define F_EXECCMMAND		31270	/* 外部コマンド実行 */
+#define F_EXECCOMMAND		31270	/* 外部コマンド実行 */
 //	To Here Sept. 20, 2000
 
 //	Jul. 4, 2000 genta
-#define F_USERMACRO_0      31200  /* 登録マクロ開始 */
-#define SIZE_CUSTMACRO     100  /* 登録できるマクロの数 */
+#define F_USERMACRO_0		31200	/* 登録マクロ開始 */
+#define SIZE_CUSTMACRO		100		/* 登録できるマクロの数 */
 
 
 /* カスタムメニュー */
@@ -306,11 +302,11 @@
 
 /* 機能一覧に関するデータ宣言 */
 namespace nsFuncCode{
-	extern const char* ppszFuncKind[];
-	extern const int nFuncKindNum;
-	extern const int pnFuncListNumArr[];
-	extern const int* ppnFuncListArr[];
-	extern const int nFincListNumArrNum;
+	extern const char*	ppszFuncKind[];
+	extern const int	nFuncKindNum;
+	extern const int	pnFuncListNumArr[];
+	extern const int*	ppnFuncListArr[];
+	extern const int	nFincListNumArrNum;
 };
 ///////////////////////////////////////////////////////////////////////
 #endif /* _FUNCCODE_H_ */

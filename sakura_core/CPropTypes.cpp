@@ -1,13 +1,12 @@
 //	$Id$
 /************************************************************************
-
 	CPropTypes.cpp
 	Copyright (C) 1998-2000, Norio Nakatani
 
 	UPDATE:
 	CREATE: 1998/12/24  新規作成
-
 ************************************************************************/
+
 #include "sakura_rc.h"
 #include "CPropTypes.h"
 #include "debug.h"
@@ -574,7 +573,7 @@ int CPropTypes::DoPropertySheet( int nPageNum )
 		);
 		::LocalFree( pszMsgBuf );
 	}
-    
+
 //	::DeleteObject( m_hbmpToolButtons );
 //	m_hbmpToolButtons = NULL;
 	return nRet;
@@ -1294,10 +1293,10 @@ int CPropTypes::GetData_p1( HWND hwndDlg )
 //
 //		/* コメントを表示する */
 //		::CheckDlgButton( hwndDlg, IDC_CHECK_COMMENT, m_Types.m_bDispCOMMENT );
-//		
+//
 //		/* シングルクォーテーション文字列を表示する */
 //		::CheckDlgButton( hwndDlg, IDC_CHECK_SSTRING, m_Types.m_bDispSSTRING );
-//		
+//
 //		/* ダブルクォーテーション文字列を表示する */
 //		::CheckDlgButton( hwndDlg, IDC_CHECK_WSTRING, m_Types.m_bDispWSTRING );
 //
@@ -1386,10 +1385,10 @@ int CPropTypes::GetData_p1( HWND hwndDlg )
 //
 //		/* コメントを表示する */
 //		m_Types.m_bDispCOMMENT = ::IsDlgButtonChecked( hwndDlg, IDC_CHECK_COMMENT );
-//		
+//
 //		/* シングルクォーテーション文字列を表示する */
 //		m_Types.m_bDispSSTRING = ::IsDlgButtonChecked( hwndDlg, IDC_CHECK_SSTRING );
-//		
+//
 //		/* ダブルクォーテーション文字列を表示する */
 //		m_Types.m_bDispWSTRING = ::IsDlgButtonChecked( hwndDlg, IDC_CHECK_WSTRING );
 //
@@ -1428,7 +1427,7 @@ int CPropTypes::GetData_p1( HWND hwndDlg )
 //			m_Types.m_nKeyWordSetIdx = -1;
 //		}else{
 //			m_Types.m_nKeyWordSetIdx = nIdx - 1;
-//		
+//
 //		}
 //
 //		return TRUE;
@@ -1480,7 +1479,7 @@ void CPropTypes::p3_Import_Colors( HWND hwndDlg )
 	/* 色設定Ver1か */
 	hFile = _lopen( szPath, OF_READ );
 	if( HFILE_ERROR == hFile ){
-		::MYMESSAGEBOX(	hwndDlg, MB_OK | MB_ICONSTOP, GSTR_APPNAME, "ファイルを開けませんでした。\n\n%s", szPath );
+		::MYMESSAGEBOX( hwndDlg, MB_OK | MB_ICONSTOP, GSTR_APPNAME, "ファイルを開けませんでした。\n\n%s", szPath );
 		return;
 	}
 //	if( STR_COLORDATA_HEAD_LEN		== _lread( hFile, pHeader, STR_COLORDATA_HEAD_LEN )
@@ -1488,16 +1487,16 @@ void CPropTypes::p3_Import_Colors( HWND hwndDlg )
 //	 && 0 == memcmp( pHeader, STR_COLORDATA_HEAD, STR_COLORDATA_HEAD_LEN )
 //	){
 //		int nWorkWork = sizeof( ColorInfoArr[0] );
-//		
+//
 //		for( i = 0; i < nColorInfoArrNum && i < m_Types.m_nColorInfoArrNum; ++i ){
 //			if( sizeof( ColorInfoArr[i] ) != _lread( hFile,  &ColorInfoArr[i], sizeof( ColorInfoArr[i] ) ) ){
-//				::MYMESSAGEBOX(	hwndDlg, MB_OK | MB_ICONSTOP, GSTR_APPNAME,
+//				::MYMESSAGEBOX( hwndDlg, MB_OK | MB_ICONSTOP, GSTR_APPNAME,
 //					"色設定ファイルの形式が違います。\n\n%s", szPath
 //				);
 //				_lclose( hFile );
 //				return;
 //			}
-//		} 
+//		}
 //		_lclose( hFile );
 //		goto complete;
 //	}else{
@@ -1516,7 +1515,7 @@ void CPropTypes::p3_Import_Colors( HWND hwndDlg )
 			0 == memcmp( pHeader, szWork, nWorkLen )
 		){
 		}else{
-			::MYMESSAGEBOX(	hwndDlg, MB_OK | MB_ICONSTOP, GSTR_APPNAME,
+			::MYMESSAGEBOX( hwndDlg, MB_OK | MB_ICONSTOP, GSTR_APPNAME,
 //				"色設定ファイルの形式が違います。\n古い形式はサポートされなくなりました。\n%s", szPath
 //				Nov. 2, 2000 JEPRO 変更 [注]. 0.3.9.0:ur3β10以降、設定項目の番号を入れ替えたため
 //				Dec. 26, 2000 JEPRO UR1.2.24.0で強調キーワード2が入ってきたためCI[13]が追加された. それに伴い13番以降を1つづらした
@@ -1585,7 +1584,7 @@ void CPropTypes::p3_Import_Colors( HWND hwndDlg )
 	nColorInfoArrNum = COLORIDX_LAST;
 	if( FALSE == cProfile.ReadProfile( szPath ) ){
 		/* 設定ファイルが存在しない */
-		::MYMESSAGEBOX(	hwndDlg, MB_OK | MB_ICONSTOP, GSTR_APPNAME,
+		::MYMESSAGEBOX( hwndDlg, MB_OK | MB_ICONSTOP, GSTR_APPNAME,
 			"ファイルを開けませんでした。\n\n%s", szPath
 		);
 		return;
@@ -1594,7 +1593,7 @@ void CPropTypes::p3_Import_Colors( HWND hwndDlg )
 	for( i = 0; i < m_Types.m_nColorInfoArrNum; ++i ){
 		ColorInfoArr[i] = m_Types.m_ColorInfoArr[i];
 		strcpy( ColorInfoArr[i].m_szName, m_Types.m_ColorInfoArr[i].m_szName );
-	} 
+	}
 	CShareData::IO_ColorSet( &cProfile, TRUE, STR_COLORDATA_SECTION, ColorInfoArr );
 
 
@@ -1665,12 +1664,12 @@ void CPropTypes::p3_Export_Colors( HWND hwndDlg )
 //	}
 //	for( i = 0; i < m_Types.m_nColorInfoArrNum; ++i ){
 //		if( sizeof( m_Types.m_ColorInfoArr[i] ) != _lwrite( hFile, (LPCSTR)&m_Types.m_ColorInfoArr[i], sizeof( m_Types.m_ColorInfoArr[i] ) ) ){
-//			::MYMESSAGEBOX(	hwndDlg, MB_OK | MB_ICONSTOP, GSTR_APPNAME,
+//			::MYMESSAGEBOX( hwndDlg, MB_OK | MB_ICONSTOP, GSTR_APPNAME,
 //				"ファイルの書き込みに失敗しました。\n\n%s", szPath
 //			);
 //			return;
 //		}
-//	} 
+//	}
 //	_lclose( hFile );
 
 	/* 色設定 I/O */
@@ -1754,7 +1753,7 @@ LRESULT APIENTRY ColorList_SubclassProc( HWND hwnd, UINT uMsg, WPARAM wParam, LP
 			::InvalidateRect( hwnd, &rcItem, TRUE );
 		}
 		break;
-	
+
 	case WM_LBUTTONDBLCLK:
 		if( -1 == nIndex ){
 			break;
@@ -1855,7 +1854,7 @@ BOOL CPropTypes::DispatchEvent_p3_new(
 
 		/* 色リストをフック */
 		m_wpColorListProc = (WNDPROC) ::SetWindowLong( hwndListColor, GWL_WNDPROC, (LONG)ColorList_SubclassProc );
-		
+
 		return TRUE;
 
 	case WM_COMMAND:
@@ -2336,7 +2335,7 @@ void CPropTypes::DrawColorListItem( DRAWITEMSTRUCT* pDis )
 //	}
 //	return;
 
-	
+
 	rc1.left+= (2 + 16);
 	rc1.top += 2;
 	rc1.right -= ( 2 + 27 );

@@ -1,13 +1,12 @@
 //	$Id$
 /************************************************************************
-
 	CEditView.h
 	Copyright (C) 1998-2000, Norio Nakatani
 
 	UPDATE:
 	CREATE: 1998/3/13  新規作成
-
 ************************************************************************/
+
 class CEditView;
 
 #include "CEditDoc.h"
@@ -119,9 +118,9 @@ public:
 
 public: /* テスト用にアクセス属性を変更 */
 	CDropTarget*	m_pcDropTarget;
-	BOOL	m_bDrawSWITCH;
-	BOOL	m_bDragSource;	/* 選択テキストのドラッグ中か */
-	BOOL	m_bDragMode;	/* 選択テキストのドラッグ中か */
+	BOOL			m_bDrawSWITCH;
+	BOOL			m_bDragSource;	/* 選択テキストのドラッグ中か */
+	BOOL			m_bDragMode;	/* 選択テキストのドラッグ中か */
 
 	/* 単語検索の状態 */
 	CJre	m_CurSrch_CJre;
@@ -140,7 +139,7 @@ public: /* テスト用にアクセス属性を変更 */
 	int		m_nCaretPosX_Prev;	/* ビュー左端からのカーソル桁位置（０オリジン）*/
 	int		m_nCaretPosX;		/* ビュー左端からのカーソル桁位置（０開始）*/
 	int		m_nCaretPosY;		/* ビュー上端からのカーソル行位置（０開始）*/
-	int		m_nCaretPosX_PHY;	/* カーソル位置  改行単位行先頭からのバイト数（０開始 */
+	int		m_nCaretPosX_PHY;	/* カーソル位置  改行単位行先頭からのバイト数（０開始）*/
 	int		m_nCaretPosY_PHY;	/* カーソル位置  改行単位行の行番号（０開始）*/
 	/*
 	||  メンバ変数
@@ -225,7 +224,7 @@ public: /* テスト用にアクセス属性を変更 */
 	POINT	m_poTipCurPos;			/* Tip起動時のマウスカーソル位置 */
 	BOOL	m_bInMenuLoop;			/* メニュー モーダル ループに入っています */
 	CDicMgr	m_cDicMgr;				/* 辞書マネージャ */
-	/* 補完 */
+	/* 入力補完 */
 //	CHokanMgr	m_cHokanMgr;
 	BOOL		m_bHokan;
 	//	Aug. 31, 2000 genta
@@ -346,8 +345,8 @@ protected:
 	void Command_DELETE_BACK( void );		/* カーソルの前を削除 */
 	void Command_WordDeleteToStart( void );	/* 単語の左端まで削除 */
 	void Command_WordDeleteToEnd( void );	/* 単語の右端まで削除 */
-	void Command_WordCut( void );			/* 単語を切り取り */
-	void Command_WordDelete( void );		/* 単語を削除 */
+	void Command_WordCut( void );			/* 単語切り取り */
+	void Command_WordDelete( void );		/* 単語削除 */
 	void Command_LineCutToStart( void );   	//行頭まで切り取り(改行単位)
 	void Command_LineCutToEnd( void );   	//行末まで切り取り(改行単位)
 	void Command_LineDeleteToStart( void );	/* 行頭まで削除(改行単位) */
@@ -436,8 +435,8 @@ void ReplaceData_CEditView(
 	int			nDelLineTo,			/* 削除範囲行  To   レイアウト行番号 */
 	int			nDelColmTo,			/* 削除範囲位置To   レイアウト行桁位置 */
 	CMemory*	pcmemCopyOfDeleted,	/* 削除されたデータのコピー(NULL可能) */
-	const char*	pInsData,			/* 挿入するデータ */       
-	int			nInsDataLen,		/* 挿入するデータの長さ */ 
+	const char*	pInsData,			/* 挿入するデータ */
+	int			nInsDataLen,		/* 挿入するデータの長さ */
 //	int*		pnAddLineNum,		/* 再描画ヒント レイアウト行の増減 */
 //	int*		pnModLineFrom,		/* 再描画ヒント 変更されたレイアウト行From(レイアウト行の増減が0のとき使う) */
 //	int*		pnModLineTo,		/* 再描画ヒント 変更されたレイアウト行From(レイアウト行の増減が0のとき使う) */
@@ -538,7 +537,7 @@ void ReplaceData_CEditView(
 	void Command_MINIMIZE_ALL( void );	/* すべて最小化 */
 	void Command_REDRAW( void );		/* 再描画 */
 	void Command_WIN_OUTPUT( void );	//アウトプットウィンドウ表示
-	
+
 	/* 支援 */
 	void Command_HOKAN( void );			/* 入力補完	*/
 	void Command_HELP_CONTENTS( void );	/* ヘルプ目次 */			//Nov. 25, 2000 JEPRO added

@@ -78,8 +78,8 @@ CEditDoc::CEditDoc() :
 //#ifdef _DEBUG
 //	m_cf.Flags = CF_SCREENFONTS | CF_INITTOLOGFONTSTRUCT;
 //#endif
-	
-	
+
+
 	/* レイアウト管理情報の初期化 */
 	m_cLayoutMgr.Create( &m_cDocLineMgr );
 	/* レイアウト情報の変更 */
@@ -112,7 +112,7 @@ CEditDoc::~CEditDoc()
 {
 //	delete (CDialog*)m_pcDlgTest;
 //	m_pcDlgTest = NULL;
-	
+
 	if( m_hWnd != NULL ){
 		DestroyWindow( m_hWnd );
 	}
@@ -175,7 +175,7 @@ BOOL CEditDoc::Create(
 	m_cPropCommon.Create( m_hInstance, m_hWnd, pcIcons );
 	m_cPropTypes.Create( m_hInstance, m_hWnd );
 
-	/* 補完ウィンドウ作成 */
+	/* 入力補完ウィンドウ作成 */
 	m_cHokanMgr.DoModeless( m_hInstance, m_cEditViewArr[0].m_hWnd, (LPARAM)&(m_cEditViewArr[0]) );
 
 	return TRUE;
@@ -226,9 +226,6 @@ BOOL CEditDoc::IsTextSelected( void )
 {
 	return m_cEditViewArr[m_nActivePaneIndex].IsTextSelected();
 }
-
-
-
 
 
 
@@ -355,7 +352,7 @@ BOOL CEditDoc::FileRead(
 				char*		pszPathNew = new char[_MAX_PATH];
 //				int			nCharCode;
 //				BOOL		bReadOnly;
-				
+
 				strcpy( pszPathNew, "" );
 
 				/* 「ファイルを開く」ダイアログ */
@@ -432,13 +429,13 @@ BOOL CEditDoc::FileRead(
 	//	-1以上CODE_MAX未満のみ受け付ける
 	//	Oct. 26, 2000 genta
 	//	CODE_AUTODETECTはこの範囲から外れているから個別にチェック
-	if(( -1 <= nCharCode && nCharCode < CODE_CODEMAX ) || nCharCode == CODE_AUTODETECT )
+	if( ( -1 <= nCharCode && nCharCode < CODE_CODEMAX ) || nCharCode == CODE_AUTODETECT )
 		m_nCharCode = nCharCode;
 
 	/* MRUリストに存在するか調べる  存在するならばファイル情報を返す */
 	if( m_cShareData.IsExistInMRUList( pszPath, &fi ) ){
 		bIsExistInMRU = TRUE;
-		
+
 //		m_cDlgJump.m_bPLSQL = fi.m_bPLSQL;			/* 行ジャンプが PL/SQLモードか */
 //		m_cDlgJump.m_nPLSQL_E1 = fi.m_nPLSQL_E1;	/* 行ジャンプが PL/SQLモードのときの基点 */
 
@@ -453,7 +450,7 @@ BOOL CEditDoc::FileRead(
 			m_nCharCode = 0;
 		}
 		if( CODE_AUTODETECT == m_nCharCode ){	/* 文字コード自動判別 */
-			/* 
+			/*
 			|| ファイルの日本語コードセット判別
 			||
 			|| 【戻り値】
@@ -465,8 +462,8 @@ BOOL CEditDoc::FileRead(
 			*/
 			m_nCharCode = CMemory::CheckKanjiCodeOfFile( pszPath );
 			if( -1 == m_nCharCode ){
-				::MYMESSAGEBOX(	m_hWnd,	MB_OK | MB_ICONEXCLAMATION | MB_TOPMOST, GSTR_APPNAME,
-					"%s\n文字コードの判別処理でエラーが発生しました。", 
+				::MYMESSAGEBOX( m_hWnd, MB_OK | MB_ICONEXCLAMATION | MB_TOPMOST, GSTR_APPNAME,
+					"%s\n文字コードの判別処理でエラーが発生しました。",
 					pszPath
 				);
 				strcpy( m_szFilePath, "" );
@@ -485,7 +482,7 @@ BOOL CEditDoc::FileRead(
 				case CODE_UNICODE:	/* Unicode */	pszCodeName = "Unicode";break;
 				case CODE_UTF8:	/* UTF-8 */			pszCodeName = "UTF-8";break;
 				case CODE_UTF7:	/* UTF-7 */			pszCodeName = "UTF-7";break;
-				} 
+				}
 				switch( m_nCharCode ){
 				case CODE_SJIS:		/* SJIS */		pszCodeNameNew = "SJIS";break;	//Sept. 1, 2000 jepro 'シフト'を'S'に変更
 				case CODE_JIS:		/* JIS */		pszCodeNameNew = "JIS";break;
@@ -493,8 +490,8 @@ BOOL CEditDoc::FileRead(
 				case CODE_UNICODE:	/* Unicode */	pszCodeNameNew = "Unicode";break;
 				case CODE_UTF8:	/* UTF-8 */			pszCodeNameNew = "UTF-8";break;
 				case CODE_UTF7:	/* UTF-7 */			pszCodeNameNew = "UTF-7";break;
-				} 
-				if( pszCodeName != NULL	){
+				}
+				if( pszCodeName != NULL ){
 					::MessageBeep( MB_ICONQUESTION );
 					nRet = MYMESSAGEBOX(
 						m_hWnd,
@@ -535,7 +532,7 @@ BOOL CEditDoc::FileRead(
 			m_nCharCode = 0;
 		}
 		if( CODE_AUTODETECT == m_nCharCode ){	/* 文字コード自動判別 */
-			/* 
+			/*
 			|| ファイルの日本語コードセット判別
 			||
 			|| 【戻り値】
@@ -547,7 +544,7 @@ BOOL CEditDoc::FileRead(
 			*/
 			m_nCharCode = CMemory::CheckKanjiCodeOfFile( pszPath );
 			if( -1 == m_nCharCode ){
-				::MYMESSAGEBOX(	m_hWnd,	MB_OK | MB_ICONEXCLAMATION | MB_TOPMOST, GSTR_APPNAME,
+				::MYMESSAGEBOX( m_hWnd, MB_OK | MB_ICONEXCLAMATION | MB_TOPMOST, GSTR_APPNAME,
 					"%s\n文字コードの判別処理でエラーが発生しました。",
 					pszPath
 				);
@@ -601,7 +598,7 @@ BOOL CEditDoc::FileRead(
 		);
 
 //		::MessageBeep( MB_ICONHAND );
-//		::MYMESSAGEBOX(	hwndParent,	MB_OK | MB_ICONQUESTION | MB_TOPMOST, GSTR_APPNAME,
+//		::MYMESSAGEBOX( hwndParent, MB_OK | MB_ICONQUESTION | MB_TOPMOST, GSTR_APPNAME,
 //			"'%s'\nファイルが存在しません。",  pszPath
 //
 //		);
@@ -783,7 +780,7 @@ BOOL CEditDoc::FileWrite( const char* pszPath, enumEOLType cEolType )
 		m_cShareData.AddMRUList( &fi );
 	}else{
 		char szPath[_MAX_PATH + 1];
-		
+
 		//	Aug. 16, 2000 genta
 		//	現在のファイル名を初期値で与えない
 		//	strcpy( szPath, m_szFilePath );
@@ -826,7 +823,7 @@ BOOL CEditDoc::FileWrite( const char* pszPath, enumEOLType cEolType )
 		int doctype;
 		m_pShareData = m_cShareData.GetShareData( m_szFilePath, &doctype );
 		SetDocumentType( doctype, false );
-		
+
 		/* レイアウト情報の変更 */
 		Types& ref = GetDocumentAttribute();
 		m_cLayoutMgr.SetLayoutInfo(
@@ -927,7 +924,7 @@ BOOL CEditDoc::OpenFileDialog(
 		for( i = 0; i < m_pShareData->m_nOPENFOLDERArrNum; ++i ){
 			if( m_pShareData->m_Common.m_nOPENFOLDERArrNum_MAX <= i ){
 				break;
-			} 
+			}
 			++j;
 		}
 	}
@@ -1226,7 +1223,7 @@ BOOL CEditDoc::OpenPropertySheet( int nPageNum/*, int nActiveItem*/ )
 			m_pShareData->m_Common = m_cPropCommon.m_Common;
 //		}else{
 //		}
-		
+
 //		/* 共通設定とキーワード設定が無変更の場合は、なにもしない */
 //		if( FALSE == m_pShareData->m_nCommonModify
 //		 && FALSE == m_pShareData->m_bKeyWordSetModify
@@ -1317,7 +1314,7 @@ BOOL CEditDoc::IsEnablePaste( void )
 {
 	UINT uFormatSakuraClip;
 	uFormatSakuraClip = ::RegisterClipboardFormat( "SAKURAClip" );
-	if( ::IsClipboardFormatAvailable( CF_OEMTEXT ) 
+	if( ::IsClipboardFormatAvailable( CF_OEMTEXT )
 	 || ::IsClipboardFormatAvailable( uFormatSakuraClip )
 	){
 		return TRUE;
@@ -1358,11 +1355,11 @@ void CEditDoc::SetParentCaption( BOOL bKillFocus )
 
 
 	hwnd = m_hwndParent;
-	
+
 	if( m_bReadOnly ){	/* 読み取り専用モード */
 		pszMode = "（読み取り専用）";
 	}else
-	if(	0 != m_nFileShareModeOld && /* ファイルの排他制御モード */
+	if( 0 != m_nFileShareModeOld && /* ファイルの排他制御モード */
 		NULL == m_hLockedFile		/* ロックしていない */
 	){
 		pszMode = "（上書き禁止）";
@@ -1471,6 +1468,7 @@ BOOL CEditDoc::MakeBackUp( void )
 	char	szFname[_MAX_FNAME];
 	char	szExt[_MAX_EXT];
 //	int		nLen;
+	int		nRet;
 	char*	pBase;
 
 	/* ファイル名が付いているか */
@@ -1491,13 +1489,13 @@ BOOL CEditDoc::MakeBackUp( void )
 		/* フォルダの最後が半角かつ'\\'でない場合は、付加する */
 		AddLastYenFromDirectoryPath( szPath );
 	}
-	else {
+	else{
 		wsprintf( szPath, "%s%s", szDrive, szDir );
 	}
 	pBase = szPath + strlen( szPath );
 
 	/* バックアップファイル名のタイプ 1=(.bak) 2=*_日付.* */
-	switch( m_pShareData->m_Common.GetBackupType()){
+	switch( m_pShareData->m_Common.GetBackupType() ){
 	case 1:
 		wsprintf( pBase, "%s%s", szFname, ".bak" );
 		break;
@@ -1529,7 +1527,7 @@ BOOL CEditDoc::MakeBackUp( void )
 		}
 		/* YYYYMMDD時分秒 形式に変換 */
 		strftime( szTime, sizeof( szTime ) - 1, szForm, today );
-		wsprintf( pBase, "%s_%s%s", szFname, szTime, szExt	);
+		wsprintf( pBase, "%s_%s%s", szFname, szTime, szExt );
 		break;
 	case 3: //	?xx : xx = 00~99, ?は任意の文字
 		//	Aug. 15, 2000 genta
@@ -1547,16 +1545,31 @@ BOOL CEditDoc::MakeBackUp( void )
 
 	if( m_pShareData->m_Common.m_bBackUpDialog ){	/* バックアップの作成前に確認 */
 		::MessageBeep( MB_ICONQUESTION );
-		if( IDYES != MYMESSAGEBOX(
+//From Here Feb. 27, 2001 JEPROtest キャンセルもできるようにし、メッセージを追加した
+//		if( IDYES != MYMESSAGEBOX(
+//			m_hWnd,
+//			MB_YESNO | MB_ICONQUESTION | MB_TOPMOST,
+//			"バックアップ作成の確認",
+//			"変更される前に、バックアップファイルを作成します。\nよろしいですか？\n\n%s\n    ↓\n%s\n\n",
+//			lstrlen( m_szFilePath ) ? m_szFilePath : "（無題）",
+//			szPath
+//		) ){
+//			return FALSE;
+//		}
+		nRet = ::MYMESSAGEBOX(
 			m_hWnd,
-			MB_YESNO | MB_ICONQUESTION | MB_TOPMOST,
+			MB_YESNO/*CANCEL*/ | MB_ICONQUESTION | MB_TOPMOST,
 			"バックアップ作成の確認",
-			"変更される前に、バックアップファイルを作成します。\nよろしいですか？\n\n%s\n    ↓\n%s\n\n",
+			"変更される前に、バックアップファイルを作成します。\nよろしいですか？  [いいえ(N)] を選ぶと上書き保存になります。\n\n%s\n    ↓\n%s\n\n",
 			lstrlen( m_szFilePath ) ? m_szFilePath : "（無題）",
 			szPath
-		) ){
+		);
+		if( IDNO == nRet ){
 			return FALSE;
+		}else if( IDCANCEL == nRet ){
+			return FALSE;// FALSE ではダメですが何を返せばいいのかわかりません。。。
 		}
+//To Here Feb. 27, 2001
 	}
 
 	//	From Here Aug. 16, 2000 genta
@@ -1576,7 +1589,7 @@ BOOL CEditDoc::MakeBackUp( void )
 		for( i = 0; i <= 99; i++ ){	//	最大値に関わらず，99（2桁の最大値）まで探す
 			//	ファイル名をセット
 			wsprintf( pBase, "%02d", i );
-		
+
 			hFind = ::FindFirstFile( szPath, &fData );
 			if( hFind == INVALID_HANDLE_VALUE ){
 				//	検索に失敗した == ファイルは存在しない
@@ -1607,7 +1620,7 @@ BOOL CEditDoc::MakeBackUp( void )
 		}
 
 		//	この位置でiは存在するバックアップファイルの最大番号を表している．
-		
+
 		//	3. そこから0番まではコピーしながら移動
 		char szNewPath[MAX_PATH];
 		char *pNewNrBase;
@@ -1783,7 +1796,7 @@ void CEditDoc::DoFileUnLock( void )
 	1	単語読み込み中
 	2	記号列読み込み中
 	999	長過ぎる単語無視中
-	
+
 	FuncIdの値の意味
 	10の位で目的別に使い分けている．C/C++用は10位が0
 	1: 宣言
@@ -1806,7 +1819,7 @@ inline bool C_IsWordChar( char c ){
 		);
 }
 //	To Here
-	
+
 void CEditDoc::MakeFuncList_C( CFuncInfoArr* pcFuncInfoArr )
 {
 	const char*	pLine;
@@ -1846,7 +1859,7 @@ void CEditDoc::MakeFuncList_C( CFuncInfoArr* pcFuncInfoArr )
 		for( i = 0; i < nLineLen; ++i ){
 			/* 1バイト文字だけを処理する */
 			nCharChars = CMemory::MemCharNext( pLine, nLineLen, &pLine[i] ) - &pLine[i];
-			if(	1 < nCharChars ){
+			if( 1 < nCharChars ){
 				i += (nCharChars - 1);
 				bLineTop = false;
 				continue;
@@ -1942,7 +1955,7 @@ void CEditDoc::MakeFuncList_C( CFuncInfoArr* pcFuncInfoArr )
 			/* ノーマルモード */
 			if( 0 == nMode ){
 				/* 空白やタブ記号等を飛ばす */
-				if( C_IsSpace( pLine[i] ))
+				if( C_IsSpace( pLine[i] ) )
 					continue;
 				//	Mar 4, 2001 genta
 				//	プリプロセッサ指令は無視する
@@ -2044,7 +2057,7 @@ void CEditDoc::MakeFuncList_C( CFuncInfoArr* pcFuncInfoArr )
 					nMode = 0;
 					continue;
 				}else{
-					if( C_IsWordChar( pLine[i] )){
+					if( C_IsWordChar( pLine[i] ) ){
 						if( 2 == nNestLevel2 ){
 							//	閉じ括弧が無いけどとりあえず登録しちゃう
 							if( 0 != strcmp( "sizeof", szFuncName ) ){
@@ -2076,7 +2089,7 @@ void CEditDoc::MakeFuncList_C( CFuncInfoArr* pcFuncInfoArr )
 						//	From Here
 						//	直前のwordの最後が::か，あるいは直後のwordの先頭が::なら
 						//	クラス限定子と考えて両者を接続する．
-						
+
 						{
 							int pos = strlen( szWordPrev ) - 2;
 							if( //	前の文字列の末尾チェック
@@ -2191,7 +2204,7 @@ void CEditDoc::MakeFuncList_PLSQL( CFuncInfoArr* pcFuncInfoArr )
 					('a' <= pLine[i] &&	pLine[i] <= 'z' )||
 					('A' <= pLine[i] &&	pLine[i] <= 'Z' )||
 					('0' <= pLine[i] &&	pLine[i] <= '9' )
-					))
+					) )
 				 || 2 == nCharChars
 				){
 //					++nWordIdx;
@@ -2429,7 +2442,7 @@ void CEditDoc::MakeFuncList_PLSQL( CFuncInfoArr* pcFuncInfoArr )
 						('a' <= pLine[i] &&	pLine[i] <= 'z' )||
 						('A' <= pLine[i] &&	pLine[i] <= 'Z' )||
 						('0' <= pLine[i] &&	pLine[i] <= '9' )
-						))
+						) )
 					 || 2 == nCharChars
 					){
 						strcpy( szWordPrev, szWord );
@@ -2479,7 +2492,7 @@ void CEditDoc::MakeTopicList_txt( CFuncInfoArr* pcFuncInfoArr )
 	char*					pszStarts;
 	int						nStartsLen;
 	char*					pszText;
-	
+
 	pszStarts = m_pShareData->m_Common.m_szMidashiKigou; 	/* 見出し記号 */
 	nStartsLen = lstrlen( pszStarts );
 
@@ -2578,7 +2591,7 @@ void CEditDoc::MakeTopicList_cobol( CFuncInfoArr* pcFuncInfoArr )
 	const char*				pszKeyWord;
 	int						nKeyWordLen;
 	BOOL					bDivision;
-	
+
 	szDivision[0] = '\0';
 	szLabel[0] =  '\0';
 
@@ -2692,7 +2705,7 @@ void CEditDoc::MakeTopicList_asm( CFuncInfoArr* pcFuncInfoArr )
 		for( i = 0; i < nLineLen; ++i ){
 			/* 1バイト文字だけを処理する */
 			nCharChars = CMemory::MemCharNext( pLine, nLineLen, &pLine[i] ) - &pLine[i];
-			if(	1 < nCharChars ){
+			if( 1 < nCharChars ){
 				i += (nCharChars - 1);
 				continue;
 			}
@@ -2803,7 +2816,7 @@ void CEditDoc::MakeTopicList_asm( CFuncInfoArr* pcFuncInfoArr )
 							pcFuncInfoArr->AppendData( nLineCount + 1/*nFuncLine*/, nPosY + 1, szWord, nFuncId );
 
 						}
-					
+
 					}
 					strcpy( szWordPrev , szWord );
 
@@ -2884,15 +2897,15 @@ void  CEditDoc::SetActivePane( int nIndex )
 
 	m_cSplitterWnd.SetActivePane( nIndex );
 
-	if( NULL != m_cDlgFind.m_hWnd){		/* 「検索」ダイアログ */
+	if( NULL != m_cDlgFind.m_hWnd ){		/* 「検索」ダイアログ */
 		/* モードレス時：検索対象となるビューの変更 */
 		m_cDlgFind.ChangeView( (LPARAM)&m_cEditViewArr[m_nActivePaneIndex] );
 	}
-	if( NULL != m_cDlgReplace.m_hWnd){	/* 「置換」ダイアログ */
+	if( NULL != m_cDlgReplace.m_hWnd ){	/* 「置換」ダイアログ */
 		/* モードレス時：検索対象となるビューの変更 */
 		m_cDlgReplace.ChangeView( (LPARAM)&m_cEditViewArr[m_nActivePaneIndex] );
 	}
-	if( NULL != m_cHokanMgr.m_hWnd){	/* 「補完」ダイアログ */
+	if( NULL != m_cHokanMgr.m_hWnd ){	/* 「入力補完」ダイアログ */
 		m_cHokanMgr.Hide();
 		/* モードレス時：検索対象となるビューの変更 */
 		m_cHokanMgr.ChangeView( (LPARAM)&m_cEditViewArr[m_nActivePaneIndex] );
@@ -3021,7 +3034,7 @@ void CEditDoc::OnChangeSetting( void )
 	pCEditWnd = ( CEditWnd* )::GetWindowLong( m_hwndParent, GWL_USERDATA );
 
 	pCEditWnd->m_CFuncKeyWnd.m_nCurrentKeyState = -1;
-	
+
 	if( NULL != pCEditWnd ){
 		hwndProgress = pCEditWnd->m_hwndProgressBar;
 	}else{
@@ -3131,8 +3144,8 @@ void CEditDoc::SetFileInfo( FileInfo* pfi )
 	);
 	pfi->m_nX = nX;		/* カーソル 物理位置(行頭からのバイト数) */
 	pfi->m_nY = nY;		/* カーソル 物理位置(折り返し無し行位置) */
-	
-	
+
+
 	pfi->m_bIsModified = m_bIsModified;			/* 変更フラグ */
 	pfi->m_nCharCode = m_nCharCode;				/* 文字コード種別 */
 //	pfi->m_bPLSQL = m_cDlgJump.m_bPLSQL,		/* 行ジャンプが PL/SQLモードか */
@@ -3171,7 +3184,7 @@ BOOL CEditDoc::OnFileClose( void )
 	/* MRUリストへの登録 */
 	m_cShareData.AddMRUList( &fi );
 
-	if(	m_bGrepRunning ){		/* Grep処理中 */
+	if( m_bGrepRunning ){		/* Grep処理中 */
 		::MYMESSAGEBOX(
 			hwndMainFrame,
 			MB_OK | MB_ICONINFORMATION | MB_TOPMOST,
@@ -3181,7 +3194,7 @@ BOOL CEditDoc::OnFileClose( void )
 		return FALSE;
 	}
 
-	
+
 	/* テキストが変更されている場合 */
 	if( m_bIsModified
 	&& FALSE == m_bDebugMode	/* デバッグモニタモードのときは保存確認しない */
@@ -3210,7 +3223,7 @@ BOOL CEditDoc::OnFileClose( void )
 //				if( 0 < lstrlen( m_szFilePath ) ){
 //					nBool = HandleCommand( F_FILESAVE );
 //				}else{
-					nBool = HandleCommand( F_FILESAVEAS	);
+					nBool = HandleCommand( F_FILESAVEAS );
 //				}
 				return nBool;
 			case IDNO:
@@ -3256,7 +3269,7 @@ void CEditDoc::Init( void )
 
 	m_bReadOnly = FALSE;	/* 読み取り専用モード */
 	strcpy( m_szGrepKey, "" );
-	m_bGrepMode = FALSE; 	/* Grepモード */
+	m_bGrepMode = FALSE;	/* Grepモード */
 
 	HICON	hIcon;
 #ifdef _DEBUG
@@ -3268,7 +3281,7 @@ void CEditDoc::Init( void )
 	::SendMessage( m_hwndParent, WM_SETICON, ICON_SMALL, (LPARAM)hIcon );
 	::SendMessage( m_hwndParent, WM_SETICON, ICON_BIG, (LPARAM)NULL );
 	::SendMessage( m_hwndParent, WM_SETICON, ICON_BIG, (LPARAM)hIcon );
-	
+
 	/* ファイルの排他ロック解除 */
 	DoFileUnLock();
 
@@ -3286,7 +3299,7 @@ void CEditDoc::Init( void )
 
 	/* 現在編集中のファイルのパス */
 	m_szFilePath[0] = '\0';
- 
+
 	/* 現在編集中のファイルのタイムスタンプ */
 	m_FileTime.dwLowDateTime = 0;
     m_FileTime.dwHighDateTime = 0;
@@ -3332,13 +3345,13 @@ void CEditDoc::Init( void )
 void CEditDoc::InitAllView( void )
 {
 	int		i;
-	
+
 	m_nCommandExecNum = 0;	/* コマンド実行回数 */
 	/* 先頭へカーソルを移動 */
 	for( i = 0; i < 4; ++i ){
 		/* 現在の選択範囲を非選択状態に戻す */
 		m_cEditViewArr[i].DisableSelectArea( FALSE );
-		
+
 		m_cEditViewArr[i].OnChangeSetting();
 		m_cEditViewArr[i].MoveCursor( 0, 0, TRUE );
 	}
@@ -3349,7 +3362,7 @@ void CEditDoc::InitAllView( void )
 
 
 /* ファイルのタイムスタンプのチェック処理 */
-void CEditDoc::CheckFileTimeStamp( void ) 
+void CEditDoc::CheckFileTimeStamp( void )
 {
 	HWND		hwndActive;
 	BOOL		bUpdate;
@@ -3365,7 +3378,7 @@ void CEditDoc::CheckFileTimeStamp( void )
 		while( 1 ){
 			/* ファイルスタンプをチェックする */
 //			MYTRACE( "ファイルスタンプをチェックする\n" );
-			
+
 			FILETIME	FileTimeNow;
 			HFILE		hFile;
 			BOOL		bWork;
@@ -3376,7 +3389,7 @@ void CEditDoc::CheckFileTimeStamp( void )
 				break;
 			}
 			bWork = ::GetFileTime( (HANDLE)hFile, NULL, NULL, &FileTimeNow );
-			_lclose( hFile ); 
+			_lclose( hFile );
 			if( 0 == bWork ){
 				break;
 			}
@@ -3400,7 +3413,7 @@ void CEditDoc::CheckFileTimeStamp( void )
 	) ){
 		return;
 	}
-	
+
 	int		nCharCode;				/* 文字コード種別 */
 	BOOL	bReadOnly;				/* 読み取り専用モード */
 	nCharCode = m_nCharCode;		/* 文字コード種別 */
@@ -3429,7 +3442,7 @@ void CEditDoc::ReloadCurrentFile(
 		return;
 	}
 
-	
+
 	BOOL	bOpened;
 	char	szFilePath[MAX_PATH];
 	int		nCaretPosX;
@@ -3449,7 +3462,7 @@ void CEditDoc::ReloadCurrentFile(
 	SetParentCaption();
 
 	/* ファイル読み込み */
-	FileRead( 
+	FileRead(
 		szFilePath,
 		&bOpened,
 		nCharCode,	/* 文字コード自動判別 */
@@ -3475,7 +3488,7 @@ void CEditDoc::SetImeMode( int mode )
 	}
 	if( ( mode >> 2 ) > 0 ){
 		ImmGetConversionStatus( hIme, &conv, &sent );
-		
+
 		switch( mode >> 2 ){
 		case 1:	//	FullShape
 			conv |= IME_CMODE_FULLSHAPE;

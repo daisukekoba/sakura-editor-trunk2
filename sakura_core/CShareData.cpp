@@ -1,14 +1,11 @@
 //	$Id$
 /************************************************************************
-
 	CShareData.cpp
-
 	プロセス間共有データへのアクセス
 	Copyright (C) 1998-2000, Norio Nakatani
 
 	UPDATE:
 	CREATE: 1998/5/26  新規作成
-
 ************************************************************************/
 
 //#include <stdio.h>
@@ -41,7 +38,7 @@ CShareData::~CShareData()
 }
 
 
-/* CShareDataクラスの初期化処理 *.
+/* CShareDataクラスの初期化処理 */
 /* CShareDataクラスを利用する前に必ず呼び出してください */
 bool CShareData::Init( void )
 {
@@ -196,13 +193,15 @@ bool CShareData::Init( void )
 			short			nFuncCode_7;
 		};
 		static KEYDATAINIT	KeyDataInit[] = {
-		//	Sept. 1, 2000 Jepro note: key binding
-		//		0,		1,		 2,		3,		4,		5,			6,		7,		8,			9
+		//Sept. 1, 2000 Jepro note: key binding
+		//Feb. 17, 2001 jepro note 2: 順番は2進で下位3ビット[Alt][Ctrl][Shift]の組合せの順(それに2を加えた値)
+		//		0,		1,		 2(000), 3(001),4(010),	5(011),		6(100),	7(101),		8(110),		9(111)
 		//		keycode, keyname, なし, Shitf+, Ctrl+, Shift+Ctrl+, Alt+, Shit+Alt+, Ctrl+Alt+, Shift+Ctrl+Alt+
 		//
 			/* マウスボタン */
 			{ 0, "ダブルクリック",F_SELECTWORD, F_SELECTWORD, F_SELECTWORD, F_SELECTWORD, F_SELECTWORD, F_SELECTWORD, F_SELECTWORD, F_SELECTWORD },
-			{ 0, "右クリック",F_MENU_RBUTTON, F_MENU_RBUTTON, F_MENU_RBUTTON, F_MENU_RBUTTON, F_MENU_RBUTTON, F_MENU_RBUTTON, F_MENU_RBUTTON, F_MENU_RBUTTON },
+		//Feb. 19, 2001 JEPRO Altと右クリックの組合せは効かないので右クリックメニューのキー割り当てをはずした
+			{ 0, "右クリック",F_MENU_RBUTTON, F_MENU_RBUTTON, F_MENU_RBUTTON, F_MENU_RBUTTON, 0, 0, 0, 0 },
 			/* ファンクションキー */
 		//	From Here Sept. 14, 2000 JEPRO
 		//	VK_F1,"F1", F_EXTHTMLHELP, 0, F_EXTHELP1, 0, 0, 0, 0, 0,
@@ -327,7 +326,7 @@ bool CShareData::Init( void )
 			//Jan. 16, 2001 JEPRO	SHift+Ctrl+C に「.hと同名の.c(なければ.cpp)を開く」を追加
 			//Feb. 07, 2001 JEPRO	SHift+Ctrl+C を「.hと同名の.c(なければ.cpp)を開く」→「同名のC/C++ヘッダ(ソース)を開く」に変更
 			{ 'C', "C",0, 0, F_COPY, F_OPEN_HfromtoC, 0, 0, 0, 0 },
-			//Jan. 16, 2001 JEPRO	Ctrl+D に「単語を切り取り」, Shift+Ctrl+D に「単語を削除」を追加
+			//Jan. 16, 2001 JEPRO	Ctrl+D に「単語切り取り」, Shift+Ctrl+D に「単語削除」を追加
 			{ 'D', "D",0, 0, F_WordCut, F_WordDelete, 0, 0, 0, 0 },
 			//Oct. 7, 2000 JEPRO	Ctrl+Alt+E に「重ねて表示」を追加
 			//Jan. 16, 2001	JEPRO	Ctrl+E に「行切り取り(折り返し単位)」, Shift+Ctrl+E に「行削除(折り返し単位)」を追加
@@ -533,11 +532,10 @@ bool CShareData::Init( void )
 		m_pShareData->m_Common.m_nToolBarButtonIdxArr[++i] = 4;		//名前を付けて保存	//Sept. 19, 2000 JEPRO 追加
 		m_pShareData->m_Common.m_nToolBarButtonIdxArr[++i] = 0;
 
-		m_pShareData->m_Common.m_nToolBarButtonIdxArr[++i] = 161;	//切り取り	//Sept. 16, 2000 JEPRO 4→16に変更	//Oct. 25, 2000 16→161
-
-		m_pShareData->m_Common.m_nToolBarButtonIdxArr[++i] = 162;	//コピー	//Sept. 16, 2000 JEPRO 5→17に変更	//Oct. 25, 2000 171→62
-		m_pShareData->m_Common.m_nToolBarButtonIdxArr[++i] = 164;	//貼り付け	//Sept. 16, 2000 JEPRO 6→18に変更	//Oct. 25, 2000 18→164
-		m_pShareData->m_Common.m_nToolBarButtonIdxArr[++i] = 0;
+//		m_pShareData->m_Common.m_nToolBarButtonIdxArr[++i] = 161;	//切り取り	//Sept. 16, 2000 JEPRO 4→16に変更	//Oct. 25, 2000 16→161	//Feb. 24, 2001 外した
+//		m_pShareData->m_Common.m_nToolBarButtonIdxArr[++i] = 162;	//コピー	//Sept. 16, 2000 JEPRO 5→17に変更	//Oct. 25, 2000 171→62	//Feb. 24, 2001 外した
+//		m_pShareData->m_Common.m_nToolBarButtonIdxArr[++i] = 164;	//貼り付け	//Sept. 16, 2000 JEPRO 6→18に変更	//Oct. 25, 2000 18→164	//Feb. 24, 2001 外した
+//		m_pShareData->m_Common.m_nToolBarButtonIdxArr[++i] = 0;		//Feb. 24, JEPRO 2001 外した
 		m_pShareData->m_Common.m_nToolBarButtonIdxArr[++i] = 33;	//元に戻す(Undo)	//Sept. 16, 2000 JEPRO 7→19に変更	//Oct. 25, 2000 19→33
 		m_pShareData->m_Common.m_nToolBarButtonIdxArr[++i] = 34;	//やり直し(Redo)	//Sept. 16, 2000 JEPRO 8→20に変更	//Oct. 25, 2000 20→34
 		m_pShareData->m_Common.m_nToolBarButtonIdxArr[++i] = 0;
@@ -556,11 +554,11 @@ bool CShareData::Init( void )
 		m_pShareData->m_Common.m_nToolBarButtonIdxArr[++i] = 232;	//アウトライン解析	//Dec. 24, 2000 JEPRO 追加
 		m_pShareData->m_Common.m_nToolBarButtonIdxArr[++i] = 0;
 
-		m_pShareData->m_Common.m_nToolBarButtonIdxArr[++i] = 264;	//タイプ別設定	//Sept. 16, 2000 JEPRO 追加
-		m_pShareData->m_Common.m_nToolBarButtonIdxArr[++i] = 265;	//タイプ別設定	//Sept. 16, 2000 JEPRO 18→36に変更	//Oct. 25, 2000 36→265
-		m_pShareData->m_Common.m_nToolBarButtonIdxArr[++i] = 266;	//共通設定		//Sept. 16, 2000 JEPRO 10→37に変更 説明を「設定プロパティシート」から変更	//Oct. 25, 2000 37→266
-//		m_pShareData->m_Common.m_nToolBarButtonIdxArr[++i] = 267;	//フォント設定	//Sept. 16, 2000 JEPRO 11→38に変更	//Oct. 25, 2000 38→267	//Dec. 24, 2000 外した
-		m_pShareData->m_Common.m_nToolBarButtonIdxArr[++i] = 268;	//現在のウィンドウ幅で折り返し	//Sept. 16, 2000 JEPRO 42→39に変更	//Oct. 25, 2000 39→268
+		m_pShareData->m_Common.m_nToolBarButtonIdxArr[++i] = 264;	//タイプ別設定一覧	//Sept. 16, 2000 JEPRO 追加
+		m_pShareData->m_Common.m_nToolBarButtonIdxArr[++i] = 265;	//タイプ別設定		//Sept. 16, 2000 JEPRO 18→36に変更	//Oct. 25, 2000 36→265
+		m_pShareData->m_Common.m_nToolBarButtonIdxArr[++i] = 266;	//共通設定			//Sept. 16, 2000 JEPRO 10→37に変更 説明を「設定プロパティシート」から変更	//Oct. 25, 2000 37→266
+//		m_pShareData->m_Common.m_nToolBarButtonIdxArr[++i] = 267;	//フォント設定		//Sept. 16, 2000 JEPRO 11→38に変更	//Oct. 25, 2000 38→267	//Dec. 24, 2000 外した
+//		m_pShareData->m_Common.m_nToolBarButtonIdxArr[++i] = 268;	//現在のウィンドウ幅で折り返し	//Sept. 16, 2000 JEPRO 42→39に変更	//Oct. 25, 2000 39→268	//Feb. 24, 2001 外した
 //		m_pShareData->m_Common.m_nToolBarButtonIdxArr[++i] = 0;
 
 //		m_pShareData->m_Common.m_nToolBarButtonIdxArr[++i] = 12;	//同名のC/C++ヘッダファイルを開く	//Feb. 9, 2001 jepro「.cまたは.cppと同名の.hを開く」から変更
@@ -710,7 +708,7 @@ bool CShareData::Init( void )
 		m_pShareData->m_Common.m_nCustMenuItemFuncArr[1][6] = F_WINCLOSE;
 		m_pShareData->m_Common.m_nCustMenuItemKeyArr [1][6] = 'C';
 		/* 見出し記号 */
-		strcpy( m_pShareData->m_Common.m_szMidashiKigou, 	"１２３４５６７８９０（(［[「『【■□▲△▼▽◆◇○◎●§・※☆★第①②③④⑤⑥⑦⑧⑨⑩⑪⑫⑬⑭⑮⑯⑰⑱⑲⑳ⅠⅡⅢⅣⅤⅥⅦⅧⅨⅩ一二三四五六七八九十壱弐参伍" );
+		strcpy( m_pShareData->m_Common.m_szMidashiKigou, "１２３４５６７８９０（(［[「『【■□▲△▼▽◆◇○◎●§・※☆★第①②③④⑤⑥⑦⑧⑨⑩⑪⑫⑬⑭⑮⑯⑰⑱⑲⑳ⅠⅡⅢⅣⅤⅥⅦⅧⅨⅩ一二三四五六七八九十壱弐参伍" );
 		/* 引用符 */
 		strcpy( m_pShareData->m_Common.m_szInyouKigou, "> " );		/* 引用符 */
 		m_pShareData->m_Common.m_bUseHokan = FALSE;					/* 入力補完機能を使用する */
@@ -828,7 +826,7 @@ tt 時刻マーカー。「 AM 」「 PM 」「午前」「午後」など。
 		strcpy( m_pShareData->m_Types[nIdx].m_szBlockCommentFrom, "" );	/* ブロックコメントデリミタ(From) */
 		strcpy( m_pShareData->m_Types[nIdx].m_szBlockCommentTo, "" );	/* ブロックコメントデリミタ(To) */
 		m_pShareData->m_Types[nIdx].m_nStringType = 0;					/* 文字列区切り記号エスケープ方法 0=[\"][\'] 1=[""][''] */
-		strcpy(	m_pShareData->m_Types[nIdx].m_szIndentChars, "" );		/* その他のインデント対象文字 */
+		strcpy( m_pShareData->m_Types[nIdx].m_szIndentChars, "" );		/* その他のインデント対象文字 */
 
 		m_pShareData->m_Types[nIdx].m_nColorInfoArrNum = COLORIDX_LAST;
 
@@ -921,6 +919,9 @@ tt 時刻マーカー。「 AM 」「 PM 」「午前」「午後」など。
 			"改行記号",							TRUE , FALSE, FALSE, RGB( 0, 128, 255 )		, RGB( 255, 251, 240 ),
 			"折り返し記号",						TRUE , FALSE, FALSE, RGB( 255, 0, 255 )		, RGB( 255, 251, 240 ),
 			"EOF記号",							TRUE , FALSE, FALSE, RGB( 0, 255, 255 )		, RGB( 0, 0, 0 ),
+//#ifdef COMPILE_COLOR_DIGIT
+			"半角数値",							TRUE , FALSE, FALSE, RGB( 128, 0, 255 )		, RGB( 255, 251, 240 ),	//@@@ 2001.02.17 by MIK		//Mar. 7, 2001 JEPRO RGB(0,0,255)を変更
+//#endif
 			"検索文字列",						TRUE , FALSE, FALSE, RGB( 0, 0, 0 )			, RGB( 255, 255, 0 ),
 			"強調キーワード1",					TRUE , FALSE, FALSE, RGB( 0, 0, 255 )		, RGB( 255, 251, 240 ),
 			"強調キーワード2",					TRUE , FALSE, FALSE, RGB( 255, 128, 0 )		, RGB( 255, 251, 240 ),	//Dec. 4, 2000 MIK added	//Jan. 19, 2001 JEPRO キーワード1とは違う色に変更
@@ -931,9 +932,6 @@ tt 時刻マーカー。「 AM 」「 PM 」「午前」「午後」など。
 			"シングルクォーテーション文字列",	TRUE , FALSE, FALSE, RGB( 64, 128, 128 )	, RGB( 255, 251, 240 ),
 			"ダブルクォーテーション文字列",		TRUE , FALSE, FALSE, RGB( 128, 0, 64 )		, RGB( 255, 251, 240 ),
 			"URL",								TRUE , FALSE, TRUE , RGB( 0, 0, 255 )		, RGB( 255, 251, 240 ),
-//#ifdef COMPILE_COLOR_DIGIT
-			"数字",								TRUE , FALSE, FALSE, RGB( 0, 0, 255 )		, RGB( 255, 251, 240 )     //@@@ 2001.02.17 by MIK
-//#endif
   		};
 //	To Here Sept. 18, 2000
 
@@ -1008,7 +1006,7 @@ tt 時刻マーカー。「 AM 」「 PM 」「午前」「午後」など。
 			m_pShareData->m_Types[nIdx].m_nKeyWordSetIdx2 = -1;	//Dec. 4, 2000 MIK
 		}
 
-		
+
 		/* 基本 */
 		strcpy( m_pShareData->m_Types[0].m_szLineComment, "" );			/* 行コメントデリミタ */
 		strcpy( m_pShareData->m_Types[0].m_szLineComment2, "" );		/* 行コメントデリミタ2 */
@@ -1064,7 +1062,7 @@ tt 時刻マーカー。「 AM 」「 PM 」「午前」「午後」など。
 		strcpy( m_pShareData->m_Types[4].m_szBlockCommentFrom, "/*" );		/* ブロックコメントデリミタ(From) */
 		strcpy( m_pShareData->m_Types[4].m_szBlockCommentTo, "*/" );		/* ブロックコメントデリミタ(To) */
 		m_pShareData->m_Types[4].m_nStringType = 1;							/* 文字列区切り記号エスケープ方法  0=[\"][\'] 1=[""][''] */
-		strcpy(	m_pShareData->m_Types[4].m_szIndentChars, "|★" );			/* その他のインデント対象文字 */
+		strcpy( m_pShareData->m_Types[4].m_szIndentChars, "|★" );			/* その他のインデント対象文字 */
 		m_pShareData->m_Types[4].m_nKeyWordSetIdx = 1;						/* キーワードセット */
 		m_pShareData->m_Types[4].m_nDefaultOutline = OUTLINE_PLSQL;			/* アウトライン解析方法 */
 
@@ -1074,7 +1072,7 @@ tt 時刻マーカー。「 AM 」「 PM 」「午前」「午後」など。
 		strcpy( m_pShareData->m_Types[5].m_szBlockCommentFrom, "" );		/* ブロックコメントデリミタ(From) */
 		strcpy( m_pShareData->m_Types[5].m_szBlockCommentTo, "" );			/* ブロックコメントデリミタ(To) */
 		m_pShareData->m_Types[5].m_nStringType = 1;							/* 文字列区切り記号エスケープ方法  0=[\"][\'] 1=[""][''] */
-		strcpy(	m_pShareData->m_Types[5].m_szIndentChars, "*" );			/* その他のインデント対象文字 */
+		strcpy( m_pShareData->m_Types[5].m_szIndentChars, "*" );			/* その他のインデント対象文字 */
 		m_pShareData->m_Types[5].m_nKeyWordSetIdx = 1;						/* キーワードセット */
 		m_pShareData->m_Types[5].m_nDefaultOutline = OUTLINE_COBOL;			/* アウトライン解析方法 */
 
@@ -1087,7 +1085,7 @@ tt 時刻マーカー。「 AM 」「 PM 」「午前」「午後」など。
 		m_pShareData->m_Types[6].m_nKeyWordSetIdx = 3;						/* キーワードセット */
 		m_pShareData->m_Types[6].m_nDefaultOutline = OUTLINE_JAVA;			/* アウトライン解析方法 */
 		m_pShareData->m_Types[6].m_nSmartIndent = SMARTINDENT_CPP;			/* スマートインデント種別 */
-		
+
 		/* アセンブラ */
 		m_pShareData->m_Types[7].m_nDefaultOutline = OUTLINE_ASM;			/* アウトライン解析方法 */
 
@@ -3032,7 +3030,7 @@ void CShareData::SetKeyNameArrVal(
  {
 	pShareData->m_pKeyNameArr[nIdx].m_nKeyCode = nKeyCode;
 	strcpy( pShareData->m_pKeyNameArr[nIdx].m_szKeyName, pszKeyName );
- 	return;
+	return;
  }
 
 
@@ -3058,7 +3056,7 @@ typedef struct _TBBUTTON {
     DWORD dwData;	// アプリケーション-定義された値
     int iString;	// ボタンのラベル文字列の 0 から始まるインデックス
 } TBBUTTON;
-*/  
+*/
 
  	ptb->iBitmap	= iBitmap;
  	ptb->idCommand	= idCommand;
@@ -3075,7 +3073,7 @@ typedef struct _TBBUTTON {
 /* 共有データ構造体のアドレスを返す */
 DLLSHAREDATA* CShareData::GetShareData( const char* pszFilePath, int* pnSettingType )
 {
-	
+
 	char	szExt[_MAX_EXT];
 	char	szText[256];
 	int		i;
@@ -3091,7 +3089,7 @@ DLLSHAREDATA* CShareData::GetShareData( const char* pszFilePath, int* pnSettingT
 				strcpy( szExt2, szExt );
 				strcpy( szExt, &szExt2[1] );
 			}
-			
+
 			bFound = FALSE;
 			for( i = 0; i < MAX_TYPES; ++i ){
 				strcpy( szText, m_pShareData->m_Types[i].m_szTypeExts );
@@ -3141,7 +3139,7 @@ BOOL CShareData::AddEditWndList( HWND hWnd )
 			/* これ以上登録できない */
 			return FALSE;
 		}
-		
+
 		for( j = MAX_EDITWINDOWS - 1; j > 0; j-- ){
 			m_pShareData->m_pEditArr[j] = m_pShareData->m_pEditArr[j - 1];
 		}
@@ -3254,7 +3252,7 @@ void CShareData::AddOPENFOLDERList( const char* pszFolder )
 	if( 0 == strlen( pszFolder ) ){
 		return;
 	}
-	
+
 	int		i;
 	int		j;
 	char*	pszWork = new char[_MAX_PATH + 1];
@@ -3561,7 +3559,7 @@ int CShareData::GetOpenedWindowArr( EditNode** ppEditNode, BOOL bSort )
 			}
 			nRowNum = k;
 		}
-		
+
 //		LRESULT	lSuccrss;
 //		DWORD	dwResult;
 //		for( i = 0; i < nRowNum; ++i ){

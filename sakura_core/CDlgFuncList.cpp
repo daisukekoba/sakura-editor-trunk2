@@ -1,10 +1,9 @@
 //	$Id$
 /************************************************************************
-
 	CDlgFuncList.cpp
 	Copyright (C) 1998-2000, Norio Nakatani
-
 ************************************************************************/
+
 #include <windows.h>
 #include <commctrl.h>
 //#include <stdio.h>
@@ -16,7 +15,7 @@
 #include "CEditView.h"
 
 /* ソート比較用プロシージャ */
-int CALLBACK _CompareFunc_(LPARAM lParam1, LPARAM lParam2, LPARAM lParamSort)
+int CALLBACK _CompareFunc_( LPARAM lParam1, LPARAM lParam2, LPARAM lParamSort )
 {
 	CFuncInfo*		pcFuncInfo1;
 	CFuncInfo*		pcFuncInfo2;
@@ -45,35 +44,35 @@ int CALLBACK _CompareFunc_(LPARAM lParam1, LPARAM lParam2, LPARAM lParamSort)
 		}
 	}
 	return -1;
-} 
+}
 
 
 
 CDlgFuncList::CDlgFuncList()
 {
-	m_pcFuncInfoArr = NULL;	/* 関数情報配列 */
-	m_nCurLine = 0;	/* 現在行 */
-	m_nSortCol = 0;	/* ソートする列番号 */
-	m_bLineNumIsCRLF = FALSE;/* 行番号の表示 FALSE=折り返し単位／TRUE=改行単位 */
+	m_pcFuncInfoArr = NULL;		/* 関数情報配列 */
+	m_nCurLine = 0;				/* 現在行 */
+	m_nSortCol = 0;				/* ソートする列番号 */
+	m_bLineNumIsCRLF = FALSE;	/* 行番号の表示 FALSE=折り返し単位／TRUE=改行単位 */
 	return;
 }
 
 
 
 //	/* モーダルダイアログの表示 */
-//	int CDlgFuncList::DoModal( 
-//		HINSTANCE		hInstance, 
-//		HWND			hwndParent, 
+//	int CDlgFuncList::DoModal(
+//		HINSTANCE		hInstance,
+//		HWND			hwndParent,
 //		LPARAM			lParam,
-//		CFuncInfoArr*	pcFuncInfoArr, 
+//		CFuncInfoArr*	pcFuncInfoArr,
 //		int				nCurLine,
 //		int				nListType,
 //		int				bLineNumIsCRLF	/* 行番号の表示 FALSE=折り返し単位／TRUE=改行単位 */
 //	)
 //	{
 //		m_pcFuncInfoArr = pcFuncInfoArr;	/* 関数情報配列 */
-//		m_nCurLine = nCurLine;	/* 現在行 */
-//		m_nListType = nListType;	/* 一覧の種類 */
+//		m_nCurLine = nCurLine;				/* 現在行 */
+//		m_nListType = nListType;			/* 一覧の種類 */
 //		m_bLineNumIsCRLF = bLineNumIsCRLF;	/* 行番号の表示 FALSE=折り返し単位／TRUE=改行単位 */
 //		return CDialog::DoModal( hInstance, hwndParent, IDD_FUNCLIST, lParam );
 //	}
@@ -81,18 +80,18 @@ CDlgFuncList::CDlgFuncList()
 
 /* モードレスダイアログの表示 */
 HWND CDlgFuncList::DoModeless(
-	HINSTANCE		hInstance, 
-	HWND			hwndParent, 
+	HINSTANCE		hInstance,
+	HWND			hwndParent,
 	LPARAM			lParam,
-	CFuncInfoArr*	pcFuncInfoArr, 
+	CFuncInfoArr*	pcFuncInfoArr,
 	int				nCurLine,
 	int				nListType,
-	int				bLineNumIsCRLF	/* 行番号の表示 FALSE=折り返し単位／TRUE=改行単位 */
+	int				bLineNumIsCRLF		/* 行番号の表示 FALSE=折り返し単位／TRUE=改行単位 */
 )
 {
 	m_pcFuncInfoArr = pcFuncInfoArr;	/* 関数情報配列 */
-	m_nCurLine = nCurLine;	/* 現在行 */
-	m_nListType = nListType;	/* 一覧の種類 */
+	m_nCurLine = nCurLine;				/* 現在行 */
+	m_nListType = nListType;			/* 一覧の種類 */
 	m_bLineNumIsCRLF = bLineNumIsCRLF;	/* 行番号の表示 FALSE=折り返し単位／TRUE=改行単位 */
 	return CDialog::DoModeless( hInstance, hwndParent, IDD_FUNCLIST, lParam, SW_SHOW );
 }
@@ -123,24 +122,25 @@ void CDlgFuncList::SetData( void/*HWND hwndDlg*/ )
 
 	if( OUTLINE_CPP == m_nListType ){	/* C++メソッドリスト */
 		::DestroyWindow( hwndList );
-		/* ツリーコントロールの初期化：　C++メソッドツリー */
+		/* ツリーコントロールの初期化：C++メソッドツリー */
 		SetTreeCpp( m_hWnd );
 		::SetWindowText( m_hWnd, "C++メソッドツリー" );
 	}else
 	if( OUTLINE_TEXT == m_nListType ){ /* テキスト・トピックリスト */
 		::DestroyWindow( hwndList );
-		SetTreeTxt( m_hWnd );	/* ツリーコントロールの初期化：　テキストトピックツリー */
-		::SetWindowText( m_hWnd, "テキストトピックツリー" );
+		/* ツリーコントロールの初期化：テキストトピックツリー */
+		SetTreeTxt( m_hWnd );
+		::SetWindowText( m_hWnd, "テキスト トピックツリー" );
 	}else
 	if( OUTLINE_JAVA == m_nListType ){ /* Javaメソッドツリー */
 		::DestroyWindow( hwndList );
-		/* ツリーコントロールの初期化：　Javaメソッドツリー */
+		/* ツリーコントロールの初期化：Javaメソッドツリー */
 		SetTreeJava( m_hWnd, TRUE );
 		::SetWindowText( m_hWnd, "Javaメソッドツリー" );
 	}else
 	if( OUTLINE_COBOL == m_nListType ){ /* COBOL アウトライン */
 		::DestroyWindow( hwndList );
-		/* ツリーコントロールの初期化：　COBOL アウトライン */
+		/* ツリーコントロールの初期化：COBOL アウトライン */
 		SetTreeJava( m_hWnd, FALSE );
 		::SetWindowText( m_hWnd, "COBOL アウトライン" );
 	}else{
@@ -152,7 +152,7 @@ void CDlgFuncList::SetData( void/*HWND hwndDlg*/ )
 			::SetWindowText( m_hWnd, "PL/SQL関数一覧" );
 			break;
 		case OUTLINE_ASM:
-			::SetWindowText( m_hWnd, "アセンブラ　アウトライン" );
+			::SetWindowText( m_hWnd, "アセンブラ アウトライン" );
 			break;
 		case OUTLINE_PERL:	//	Sep. 8, 2000 genta
 			::SetWindowText( m_hWnd, "Perl関数一覧" );
@@ -277,7 +277,7 @@ void CDlgFuncList::SetData( void/*HWND hwndDlg*/ )
 
 
 /* ダイアログデータの取得 */
-/* 　0==条件未入力 　0より大きい==正常　 0より小さい==入力エラー  */
+/*  0==条件未入力   0より大きい==正常   0より小さい==入力エラー  */
 int CDlgFuncList::GetData( void )
 {
 	HWND			hwndList;
@@ -311,10 +311,10 @@ int CDlgFuncList::GetData( void )
 		if( NULL != hwndTree ){
 			htiItem = TreeView_GetSelection( hwndTree );
 
-			tvi.mask = TVIF_HANDLE | TVIF_TEXT | TVIF_PARAM;	
-			tvi.hItem = htiItem;	
-			tvi.pszText = szLabel;	
-			tvi.cchTextMax = sizeof(szLabel);	
+			tvi.mask = TVIF_HANDLE | TVIF_TEXT | TVIF_PARAM;
+			tvi.hItem = htiItem;
+			tvi.pszText = szLabel;
+			tvi.cchTextMax = sizeof( szLabel );
 			if( TreeView_GetItem( hwndTree, &tvi ) ){
 				if( -1 != tvi.lParam ){
 					pcFuncInfo = m_pcFuncInfoArr->GetAt( tvi.lParam );
@@ -327,7 +327,7 @@ int CDlgFuncList::GetData( void )
 }
 
 
-/* ツリーコントロールの初期化：　C++メソッドツリー */
+/* ツリーコントロールの初期化：C++メソッドツリー */
 void CDlgFuncList::SetTreeCpp( HWND hwndDlg )
 {
 	int				i;
@@ -377,14 +377,14 @@ void CDlgFuncList::SetTreeCpp( HWND hwndDlg )
 			strcpy( &pClassName[pPos - pWork], "ｸﾗｽ" );
 			pFuncName = new char[ lstrlen( pPos + lstrlen( "::" ) ) + 1 ];
 			strcpy( pFuncName, pPos + lstrlen( "::" ) );
-			
+
 			/* クラス名のアイテムが登録されているか */
 			htiClass = TreeView_GetFirstVisible( hwndTree );
 			while( NULL != htiClass ){
-				tvi.mask = TVIF_HANDLE | TVIF_TEXT;	
-				tvi.hItem = htiClass;	
-				tvi.pszText = szLabel;	
-				tvi.cchTextMax = sizeof(szLabel);	
+				tvi.mask = TVIF_HANDLE | TVIF_TEXT;
+				tvi.hItem = htiClass;
+				tvi.pszText = szLabel;
+				tvi.cchTextMax = sizeof(szLabel);
 				if( TreeView_GetItem( hwndTree, &tvi ) ){
 					if( 0 == strcmp( pClassName, szLabel ) ){
 						break;
@@ -506,7 +506,7 @@ void CDlgFuncList::SetTreeCpp( HWND hwndDlg )
 
 
 
-/* ツリーコントロールの初期化：　Javaメソッドツリー */
+/* ツリーコントロールの初期化：Javaメソッドツリー */
 void CDlgFuncList::SetTreeJava( HWND hwndDlg, BOOL bAddClass )
 {
 	int				i;
@@ -594,10 +594,10 @@ void CDlgFuncList::SetTreeJava( HWND hwndDlg, BOOL bAddClass )
 					strcat( pClassName, "ｸﾗｽ" );
 				}
 				while( NULL != htiClass ){
-					tvi.mask = TVIF_HANDLE | TVIF_TEXT;	
-					tvi.hItem = htiClass;	
-					tvi.pszText = szLabel;	
-					tvi.cchTextMax = sizeof(szLabel);	
+					tvi.mask = TVIF_HANDLE | TVIF_TEXT;
+					tvi.hItem = htiClass;
+					tvi.pszText = szLabel;
+					tvi.cchTextMax = sizeof(szLabel);
 					if( TreeView_GetItem( hwndTree, &tvi ) ){
 						if( 0 == strcmp( pClassName, szLabel ) ){
 							break;
@@ -614,7 +614,7 @@ void CDlgFuncList::SetTreeJava( HWND hwndDlg, BOOL bAddClass )
 					tvis.item.lParam = -1;
 					htiClass = TreeView_InsertItem( hwndTree, &tvis );
 				}else{
-				
+
 				}
 				htiParent = htiClass;
 				if( k + 1 >= nClassNest ){
@@ -722,9 +722,9 @@ void CDlgFuncList::SetTreeJava( HWND hwndDlg, BOOL bAddClass )
 }
 
 
-void CDlgFuncList::GetTreeTextNext( 
-		HWND		hwndTree, 
-		HTREEITEM	htiParent, 
+void CDlgFuncList::GetTreeTextNext(
+		HWND		hwndTree,
+		HTREEITEM	htiParent,
 		int			nDepth
 )
 {
@@ -736,7 +736,7 @@ void CDlgFuncList::GetTreeTextNext(
 	if( NULL == htiParent ){
 		htiItem = TreeView_GetRoot( hwndTree );
 	}else{
-		htiItem = TreeView_GetChild( hwndTree, htiParent ); 
+		htiItem = TreeView_GetChild( hwndTree, htiParent );
 	}
 	while( NULL != htiItem ){
 		tvi.mask = TVIF_HANDLE | TVIF_TEXT;
@@ -747,20 +747,20 @@ void CDlgFuncList::GetTreeTextNext(
 		for( i = 0; i < nDepth; ++i ){
 //			m_cmemClipText.Append( "　", 2 );	/* クリップボードコピー用テキスト */
 			m_cmemClipText.AppendSz( "　" );	/* クリップボードコピー用テキスト */
-		} 
+		}
 //		m_cmemClipText.Append( (const char *)tvi.pszText, lstrlen( (const char *)tvi.pszText ) );	/* クリップボードコピー用テキスト */
 		m_cmemClipText.AppendSz( (const char *)tvi.pszText );	/* クリップボードコピー用テキスト */
 //		m_cmemClipText.Append( (const char *)"\r\n", 2 );	/* クリップボードコピー用テキスト */
 		m_cmemClipText.AppendSz( (const char *)"\r\n" );	/* クリップボードコピー用テキスト */
 		GetTreeTextNext( hwndTree, htiItem, nDepth + 1 );
-	
+
 		htiItem = TreeView_GetNextSibling( hwndTree, htiItem );
 	}
 	return;
 }
 
 
-/* ツリーコントロールの初期化：　テキストトピックツリー */
+/* ツリーコントロールの初期化：テキスト トピックツリー */
 void CDlgFuncList::SetTreeTxt( HWND hwndDlg )
 {
 	HWND			hwndTree;
@@ -778,7 +778,7 @@ void CDlgFuncList::SetTreeTxt( HWND hwndDlg )
 	::EnableWindow( ::GetDlgItem( m_hWnd , IDC_BUTTON_COPY ), TRUE );
 	nBgn = 0;
 	htiItemSelected = NULL;
-	SetTreeTxtNest(	hwndTree, htiItem, 0, m_pcFuncInfoArr->GetNum(), &htiItemSelected, 0 );
+	SetTreeTxtNest( hwndTree, htiItem, 0, m_pcFuncInfoArr->GetNum(), &htiItemSelected, 0 );
 //	TreeView_Expand( hwndTree, htiItem, TVE_EXPAND );
 	if( NULL != htiItemSelected ){
 		/* 現在カーソル位置のメソッドを選択状態にする */
@@ -791,7 +791,7 @@ void CDlgFuncList::SetTreeTxt( HWND hwndDlg )
 
 
 
-/* ツリーコントロールの初期化：　テキストトピックツリー  再帰サブ関数　*/
+/* ツリーコントロールの初期化：テキスト トピックツリー  再帰サブ関数 */
 int CDlgFuncList::SetTreeTxtNest(
 	HWND			hwndTree,
 	HTREEITEM		htiParent,
@@ -816,7 +816,7 @@ int CDlgFuncList::SetTreeTxtNest(
 		pcFuncInfo = m_pcFuncInfoArr->GetAt( nBgn );
 		pWork = (unsigned char*)pcFuncInfo->m_cmemFuncName.GetPtr( NULL );
 		nCharChars = CMemory::MemCharNext( (char*)pWork, lstrlen( (char*)pWork ), (char*)pWork ) - (char*)pWork;
-		
+
 		tvis.hParent = htiParent;
 		tvis.hInsertAfter = TVI_LAST;
 		tvis.item.mask = TVIF_TEXT | TVIF_PARAM;
@@ -827,7 +827,7 @@ int CDlgFuncList::SetTreeTxtNest(
 		for( i = 0; i < nDepth; ++i ){
 //			m_cmemClipText.Append( "　", 2 );	/* クリップボードコピー用テキスト */
 			m_cmemClipText.AppendSz( "　" );	/* クリップボードコピー用テキスト */
-		} 
+		}
 //		m_cmemClipText.Append( (const char *)pWork, lstrlen( (const char *)pWork ) );	/* クリップボードコピー用テキスト */
 		m_cmemClipText.AppendSz( (const char *)pWork );	/* クリップボードコピー用テキスト */
 //		m_cmemClipText.Append( (const char *)"\r\n", 2 );	/* クリップボードコピー用テキスト */
@@ -870,17 +870,17 @@ int CDlgFuncList::SetTreeTxtNest(
 				}else
 				if( nCharChars == 2 ){
 					/* 全角数字 */
-					if(	pWork[0] == 0x82 && ( pWork[1] >= 0x4f && pWork[1] <= 0x58 ) &&
+					if( pWork[0] == 0x82 && ( pWork[1] >= 0x4f && pWork[1] <= 0x58 ) &&
 						pWork2[0] == 0x82 && ( pWork2[1] >= 0x4f && pWork2[1] <= 0x58 ) ){
 						break;
 					}
 					/* ①～⑳ */
-					if(	pWork[0] == 0x87 && ( pWork[1] >= 0x40 && pWork[1] <= 0x53 ) &&
+					if( pWork[0] == 0x87 && ( pWork[1] >= 0x40 && pWork[1] <= 0x53 ) &&
 						pWork2[0] == 0x87 && ( pWork2[1] >= 0x40 && pWork2[1] <= 0x53 ) ){
 						break;
 					}
 					/* Ⅰ～Ⅹ */
-					if(	pWork[0] == 0x87 && ( pWork[1] >= 0x54 && pWork[1] <= 0x5d ) &&
+					if( pWork[0] == 0x87 && ( pWork[1] >= 0x54 && pWork[1] <= 0x5d ) &&
 						pWork2[0] == 0x87 && ( pWork2[1] >= 0x54 && pWork2[1] <= 0x5d ) ){
 						break;
 					}
@@ -890,7 +890,7 @@ int CDlgFuncList::SetTreeTxtNest(
 				}
 			}
 		}
-		SetTreeTxtNest(	hwndTree, htiItem, nBgn + 1, i, phtiItemSelected, nDepth + 1 );
+		SetTreeTxtNest( hwndTree, htiItem, nBgn + 1, i, phtiItemSelected, nDepth + 1 );
 //		TreeView_Expand( hwndTree, htiItem, TVE_EXPAND );
 		nBgn = i;
 	}
@@ -898,7 +898,7 @@ int CDlgFuncList::SetTreeTxtNest(
 }
 
 
-	
+
 BOOL CDlgFuncList::OnInitDialog( HWND hwndDlg, WPARAM wParam, LPARAM lParam )
 {
 	m_hWnd = hwndDlg;
@@ -951,7 +951,7 @@ BOOL CDlgFuncList::OnBnClicked( int wID )
 	case IDOK:
 		return OnJump();
 	case IDCANCEL:
-		if(	m_bModal ){		/* モーダル　ダイアログか */
+		if( m_bModal ){		/* モーダル ダイアログか */
 			::EndDialog( m_hWnd, 0 );
 		}else{
 			::DestroyWindow( m_hWnd );
@@ -984,15 +984,15 @@ BOOL CDlgFuncList::OnNotify( WPARAM wParam, LPARAM lParam )
 //	int				nLineTo;
 	LV_COLUMN		col;
 
-	idCtrl = (int) wParam; 
-	pnmh = (LPNMHDR) lParam; 
+	idCtrl = (int) wParam;
+	pnmh = (LPNMHDR) lParam;
 	pnlv = (NM_LISTVIEW*)lParam;
 
 	hwndList = ::GetDlgItem( m_hWnd, IDC_LIST1 );
 	hwndTree = ::GetDlgItem( m_hWnd, IDC_TREE1 );
-	
+
 	if( hwndTree == pnmh->hwndFrom ){
-		pnmtv = (NM_TREEVIEW *) lParam; 
+		pnmtv = (NM_TREEVIEW *) lParam;
 //		switch( pnmh->code ){
 //		case TVN_BEGINDRAG     :
 //		case TVN_BEGINLABELEDIT:
@@ -1020,7 +1020,7 @@ BOOL CDlgFuncList::OnNotify( WPARAM wParam, LPARAM lParam )
 //			case NM_SETFOCUS   :
 //			default:
 //				break;
-			}	
+			}
 //			break;
 //		}
 	}else
@@ -1058,8 +1058,8 @@ BOOL CDlgFuncList::OnNotify( WPARAM wParam, LPARAM lParam )
 	}
 	return FALSE;
 }
-	
-	
+
+
 
 BOOL CDlgFuncList::OnSize( WPARAM wParam, LPARAM lParam )
 {
@@ -1085,10 +1085,10 @@ BOOL CDlgFuncList::OnSize( WPARAM wParam, LPARAM lParam )
 	HWND	hwndCtrl;
 	POINT	po;
 
-	fwSizeType = wParam;      // resizing flag 
-	nWidth = LOWORD(lParam);  // width of client area 
-	nHeight = HIWORD(lParam); // height of client area 
-	
+	fwSizeType = wParam;      // resizing flag
+	nWidth = LOWORD(lParam);  // width of client area
+	nHeight = HIWORD(lParam); // height of client area
+
 	nWork = 48;
 	for ( i = 0; i < nControls; ++i ){
 		hwndCtrl = ::GetDlgItem( m_hWnd, Controls[i] );
@@ -1127,7 +1127,7 @@ BOOL CDlgFuncList::OnJump( void )
 	int				nLineTo;
 	/* ダイアログデータの取得 */
 	if( 0 < ( nLineTo = GetData() ) ){
-		if(	m_bModal ){		/* モーダル　ダイアログか */
+		if( m_bModal ){		/* モーダル ダイアログか */
 			::EndDialog( m_hWnd, nLineTo );
 		}else{
 			/* カーソルを移動させる */

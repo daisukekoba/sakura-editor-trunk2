@@ -1,10 +1,9 @@
 //	$Id$
 /************************************************************************
-
 	CMacro.cpp
 	Copyright (C) 1998-2000, Norio Nakatani
-
 ************************************************************************/
+
 #include "CMacro.h"
 #include "funccode.h"
 
@@ -52,14 +51,14 @@ MacroFuncInfo m_MacroFuncInfoArr[] =
 	F_DELETE_BACK				, "DeleteBack",			//カーソルの前を削除
 	F_WordDeleteToStart			, "WordDeleteToStart",	//単語の左端まで削除
 	F_WordDeleteToEnd			, "WordDeleteToEnd",	//単語の右端まで削除
-	F_WordDelete				, "WordDleete",			//単語を削除
-	F_WordCut					, "WordCut",			//単語を切り取り
-	F_LineDeleteToStart			, "LineDeleteToStart",	//行頭まで削除(改行単位)
-	F_LineDeleteToEnd			, "LineDeleteToEnd",	//行末まで削除(改行単位)
+	F_WordCut					, "WordCut",			//単語切り取り
+	F_WordDelete				, "WordDleete",			//単語削除
 	F_LineCutToStart			, "LineCutToStart",		//行頭まで切り取り(改行単位)
 	F_LineCutToEnd				, "LineCutToEnd",		//行末まで切り取り(改行単位)
-	F_DELETE_LINE				, "DeleteLine",			//行削除(折り返し単位)
+	F_LineDeleteToStart			, "LineDeleteToStart",	//行頭まで削除(改行単位)
+	F_LineDeleteToEnd			, "LineDeleteToEnd",	//行末まで削除(改行単位)
 	F_CUT_LINE					, "CutLine",			//行切り取り(折り返し単位)
+	F_DELETE_LINE				, "DeleteLine",			//行削除(折り返し単位)
 	F_DUPLICATELINE				, "DuplicateLine",		//行の二重化(折り返し単位)
 	F_INDENT_TAB				, "IndentTab",			//TABインデント
 	F_UNINDENT_TAB				, "UnindentTab",		//逆TABインデント
@@ -175,7 +174,7 @@ MacroFuncInfo m_MacroFuncInfoArr[] =
 	F_CODECNV_SJIS2UTF7			, "SJIStoUTF7",			/* SJIS→UTF-7コード変換 */
 	F_BASE64DECODE	 			, "Base64Decode",		//Base64デコードして保存
 	F_UUDECODE		 			, "Uudecode",			//uudecodeして保存	//Oct. 17, 2000 jepro 説明を「選択部分をUUENCODEデコード」から変更
-	
+
 
 	/* 検索系 */
 	F_SEARCH_DIALOG				, "SearchDialog",		//検索(単語検索ダイアログ)
@@ -259,7 +258,7 @@ MacroFuncInfo m_MacroFuncInfoArr[] =
 	F_ABOUT						, "About",			/* バージョン情報 */	//Dec. 24, 2000 JEPRO 追加
 
 	/* その他 */
-//	F_SENDMAIL					, "SendMail",		/* メール送信 */	//Oct. 17, 2000 JEPRO メール機能は死んでいるのでコメントアウトにした 
+//	F_SENDMAIL					, "SendMail",		/* メール送信 */	//Oct. 17, 2000 JEPRO メール機能は死んでいるのでコメントアウトにした
 
 };
 int	m_nMacroFuncInfoArrNum = sizeof( m_MacroFuncInfoArr ) / sizeof( m_MacroFuncInfoArr[0] );
@@ -290,7 +289,7 @@ char* CMacro::GetFuncInfoByID( HINSTANCE hInstance, int nFincID, char* pszFuncNa
 			::LoadString( hInstance, nFincID, pszFuncNameJapanese, 255 );
 			return pszFuncName;
 		}
-	} 
+	}
 	return NULL;
 }
 
@@ -305,7 +304,7 @@ int CMacro::GetFuncInfoByName( HINSTANCE hInstance, const char* pszFuncName, cha
 			::LoadString( hInstance, nFincID, pszFuncNameJapanese, 255 );
 			return nFincID;
 		}
-	} 
+	}
 	return -1;
 }
 
@@ -325,7 +324,7 @@ BOOL CMacro::CanFuncIsKeyMacro( int nFuncID )
 //	case F_FILE_REOPEN_EUC			://EUCで開き直す
 //	case F_FILE_REOPEN_UNICODE		://Unicodeで開き直す
 //	case F_FILE_REOPEN_UTF8			://UTF-8で開き直す
-//	case F_FILE_REOPEN_UTF7			://UTF-7で開き直す	
+//	case F_FILE_REOPEN_UTF7			://UTF-7で開き直す
 //	case F_PRINT					://印刷
 //	case F_PRINT_DIALOG				://印刷ダイアログ
 //	case F_PRINT_PREVIEW			://印刷プレビュー
@@ -333,7 +332,7 @@ BOOL CMacro::CanFuncIsKeyMacro( int nFuncID )
 //	case F_OPEN_HfromtoC:			://同名のC/C++ヘッダ(ソース)を開く	//Feb. 9, 2001 JEPRO 追加
 //	case F_OPEN_HHPP				://同名のC/C++ヘッダファイルを開く	//Feb. 9, 2001 jepro「.cまたは.cppと同名の.hを開く」から変更
 //	case F_OPEN_CCPP				://同名のC/C++ソースファイルを開く	//Feb. 9, 2001 jepro「.hと同名の.c(なければ.cpp)を開く」から変更
-//	case F_ACTIVATE_SQLPLUS			:/* Oracle SQL*Plusをアクティブ表示 */	
+//	case F_ACTIVATE_SQLPLUS			:/* Oracle SQL*Plusをアクティブ表示 */
 //	case F_PLSQL_COMPILE_ON_SQLPLUS	:/* Oracle SQL*Plusで実行 */	//Sept. 17, 2000 jepro 説明の「コンパイル」を「実行」に統一
 ///	case F_BROWSE					://ブラウズ
 //	case F_PROPERTY_FILE			://ファイルのプロパティ
@@ -348,8 +347,8 @@ BOOL CMacro::CanFuncIsKeyMacro( int nFuncID )
 	case F_DELETE_BACK				://カーソルの前を削除
 	case F_WordDeleteToStart		://単語の左端まで削除
 	case F_WordDeleteToEnd			://単語の右端まで削除
-	case F_WordCut					://単語を切り取り
-	case F_WordDelete				://単語を削除
+	case F_WordCut					://単語切り取り
+	case F_WordDelete				://単語削除
 	case F_LineCutToStart			://行頭まで切り取り(改行単位)
 	case F_LineCutToEnd				://行末まで切り取り(改行単位)
 	case F_LineDeleteToStart		://行頭まで削除(改行単位)

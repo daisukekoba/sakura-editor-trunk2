@@ -424,6 +424,7 @@
 #define IDC_EDIT_MENUNAME               1382
 #define IDC_BUTTON_TEMPCHANGE           1384
 #define IDC_STATIC_EOL                  1385
+#define IDC_BUTTON_JUMP                 1388
 #define FILEOPENORD1                    1538
 #define IDD_PROP1P6                     1539
 #define IDD_PROP_TOOLBAR                1539
@@ -457,7 +458,7 @@
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_NEXT_RESOURCE_VALUE        215
 #define _APS_NEXT_COMMAND_VALUE         4072
-#define _APS_NEXT_CONTROL_VALUE         1388
+#define _APS_NEXT_CONTROL_VALUE         1389
 #define _APS_NEXT_SYMED_VALUE           101
 #endif
 #endif

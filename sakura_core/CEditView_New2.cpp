@@ -1,11 +1,10 @@
 //	$Id$
 /************************************************************************
-        CEditView_New2.cpp
+	CEditView_New2.cpp
 	Copyright (C) 1998-2000, Norio Nakatani
 
-        CREATE: 1998/12/8
+	CREATE: 1998/12/8
 ************************************************************************/
-
 
 //#include <stdio.h>
 #include <stdlib.h>
@@ -127,13 +126,13 @@ void CEditView::SetCurrentColor( HDC hdc, int nCOMMENTMODE )
 //			}
 //		}
 		break;
-//@@@ 2001.02.17 Start by MIK: 半角数字を強調表示
+//@@@ 2001.02.17 Start by MIK: 半角数値を強調表示
 //#ifdef COMPILE_COLOR_DIGIT
-	case 9:	/* 半角数字である */
+	case 9:	/* 半角数値である */
 		nColorIdx = COLORIDX_DIGIT;
 		break;
 //#endif
-//@@@ 2001.02.17 End by MIK: 半角数字を強調表示
+//@@@ 2001.02.17 End by MIK: 半角数値を強調表示
 	case 50:	/* キーワード2（登録単語）文字列である */	//MIK
 		nColorIdx = COLORIDX_KEYWORD2;						//MIK
 		break;												//MIK
@@ -222,8 +221,8 @@ void CEditView::DispLineNumber(
 //		pCDocLine = m_pcEditDoc->m_cDocLineMgr.GetLineInfo( pcLayout->m_nLinePhysical );
 		pCDocLine = pcLayout->m_pCDocLine;
 
-		if( TRUE == m_pcEditDoc->m_bIsModified /* ドキュメントが無変更の状態か */
-		 && TRUE == pCDocLine->m_bModify ){	/* 変更フラグ */
+		if( TRUE == m_pcEditDoc->m_bIsModified	/* ドキュメントが無変更の状態か */
+		 && TRUE == pCDocLine->m_bModify ){		/* 変更フラグ */
 //			if( 0 == pCDocLine->m_nModifyCount ){	/* 変更回数 */
 				nColorIndex = COLORIDX_GYOU_MOD;	/* 行番号（変更行） */
 //			}
@@ -251,9 +250,9 @@ void CEditView::DispLineNumber(
 			_itoa( nLineNum + 1, szLineNum, 10 );
 		}
 		nLineCols = lstrlen( szLineNum );
-		
+
 		colTextColorOld = ::SetTextColor( hdc, m_pcEditDoc->GetDocumentAttribute().m_ColorInfoArr[nColorIndex].m_colTEXT );	/* 行番号の色 */
-		colBkColorOld = ::SetBkColor( hdc, m_pcEditDoc->GetDocumentAttribute().m_ColorInfoArr[nColorIndex].m_colBACK );	/* 行番号背景の色 */
+		colBkColorOld = ::SetBkColor( hdc, m_pcEditDoc->GetDocumentAttribute().m_ColorInfoArr[nColorIndex].m_colBACK );		/* 行番号背景の色 */
 
 		HFONT	hFontOld;
 		/* フォントを選ぶ */
@@ -281,10 +280,10 @@ void CEditView::DispLineNumber(
 
 
 //		/* 行番号のテキストを表示 */
-//		m_pShareData->m_Types[nIdx].m_nLineTermType = 1;			/* 行番号区切り　0=なし 1=縦線 2=任意 */
+//		m_pShareData->m_Types[nIdx].m_nLineTermType = 1;			/* 行番号区切り 0=なし 1=縦線 2=任意 */
 //		m_pShareData->m_Types[nIdx].m_cLineTermChar = ':';			/* 行番号区切り文字 */
 
-		/* 行番号区切り　0=なし 1=縦線 2=任意 */
+		/* 行番号区切り 0=なし 1=縦線 2=任意 */
 		if( 2 == m_pcEditDoc->GetDocumentAttribute().m_nLineTermType ){
 			char szLineTerm[2];
 			wsprintf( szLineTerm, "%c", m_pcEditDoc->GetDocumentAttribute().m_cLineTermChar );	/* 行番号区切り文字 */
@@ -304,7 +303,7 @@ void CEditView::DispLineNumber(
 //		hPen = ::CreatePen( PS_SOLID, 0, m_pcEditDoc->GetDocumentAttribute().m_colorGYOU );
 
 
-		/* 行番号区切り　0=なし 1=縦線 2=任意 */
+		/* 行番号区切り 0=なし 1=縦線 2=任意 */
 		if( 1 == m_pcEditDoc->GetDocumentAttribute().m_nLineTermType ){
 			hPen = ::CreatePen( PS_SOLID, 0, m_pcEditDoc->GetDocumentAttribute().m_ColorInfoArr[nColorIndex].m_colTEXT );
 			hPenOld = (HPEN)::SelectObject( hdc, hPen );
@@ -396,7 +395,7 @@ void CEditView::DispTextSelected( HDC hdc, int nLineNum, int x, int y, int nX  )
 	/* 選択範囲内の行かな */
 //	if( IsTextSelected() ){
 		if( nLineNum >= m_nSelectLineFrom && nLineNum <= m_nSelectLineTo ){
-			if(	m_bBeginBoxSelect){		/* 矩形範囲選択中 */
+			if( m_bBeginBoxSelect){		/* 矩形範囲選択中 */
 				nSelectFrom = m_nSelectColmFrom;
 				nSelectTo   = m_nSelectColmTo;
 			}else{
@@ -404,7 +403,7 @@ void CEditView::DispTextSelected( HDC hdc, int nLineNum, int x, int y, int nX  )
 						nSelectFrom = m_nSelectColmFrom;
 						nSelectTo   = m_nSelectColmTo;
 				}else{
-					if( nLineNum == m_nSelectLineFrom	){
+					if( nLineNum == m_nSelectLineFrom ){
 						nSelectFrom = m_nSelectColmFrom;
 						nSelectTo   = nX;
 					}else
@@ -417,10 +416,10 @@ void CEditView::DispTextSelected( HDC hdc, int nLineNum, int x, int y, int nX  )
 					}
 				}
 			}
-			if(	nSelectFrom < m_nViewLeftCol ){
+			if( nSelectFrom < m_nViewLeftCol ){
 				nSelectFrom = m_nViewLeftCol;
 			}
-			if(	nSelectTo < m_nViewLeftCol ){
+			if( nSelectTo < m_nViewLeftCol ){
 				nSelectTo = m_nViewLeftCol;
 			}
 			rcClip.left   = x + nSelectFrom * ( nCharWidth );
@@ -448,7 +447,7 @@ void CEditView::DispTextSelected( HDC hdc, int nLineNum, int x, int y, int nX  )
 
 
 /* 現在位置が検索文字列に該当するか */
-BOOL CEditView::IsSeaechString( const char* pszData, int nDataLen, int nPos, int* pnSearchEnd  )
+BOOL CEditView::IsSeaechString( const char* pszData, int nDataLen, int nPos, int* pnSearchEnd )
 {
 	int		nKeyLength;
 
@@ -502,7 +501,7 @@ BOOL CEditView::IsSeaechString( const char* pszData, int nDataLen, int nPos, int
 void CEditView::DispRuler( HDC hdc )
 {
 
-#ifdef _DEBUG	
+#ifdef _DEBUG
 //	if( 0 != m_pShareData->m_Common.m_nRulerType ){	/* ルーラーのタイプ */
 //		DispRulerEx( hdc );
 //		return;
@@ -514,7 +513,7 @@ void CEditView::DispRuler( HDC hdc )
 		return;
 	}
 	if( !m_pcEditDoc->GetDocumentAttribute().m_ColorInfoArr[COLORIDX_RULER].m_bDisp ){
-		return;	
+		return;
 	}
 
 	/* 描画処理 */
@@ -548,7 +547,6 @@ void CEditView::DispRuler( HDC hdc )
 
 
 	/* LOGFONTの初期化 */
-/* LOGFONTの初期化 */
 	memset( &lf, 0, sizeof(LOGFONT) );
 	lf.lfHeight         = -12;
 	lf.lfWidth          = 5/*0*/;
@@ -583,9 +581,9 @@ void CEditView::DispRuler( HDC hdc )
 	hPenOld = (HPEN)::SelectObject( hdc, hPen );
 	colTextOld = ::SetTextColor( hdc, m_pcEditDoc->GetDocumentAttribute().m_ColorInfoArr[COLORIDX_RULER].m_colTEXT );
 
-	
+
 	nToX = m_nViewAlignLeft + m_nViewCx;
-	
+
 	nToX = m_nViewAlignLeft + (m_pcEditDoc->GetDocumentAttribute().m_nMaxLineSize - m_nViewLeftCol) * ( m_nCharWidth  + m_pcEditDoc->GetDocumentAttribute().m_nColmSpace );
 	if( nToX > m_nViewAlignLeft + m_nViewCx ){
 		nToX = m_nViewAlignLeft + m_nViewCx;
@@ -703,7 +701,7 @@ bool CEditView::SearchBracket( int LayoutX, int LayoutY, int* NewX, int* NewY )
 
 	//	Jun. 19, 2000 genta
 	if( cline == NULL )	//	最後の行に本文がない場合
-		return false;	
+		return false;
 //	PosX = LineColmnToIndex( cline, len, PosX );	不要
 
 	nCharSize = CMemory::MemCharNext( cline, len, cline + PosX ) - cline - PosX;
@@ -775,13 +773,13 @@ bool CEditView::SearchBracket( int LayoutX, int LayoutY, int* NewX, int* NewY )
 		const struct ZENKAKKO_T *p;
 		PosX = bPos - cline;
 		p = zenkakkoarr;
-		for(i = 0; p->sStr != NULL; i++, p++)
+		for( i = 0; p->sStr != NULL; i++, p++ )
 		{
-			if(strncmp(p->sStr, &cline[PosX], 2) == 0)
+			if( strncmp(p->sStr, &cline[PosX], 2) == 0 )
 			{
 				return SearchBracketForward2( PosX, PosY, NewX, NewY, p->sStr, p->eStr );
 			}
-			else if(strncmp(p->eStr, &cline[PosX], 2) == 0)
+			else if( strncmp(p->eStr, &cline[PosX], 2) == 0 )
 			{
 				return SearchBracketBackward2( PosX, PosY, NewX, NewY, p->sStr, p->eStr );
 			}
@@ -801,10 +799,10 @@ bool CEditView::SearchBracketForward( int PosX, int PosY, int* NewX, int* NewY,
 {
 	CDocLine* ci;
 
-	int len;
-	const char *cPos, *nPos;
-	char *cline, *lineend;
-	int level = 0;
+	int			len;
+	const char	*cPos, *nPos;
+	char		*cline, *lineend;
+	int			level = 0;
 
 //	char buf[50];	Debug用
 
@@ -860,10 +858,10 @@ bool CEditView::SearchBracketBackward( int PosX, int PosY, int* NewX, int* NewY,
 {
 	CDocLine* ci;
 
-	int len;
-	const char *cPos, *pPos;
-	char *cline, *lineend;
-	int level = 1;
+	int			len;
+	const char	*cPos, *pPos;
+	char		*cline, *lineend;
+	int			level = 1;
 
 //	char buf[50];	Debug用
 
@@ -914,7 +912,7 @@ bool CEditView::SearchBracketBackward( int PosX, int PosY, int* NewX, int* NewY,
 //
 //	戻り値: true : 成功 / false : 失敗
 //
-bool CEditView::SearchBracketForward2( int   PosX,   int   PosY, 
+bool CEditView::SearchBracketForward2( int   PosX,   int   PosY,
 									   int*  NewX,   int*  NewY,
 									   char* upChar, char* dnChar )
 {
@@ -975,7 +973,7 @@ bool CEditView::SearchBracketForward2( int   PosX,   int   PosY,
 //
 //	戻り値: true : 成功 / false : 失敗
 //
-bool CEditView::SearchBracketBackward2( int   PosX,   int   PosY, 
+bool CEditView::SearchBracketBackward2( int   PosX,   int   PosY,
 									    int*  NewX,   int*  NewY,
 									    char* dnChar, char* upChar )
 {
@@ -1032,7 +1030,7 @@ bool CEditView::SearchBracketBackward2( int   PosX,   int   PosY,
 //	現在のカーソル行位置を履歴に登録する
 //
 //
-void CEditView::AddCurrentLineToHistory(void)
+void CEditView::AddCurrentLineToHistory( void )
 {
 	int PosX, PosY;	//	物理位置（改行単位の計算）
 
@@ -1042,8 +1040,9 @@ void CEditView::AddCurrentLineToHistory(void)
 	m_cHistory->Add( m );
 
 //	char buf[256];
-//	wsprintf( buf, "Line: %d, Ext: %d",m.GetLine(),m.GetExtra());
+//	wsprintf( buf, "Line: %d, Ext: %d",m.GetLine(),m.GetExtra() );
 //	::MessageBox( NULL, buf, "Mark Add", MB_OK );
 }
+
 
 /* [EOF] */

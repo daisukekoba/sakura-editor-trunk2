@@ -1,12 +1,10 @@
 //	$Id$
 /************************************************************************
-
 	CDlgFind.cpp
-
 	1999.12.2  再作成
 	Copyright (C) 1998-2000, Norio Nakatani
-
 ************************************************************************/
+
 #include "CDlgFind.h"
 #include "funccode.h"
 #include "sakura_rc.h"
@@ -232,7 +230,7 @@ BOOL CDlgFind::OnBnClicked( int wID )
 		/* ダイアログデータの取得 */
 		nRet = GetData();
 		if( 0 < nRet ){
-			if(	m_bModal ){		/* モーダルダイアログか */
+			if( m_bModal ){		/* モーダルダイアログか */
 				CloseDialog( 1 );
 			}else{
 				/* 前を検索 */
@@ -244,17 +242,26 @@ BOOL CDlgFind::OnBnClicked( int wID )
 					CloseDialog( 0 );
 				}
 			}
-		}else
-		if( 0 == nRet ){
-			::MessageBeep( MB_ICONHAND );
-			CloseDialog( 0 );
+//From Here Feb. 20, 2001 JEPRO 「置換」ダイアログと同じように警告メッセージを表示するように変更
+//		}else
+//		if( 0 == nRet ){
+//			::MessageBeep( MB_ICONHAND );
+//			CloseDialog( 0 );
+//		}
+//		return TRUE;
+//ここまでコメントアウトし、代わりに以下を追加
+		}else{
+			::MYMESSAGEBOX( m_hWnd, MB_OK , GSTR_APPNAME,
+				"検索条件を指定してください。"
+			);
 		}
 		return TRUE;
+//To Here Feb. 20, 2001
 	case IDC_BUTTON_SEARCHNEXT:		/* 下検索 */	//Feb. 13, 2001 JEPRO ボタン名を[IDOK]→[IDC_BUTTON_SERACHNEXT]に変更
 		/* ダイアログデータの取得 */
 		nRet = GetData();
 		if( 0 < nRet ){
-			if(	m_bModal ){		/* モーダルダイアログか */
+			if( m_bModal ){		/* モーダルダイアログか */
 				CloseDialog( 2 );
 			}else{
 				/* 次を検索 */
@@ -266,12 +273,21 @@ BOOL CDlgFind::OnBnClicked( int wID )
 					CloseDialog( 0 );
 				}
 			}
-		}else
-		if( 0 == nRet ){
-			::MessageBeep( MB_ICONHAND );
-			CloseDialog( 0 );
+//From Here Feb. 20, 2001 JEPRO 「置換」ダイアログと同じように警告メッセージを表示するように変更
+//		}else
+//		if( 0 == nRet ){
+//			::MessageBeep( MB_ICONHAND );
+//			CloseDialog( 0 );
+//		}
+//		return TRUE;
+//ここまでコメントアウトし、代わりに以下を追加
+		}else{
+			::MYMESSAGEBOX( m_hWnd, MB_OK , GSTR_APPNAME,
+				"検索条件を指定してください。"
+			);
 		}
 		return TRUE;
+//To Here Feb. 20, 2001
 	case IDCANCEL:
 		CloseDialog( 0 );
 		return TRUE;

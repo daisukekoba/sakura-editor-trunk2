@@ -1,14 +1,11 @@
 //	$Id$
 /************************************************************************
-
 	CShareData.h
-
 	プロセス間共有データへのアクセス
 	Copyright (C) 1998-2000, Norio Nakatani
 
 	UPDATE:
 	CREATE: 1998/5/26  新規作成
-
 ************************************************************************/
 
 class CShareData;
@@ -146,16 +143,16 @@ struct PRINTSETTING {
 #define COLORIDX_CRLF			8	/* 改行記号 */
 #define COLORIDX_WRAP			9	/* 折り返し記号	*/
 #define COLORIDX_EOF			10	/* EOF記号 */
-#define COLORIDX_SEARCH			11	/* 検索文字列 */
-#define COLORIDX_KEYWORD		12	/* 強調キーワード1 */
-#define COLORIDX_KEYWORD2		13	/* 強調キーワード2 */					//MIK ADDED
-#define COLORIDX_COMMENT		14	/* コメント */							//Dec. 4, 2000 shifted by MIK
-#define COLORIDX_SSTRING		15	/* シングルクォーテーション文字列 */	//Dec. 4, 2000 shifted by MIK
-#define COLORIDX_WSTRING		16	/* ダブルクォーテーション文字列 */		//Dec. 4, 2000 shifted by MIK
-#define COLORIDX_URL			17	/* URL */								//Dec. 4, 2000 shifted by MIK
-//@@@ 2001.02.17 Start by MIK: 半角数字を強調表示
+//@@@ 2001.02.17 Start by MIK: 半角数値を強調表示
 //#ifdef COMPILE_COLOR_DIGIT
-#define COLORIDX_DIGIT			18	/* 半角数字 */	//@@@ 2001.02.17 by MIK
+#define COLORIDX_DIGIT			11	/* 半角数値 */	//@@@ 2001.02.17 by MIK	//色設定Ver.3からユーザファイルに対しては文字列で処理しているのでリナンバリングしてもよい. Mar. 7, 2001 JEPRO noted
+#define COLORIDX_SEARCH			12	/* 検索文字列 */
+#define COLORIDX_KEYWORD		13	/* 強調キーワード1 */
+#define COLORIDX_KEYWORD2		14	/* 強調キーワード2 */					//MIK ADDED
+#define COLORIDX_COMMENT		15	/* コメント */							//Dec. 4, 2000 shifted by MIK
+#define COLORIDX_SSTRING		16	/* シングルクォーテーション文字列 */	//Dec. 4, 2000 shifted by MIK
+#define COLORIDX_WSTRING		17	/* ダブルクォーテーション文字列 */		//Dec. 4, 2000 shifted by MIK
+#define COLORIDX_URL			18	/* URL */								//Dec. 4, 2000 shifted by MIK
 #define COLORIDX_LAST			19											//Dec. 4, 2000 @@@2001.02.17 renumber by MIK
 //#else
 //#define COLORIDX_LAST			18											//Dec. 4, 2000
@@ -304,7 +301,7 @@ struct Common {
 	//	自動Backup
 	bool	IsAutoBackupEnabled(void) const { return GetBackupOpt( BKUP_AUTO ); }
 	void	EnableAutoBackup(bool flag){ SetBackupOpt( BKUP_AUTO, flag ); }
-	
+
 	int		GetAutoBackupInterval(void) const { return m_nBackUpType_Opt3; }
 	void	SetAutoBackupInterval(int i){ m_nBackUpType_Opt3 = i; }
 
@@ -317,7 +314,7 @@ struct Common {
 	//	ファイル読み込み時にMIMEのdecodeを行うか
 	bool	GetAutoMIMEdecode(void) const { return m_bAutoMIMEdecode != 0; }
 	void	SetAutoMIMEdecode(bool i){ m_bAutoMIMEdecode = i; }
-	
+
 	//	注意: 設定ファイルからの読み込み時にINTとして扱うため，bool型を使ってはいけない．
 	//	sizeof(int) != sizeof(bool)だとデータを破壊してしまう．
 
@@ -409,7 +406,7 @@ struct Common {
 	BOOL				m_bUseOLE_DragDrop;			/* OLEによるドラッグ & ドロップを使う */
 	BOOL				m_bUseOLE_DropSource;		/* OLEによるドラッグ元にするか */
 
-	
+
 	BOOL				m_bDispExitingDialog;			/* 終了ダイアログを表示する */
 	BOOL				m_bEnableUnmodifiedOverwrite;	/* 無変更でも上書きするか */
 	BOOL				m_bJumpSingleClickURL;			/* URLのシングルクリックでJump */
@@ -562,7 +559,7 @@ public:
 	BOOL SendMessageToAllEditors( UINT, WPARAM, LPARAM, HWND );	/* 全編集ウィンドウへメッセージを送るする */
 	int GetOpenedWindowArr( EditNode** , BOOL );				/* 現在開いている編集ウィンドウの配列を返す */
 	static BOOL IsEditWnd( HWND );								/* 指定ウィンドウが、編集ウィンドウのフレームウィンドウかどうか調べる */
-	static void SetTBBUTTONVal(	TBBUTTON*, int, int, BYTE, BYTE, DWORD, int	);	/* TBBUTTON構造体にデータをセット */
+	static void SetTBBUTTONVal( TBBUTTON*, int, int, BYTE, BYTE, DWORD, int );	/* TBBUTTON構造体にデータをセット */
 	static void SetKeyNameArrVal(
 		DLLSHAREDATA*, int, short, char*,
 		short, short, short, short,

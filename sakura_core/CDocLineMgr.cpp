@@ -1,13 +1,12 @@
 //	$Id$
 /************************************************************************
 	CDocLineMgr.cpp
-    テキストの管理
+	テキストの管理
 	Copyright (C) 1998-2000, Norio Nakatani
 
 	UPDATE:
 	CREATE: 1998/3/5  新規作成
 ************************************************************************/
-
 
 /* for TRACE() of MFC */
 //#ifdef _DEBUG
@@ -40,13 +39,13 @@
 
 /* 文字種類識別子 */
 #define	CK_NULL			0	/* NULL 0x0<=c<=0x0 */
-#define	CK_TAB			1	/* タブ	0x9<=c<=0x9 */
+#define	CK_TAB			1	/* タブ 0x9<=c<=0x9 */
 #define	CK_CR			2	/* CR = 0x0d  */
 #define	CK_LF			3	/* LF = 0x0a  */
 
 #define	CK_SPACE		4	/* 半角のスペース 0x20<=c<=0x20 */
 #define	CK_CSYM			5	/* 半角の英字、アンダースコア、数字のいずれか */
-#define	CK_KATA			6	/* 半角のカタカナ 0xA1<=c<=0xFD*/
+#define	CK_KATA			6	/* 半角のカタカナ 0xA1<=c<=0xFD */
 #define	CK_ETC			7	/* 半角のその他 */
 
 #define	CK_MBC_SPACE	12	/* 2バイトのスペース */
@@ -428,7 +427,7 @@ int CDocLineMgr::ReadFile( const char* pszPath, HWND hWndParent, HWND hwndProgre
 	nEOF = FALSE;
 	bBinaryAlerted = FALSE;
 	HGLOBAL	hgRead;
-	
+
 	/* 既存データのクリア */
 	Empty();
 	Init();
@@ -500,7 +499,7 @@ int CDocLineMgr::ReadFile( const char* pszPath, HWND hWndParent, HWND hwndProgre
 	SYSTEMTIME	systimeL;
 	if( ::GetFileTime( (HANDLE)hFile, NULL, NULL, &FileTime ) ){
 		*pFileTime = FileTime;
-		
+
 		::FileTimeToLocalFileTime( &FileTime, &FileTime );
 		::FileTimeToSystemTime( &FileTime, &systimeL );
 //		MYTRACE( "Last Update: %d/%d/%d %02d:%02d:%02d\n",
@@ -542,7 +541,7 @@ int CDocLineMgr::ReadFile( const char* pszPath, HWND hWndParent, HWND hwndProgre
 	}
 	pBuf = (char*)::GlobalLock( hgRead );
 	nEOF = TRUE;
-	
+
 	switch( nCharCode ){
 	case CODE_UNICODE:
 		nReadSize = _lread( hFile, pBuf, 2 );
@@ -725,7 +724,7 @@ _RETURN_:;
 		::GlobalUnlock( hgRead );
 		::GlobalFree( hgRead );
 	}
-	
+
 	if( NULL != hwndProgress ){
 		::PostMessage( hwndProgress, PBM_SETPOS, 0, 0 );
 	}
@@ -824,7 +823,7 @@ int CDocLineMgr::WriteFile( const char* pszPath, HWND hWndParent, HWND hwndProgr
 		nRetVal = FALSE;
 		goto _RETURN_;
 	}
-	
+
 	switch( nCharCode ){
 	case CODE_UNICODE:
 //-		if( HFILE_ERROR == _lwrite( hFile, "\xff\xfe", 2 ) ){
@@ -853,7 +852,7 @@ int CDocLineMgr::WriteFile( const char* pszPath, HWND hWndParent, HWND hwndProgr
 				return -1;
 			}
 		}
-		
+
 //		for( i = 0; i < nLineLen; ++i ){
 //			if( pLine[i] == CR ||
 //				pLine[i] == LF ){
@@ -959,7 +958,7 @@ _CLOSEFILE_:;
 	/* 更新後のファイル時刻の取得 */
 	hFile = _lopen( pszPath, OF_READ );
 	if( HFILE_ERROR != hFile ){
-	
+
 		FILETIME	FileTime;
 		SYSTEMTIME	systimeL;
 		if( ::GetFileTime( (HANDLE)hFile, NULL, NULL, &FileTime ) ){
@@ -979,8 +978,8 @@ _CLOSEFILE_:;
 		}
 	}
 	_lclose( hFile );
-	
-			
+
+
 _RETURN_:;
 	if( NULL != hwndProgress ){
 		::PostMessage( hwndProgress, PBM_SETPOS, 0, 0 );
@@ -994,7 +993,7 @@ _RETURN_:;
 	ResetAllModifyFlag();
 //		FALSE	/* 変更回数を0にするかどうか */
 //	);
-	
+
 	return nRetVal;
 }
 
@@ -1050,7 +1049,7 @@ void CDocLineMgr::DeleteData(
 //			pDocLine->m_bModify = FALSE;		/* 変更フラグ */
 //		}
 //		if( 0 > pDocLine->m_nModifyCount ){		/* 変更回数 */
-//			::MYMESSAGEBOX(	NULL, MB_OK | MB_ICONINFORMATION, "作者に教えて欲しいエラー",
+//			::MYMESSAGEBOX( NULL, MB_OK | MB_ICONINFORMATION, "作者に教えて欲しいエラー",
 //				"CDocLineMgr::DeleteData()で変更カウンタが0以下になりました。バグじゃぁああ"
 //			);
 //		}
@@ -1068,7 +1067,7 @@ void CDocLineMgr::DeleteData(
 	/* 「改行」を削除する場合は、次の行と連結する */
 //	if( ( nDelPos == nLineLen -1 && ( pLine[nDelPos] == CR || pLine[nDelPos] == LF ) )
 //	 || nDelPos + nDelLen >= nLineLen
-	if( ( EOL_NONE != pDocLine->m_cEol && nDelPos == nLineLen - pDocLine->m_cEol.GetLen() ) 
+	if( ( EOL_NONE != pDocLine->m_cEol && nDelPos == nLineLen - pDocLine->m_cEol.GetLen() )
 	 || ( EOL_NONE != pDocLine->m_cEol && nDelPos + nDelLen >  nLineLen - pDocLine->m_cEol.GetLen() )
 	 || ( EOL_NONE == pDocLine->m_cEol && nDelPos + nDelLen >= nLineLen - pDocLine->m_cEol.GetLen() )
 	){
@@ -1234,7 +1233,7 @@ void CDocLineMgr::InsertData_CDocLineMgr(
 //				pDocLine->m_bModify = FALSE;		/* 変更フラグ */
 //			}
 //			if( 0 > pDocLine->m_nModifyCount ){		/* 変更回数 */
-//				::MYMESSAGEBOX(	NULL, MB_OK | MB_ICONINFORMATION, "作者に教えて欲しいエラー",
+//				::MYMESSAGEBOX( NULL, MB_OK | MB_ICONINFORMATION, "作者に教えて欲しいエラー",
 //					"CDocLineMgr::InsertData()で変更カウンタが0以下になりました。バグじゃぁああ"
 //				);
 //			}
@@ -1302,7 +1301,7 @@ void CDocLineMgr::InsertData_CDocLineMgr(
 
 					pDocLine->m_cEol = cEOLType;						/* 改行コードの種類 */
 					// pDocLine->m_nEOLLen = gm_pnEolLenArr[nEOLType];	/* 改行コードの長さ */
-					
+
 					pDocLine = pDocLine->m_pNext;
 				}else{
 					pDocLineNew = new CDocLine;
@@ -1493,10 +1492,10 @@ int	CDocLineMgr::WhereCurrentWord(
 		nCharChars = CMemory::MemCharNext( pLine, nLineLen, &pLine[nIdxNext] ) - &pLine[nIdxNext];
 	}
 	*pnIdxTo = nIdxNext;
-	
+
 	if( NULL != pcmcmWord ){
 		pcmcmWord->SetData( &pLine[*pnIdxFrom], *pnIdxTo - *pnIdxFrom );
-	} 
+	}
 	return TRUE;
 }
 
@@ -1665,7 +1664,7 @@ int CDocLineMgr::SearchWord(
 //		lstrlen( pszPattern ),
 //		pnKey_CharCharsArr,
 //		&pnKey_CharUsedArr
-//	); 
+//	);
 
 	/* 1==正規表現 */
 	if( bRegularExp ){
@@ -1870,7 +1869,7 @@ void CDocLineMgr::CreateCharCharsArr(
 )
 {
 	int		i;
-	int*	pnCharCharsArr;	
+	int*	pnCharCharsArr;
 	pnCharCharsArr = new int[nSrcLen];
 	for( i = 0; i < nSrcLen; /*i++*/ ){
 		pnCharCharsArr[i] = CMemory::MemCharNext( (const char *)pszPattern, nSrcLen, (const char *)&pszPattern[i] ) - (const char *)&pszPattern[i];
@@ -1974,7 +1973,7 @@ char* CDocLineMgr::SearchString(
 				}else{
 					nWork = nCharChars1;
 				}
-				
+
 				for( j = 0; j < nWork; ++j ){
 					if( islower( pLine[nPos + i + j] ) ){
 						if( islower( pszPattern[i + j] ) ){
@@ -2011,7 +2010,7 @@ char* CDocLineMgr::SearchString(
 			if( i >= nSrcLen ){
 				return (char *)&pLine[nPos];
 			}
-			if( 0 == nCharChars	){
+			if( 0 == nCharChars ){
 				++nPos;
 			}else{
 				nPos+= nCharChars;
@@ -2041,7 +2040,7 @@ char* CDocLineMgr::SearchString(
 					nWork = nCharChars1;
 				}
 				//	From Here Mar. 4, 2001 genta
-				if( bLoHiCase && nWork == 1 ){	//	英大小文字の同一視
+				if( !bLoHiCase && nWork == 1 ){	//	英大小文字の同一視
 					if( toupper( pLine[nPos + i] ) != toupper( pszPattern[i] ) )
 						break;
 				}
@@ -2066,7 +2065,7 @@ char* CDocLineMgr::SearchString(
 			if( i >= nSrcLen ){
 				return (char *)&pLine[nPos];
 			}
-			if( 0 == nCharChars	){
+			if( 0 == nCharChars ){
 				++nPos;
 			}else{
 				nPos+= nCharChars;
@@ -2100,7 +2099,7 @@ int	CDocLineMgr::WhatKindOfChar(
 			return CK_LF;	/* LF = 0x0a */
 		}
 		if( pData[nIdx] == TAB ){
-			return CK_TAB;	/* タブ	0x9<=c<=0x9 */
+			return CK_TAB;	/* タブ 0x9<=c<=0x9 */
 		}
 		if( pData[nIdx] == SPACE ){
 			return CK_SPACE;	/* 半角のスペース 0x20<=c<=0x20 */
@@ -2185,7 +2184,7 @@ void CDocLineMgr::DUMP( void )
 		MYTRACE( "\tpDocLine->m_pLine->m_nDataLen=[%d]\n",   pDocLine->m_pLine->m_nDataLen );
 		MYTRACE( "\t[%s]\n",   pDocLine->m_pLine->GetPtr( NULL ) );
 
-		
+
 		pDocLine = pDocLineNext;
 	}
 	MYTRACE( "------------------------\n" );

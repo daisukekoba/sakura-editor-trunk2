@@ -647,7 +647,8 @@ void CEditDoc::MakeFuncList_Perl( CFuncInfoArr* pcFuncInfoArr )
 						&nPosX,
 						&nPosY
 					);
-					pcFuncInfoArr->AppendData( nPosY + 1/*nFuncLine*/, nPosY + 1, szWord, 0 );
+					//	Mar. 9, 2001
+					pcFuncInfoArr->AppendData( nLineCount + 1/*nFuncLine*/, nPosY + 1, szWord, 0 );
 					
 					break;
 				}
