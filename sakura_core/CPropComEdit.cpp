@@ -9,10 +9,10 @@
 
 /* メッセージ処理 */
 BOOL CPropCommon::DispatchEvent_PROP_EDIT(
-    HWND	hwndDlg,	// handle to dialog box
-    UINT	uMsg,	// message
-    WPARAM	wParam,	// first message parameter
-    LPARAM	lParam 	// second message parameter
+    HWND		hwndDlg,	// handle to dialog box
+    UINT		uMsg,		// message
+    WPARAM		wParam,		// first message parameter
+    LPARAM		lParam 		// second message parameter
 )
 {
 	WORD		wNotifyCode;
@@ -22,7 +22,7 @@ BOOL CPropCommon::DispatchEvent_PROP_EDIT(
 	NM_UPDOWN*	pMNUD;
 	int			idCtrl;
 //	int			nVal;
-//    LPDRAWITEMSTRUCT pDis;
+//	LPDRAWITEMSTRUCT pDis;
 
 	switch( uMsg ){
 
@@ -35,9 +35,9 @@ BOOL CPropCommon::DispatchEvent_PROP_EDIT(
 
 		return TRUE;
 	case WM_COMMAND:
-		wNotifyCode = HIWORD(wParam);	/* 通知コード */
-		wID         = LOWORD(wParam);	/* 項目ID､ コントロールID､ またはアクセラレータID */
-		hwndCtl     = (HWND) lParam;	/* コントロールのハンドル */
+		wNotifyCode	= HIWORD(wParam);	/* 通知コード */
+		wID			= LOWORD(wParam);	/* 項目ID､ コントロールID､ またはアクセラレータID */
+		hwndCtl		= (HWND) lParam;	/* コントロールのハンドル */
 		switch( wNotifyCode ){
 		/* ボタン／チェックボックスがクリックされた */
 		case BN_CLICKED:
@@ -61,7 +61,7 @@ BOOL CPropCommon::DispatchEvent_PROP_EDIT(
 			break;
 		}
 		break;
-				
+
 	case WM_NOTIFY:
 		idCtrl = (int)wParam;
 		pNMHDR = (NMHDR*)lParam;
@@ -93,7 +93,7 @@ void CPropCommon::SetData_PROP_EDIT( HWND hwndDlg )
 {
 //	BOOL	bRet;
 
-	/* Drag && Drop編集 */
+	/* ドラッグ & ドロップ編集 */
 	::CheckDlgButton( hwndDlg, IDC_CHECK_DRAGDROP, m_Common.m_bUseOLE_DragDrop );
 	if( ::IsDlgButtonChecked( hwndDlg, IDC_CHECK_DRAGDROP ) ){
 //	From Here Sept. 9, 2000 JEPRO
@@ -127,15 +127,12 @@ void CPropCommon::SetData_PROP_EDIT( HWND hwndDlg )
 
 
 
-
-
-
 /* ダイアログデータの取得 */
 int CPropCommon::GetData_PROP_EDIT( HWND hwndDlg )
 {
 	m_nPageNum = ID_PAGENUM_EDIT;
 
-	/* Drag && Drop編集 */
+	/* ドラッグ & ドロップ編集 */
 	m_Common.m_bUseOLE_DragDrop = ::IsDlgButtonChecked( hwndDlg, IDC_CHECK_DRAGDROP );
 	/* DropSource */
 	m_Common.m_bUseOLE_DropSource = ::IsDlgButtonChecked( hwndDlg, IDC_CHECK_DROPSOURCE );
@@ -150,3 +147,6 @@ int CPropCommon::GetData_PROP_EDIT( HWND hwndDlg )
 	m_Common.m_bNotOverWriteCRLF = ::IsDlgButtonChecked( hwndDlg, IDC_CHECK_bNotOverWriteCRLF );
 	return TRUE;
 }
+
+
+/*[EOF]*/

@@ -266,13 +266,13 @@ BEGIN
     ICON            IDI_ICON_STD,IDC_STATIC_MYICON,5,5,20,20,SS_NOTIFY
     CONTROL         "テキストエディタ Ver. 0.3.9.0",IDC_STATIC,"Static",
                     SS_LEFTNOWORDWRAP,30,7,80,8
-    LTEXT           "UR 8.8.8.8",IDC_STATIC_VER,113,7,60,8,NOT WS_GROUP
+    LTEXT           "UR8.8.8.8",IDC_STATIC_VER,113,7,60,8,NOT WS_GROUP
     LTEXT           "Copyright (C) 1998-2001  by Norio Nakatani && Collaborators",
                     IDC_STATIC,38,33,182,8,NOT WS_GROUP
     LTEXT           "Last Update:1999/99/99 99:99:99",IDC_STATIC_UPDATE,40,
                     20,97,8,NOT WS_GROUP
-    LTEXT           "このソフトはフリーソフトです。ご自由にお使い下さい。",
-                    IDC_STATIC,41,76,156,8,NOT WS_GROUP
+    LTEXT           "このソフトはフリーソフトです。 ご自由にお使いください。",
+                    IDC_STATIC,38,76,162,8,NOT WS_GROUP
     DEFPUSHBUTTON   "&OK",IDOK,94,91,50,14
     PUSHBUTTON      "原作者連絡先(&A)...",IDC_BUTTON_CONTACT,175,7,59,14
     LTEXT           "Project Sakura Editor:",IDC_STATIC_URL_CAPTION,12,60,64,
@@ -380,7 +380,7 @@ BEGIN
     EDITTEXT        IDC_EDIT_SMTPSERVER,10,70,125,12,ES_AUTOHSCROLL
     LTEXT           "S&MTPポート番号(25)",IDC_STATIC,145,60,60,8
     EDITTEXT        IDC_EDIT_SMTPPORT,145,70,25,12,ES_AUTOHSCROLL
-    LTEXT           "メール送信機能を利用するための設定です。\nメールアドレス、SMTPサーバのアドレス、ポート番号等が不明な場合は、ご加入のプロバイダか、所属組織のネットワーク管理者などにお問い合わせ下さい。",
+    LTEXT           "メール送信機能を利用するための設定です。\nメールアドレス、SMTPサーバのアドレス、ポート番号等が不明な場合は、ご加入のプロバイダか、所属組織のネットワーク管理者などにお問い合わせください。",
                     IDC_STATIC,10,170,265,25
     LTEXT           "メール受信(&POP3)サーバ",IDC_STATIC,10,85,75,8,
                     WS_DISABLED
@@ -441,12 +441,12 @@ BEGIN
                     BS_AUTORADIOBUTTON | WS_GROUP | WS_TABSTOP,140,63,45,10
     CONTROL         "該当部分(&P)",IDC_RADIO_OUTPUTMARKED,"Button",
                     BS_AUTORADIOBUTTON,140,75,50,10
-    GROUPBOX        "結果出力",IDC_STATIC,135,53,60,35,WS_GROUP
+    GROUPBOX        "結果出力",IDC_STATIC,135,53,75,35,WS_GROUP
     CONTROL         "ノーマル(&M)",IDC_RADIO_OUTPUTSTYLE1,"Button",
                     BS_AUTORADIOBUTTON | WS_GROUP | WS_TABSTOP,140,103,50,10
-    CONTROL         "&WZ風",IDC_RADIO_OUTPUTSTYLE2,"Button",
-                    BS_AUTORADIOBUTTON,140,115,40,10
-    GROUPBOX        "結果出力形式",IDC_STATIC,135,93,60,35,WS_GROUP
+    CONTROL         "ファイル毎（&WZ風）",IDC_RADIO_OUTPUTSTYLE2,"Button",
+                    BS_AUTORADIOBUTTON,140,115,65,10
+    GROUPBOX        "結果出力形式",IDC_STATIC,135,93,75,35,WS_GROUP
     DEFPUSHBUTTON   "検索(&F)",IDOK,255,81,50,14,WS_GROUP
     PUSHBUTTON      "キャンセル(&X)",IDCANCEL,255,100,50,14
     PUSHBUTTON      "ヘルプ(&H)",IDC_BUTTON_HELP,255,116,50,14
@@ -1061,10 +1061,9 @@ BEGIN
     DEFPUSHBUTTON   "&OK",IDOK,190,145,50,14
     PUSHBUTTON      "キャンセル(&X)",IDCANCEL,250,145,50,14
     PUSHBUTTON      "ヘルプ(&H)",IDC_BUTTON_HELP,310,145,50,14
-    PUSHBUTTON      "上下に表示(&V)",IDC_BUTTON1,130,145,50,14,NOT 
-                    WS_VISIBLE | WS_DISABLED | WS_GROUP
-    DEFPUSHBUTTON   "左右に表示(&T)",IDOK2,70,145,50,14,NOT WS_VISIBLE | 
-                    WS_DISABLED
+    PUSHBUTTON      "上下に表示(&V)",IDC_BUTTON1,130,145,50,14,WS_DISABLED | 
+                    WS_GROUP
+    DEFPUSHBUTTON   "左右に表示(&T)",IDOK2,70,145,50,14,WS_DISABLED
 END
 
 149 DIALOG FIXED IMPURE  36, 24, 232, 101
@@ -1233,8 +1232,8 @@ STYLE DS_MODALFRAME | DS_SETFOREGROUND | DS_CENTER | WS_POPUP | WS_VISIBLE
 FONT 9, "ＭＳ Ｐゴシック"
 BEGIN
     ICON            IDI_ICON_STD,IDC_STATIC,5,5,20,20
-    LTEXT           "終了しています。しばらくお待ち下さい・・・。",
-                    IDC_STATIC,30,10,124,8
+    LTEXT           "終了しています。 しばらくお待ちください・・・",
+                    IDC_STATIC,30,10,125,8
 END
 
 IDD_DEBUG DIALOG DISCARDABLE  0, 0, 355, 190
@@ -1933,8 +1932,8 @@ END
 //
 
 VS_VERSION_INFO VERSIONINFO
- FILEVERSION 1,2,25,1
- PRODUCTVERSION 1,2,25,1
+ FILEVERSION 1,2,0,0
+ PRODUCTVERSION 1,2,25,2
  FILEFLAGSMASK 0x3fL
 #ifdef _DEBUG
  FILEFLAGS 0x21L
@@ -1951,14 +1950,14 @@ BEGIN
         BEGIN
             VALUE "Comments", "このソフトはフリーソフトです。\0"
             VALUE "CompanyName", "Project: Sakura Editor\0"
+            VALUE "ProductVersion", "1.2.25.2\0"
             VALUE "FileDescription", "テキストエディタ SAKURA\0"
-            VALUE "FileVersion", "1.2.25.1\0"
             VALUE "InternalName", "sakura\0"
             VALUE "LegalCopyright", "Copyright (C) Norio Nakatani & Collaborators\0"
             VALUE "LegalTrademarks", " \0"
             VALUE "OriginalFilename", "sakura.exe\0"
+            VALUE "FileVersion", "1.2\0"
             VALUE "ProductName", "テキストエディタ SAKURA\0"
-            VALUE "ProductVersion", "1.2.25.1\0"
         END
     END
     BLOCK "VarFileInfo"

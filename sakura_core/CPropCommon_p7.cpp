@@ -104,11 +104,11 @@ BOOL CPropCommon::DispatchEvent_p7(
 			case LVN_BEGINLABELEDIT:
 #ifdef _DEBUG
 				MYTRACE( "LVN_BEGINLABELEDIT\n" );
-				MYTRACE( "	plvi->mask =[%xh]\n", plvi->mask  );
-				MYTRACE( "	plvi->iItem =[%d]\n", plvi->iItem  );
-				MYTRACE( "	plvi->iSubItem =[%d]\n", plvi->iSubItem  );
+				MYTRACE( "	plvi->mask =[%xh]\n", plvi->mask );
+				MYTRACE( "	plvi->iItem =[%d]\n", plvi->iItem );
+				MYTRACE( "	plvi->iSubItem =[%d]\n", plvi->iSubItem );
 				MYTRACE( "	plvi->state =[%xf]\n", plvi->state  );
-				MYTRACE( "	plvi->stateMask =[%xh]\n", plvi->stateMask  );
+				MYTRACE( "	plvi->stateMask =[%xh]\n", plvi->stateMask );
 				MYTRACE( "	plvi->pszText =[%s]\n", plvi->pszText  );
 				MYTRACE( "	plvi->cchTextMax=[%d]\n", plvi->cchTextMax );
 				MYTRACE( "	plvi->iImage=[%d]\n", plvi->iImage );
@@ -118,11 +118,11 @@ BOOL CPropCommon::DispatchEvent_p7(
 			case LVN_ENDLABELEDIT:
 #ifdef _DEBUG
 				MYTRACE( "LVN_ENDLABELEDIT\n" );
-				MYTRACE( "	plvi->mask =[%xh]\n", plvi->mask  );
-				MYTRACE( "	plvi->iItem =[%d]\n", plvi->iItem  );
-				MYTRACE( "	plvi->iSubItem =[%d]\n", plvi->iSubItem  );
+				MYTRACE( "	plvi->mask =[%xh]\n", plvi->mask );
+				MYTRACE( "	plvi->iItem =[%d]\n", plvi->iItem );
+				MYTRACE( "	plvi->iSubItem =[%d]\n", plvi->iSubItem );
 				MYTRACE( "	plvi->state =[%xf]\n", plvi->state  );
-				MYTRACE( "	plvi->stateMask =[%xh]\n", plvi->stateMask  );
+				MYTRACE( "	plvi->stateMask =[%xh]\n", plvi->stateMask );
 				MYTRACE( "	plvi->pszText =[%s]\n", plvi->pszText  );
 				MYTRACE( "	plvi->cchTextMax=[%d]\n", plvi->cchTextMax );
 				MYTRACE( "	plvi->iImage=[%d]\n", plvi->iImage );
@@ -131,7 +131,7 @@ BOOL CPropCommon::DispatchEvent_p7(
 				if( NULL == plvi->pszText ){
 					return TRUE;
 				}
-				if( 0 < strlen( plvi->pszText )	){
+				if( 0 < strlen( plvi->pszText ) ){
 					if( MAX_KEYWORDLEN < strlen( plvi->pszText ) ){
 						::MYMESSAGEBOX(	hwndDlg, MB_OK | MB_ICONINFORMATION, GSTR_APPNAME,
 							"キーワードの長さは%dバイトまでです。", MAX_KEYWORDLEN 
@@ -181,8 +181,8 @@ BOOL CPropCommon::DispatchEvent_p7(
 		break;
 	case WM_COMMAND:
 		wNotifyCode = HIWORD(wParam);	/* 通知コード */
-		wID = LOWORD(wParam);	/* 項目ID､ コントロールID､ またはアクセラレータID */
-		hwndCtl = (HWND) lParam;	/* コントロールのハンドル */
+		wID = LOWORD(wParam);			/* 項目ID､ コントロールID､ またはアクセラレータID */
+		hwndCtl = (HWND) lParam;		/* コントロールのハンドル */
 		if( hwndCOMBO_SET == hwndCtl){
 			switch( wNotifyCode ){
 			case CBN_SELCHANGE:
@@ -264,7 +264,7 @@ BOOL CPropCommon::DispatchEvent_p7(
 				case IDC_BUTTON_ADDKEYWORD:	/* キーワード追加 */
 					/* ｎ番目のセットのキーワードの数を返す */
 					if( MAX_KEYWORDNUM <= m_CKeyWordSetMgr.GetKeyWordNum( m_CKeyWordSetMgr.m_nCurrentKeyWordSetIdx ) ){
-						::MYMESSAGEBOX(	hwndDlg,	MB_OK | MB_ICONINFORMATION, GSTR_APPNAME,
+						::MYMESSAGEBOX( hwndDlg, MB_OK | MB_ICONINFORMATION, GSTR_APPNAME,
 							"ひとつのセットに登録できるキーワードは、%d個までです。\n", MAX_KEYWORDNUM
 						);
 						return TRUE;
@@ -285,15 +285,15 @@ BOOL CPropCommon::DispatchEvent_p7(
 					/* p7:リスト中で選択されているキーワードを編集する */
 					p7_Edit_List_KeyWord( hwndDlg, hwndLIST_KEYWORD );
 					return TRUE;
-				case IDC_BUTTON_DELKEYWORD:	/* キーワード削除 */
+				case IDC_BUTTON_DELKEYWORD:		/* キーワード削除 */
 					/* p7:リスト中で選択されているキーワードを削除する */
 					p7_Delete_List_KeyWord( hwndDlg, hwndLIST_KEYWORD );
 					return TRUE;
-				case IDC_BUTTON_IMPORT:	/* インポート */
+				case IDC_BUTTON_IMPORT:			/* インポート */
 					/* p7:リスト中のキーワードをインポートする */
 					p7_Import_List_KeyWord( hwndDlg, hwndLIST_KEYWORD );
 					return TRUE;
-				case IDC_BUTTON_EXPORT:	/* エクスポート */
+				case IDC_BUTTON_EXPORT:			/* エクスポート */
 					/* p7:リスト中のキーワードをエクスポートする */
 					p7_Export_List_KeyWord( hwndDlg, hwndLIST_KEYWORD );
 					return TRUE;
@@ -402,12 +402,12 @@ void CPropCommon::p7_Import_List_KeyWord( HWND hwndDlg, HWND hwndLIST_KEYWORD )
 
 	strcpy( szPath, "" );
 	/* ファイルオープンダイアログの初期化 */
-	cDlgOpenFile.Create( 
+	cDlgOpenFile.Create(
 		m_hInstance, 
-		hwndDlg, 
-		"*.kwd", 
-		szPath, 
-		(const char **)&pszMRU, 
+		hwndDlg,
+		"*.kwd",
+		szPath,
+		(const char **)&pszMRU,
 		(const char **)&pszOPENFOLDER
 	);
 	if( !cDlgOpenFile.DoModal_GetOpenFileName( szPath ) ){
@@ -415,7 +415,7 @@ void CPropCommon::p7_Import_List_KeyWord( HWND hwndDlg, HWND hwndLIST_KEYWORD )
 	}
 	pFile = fopen( szPath, "r" );
 	if( NULL == pFile ){
-		::MYMESSAGEBOX(	hwndDlg, MB_OK | MB_ICONSTOP, GSTR_APPNAME,
+		::MYMESSAGEBOX( hwndDlg, MB_OK | MB_ICONSTOP, GSTR_APPNAME,
 			"ファイルを開けませんでした。\n\n%s", szPath
 		);
 		return;
@@ -463,10 +463,10 @@ void CPropCommon::p7_Export_List_KeyWord( HWND hwndDlg, HWND hwndLIST_KEYWORD )
 	/* ファイルオープンダイアログの初期化 */
 	cDlgOpenFile.Create( 
 		m_hInstance, 
-		hwndDlg, 
-		"*.kwd", 
-		szPath, 
-		(const char **)&pszMRU, 
+		hwndDlg,
+		"*.kwd",
+		szPath,
+		(const char **)&pszMRU,
 		(const char **)&pszOPENFOLDER
 	);
 	if( !cDlgOpenFile.DoModal_GetSaveFileName( szPath ) ){
@@ -482,7 +482,7 @@ void CPropCommon::p7_Export_List_KeyWord( HWND hwndDlg, HWND hwndLIST_KEYWORD )
 	}
 	fputs( "// ", pFile );
 	fputs( m_CKeyWordSetMgr.GetTypeName( m_CKeyWordSetMgr.m_nCurrentKeyWordSetIdx ), pFile );
-	fputs( "　キーワード定義ファイル", pFile );
+	fputs( "  キーワード定義ファイル", pFile );
 	fputs( "\n", pFile );
 	fputs( "\n", pFile );
 
@@ -499,7 +499,7 @@ void CPropCommon::p7_Export_List_KeyWord( HWND hwndDlg, HWND hwndLIST_KEYWORD )
 	/* ダイアログデータの設定 p7 指定キーワードセットの設定 */
 	SetData_p7_KeyWordSet( hwndDlg, m_CKeyWordSetMgr.m_nCurrentKeyWordSetIdx );
 
-	::MYMESSAGEBOX(	hwndDlg, MB_OK | MB_ICONINFORMATION, GSTR_APPNAME,
+	::MYMESSAGEBOX( hwndDlg, MB_OK | MB_ICONINFORMATION, GSTR_APPNAME,
 		"ファイルへエクスポートしました。\n\n%s", szPath
 	);
 	
@@ -519,7 +519,7 @@ void CPropCommon::SetData_p7( HWND hwndDlg )
 	
 	/* セット名コンボボックスの値セット */
 	hwndWork = ::GetDlgItem( hwndDlg, IDC_COMBO_SET );
-	::SendMessage( hwndWork, CB_RESETCONTENT, 0, 0 );  /* コンボボックスを空にする */
+	::SendMessage( hwndWork, CB_RESETCONTENT, 0, 0 );	/* コンボボックスを空にする */
 	if( 0 < m_CKeyWordSetMgr.m_nKeyWordSetNum ){
 		for( i = 0; i < m_CKeyWordSetMgr.m_nKeyWordSetNum; ++i ){
 			::SendMessage( hwndWork, CB_ADDSTRING, 0, (LPARAM) (LPCTSTR)m_CKeyWordSetMgr.GetTypeName( i ) );
@@ -575,7 +575,7 @@ void CPropCommon::SetData_p7_KeyWordSet( HWND hwndDlg, int nIdx )
 //	if( TRUE == m_CKeyWordSetMgr.m_ppcKeyWordSetArr[nIdx]->m_nKEYWORDCASE ){
 //	if( TRUE == m_CKeyWordSetMgr.m_cKeyWordSetArr[nIdx].m_nKEYWORDCASE ){
 //	if( TRUE == m_CKeyWordSetMgr.m_nKEYWORDCASEArr[nIdx] ){		//MIK 2000.12.01 case sense
-	if( TRUE == m_CKeyWordSetMgr.GetKeyWordCase(nIdx) ){		//MIK 2000.12.01 case sense
+	if( TRUE == m_CKeyWordSetMgr.GetKeyWordCase( nIdx ) ){		//MIK 2000.12.01 case sense
 		::CheckDlgButton( hwndDlg, IDC_CHECK_KEYWORDCASE, TRUE );
 	}else{
 		::CheckDlgButton( hwndDlg, IDC_CHECK_KEYWORDCASE, FALSE );

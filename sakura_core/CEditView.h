@@ -4,8 +4,8 @@
 	CEditView.h
 	Copyright (C) 1998-2000, Norio Nakatani
 
-    UPDATE:
-    CREATE: 1998/3/13  êVãKçÏê¨
+	UPDATE:
+	CREATE: 1998/3/13  êVãKçÏê¨
 
 ************************************************************************/
 class CEditView;

@@ -191,9 +191,7 @@ const int pnFuncList_Clip[] = {	//Oct. 16, 2000 JEPRO 変数名変更(List2→List_Cli
 	F_COPYLINESWITHLINENUMBER	,	//選択範囲内全行行番号付きコピー
 	F_COPYPATH					,	//このファイルのパス名をクリップボードにコピー
 	F_COPYTAG					,	//このファイルのパス名とカーソル位置をコピー	//Sept. 14, 2000 JEPRO メニューに合わせて下に移動
-//jeprotest	Sept. 16, 2000 JEPRO
-//ショートカットキーがうまく働かないので次行は殺してある  それに合わせて上の行の','も取り除いてある(ショートカットを登録しなければ以下の設定で使えるが...)
-	F_CREATEKEYBINDLIST				//キー割り当て一覧をコピー			//Sept. 15, 2000 JEPRO IDM_TESTのままではうまくいかないのでFに変えて登録(.hも要変更)
+	F_CREATEKEYBINDLIST				//キー割り当て一覧をコピー	//Sept. 15, 2000 JEPRO IDM_TESTのままではうまくいかないのでFに変えて登録
 };
 const int nFincList_Clip_Num = sizeof( pnFuncList_Clip ) / sizeof( pnFuncList_Clip[0] );	//Oct. 16, 2000 JEPRO 変数名変更(List1→List_Move)
 
@@ -272,7 +270,7 @@ const int pnFuncList_Set[] = {	//Oct. 16, 2000 JEPRO 変数名変更(List9→List_Set)
 	F_WRAPWINDOWWIDTH	,	/* 現在のウィンドウ幅で折り返し */	//Oct. 7, 2000 JEPRO WRAPWINDIWWIDTH を WRAPWINDOWWIDTH に変更
 	F_PRINT_PAGESETUP		//印刷ページ設定				//Sept. 14, 2000 JEPRO 「印刷のページレイアウトの設定」を「印刷ページ設定」に変更	//Oct. 17, 2000 コマンド本家は「ファイル操作系」
 };
-int	nFincList_Set_Num = sizeof( pnFuncList_Set ) / sizeof( pnFuncList_Set[0] );	//Oct. 16, 2000 JEPRO 変数名変更(List9→List_Set)
+int		nFincList_Set_Num = sizeof( pnFuncList_Set ) / sizeof( pnFuncList_Set[0] );	//Oct. 16, 2000 JEPRO 変数名変更(List9→List_Set)
 
 
 /* マクロ系 */
@@ -368,7 +366,7 @@ const int nFincList_Others_Num = sizeof( pnFuncList_Others ) / sizeof( pnFuncLis
 
 const int nsFuncCode::pnFuncListNumArr[] = {
 //	nFincList_Undef_Num,	//Oct. 14, 2000 JEPRO 「--未定義--」を表示させないように変更	//Oct. 16, 2000 JEPRO 変数名変更(List0→List_Undef)
-	nFincList_File_Num,		/* ファイル操作系 */	//Oct. 16, 2000 JEPRO 変数名変更(List5→List_File)	
+	nFincList_File_Num,		/* ファイル操作系 */	//Oct. 16, 2000 JEPRO 変数名変更(List5→List_File)
 	nFincList_Edit_Num,		/* 編集系 */			//Oct. 16, 2000 JEPRO 変数名変更(List3→List_Edit)
 	nFincList_Move_Num,		/* カーソル移動系 */	//Oct. 16, 2000 JEPRO 変数名変更(List1→List_Move)
 	nFincList_Select_Num,	/* 選択系 */			//Oct. 15, 2000 JEPRO 「カーソル移動系」から(選択)を移動

@@ -7,7 +7,7 @@
 *	Copyright (C) 1998-2000, Norio Nakatani
 *
 *
-*    CREATE: 1998/5/13
+*	CREATE: 1998/5/13
 *
 ************************************************************************/
 
@@ -483,10 +483,10 @@ LRESULT CEditApp::DispatchEvent(
 //				}else{
 //				}
 //			}
-//			if (hwndHtmlHelp != NULL){
-//				DWORD dwPID; 
-//				DWORD dwTID = ::GetWindowThreadProcessId( hwndHtmlHelp, &dwPID );
-//				::AttachThreadInput( ::GetCurrentThreadId(), dwTID, TRUE);
+//			if( hwndHtmlHelp != NULL ){
+//				DWORD	dwPID; 
+//				DWORD	dwTID = ::GetWindowThreadProcessId( hwndHtmlHelp, &dwPID );
+//				::AttachThreadInput( ::GetCurrentThreadId(), dwTID, TRUE );
 //				::SetFocus( hwndHtmlHelp );
 //				::AttachThreadInput( ::GetCurrentThreadId(), dwTID, FALSE );
 //			}
@@ -674,7 +674,7 @@ LRESULT CEditApp::DispatchEvent(
 //						hwndFrame = ::GetParent( m_hwndParent );
 						/* フォント設定ダイアログ */
 //						if( m_pcEditDoc->SelectFont( &(m_pShareData->m_Common.m_lf) ) ){
-							if( m_pShareData->m_Common.m_lf.lfPitchAndFamily & FIXED_PITCH  ){
+							if( m_pShareData->m_Common.m_lf.lfPitchAndFamily & FIXED_PITCH ){
 								m_pShareData->m_Common.m_bFontIs_FIXED_PITCH = TRUE;	/* 現在のフォントは固定幅フォントである */
 							}else{
 								m_pShareData->m_Common.m_bFontIs_FIXED_PITCH = FALSE;	/* 現在のフォントは固定幅フォントである */
@@ -875,7 +875,7 @@ LRESULT CEditApp::DispatchEvent(
 							(const char **)ppszMRU,
 							(const char **)ppszOPENFOLDER
 						);
-						if( !cDlgOpenFile.DoModalOpenDlg( szPath, &nCharCode, &bReadOnly )){
+						if( !cDlgOpenFile.DoModalOpenDlg( szPath, &nCharCode, &bReadOnly ) ){
 							delete [] ppszMRU;
 							delete [] ppszOPENFOLDER;
 							break;
@@ -991,22 +991,22 @@ LRESULT CEditApp::DispatchEvent(
 					);
 					
 					pOpt[0] = '\0';
-					if( cDlgGrep.m_bSubFolder ){	/* サブフォルダからも検索する */
+					if( cDlgGrep.m_bSubFolder ){			/* サブフォルダからも検索する */
 						strcat( pOpt, "S" );
 					}
-				//	if( m_bFromThisText ){	/* この編集中のテキストから検索する */
+				//	if( m_bFromThisText ){					/* この編集中のテキストから検索する */
 				//
 				//	}
-					if( cDlgGrep.m_bLoHiCase ){	/* 英大文字と英小文字を区別する */
+					if( cDlgGrep.m_bLoHiCase ){				/* 英大文字と英小文字を区別する */
 						strcat( pOpt, "L" );
 					}
-					if( cDlgGrep.m_bRegularExp ){	/* 正規表現 */
+					if( cDlgGrep.m_bRegularExp ){			/* 正規表現 */
 						strcat( pOpt, "R" );
 					}
 					if( cDlgGrep.m_bKanjiCode_AutoDetect ){	/* 文字コード自動判別 */
 						strcat( pOpt, "K" );
 					}
-					if( cDlgGrep.m_bGrepOutputLine ){	/* 行を出力するか該当部分だけ出力するか */
+					if( cDlgGrep.m_bGrepOutputLine ){		/* 行を出力するか該当部分だけ出力するか */
 						strcat( pOpt, "P" ); 
 					}
 
@@ -1068,7 +1068,7 @@ LRESULT CEditApp::DispatchEvent(
 //						}
 						/* 新しい編集ウィンドウを開く */
 						//	From Here Oct. 27, 2000 genta	カーソル位置を復元しない機能
-						if( m_pShareData->m_Common.GetRestoreCurPosition()){
+						if( m_pShareData->m_Common.GetRestoreCurPosition() ){
 							CEditApp::OpenNewEditor2( m_hInstance, m_hWnd, &(m_pShareData->m_fiMRUArr[nId - IDM_SELMRU]), FALSE );
 						}
 						else {
@@ -1149,7 +1149,7 @@ LRESULT CEditApp::DispatchEvent(
 								(const char **)ppszMRU,
 								(const char **)ppszOPENFOLDER
 							);
-							if( !cDlgOpenFile.DoModalOpenDlg( szPath, &nCharCode, &bReadOnly )){
+							if( !cDlgOpenFile.DoModalOpenDlg( szPath, &nCharCode, &bReadOnly ) ){
 								delete [] ppszMRU;
 								delete [] ppszOPENFOLDER;
 								break;
@@ -1334,12 +1334,12 @@ bool CEditApp::OpenNewEditor( HINSTANCE hInstance, HWND hWndParent, char* pszPat
 	/* 編集ウィンドウの上限チェック */	
 	if( pShareData->m_nEditArrNum + 1 > MAX_EDITWINDOWS ){
 		char szMsg[512];
-		wsprintf( szMsg, "編集ウィンドウ数の上限は%dです。\nこれ以上は同時に開けません。", MAX_EDITWINDOWS	);
+		wsprintf( szMsg, "編集ウィンドウ数の上限は%dです。\nこれ以上は同時に開けません。", MAX_EDITWINDOWS );
 		::MessageBox( NULL, szMsg, GSTR_APPNAME, MB_OK );
 		return false;
 	}
 
-	::GetModuleFileName( ::GetModuleHandle( NULL ),	szEXE, sizeof(szEXE) );
+	::GetModuleFileName( ::GetModuleHandle( NULL ), szEXE, sizeof( szEXE ) );
 	nPos += wsprintf( szCmdLineBuf + nPos, "\"%s\"", szEXE );
 
 	//	ファイル名が指定されている場合
@@ -1450,7 +1450,7 @@ bool CEditApp::OpenNewEditor( HINSTANCE hInstance, HWND hWndParent, char* pszPat
 		::MessageBox( NULL, szMsg, GSTR_APPNAME, MB_OK );
 		return;
 	}
-	::GetModuleFileName( ::GetModuleHandle( NULL ),	szEXE, sizeof(szEXE) );
+	::GetModuleFileName( ::GetModuleHandle( NULL ), szEXE, sizeof( szEXE ) );
 	strcpy( szPath, pfi->m_szPath );
 	if( strchr( szPath, ' ' ) ){
 		char	pszFile2[_MAX_PATH + 3];
@@ -1583,10 +1583,10 @@ bool CEditApp::OpenNewEditor2( HINSTANCE hInstance, HWND hWndParent, FileInfo* p
 //
 //		/* 共有データ構造体のアドレスを返す */
 //		m_cShareData.Init();
-//		pShareData = m_cShareData.GetShareData( NULL, NULL);
+//		pShareData = m_cShareData.GetShareData( NULL, NULL );
 //
 //		/* コマンドラインの解析 */
-//		ParseCommandLine( 
+//		ParseCommandLine(
 //			pszCommandLine,
 //			&bGrepMode,
 //			&cmGrepKey,
@@ -1824,18 +1824,18 @@ int	CEditApp::CreatePopUpMenu_L( void )
 
 //	From Here Oct. 4, 2000 JEPRO added, commented out & modified
 //		ファイル名やパス名に'&'が使われているときに履歴等でキチンと表示されない問題を修正(&を&&に置換するだけ)
-			char	szFile2[_MAX_PATH + 3];	//	'+1'かな？ ようわからんので多めにしとこ。わかる人修正報告下さい！
+			char	szFile2[_MAX_PATH + 3];	//	'+1'かな？ ようわからんので多めにしとこ。わかる人修正報告ください！
 			char	*p;
 			strcpy( szFile2, m_pShareData->m_fiMRUArr[i].m_szPath );
 			if( (p = strchr( szFile2, '&' )) != NULL ){
-				char	buf[_MAX_PATH + 3];	//	'+1'かな？ ようわからんので多めにしとこ。わかる人修正報告下さい！
-				do {
+				char	buf[_MAX_PATH + 3];	//	'+1'かな？ ようわからんので多めにしとこ。わかる人修正報告ください！
+				do{
 					*p = '\0';
-					strcpy( buf, p + strlen("&") );
-					strcat( szFile2, "&&");
-					strcat( szFile2, buf);
-					p = strchr( p + strlen("&&"), '&' );
-				} while ( p != NULL );
+					strcpy( buf, p + strlen( "&" ) );
+					strcat( szFile2, "&&" );
+					strcat( szFile2, buf );
+					p = strchr( p + strlen( "&&" ), '&' );
+				} while( p != NULL );
 			}
 
 //			if( j < 10 ){
@@ -1847,7 +1847,7 @@ int	CEditApp::CreatePopUpMenu_L( void )
 //				wsprintf( szMemu, "  %s", m_pShareData->m_fiMRUArr[i].m_szPath );
 //			}
 //		修正の都合上作業変数で書くように変更
-//		j >= 10 + 26 の時の考慮を省いた(に近い)がファイルの履歴MAXを36個にしてあるので事実上OKでしょう。
+//		j >= 10 + 26 の時の考慮を省いた(に近い)がファイルの履歴MAXを36個にしてあるので事実上OKでしょう
 			wsprintf( szMemu, "&%c %s", (j < 10)?('0' + j):('A' + j - 10), szFile2 );
 //		To Here Oct. 4, 2000
 			if( 0 != m_pShareData->m_fiMRUArr[i].m_nCharCode ){		/* 文字コード種別 */
@@ -1908,18 +1908,18 @@ int	CEditApp::CreatePopUpMenu_L( void )
 
 //	From Here Oct. 4, 2000 JEPRO added, commented out & modified
 //		ファイル名やパス名に'&'が使われているときに履歴等でキチンと表示されない問題を修正(&を&&に置換するだけ)
-			char	szFolder2[_MAX_PATH + 3];	//	'+1'かな？ ようわからんので多めにしとこ。わかる人修正報告下さい！
+			char	szFolder2[_MAX_PATH + 3];	//	'+1'かな？ ようわからんので多めにしとこ。わかる人修正報告ください！
 			char	*p;
 			strcpy( szFolder2, m_pShareData->m_szOPENFOLDERArr[i] );
 			if( (p = strchr( szFolder2, '&' )) != NULL ){
-				char	buf[_MAX_PATH + 3];	//	'+1'かな？ ようわからんので多めにしとこ。わかる人修正報告下さい！
-				do {
+				char	buf[_MAX_PATH + 3];	//	'+1'かな？ ようわからんので多めにしとこ。わかる人修正報告ください！
+				do{
 					*p = '\0';
 					strcpy( buf, p + strlen("&") );
-					strcat( szFolder2, "&&");
-					strcat( szFolder2, buf);
-					p = strchr( p + strlen("&&"), '&' );
-				} while ( p != NULL );
+					strcat( szFolder2, "&&" );
+					strcat( szFolder2, buf );
+					p = strchr( p + strlen( "&&" ), '&' );
+				} while( p != NULL );
 			}
 
 //			if( j < 10 ){
@@ -1931,7 +1931,7 @@ int	CEditApp::CreatePopUpMenu_L( void )
 //				wsprintf( szMemu, "  %s", m_pShareData->m_szOPENFOLDERArr[i] );
 //			}
 //		修正の都合上作業変数で書くように変更
-//		j >= 10 + 26 の時の考慮を省いた(に近い)がフォルダの履歴MAXを36個にしてあるので事実上OKでしょう。
+//		j >= 10 + 26 の時の考慮を省いた(に近い)がフォルダの履歴MAXを36個にしてあるので事実上OKでしょう
 			wsprintf( szMemu, "&%c %s", (j < 10)?('0' + j):('A' + j - 10), szFolder2 );
 //		To Here Oct. 4, 2000
 			m_CMenuDrawer.MyAppendMenu( hMenuPopUp, MF_BYPOSITION | MF_STRING, IDM_SELOPENFOLDER + i, szMemu );
@@ -1987,7 +1987,7 @@ int	CEditApp::CreatePopUpMenu_L( void )
 //							(0 < lstrlen(pfi->m_szPath))?pfi->m_szPath:"（無題）",
 //							pfi->m_bIsModified ? "*":" "
 //						);
-//		j >= 10 + 26 の時の考慮を省いた(に近い)が開くファイル数が36個を越えることはまずないので事実上OKでしょう。
+//		j >= 10 + 26 の時の考慮を省いた(に近い)が開くファイル数が36個を越えることはまずないので事実上OKでしょう
 						wsprintf( szMemu, "&%c 【Grep】\"%s%s\"", ((1 + i) <= 9)?('1' + i):('A' + i - 9),
 							pszDes, ( (int)lstrlen( pfi->m_szGrepKey ) > nDesLen ) ? "・・・":""
 						);
@@ -2129,11 +2129,11 @@ int	CEditApp::CreatePopUpMenu_L( void )
 ////			}else{
 ////				wsprintf( szMemu, "&%c %s", 'A' + j - 10, m_pShareData->m_fiMRUArr[i].m_szPath );
 ////			}
-////		j >= 10 + 26 の時の考慮を省いた(に近い)がファイルの履歴MAXを36個にしてあるので事実上OKでしょう。
+////		j >= 10 + 26 の時の考慮を省いた(に近い)がファイルの履歴MAXを36個にしてあるので事実上OKでしょう
 //			wsprintf( szMemu, "&%c %s", (j < 10)?('0' + j):('A' + j - 10), m_pShareData->m_fiMRUArr[i].m_szPath );
 ////	To Here Oct. 4, 2000
 //			::InsertMenu( hMenu, IDM_EXITALL, MF_BYCOMMAND | MF_STRING, IDM_SELWINDOW + i, szMemu );
-////			m_CMenuDrawer.MyAppendMenu( 
+////			m_CMenuDrawer.MyAppendMenu(
 ////				hMenu, MF_BYPOSITION | MF_STRING | MF_ENABLED,
 ////				IDM_SELWINDOW + i , szMemu
 ////			);
@@ -2323,15 +2323,15 @@ void CEditApp::ParseCommandLine(
 	fi.m_bIsModified = 0;				/* 変更フラグ */
 	fi.m_nCharCode = CODE_AUTODETECT;	/* 文字コード種別 *//* 文字コード自動判別 */
 	fi.m_szPath[0] = '\0';				/* ファイル名 */
-	bReadOnly = FALSE;				/* 読み取り専用か */
+	bReadOnly = FALSE;					/* 読み取り専用か */
 
 	//	May 30, 2000 genta
 	//	実行ファイル名をもとに漢字コードを固定する．
 	{
-		char exename[512];
+		char	exename[512];
 		::GetModuleFileName( NULL, exename, 512 );
 
-		int len = strlen( exename );
+		int		len = strlen( exename );
 
 		for( char *p = exename + len - 1; p > exename; p-- ){
 			if( *p == '.' ){
@@ -2471,7 +2471,7 @@ void CEditApp::ParseCommandLine(
 			if( ( (int)lstrlen( pszToken ) > nOptLen ) && ( 0 == memcmp( pszOpt, pszToken, nOptLen ) ) ){
 				for( i = nOptLen; i < (int)lstrlen( pszToken ); ++i ){
 					switch( pszToken[i] ){
-					case 'S':	/* サブフォルダからも検索する */ 
+					case 'S':	/* サブフォルダからも検索する */
 						bGrepSubFolder = TRUE;	break;
 					case 'L':	/* 英大文字と英小文字を区別する */
 						bGrepLoHiCase = TRUE;	break;

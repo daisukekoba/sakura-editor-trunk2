@@ -28,8 +28,8 @@ BOOL CPropCommon::DispatchEvent_p8(
 	int			idCtrl;
 	static HWND	hwndCOMBO_FUNCKIND;
 	static HWND	hwndLIST_FUNC;
-	static HWND hwndCOMBO_MENU;
-	static HWND hwndLIST_RES;
+	static HWND	hwndCOMBO_MENU;
+	static HWND	hwndLIST_RES;
 //	static HWND	hwndEDIT_KEY;
 
 //	int			nLength;
@@ -236,7 +236,7 @@ BOOL CPropCommon::DispatchEvent_p8(
 //				::SetWindowText( hwndEDIT_KEY, szKey );
 			}
 		}else
-		if( hwndCOMBO_FUNCKIND == hwndCtl){
+		if( hwndCOMBO_FUNCKIND == hwndCtl ){
 			switch( wNotifyCode ){
 			case CBN_SELCHANGE:
 				nIdx1 = ::SendMessage( hwndCOMBO_MENU, LB_GETCURSEL, 0, 0 );

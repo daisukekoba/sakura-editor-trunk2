@@ -3,11 +3,11 @@
 
 	CDlgOpenFile.cpp
 
-    ファイルオープンダイアログ
+	ファイルオープンダイアログ
 	Copyright (C) 1998-2000, Norio Nakatani
 
-    UPDATE:
-    CREATE: 1998/08/10  新規作成
+	UPDATE:
+	CREATE: 1998/08/10  新規作成
 
 
 ************************************************************************/
@@ -157,7 +157,7 @@ UINT APIENTRY OFNHookProc(
 	int	Controls[nControls] = {
 		stc3, stc2,		// The two label controls
 		edt1, cmb1,		// The edit control and the drop-down box
-		IDOK, IDCANCEL, 
+		IDOK, IDCANCEL,
 		pshHelp,		// The Help command button (push button)
 		lst1,			// The Explorer window
 		chx1			// The read-only check box
@@ -165,7 +165,7 @@ UINT APIENTRY OFNHookProc(
 	int	nRightMargin = 24;
 	HWND	hwndFrame;
 
-	switch (uiMsg){
+	switch( uiMsg ){
 	case WM_MOVE:
 //		MYTRACE( "WM_MOVE 2\n" );
 		break;
@@ -218,9 +218,9 @@ UINT APIENTRY OFNHookProc(
 
 //		/* Explorerスタイルの「開く」ダイアログのスタイル */
 //		lStyle = ::GetWindowLong( hwndOpenDlg, GWL_STYLE );
-//		if( lStyle & WS_BORDER ) lStyle ^= WS_BORDER; 
-//		if( lStyle & WS_DLGFRAME ) lStyle ^= WS_DLGFRAME; 
-//		if( lStyle & WS_SYSMENU ) lStyle ^= WS_SYSMENU; 
+//		if( lStyle & WS_BORDER )	lStyle = WS_BORDER; 
+//		if( lStyle & WS_DLGFRAME )	lStyle = WS_DLGFRAME; 
+//		if( lStyle & WS_SYSMENU )	lStyle = WS_SYSMENU; 
 //		::SetWindowLong( hwndOpenDlg, GWL_STYLE, lStyle );
 
 //		lStyle = ::GetWindowLong( hwndOpenDlg, GWL_EXSTYLE );
@@ -356,7 +356,7 @@ UINT APIENTRY OFNHookProc(
 
 	case WM_DESTROY:
 		/* フック解除 */
-		::SetWindowLong( hwndOpenDlg, GWL_WNDPROC, (LONG) m_wpOpenDialogProc);
+		::SetWindowLong( hwndOpenDlg, GWL_WNDPROC, (LONG) m_wpOpenDialogProc );
 		return FALSE;
 
 	case WM_NOTIFY:
@@ -379,7 +379,7 @@ UINT APIENTRY OFNHookProc(
 //			MYTRACE( "pofn->hdr.code=CDN_FILEOK        \n" );break;
 		case CDN_FOLDERCHANGE  :
 //			MYTRACE( "pofn->hdr.code=CDN_FOLDERCHANGE  \n" );
-			lRes = ::SendMessage( hwndOpenDlg, CDM_GETFOLDERPATH, sizeof(szFolder), (long)(char*)szFolder );
+			lRes = ::SendMessage( hwndOpenDlg, CDM_GETFOLDERPATH, sizeof( szFolder ), (long)(char*)szFolder );
 //			MYTRACE( "\tlRes=%d\tszFolder=[%s]\n", lRes, szFolder );
 
 			break;
@@ -394,9 +394,9 @@ UINT APIENTRY OFNHookProc(
 //		MYTRACE( "=======================\n" );
 		break;
 	case WM_COMMAND:
-		wNotifyCode = HIWORD(wParam); // notification code
-		wID = LOWORD(wParam);         // item, control, or accelerator identifier
-		hwndCtl = (HWND) lParam;      // handle of control
+		wNotifyCode = HIWORD(wParam);	// notification code
+		wID = LOWORD(wParam);			// item, control, or accelerator identifier
+		hwndCtl = (HWND) lParam;		// handle of control
 		switch( wNotifyCode ){
 		case CBN_SELCHANGE:
 			switch( (int) LOWORD(wParam) ){
@@ -461,7 +461,7 @@ CDlgOpenFile::CDlgOpenFile()
 //	::GetCurrentDirectory( _MAX_PATH, m_szInitialDir );	/* 「開く」での初期ディレクトリ */
 	lPathLen = ::GetModuleFileName(
 		::GetModuleHandle( NULL ),
-		szFile, sizeof(szFile)
+		szFile, sizeof( szFile )
 	);
 	_splitpath( szFile, szDrive, szDir, NULL, NULL );
 	strcpy( m_szInitialDir, szDrive );
@@ -513,7 +513,7 @@ void CDlgOpenFile::Create(
 		char szDrive[_MAX_DRIVE];
 		char szDir[_MAX_DIR];
 		_splitpath( pszDefaultPath, szDrive, szDir, NULL, NULL );
-		wsprintf( m_szInitialDir, "%s%s", szDrive, szDir	);
+		wsprintf( m_szInitialDir, "%s%s", szDrive, szDir );
 	}
 	m_ppszMRU = ppszMRU;
 	m_ppszOPENFOLDER = ppszOPENFOLDER;
@@ -535,10 +535,10 @@ BOOL CDlgOpenFile::DoModal_GetOpenFileName( char* pszPath )
 			"すべてのファイル", "*.*",
 			"ユーザー指定", m_szDefaultWildCard
 	};
-	int		nFilterArrNum = sizeof(pszFilterArr) / sizeof(pszFilterArr[0]);
+	int		nFilterArrNum = sizeof( pszFilterArr ) / sizeof( pszFilterArr[0] );
 	/* 拡張子フィルタの作成 */
 	strcpy( szFilter, "" );
-	for( i = 0; i < nFilterArrNum; i+=2 ){
+	for( i = 0; i < nFilterArrNum; i += 2 ){
 		wsprintf( szWork, "%s (%s)|%s|", pszFilterArr[i], pszFilterArr[i + 1], pszFilterArr[i + 1] );
 		strcat( szFilter, szWork );
 	}
@@ -629,10 +629,10 @@ BOOL CDlgOpenFile::DoModal_GetSaveFileName( char* pszPath )
 			"すべてのファイル", "*.*",
 			"ユーザー指定", m_szDefaultWildCard
 	};
-	int		nFilterArrNum = sizeof(pszFilterArr) / sizeof(pszFilterArr[0]);
+	int		nFilterArrNum = sizeof( pszFilterArr ) / sizeof( pszFilterArr[0] );
 	/* 拡張子フィルタの作成 */
 	strcpy( szFilter, "" );
-	for( i = 0; i < nFilterArrNum; i+=2 ){
+	for( i = 0; i < nFilterArrNum; i += 2 ){
 		wsprintf( szWork, "%s (%s)|%s|", pszFilterArr[i], pszFilterArr[i + 1], pszFilterArr[i + 1] );
 		strcat( szFilter, szWork );
 	}
@@ -669,7 +669,7 @@ BOOL CDlgOpenFile::DoModal_GetSaveFileName( char* pszPath )
 //		/* | OFN_ENABLETEMPLATE | OFN_ENABLEHOOK */
 //		;
 	m_ofn.Flags =
-		OFN_CREATEPROMPT | OFN_EXPLORER | OFN_FILEMUSTEXIST | OFN_HIDEREADONLY | OFN_OVERWRITEPROMPT  
+		OFN_CREATEPROMPT | OFN_EXPLORER | OFN_FILEMUSTEXIST | OFN_HIDEREADONLY | OFN_OVERWRITEPROMPT
 		 /*| OFN_ENABLETEMPLATE | OFN_ENABLEHOOK*/;
 	m_ofn.nFileOffset = 0;
 	m_ofn.nFileExtension = 0;
@@ -705,8 +705,8 @@ BOOL CDlgOpenFile::DoModal_GetSaveFileName( char* pszPath )
 		}
 		if( !bCancel ){
 			::MessageBeep( MB_ICONSTOP );
-			::MYMESSAGEBOX(	m_hwndParent, MB_OK | MB_ICONSTOP | MB_TOPMOST, GSTR_APPNAME,
-				"ダイアログが開けません。\n\nエラー:%s", pszError 
+			::MYMESSAGEBOX( m_hwndParent, MB_OK | MB_ICONSTOP | MB_TOPMOST, GSTR_APPNAME,
+				"ダイアログが開けません。\n\nエラー:%s", pszError
 			);
 		}
 		return FALSE;
@@ -727,21 +727,21 @@ BOOL CDlgOpenFile::DoModalOpenDlg( char* pszPath, int* pnCharCode, BOOL* pbReadO
 	char	szWork[256];
 	char	szFilter[1024];
 	char*	pszFilterArr[] = {
-			"テキストファイル",	"*.txt",
+			"テキストファイル", "*.txt",
 			"すべてのファイル", "*.*",
 			"ユーザー指定", m_szDefaultWildCard
 	};
-	int		nFilterArrNum = sizeof(pszFilterArr) / sizeof(pszFilterArr[0]);
+	int		nFilterArrNum = sizeof( pszFilterArr ) / sizeof( pszFilterArr[0] );
 	/* 拡張子フィルタの作成 */
 	strcpy( szFilter, "" );
-	for( i = 0; i < nFilterArrNum; i+=2 ){
+	for( i = 0; i < nFilterArrNum; i += 2 ){
 		wsprintf( szWork, "%s (%s)|%s|", pszFilterArr[i], pszFilterArr[i + 1], pszFilterArr[i + 1] );
 		strcat( szFilter, szWork );
 	}
 	strcat( szFilter, "|" );
 //	MYTRACE( "%s\n", szFilter );
 	for (i = 0; szFilter[i] != '\0'; i++){
-		if (szFilter[i] == '|' ){
+		if( szFilter[i] == '|' ){
 			szFilter[i] = '\0';
 		}
 	}
@@ -754,7 +754,7 @@ BOOL CDlgOpenFile::DoModalOpenDlg( char* pszPath, int* pnCharCode, BOOL* pbReadO
 	m_ofn.nMaxCustFilter = 0;
 //	m_ofn.nFilterIndex = 3;
 	if( 0 == lstrlen( pszPath ) ){
-		m_ofn.lpstrFile = strcpy( pszPath, pszFilterArr[(m_ofn.nFilterIndex - 1) * 2 + 1]);
+		m_ofn.lpstrFile = strcpy( pszPath, pszFilterArr[(m_ofn.nFilterIndex - 1) * 2 + 1] );
 	}else{
 		m_ofn.lpstrFile = pszPath;
 	}
@@ -825,7 +825,7 @@ BOOL CDlgOpenFile::DoModalOpenDlg( char* pszPath, int* pnCharCode, BOOL* pbReadO
 		}
 		if( !bCancel ){
 			::MessageBeep( MB_ICONSTOP );
-			::MYMESSAGEBOX(	m_hwndParent, MB_OK | MB_ICONSTOP | MB_TOPMOST, GSTR_APPNAME,
+			::MYMESSAGEBOX( m_hwndParent, MB_OK | MB_ICONSTOP | MB_TOPMOST, GSTR_APPNAME,
 				"ダイアログが開けません。\n\nエラー:%s", pszError 
 			);
 		}
@@ -847,7 +847,7 @@ BOOL CDlgOpenFile::DoModalSaveDlg( char* pszPath, int* pnCharCode )
 			"すべてのファイル", "*.*",
 			"ユーザー指定", m_szDefaultWildCard
 	};
-	int		nFilterArrNum = sizeof(pszFilterArr) / sizeof(pszFilterArr[0]);
+	int		nFilterArrNum = sizeof( pszFilterArr ) / sizeof( pszFilterArr[0] );
 	/* 拡張子フィルタの作成 */
 	strcpy( szFilter, "" );
 	for( i = 0; i < nFilterArrNum; i+=2 ){
@@ -857,7 +857,7 @@ BOOL CDlgOpenFile::DoModalSaveDlg( char* pszPath, int* pnCharCode )
 	strcat( szFilter, "|" );
 //	MYTRACE( "%s\n", szFilter );
 	for (i = 0; szFilter[i] != '\0'; i++){
-		if (szFilter[i] == '|' ){
+		if( szFilter[i] == '|' ){
 			szFilter[i] = '\0';
 		}
 	}
@@ -870,7 +870,7 @@ BOOL CDlgOpenFile::DoModalSaveDlg( char* pszPath, int* pnCharCode )
 	m_ofn.nMaxCustFilter = 0;
 //	m_ofn.nFilterIndex = 3;
 	if( 0 == lstrlen( pszPath ) ){
-		m_ofn.lpstrFile = strcpy( pszPath, pszFilterArr[(m_ofn.nFilterIndex - 1) * 2 + 1]);
+		m_ofn.lpstrFile = strcpy( pszPath, pszFilterArr[(m_ofn.nFilterIndex - 1) * 2 + 1] );
 	}else{
 		m_ofn.lpstrFile = pszPath;
 	}
@@ -883,7 +883,7 @@ BOOL CDlgOpenFile::DoModalSaveDlg( char* pszPath, int* pnCharCode )
 //		/*OFN_CREATEPROMPT |*/ OFN_EXPLORER | OFN_FILEMUSTEXIST | OFN_HIDEREADONLY
 //		/* | OFN_ENABLETEMPLATE | OFN_ENABLEHOOK */
 	m_ofn.Flags =
-		OFN_CREATEPROMPT | OFN_EXPLORER | OFN_FILEMUSTEXIST | OFN_HIDEREADONLY | OFN_OVERWRITEPROMPT 
+		OFN_CREATEPROMPT | OFN_EXPLORER | OFN_FILEMUSTEXIST | OFN_HIDEREADONLY | OFN_OVERWRITEPROMPT
 		 /*| OFN_ENABLETEMPLATE | OFN_ENABLEHOOK*/ | OFN_SHOWHELP | OFN_ENABLESIZING;
 	if( NULL != pnCharCode ){
 		m_ofn.Flags = m_ofn.Flags | OFN_ENABLETEMPLATE | OFN_ENABLEHOOK;
@@ -933,7 +933,7 @@ BOOL CDlgOpenFile::DoModalSaveDlg( char* pszPath, int* pnCharCode )
 		}
 		if( !bCancel ){
 			::MessageBeep( MB_ICONSTOP );
-			::MYMESSAGEBOX(	m_hwndParent, MB_OK | MB_ICONSTOP | MB_TOPMOST, GSTR_APPNAME,
+			::MYMESSAGEBOX( m_hwndParent, MB_OK | MB_ICONSTOP | MB_TOPMOST, GSTR_APPNAME,
 				"ダイアログが開けません。\n\nエラー:%s", pszError
 			);
 		}

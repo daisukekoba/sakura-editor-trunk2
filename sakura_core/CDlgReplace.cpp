@@ -113,7 +113,7 @@ void CDlgReplace::SetData( void )
 
 
 /* ダイアログデータの取得 */
-/* 0==条件未入力  0より大きい==正常   0より小さい==入力エラー  */
+/* 0==条件未入力  0より大きい==正常   0より小さい==入力エラー */
 int CDlgReplace::GetData( void )
 {
 	int			i;
@@ -348,7 +348,7 @@ BOOL CDlgReplace::OnBnClicked( int wID )
 			/* 再描画 */
 			pcEditView->HandleCommand( F_REDRAW, TRUE, 0, 0, 0, 0 );
 		}else{
-			::MYMESSAGEBOX(	m_hWnd,	MB_OK , GSTR_APPNAME,
+			::MYMESSAGEBOX( m_hWnd, MB_OK , GSTR_APPNAME,
 				"文字列を指定してください。"
 			);
 		}
@@ -361,7 +361,7 @@ BOOL CDlgReplace::OnBnClicked( int wID )
 			/* 再描画 */
 			pcEditView->HandleCommand( F_REDRAW, TRUE, 0, 0, 0, 0 );
 		}else{
-			::MYMESSAGEBOX(	m_hWnd,	MB_OK , GSTR_APPNAME,
+			::MYMESSAGEBOX( m_hWnd, MB_OK , GSTR_APPNAME,
 				"文字列を指定してください。"
 			);
 		}		
@@ -390,7 +390,7 @@ BOOL CDlgReplace::OnBnClicked( int wID )
 			/* 再描画 */
 			pcEditView->HandleCommand( F_REDRAW, TRUE, 0, 0, 0, 0 );
 		}else{
-			::MYMESSAGEBOX(	m_hWnd,	MB_OK , GSTR_APPNAME,
+			::MYMESSAGEBOX( m_hWnd, MB_OK , GSTR_APPNAME,
 				"文字列を指定してください。"
 			);
 		}
@@ -416,7 +416,7 @@ BOOL CDlgReplace::OnBnClicked( int wID )
 
 			/* プログレスバー初期化 */
 			hwndProgress = ::GetDlgItem( hwndCancel, IDC_PROGRESS_REPLACE );
-			::SendMessage( hwndProgress, PBM_SETRANGE, 0, MAKELPARAM(0, 100) );
+			::SendMessage( hwndProgress, PBM_SETRANGE, 0, MAKELPARAM( 0, 100 ) );
 			nNewPos = 0;
  			::SendMessage( hwndProgress, PBM_SETPOS, nNewPos, 0 );
 
@@ -447,8 +447,8 @@ BOOL CDlgReplace::OnBnClicked( int wID )
 					if( !::BlockingHook( hwndCancel ) ){
 						return -1;
 					}
-//					if( ::PeekMessage(&msg, NULL, 0, 0, PM_REMOVE) ){
-//						if ( msg.message == WM_QUIT ){
+//					if( ::PeekMessage( &msg, NULL, 0, 0, PM_REMOVE ) ){
+//						if( msg.message == WM_QUIT ){
 //							return -1;
 //						}
 //						if( !IsDialogMessage(hwndCancel, &msg)) {
@@ -515,7 +515,7 @@ BOOL CDlgReplace::OnBnClicked( int wID )
 				nNewPos = 100;
 				::SendMessage( hwndProgress, PBM_SETPOS, nNewPos, 0 );
 			}
-//			cDlgCancel.Close();	 
+//			cDlgCancel.Close();
 			cDlgCancel.CloseDialog( 0 );
 			::EnableWindow( m_hWnd, TRUE );
 			::EnableWindow( ::GetParent( m_hWnd ), TRUE );
@@ -528,7 +528,7 @@ BOOL CDlgReplace::OnBnClicked( int wID )
 			/* アクティブにする */
 			ActivateFrameWindow( m_hWnd );
 
-			::MYMESSAGEBOX(	m_hWnd,	MB_OK | MB_TOPMOST, GSTR_APPNAME,
+			::MYMESSAGEBOX( m_hWnd, MB_OK | MB_TOPMOST, GSTR_APPNAME,
 				"%d箇所を置換しました。", nReplaceNum
 			);
 
@@ -538,7 +538,7 @@ BOOL CDlgReplace::OnBnClicked( int wID )
 //			::ShowWindow( ::GetDlgItem( m_hWnd, IDC_PROGRESS_REPLACE ), SW_HIDE );
 
 			if( !cDlgCancel.IsCanceled() ){
-				if(	m_bModal ){		/* モーダルダイアログか */
+				if( m_bModal ){		/* モーダルダイアログか */
 					/* 置換ダイアログを閉じる */
 					::EndDialog( m_hWnd, 0 );
 				}else{
@@ -552,7 +552,7 @@ BOOL CDlgReplace::OnBnClicked( int wID )
 
 			return TRUE;
 		}else{
-			::MYMESSAGEBOX(	m_hWnd,	MB_OK , GSTR_APPNAME,
+			::MYMESSAGEBOX( m_hWnd, MB_OK , GSTR_APPNAME,
 				"置換条件を指定してください。"
 			);
 		}

@@ -89,7 +89,7 @@ HWND CDialog::DoModeless( HINSTANCE hInstance, HWND hwndParent, int nDlgTemplete
 {
 	m_bInited = FALSE;
 	m_bModal = FALSE;
-	m_hInstance = hInstance;		/* アプリケーションインスタンスのハンドル */
+	m_hInstance = hInstance;	/* アプリケーションインスタンスのハンドル */
 	m_hwndParent = hwndParent;	/* オーナーウィンドウのハンドル */
 	m_lParam = lParam;
 	m_hWnd = ::CreateDialogParam(
@@ -100,7 +100,7 @@ HWND CDialog::DoModeless( HINSTANCE hInstance, HWND hwndParent, int nDlgTemplete
 		(LPARAM)this
 	);
 	if( NULL != m_hWnd ){
-		::ShowWindow( m_hWnd, nCmdShow  );
+		::ShowWindow( m_hWnd, nCmdShow );
 	}
 	return m_hWnd;
 }
@@ -179,8 +179,8 @@ BOOL CDialog::OnSize( WPARAM wParam, LPARAM lParam )
 		::GetClientRect( m_hWnd, &rc );
 //		::SetWindowPos( m_hwndSizeBox, NULL, 
 //	Sept. 17, 2000 JEPRO_16thdot アイコンの16dot目が表示されるように次行を変更する必要ある？
-//	Jan. 12, 2001 JEPRO (suggested by Stonee) 15を16に変更するとアウトライン解析のダイアログの右下にある
-//	サイズ変更三角マークに`遊び'ができてしまい(移動する！)、ダイアログを大きくできないという障害が発生するので
+//	Jan. 12, 2001 JEPRO (directed by stonee) 15を16に変更するとアウトライン解析のダイアログの右下にある
+//	グリップサイズに`遊び'ができてしまい(移動する！)、ダイアログを大きくできないという障害が発生するので
 //	変更しないことにした(要するに原作版に戻しただけ)
 //			rc.right - rc.left - 15, rc.bottom - rc.top - 15,
 //			13, 13,
@@ -219,15 +219,15 @@ BOOL CDialog::OnMove( WPARAM wParam, LPARAM lParam )
 //#ifdef _DEBUG
 //		MYTRACE( "CDialog::OnMove() m_xPos=%d m_yPos=%d\n", m_xPos, m_yPos );
 //#endif
-	::GetWindowRect( m_hWnd, &rc ); 
+	::GetWindowRect( m_hWnd, &rc );
 	m_xPos = rc.left;
 	m_yPos = rc.top;
 #ifdef _DEBUG
 		MYTRACE( "CDialog::OnMove() m_xPos=%d m_yPos=%d\n", m_xPos, m_yPos );
 #endif
 
-//	m_xPos = (int)(short) LOWORD(lParam);    // horizontal position
-//	m_yPos = (int)(short) HIWORD(lParam);    // vertical position
+//	m_xPos = (int)(short) LOWORD( lParam );	// horizontal position
+//	m_yPos = (int)(short) HIWORD( lParam );	// vertical position
 	return TRUE;
 
 }

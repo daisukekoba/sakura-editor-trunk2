@@ -197,12 +197,12 @@ void CDlgProperty::SetData( void )
 	
 	
 #ifdef _DEBUG/////////////////////////////////////////////////////
-	int				nEUCMojiNum, nEUCCodeNum;
-	int				nSJISMojiNum, nSJISCodeNum;
-	int				nUNICODEMojiNum, nUNICODECodeNum;
-	int				nJISMojiNum, nJISCodeNum;
-	int				nUTF8MojiNum, nUTF8CodeNum;
-	int				nUTF7MojiNum, nUTF7CodeNum;
+	int		nEUCMojiNum, nEUCCodeNum;
+	int		nSJISMojiNum, nSJISCodeNum;
+	int		nUNICODEMojiNum, nUNICODECodeNum;
+	int		nJISMojiNum, nJISCodeNum;
+	int		nUTF8MojiNum, nUTF8CodeNum;
+	int		nUTF7MojiNum, nUTF7CodeNum;
 
 	HFILE					hFile;
 	HGLOBAL					hgData;

@@ -3,12 +3,11 @@
 
 	CShareData.h
 
-    プロセス間共有データへのアクセス
+	プロセス間共有データへのアクセス
 	Copyright (C) 1998-2000, Norio Nakatani
 
-    UPDATE:
-    CREATE: 1998/5/26  新規作成
-
+	UPDATE:
+	CREATE: 1998/5/26  新規作成
 
 ************************************************************************/
 
@@ -216,7 +215,7 @@ struct Types {
 //	COLORREF			m_colorEOFBACK;					/* EOF背景の色 */
 //	COLORREF			m_colorCCPPKEYWORD;				/* 強調キーワードの色 */
 //	COLORREF			m_colorCCPPKEYWORDBACK;			/* 強調キーワード背景の色 */
-	int					m_nKeyWordSetIdx;				/* キーワードセット */
+	int					m_nKeyWordSetIdx;				/* キーワードセット1 */
 	int					m_nKeyWordSetIdx2;				/* キーワードセット2 */	//Dec. 4, 2000 MIK
 //	COLORREF			m_colorCOMMENT;					/* コメント色 */
 //	COLORREF			m_colorCOMMENTBACK;				/* コメント背景の色 */
@@ -401,8 +400,8 @@ struct Common {
 	WORD				m_wTrayMenuHotKeyCode;		/* タスクトレイ左クリックメニュー キー */
 	WORD				m_wTrayMenuHotKeyMods;		/* タスクトレイ左クリックメニュー キー */
 
-	BOOL				m_bUseOLE_DragDrop;			/* OLEによるDrag&Dropを使う */
-	BOOL				m_bUseOLE_DropSource;		/* OLEによるDrag元にするか */
+	BOOL				m_bUseOLE_DragDrop;			/* OLEによるドラッグ & ドロップを使う */
+	BOOL				m_bUseOLE_DropSource;		/* OLEによるドラッグ元にするか */
 
 	
 	BOOL				m_bDispExitingDialog;			/* 終了ダイアログを表示する */
@@ -432,10 +431,10 @@ struct Common {
 	BOOL				m_bAutoCloseDlgReplace;		/* 置換 ダイアログを自動的に閉じる */
 	BOOL				m_bAutoColmnPaste;			/* 矩形コピーのテキストは常に矩形貼り付け */
 
-	BOOL				m_bHokanKey_RETURN;	/* VK_RETURN 補完決定キーが有効/無効 */
-	BOOL				m_bHokanKey_TAB;	/* VK_TAB    補完決定キーが有効/無効 */
-	BOOL				m_bHokanKey_RIGHT;	/* VK_RIGHT  補完決定キーが有効/無効 */
-	BOOL				m_bHokanKey_SPACE;	/* VK_SPACE  補完決定キーが有効/無効 */
+	BOOL				m_bHokanKey_RETURN;	/* VK_RETURN	補完決定キーが有効/無効 */
+	BOOL				m_bHokanKey_TAB;	/* VK_TAB		補完決定キーが有効/無効 */
+	BOOL				m_bHokanKey_RIGHT;	/* VK_RIGHT		補完決定キーが有効/無効 */
+	BOOL				m_bHokanKey_SPACE;	/* VK_SPACE		補完決定キーが有効/無効 */
 
 
 	int					m_nDateFormatType;						//日付書式のタイプ
@@ -513,6 +512,7 @@ struct DLLSHAREDATA {
 //	BOOL				m_bKeyWordSetModify;				/* 変更フラグ(キーワードの全体) */
 //	BOOL				m_bKeyWordSetModifyArr[MAX_SETNUM];	/* 変更フラグ(キーワードのセットごと) */
 	CKeyWordSetMgr		m_CKeyWordSetMgr;					/* 強調キーワード */
+	char				m_szKeyWordSetDir[MAX_PATH];		/* 強調キーワードファイルのディレクトリ */
 
 	/* **** タイプ別設定 **** */
 //	BOOL				m_nTypesModifyArr[MAX_TYPES];	/* 変更フラグ(タイプ別設定) */
@@ -560,9 +560,9 @@ public:
 	static void SetKeyNameArrVal(
 		DLLSHAREDATA*, int, short, char*,
 		short, short, short, short,
-		short, short, short, short );	/* KEYDATA配列にデータをセット */
+		short, short, short, short );									/* KEYDATA配列にデータをセット */
 	static void SetKeyNameArrVal( DLLSHAREDATA*, int, short, char* );	/* KEYDATA配列にデータをセット */
-//	static void SetKeyNames( DLLSHAREDATA* );	/* キー名称のセット */
+//	static void SetKeyNames( DLLSHAREDATA* );							/* キー名称のセット */
 	static LONG MY_RegSetVal(
 		HKEY hKey,				// handle of key to set value for
 		LPCTSTR lpValueName,	// address of value to set

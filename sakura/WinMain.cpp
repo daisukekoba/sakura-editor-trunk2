@@ -1,11 +1,11 @@
 //	$Id$
 /************************************************************************
 
-		WinMain.cpp
+	WinMain.cpp
 	Copyright (C) 1998-2000, Norio Nakatani
 
-        UPDATE:
-        CREATE: 1998/3/13
+	UPDATE:
+	CREATE: 1998/3/13
 
 
 ************************************************************************/
@@ -51,11 +51,11 @@ int WINAPI WinMain( HINSTANCE, HINSTANCE, LPSTR, int );
 
 
 //struct VS_VERSION_INFO_HEAD {
-//    WORD  wLength;
-//    WORD  wValueLength;
-//    WORD  bText;
-//	WCHAR szKey[16];
-//	VS_FIXEDFILEINFO Value;
+//	WORD				wLength;
+//	WORD				wValueLength;
+//	WORD				bText;
+//	WCHAR				szKey[16];
+//	VS_FIXEDFILEINFO	Value;
 //};
 //char* m_pszAppName = "SakuraTrayClass";
 
@@ -65,7 +65,7 @@ int WINAPI WinMain( HINSTANCE, HINSTANCE, LPSTR, int );
 
 
 
-int WINAPI WinMain (
+int WINAPI WinMain(
 	HINSTANCE	hInstance,		// handle to current instance
 	HINSTANCE	hPrevInstance,	// handle to previous instance
 	LPSTR		lpCmdLine,		// pointer to command line
@@ -92,7 +92,7 @@ int WINAPI WinMain (
 //	 && NULL != RasConn.hrasconn
 //	){
 //		/* RAS接続されている */
-//		RasConnStatus.dwSize = sizeof(RASCONNSTATUS);
+//		RasConnStatus.dwSize = sizeof( RASCONNSTATUS );
 //		::RasGetConnectStatus( RasConn.hrasconn, &RasConnStatus );
 //		if( RASCS_Connected == RasConnStatus.rasconnstate
 //		 && IDYES == ::MYMESSAGEBOX(
@@ -168,7 +168,7 @@ int WINAPI WinMain (
 
 //	/* 共有データ構造体のアドレスを返す */
 //	m_cShareData.Init();
-//	m_pShareData = m_cShareData.GetShareData( NULL, NULL);
+//	m_pShareData = m_cShareData.GetShareData( NULL, NULL );
 
 
 	/* コマンドラインの解析 */
@@ -216,7 +216,7 @@ int WINAPI WinMain (
 			::MessageBox( NULL, "異なるバージョンのエディタを同時に起動することはできません。", GSTR_APPNAME, MB_OK | MB_ICONERROR );
 			return 0;
 		}
-		m_pShareData = m_cShareData.GetShareData( NULL, NULL);
+		m_pShareData = m_cShareData.GetShareData( NULL, NULL );
 
 		bFindCTRLPROCESS = TRUE;
 		if( NULL == m_pShareData->m_hwndTray ){
@@ -234,13 +234,13 @@ int WINAPI WinMain (
 			}
 		}
 		if( FALSE == bFindCTRLPROCESS ){
-//動作確認用	::MYMESSAGEBOX(	NULL, MB_OK | MB_ICONSTOP | MB_TOPMOST, GSTR_APPNAME, "コントロールプロセスが存在していませんでした。\n新たにコントロールプロセスを起動します。\n" );
+//動作確認用	::MYMESSAGEBOX( NULL, MB_OK | MB_ICONSTOP | MB_TOPMOST, GSTR_APPNAME, "コントロールプロセスが存在していませんでした。\n新たにコントロールプロセスを起動します。\n" );
 //			bNoWindow = TRUE;
 			goto CreateControlProcess;
 //			return 0;
 		}
 
-		/* コマンドラインで受け取ったファイルが開かれている場合は、*/
+		/* コマンドラインで受け取ったファイルが開かれている場合は */
 		/* その編集ウィンドウをアクティブにする */
 		if( 0 < strlen( fi.m_szPath ) ){
 			//	Oct. 27, 2000 genta
@@ -375,12 +375,12 @@ CreateControlProcess:;
 
 
 		/* 共有データ構造体のアドレスを返す */
-		if( !m_cShareData.Init()){
+		if( !m_cShareData.Init() ){
 			//	適切なデータを得られなかった
 			::MessageBox( NULL, "異なるバージョンのエディタを同時に起動することはできません。", GSTR_APPNAME, MB_OK | MB_ICONERROR );
 			return 0;
 		}
-		m_pShareData = m_cShareData.GetShareData( NULL, NULL);
+		m_pShareData = m_cShareData.GetShareData( NULL, NULL );
 
 		/* リソースから製品バージョンの取得 */
 		GetAppVersionInfo( hInstance, VS_VERSION_INFO, &m_pShareData->m_dwProductVersionMS, &m_pShareData->m_dwProductVersionLS );

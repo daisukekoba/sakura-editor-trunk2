@@ -1,7 +1,7 @@
 //	$Id$
 /************************************************************************
 	CShareData_new2.cpp
-    プロセス間共有データへのアクセス
+	プロセス間共有データへのアクセス
 	Copyright (C) 1998-2000, Norio Nakatani
 
 ************************************************************************/
@@ -16,12 +16,12 @@ CShareData::CShareData()
 	/* ツールバーのボタン TBBUTTON構造体 */
 	/*
 	typedef struct _TBBUTTON {
-		int iBitmap;    // ボタン イメージの 0 から始まるインデックス
-		int idCommand;  // ボタンが押されたときに送られるコマンド
-		BYTE fsState;   // ボタンの状態--以下を参照
-		BYTE fsStyle;   // ボタン スタイル--以下を参照
-		DWORD dwData;   // アプリケーション-定義された値
-		int iString;    // ボタンのラベル文字列の 0 から始まるインデックス
+		int iBitmap;	// ボタン イメージの 0 から始まるインデックス
+		int idCommand;	// ボタンが押されたときに送られるコマンド
+		BYTE fsState;	// ボタンの状態--以下を参照
+		BYTE fsStyle;	// ボタン スタイル--以下を参照
+		DWORD dwData;	// アプリケーション-定義された値
+		int iString;	// ボタンのラベル文字列の 0 から始まるインデックス
 	} TBBUTTON;
 	*/  
 	SetTBBUTTONVal( &m_tbMyButton[ 0], 0, 0, 0, TBSTYLE_SEP, 0, 0);		//セパレータ
@@ -67,10 +67,10 @@ CShareData::CShareData()
 //		ウィンドウ--- ウィンドウ系		(11段目22個: 321-342)
 //		ヘルプ------- 支援				(11段目残りの10個: 343-352)
 //			★その他					(12段目32個: 353-384)
-//	注1. 「挿入系」はメニューでは「編集」に入っている
-//	注2．「その他」はメニューには入っていないものを入れる (現在何もないので12段目を設定してない)
-//	注3. 「コマンド一覧」で敢えて重複していれてあるコマンドはその「本家」の方に配置した
-//	注4. 「コマンド一覧」に入ってないコマンドもわかっている範囲で位置予約にしておいた
+//	注1.「挿入系」はメニューでは「編集」に入っている
+//	注2.「その他」はメニューには入っていないものを入れる (現在何もないので12段目を設定してない)
+//	注3.「コマンド一覧」で敢えて重複していれてあるコマンドはその「本家」の方に配置した
+//	注4.「コマンド一覧」に入ってないコマンドもわかっている範囲で位置予約にしておいた
 //  注5. F_DISABLE は未定義用(ダミーとしても使う)
 //	注6. ユーザー用に確保された場所は特にないので各段の空いている後ろの方を使ってください。
 
@@ -218,21 +218,21 @@ CShareData::CShareData()
 /* 132 */		F_DISABLE/*F_UP_BOX*/			, TBSTATE_ENABLED, TBSTYLE_BUTTON, 0, 0,	//(矩形選択)カーソル上移動
 /* 133 */		F_DISABLE/*F_DOWN_BOX*/			, TBSTATE_ENABLED, TBSTYLE_BUTTON, 0, 0,	//(矩形選択)カーソル下移動
 /* 134 */		F_DISABLE/*F_LEFT_BOX*/			, TBSTATE_ENABLED, TBSTYLE_BUTTON, 0, 0,	//(矩形選択)カーソル左移動
-/* 135 */		F_DISABLE/*F_RIGHT_BOX*/			, TBSTATE_ENABLED, TBSTYLE_BUTTON, 0, 0,	//(矩形選択)カーソル右移動
+/* 135 */		F_DISABLE/*F_RIGHT_BOX*/		, TBSTATE_ENABLED, TBSTYLE_BUTTON, 0, 0,	//(矩形選択)カーソル右移動
 /* 136 */		F_DISABLE/*F_UP2_BOX*/			, TBSTATE_ENABLED, TBSTYLE_BUTTON, 0, 0,	//(矩形選択)カーソル上移動(２行ごと)
-/* 137 */		F_DISABLE/*F_DOWN2_BOX*/			, TBSTATE_ENABLED, TBSTYLE_BUTTON, 0, 0,	//(矩形選択)カーソル下移動(２行ごと)
+/* 137 */		F_DISABLE/*F_DOWN2_BOX*/		, TBSTATE_ENABLED, TBSTYLE_BUTTON, 0, 0,	//(矩形選択)カーソル下移動(２行ごと)
 /* 138 */		F_DISABLE/*F_WORDLEFT_BOX*/		, TBSTATE_ENABLED, TBSTYLE_BUTTON, 0, 0,	//(矩形選択)単語の左端に移動
-/* 139 */		F_DISABLE/*F_WORDRIGHT_BOX*/		, TBSTATE_ENABLED, TBSTYLE_BUTTON, 0, 0,	//(矩形選択)単語の右端に移動
-/* 140 */		F_DISABLE/*F_GOLINETOP_BOX*/		, TBSTATE_ENABLED, TBSTYLE_BUTTON, 0, 0,	//(矩形選択)行頭に移動(折り返し単位)
-/* 141 */		F_DISABLE/*F_GOLINEEND_BOX*/		, TBSTATE_ENABLED, TBSTYLE_BUTTON, 0, 0,	//(矩形選択)行末に移動(折り返し単位)
+/* 139 */		F_DISABLE/*F_WORDRIGHT_BOX*/	, TBSTATE_ENABLED, TBSTYLE_BUTTON, 0, 0,	//(矩形選択)単語の右端に移動
+/* 140 */		F_DISABLE/*F_GOLINETOP_BOX*/	, TBSTATE_ENABLED, TBSTYLE_BUTTON, 0, 0,	//(矩形選択)行頭に移動(折り返し単位)
+/* 141 */		F_DISABLE/*F_GOLINEEND_BOX*/	, TBSTATE_ENABLED, TBSTYLE_BUTTON, 0, 0,	//(矩形選択)行末に移動(折り返し単位)
 /* 142 */		F_DISABLE/*F_HalfPageUp_Box*/	, TBSTATE_ENABLED, TBSTYLE_BUTTON, 0, 0,	//(矩形選択)半ページアップ
 /* 143 */		F_DISABLE/*F_HalfPageDown_Box*/	, TBSTATE_ENABLED, TBSTYLE_BUTTON, 0, 0,	//(矩形選択)半ページダウン
 /* 144 */		F_DISABLE/*F_1PageUp_Box*/		, TBSTATE_ENABLED, TBSTYLE_BUTTON, 0, 0,	//(矩形選択)１ページアップ
-/* 145 */		F_DISABLE/*F_1PageDown_Box*/		, TBSTATE_ENABLED, TBSTYLE_BUTTON, 0, 0,	//(矩形選択)１ページダウン
+/* 145 */		F_DISABLE/*F_1PageDown_Box*/	, TBSTATE_ENABLED, TBSTYLE_BUTTON, 0, 0,	//(矩形選択)１ページダウン
 /* 146 */		F_DISABLE/*F_DISABLE/*F_DISPLAYTOP_BOX*/, TBSTATE_ENABLED, TBSTYLE_BUTTON, 0, 0,	//(矩形選択)画面の先頭に移動(未実装)
 /* 147 */		F_DISABLE/*F_DISPLAYEND_BOX*/, TBSTATE_ENABLED, TBSTYLE_BUTTON, 0, 0,	//(矩形選択)画面の最後に移動(未実装)
-/* 148 */		F_DISABLE/*F_GOFILETOP_BOX*/		, TBSTATE_ENABLED, TBSTYLE_BUTTON, 0, 0,	//(矩形選択)ファイルの先頭に移動
-/* 149 */		F_DISABLE/*F_GOFILEEND_BOX*/		, TBSTATE_ENABLED, TBSTYLE_BUTTON, 0, 0,	//(矩形選択)ファイルの最後に移動
+/* 148 */		F_DISABLE/*F_GOFILETOP_BOX*/	, TBSTATE_ENABLED, TBSTYLE_BUTTON, 0, 0,	//(矩形選択)ファイルの先頭に移動
+/* 149 */		F_DISABLE/*F_GOFILEEND_BOX*/	, TBSTATE_ENABLED, TBSTYLE_BUTTON, 0, 0,	//(矩形選択)ファイルの最後に移動
 /* 150 */		F_DISABLE	, TBSTATE_ENABLED, TBSTYLE_BUTTON, 0, 0,	//ダミー
 /* 151 */		F_DISABLE	, TBSTATE_ENABLED, TBSTYLE_BUTTON, 0, 0,	//ダミー
 /* 152 */		F_DISABLE	, TBSTATE_ENABLED, TBSTYLE_BUTTON, 0, 0,	//ダミー
@@ -251,14 +251,14 @@ CShareData::CShareData()
 /* 163 */		F_COPY_CRLF					, TBSTATE_ENABLED, TBSTYLE_BUTTON, 0, 0,	//CRLF改行でコピー
 /* 164 */		F_PASTE						, TBSTATE_ENABLED, TBSTYLE_BUTTON, 0, 0,	//貼り付け(クリップボードから貼り付け)
 /* 165 */		F_PASTEBOX					, TBSTATE_ENABLED, TBSTYLE_BUTTON, 0, 0,	//矩形貼り付け(クリップボードから貼り付け)
-/* 166 */		F_DISABLE/*F_INSTEXT*/					, TBSTATE_ENABLED, TBSTYLE_BUTTON, 0, 0,	//テキストを貼り付け	(未公開コマンド？未完成？)
-/* 167 */		F_DISABLE/*F_ADDTAIL*/					, TBSTATE_ENABLED, TBSTYLE_BUTTON, 0, 0,	//最後にテキストを追加	(未公開コマンド？未完成？)
+/* 166 */		F_DISABLE/*F_INSTEXT*/		, TBSTATE_ENABLED, TBSTYLE_BUTTON, 0, 0,	//テキストを貼り付け	(未公開コマンド？未完成？)
+/* 167 */		F_DISABLE/*F_ADDTAIL*/		, TBSTATE_ENABLED, TBSTYLE_BUTTON, 0, 0,	//最後にテキストを追加	(未公開コマンド？未完成？)
 /* 168 */		F_COPYLINES					, TBSTATE_ENABLED, TBSTYLE_BUTTON, 0, 0,	//選択範囲内全行コピー	//Sept. 30, 2000 JEPRO 追加
 /* 169 */		F_COPYLINESASPASSAGE		, TBSTATE_ENABLED, TBSTYLE_BUTTON, 0, 0,	//選択範囲内全行引用符付きコピー	//Sept. 30, 2000 JEPRO 追加
 /* 170 */		F_COPYLINESWITHLINENUMBER	, TBSTATE_ENABLED, TBSTYLE_BUTTON, 0, 0,	//選択範囲内全行行番号付きコピー	//Sept. 30, 2000 JEPRO 追加
-/* 171 */		F_COPYPATH	, TBSTATE_ENABLED, TBSTYLE_BUTTON, 0, 0,	//このファイルのパス名をコピー //	added Oct. 22, 2000 JEPRO				//Nov. 5, 2000 JEPRO 追加
-/* 172 */		F_COPYTAG	, TBSTATE_ENABLED, TBSTYLE_BUTTON, 0, 0,	//このファイルのパス名とカーソル位置をコピー //	added Oct. 22, 2000 JEPRO	//Nov. 5, 2000 JEPRO 追加
-/* 173 */		F_CREATEKEYBINDLIST			, TBSTATE_ENABLED, TBSTYLE_BUTTON, 0, 0,	//キー割り当て一覧をコピー //	added Oct. 22, 2000 JEPRO		//アイコン未作
+/* 171 */		F_COPYPATH	, TBSTATE_ENABLED, TBSTYLE_BUTTON, 0, 0,	//このファイルのパス名をコピー //added Oct. 22, 2000 JEPRO				//Nov. 5, 2000 JEPRO 追加
+/* 172 */		F_COPYTAG	, TBSTATE_ENABLED, TBSTYLE_BUTTON, 0, 0,	//このファイルのパス名とカーソル位置をコピー //added Oct. 22, 2000 JEPRO	//Nov. 5, 2000 JEPRO 追加
+/* 173 */		F_CREATEKEYBINDLIST			, TBSTATE_ENABLED, TBSTYLE_BUTTON, 0, 0,	//キー割り当て一覧をコピー //added Oct. 22, 2000 JEPRO		//アイコン未作
 /* 174 */		F_DISABLE	, TBSTATE_ENABLED, TBSTYLE_BUTTON, 0, 0,	//ダミー
 /* 175 */		F_DISABLE	, TBSTATE_ENABLED, TBSTYLE_BUTTON, 0, 0,	//ダミー
 /* 176 */		F_DISABLE	, TBSTATE_ENABLED, TBSTYLE_BUTTON, 0, 0,	//ダミー
@@ -494,9 +494,9 @@ CShareData::CShareData()
 };
 	int tbd_num = sizeof( tbd ) / sizeof( tbd[0] );
 	for( int i = 0; i < tbd_num; i++ ){
-		SetTBBUTTONVal( 
+		SetTBBUTTONVal(
 			&m_tbMyButton[i+1],
-			i, 
+			i,
 			tbd[i].idCommand,
 			tbd[i].fsState,
 			tbd[i].fsStyle,

@@ -23,9 +23,9 @@
 /* p7 メッセージ処理 */
 BOOL CPropCommon::DispatchEvent_p7(
     HWND	hwndDlg,	// handle to dialog box
-    UINT	uMsg,	// message
-    WPARAM	wParam,	// first message parameter
-    LPARAM	lParam 	// second message parameter
+    UINT	uMsg,		// message
+    WPARAM	wParam,		// first message parameter
+    LPARAM	lParam 		// second message parameter
 )
 {
 	WORD				wNotifyCode;
@@ -103,12 +103,12 @@ BOOL CPropCommon::DispatchEvent_p7(
 			case LVN_BEGINLABELEDIT:
 #ifdef _DEBUG
 				MYTRACE( "LVN_BEGINLABELEDIT\n" );
-				MYTRACE( "	plvi->mask =[%xh]\n", plvi->mask  );
-				MYTRACE( "	plvi->iItem =[%d]\n", plvi->iItem  );
-				MYTRACE( "	plvi->iSubItem =[%d]\n", plvi->iSubItem  );
-				MYTRACE( "	plvi->state =[%xf]\n", plvi->state  );
-				MYTRACE( "	plvi->stateMask =[%xh]\n", plvi->stateMask  );
-				MYTRACE( "	plvi->pszText =[%s]\n", plvi->pszText  );
+				MYTRACE( "	plvi->mask =[%xh]\n", plvi->mask );
+				MYTRACE( "	plvi->iItem =[%d]\n", plvi->iItem );
+				MYTRACE( "	plvi->iSubItem =[%d]\n", plvi->iSubItem );
+				MYTRACE( "	plvi->state =[%xf]\n", plvi->state );
+				MYTRACE( "	plvi->stateMask =[%xh]\n", plvi->stateMask );
+				MYTRACE( "	plvi->pszText =[%s]\n", plvi->pszText );
 				MYTRACE( "	plvi->cchTextMax=[%d]\n", plvi->cchTextMax );
 				MYTRACE( "	plvi->iImage=[%d]\n", plvi->iImage );
 				MYTRACE( "	plvi->lParam=[%xh(%d)]\n", plvi->lParam, plvi->lParam );
@@ -117,11 +117,11 @@ BOOL CPropCommon::DispatchEvent_p7(
 			case LVN_ENDLABELEDIT:
 #ifdef _DEBUG
 				MYTRACE( "LVN_ENDLABELEDIT\n" );
-				MYTRACE( "	plvi->mask =[%xh]\n", plvi->mask  );
-				MYTRACE( "	plvi->iItem =[%d]\n", plvi->iItem  );
-				MYTRACE( "	plvi->iSubItem =[%d]\n", plvi->iSubItem  );
-				MYTRACE( "	plvi->state =[%xf]\n", plvi->state  );
-				MYTRACE( "	plvi->stateMask =[%xh]\n", plvi->stateMask  );
+				MYTRACE( "	plvi->mask =[%xh]\n", plvi->mask );
+				MYTRACE( "	plvi->iItem =[%d]\n", plvi->iItem );
+				MYTRACE( "	plvi->iSubItem =[%d]\n", plvi->iSubItem );
+				MYTRACE( "	plvi->state =[%xf]\n", plvi->state );
+				MYTRACE( "	plvi->stateMask =[%xh]\n", plvi->stateMask );
 				MYTRACE( "	plvi->pszText =[%s]\n", plvi->pszText  );
 				MYTRACE( "	plvi->cchTextMax=[%d]\n", plvi->cchTextMax );
 				MYTRACE( "	plvi->iImage=[%d]\n", plvi->iImage );
@@ -130,7 +130,7 @@ BOOL CPropCommon::DispatchEvent_p7(
 				if( NULL == plvi->pszText ){
 					return TRUE;
 				}
-				if( 0 < strlen( plvi->pszText )	){
+				if( 0 < strlen( plvi->pszText ) ){
 					if( MAX_KEYWORDLEN < strlen( plvi->pszText ) ){
 						::MYMESSAGEBOX(	hwndDlg, MB_OK | MB_ICONINFORMATION, GSTR_APPNAME,
 							"キーワードの長さは%dバイトまでです。", MAX_KEYWORDLEN
@@ -180,8 +180,8 @@ BOOL CPropCommon::DispatchEvent_p7(
 		break;
 	case WM_COMMAND:
 		wNotifyCode = HIWORD(wParam);	/* 通知コード */
-		wID = LOWORD(wParam);	/* 項目ID､ コントロールID､ またはアクセラレータID */
-		hwndCtl = (HWND) lParam;	/* コントロールのハンドル */
+		wID = LOWORD(wParam);			/* 項目ID､ コントロールID､ またはアクセラレータID */
+		hwndCtl = (HWND) lParam;		/* コントロールのハンドル */
 		if( hwndCOMBO_SET == hwndCtl){
 			switch( wNotifyCode ){
 			case CBN_SELCHANGE:
@@ -236,7 +236,7 @@ BOOL CPropCommon::DispatchEvent_p7(
 						}
 					}
 					if( IDCANCEL == ::MYMESSAGEBOX(	hwndDlg, MB_OKCANCEL | MB_ICONQUESTION, GSTR_APPNAME,
-						"「%s」のセットを削除します。\nよろしいですか？\n削除しようとするセットは、以下のファイルタイプに割り当てられています。\n削除したセットは無効になります。\n\n%s", 
+						"「%s」のセットを削除します。\nよろしいですか？\n削除しようとするセットは、以下のファイルタイプに割り当てられています。\n削除したセットは無効になります。\n\n%s",
 						m_CKeyWordSetMgr.GetTypeName( nIndex1 ),
 						pszLabel
 					) ){
@@ -264,7 +264,7 @@ BOOL CPropCommon::DispatchEvent_p7(
 					/* ｎ番目のセットのキーワードの数を返す */
 					if( MAX_KEYWORDNUM <= m_CKeyWordSetMgr.GetKeyWordNum( m_CKeyWordSetMgr.m_nCurrentKeyWordSetIdx ) ){
 						::MYMESSAGEBOX(	hwndDlg,	MB_OK | MB_ICONINFORMATION, GSTR_APPNAME,
-							"ひとつのセットに登録できるキーワードは、%d個までです。\n", MAX_KEYWORDNUM
+							"ひとつのセットに登録できるキーワードは %d個までです。\n", MAX_KEYWORDNUM
 						);
 						return TRUE;
 					}
@@ -401,12 +401,12 @@ void CPropCommon::p7_Import_List_KeyWord( HWND hwndDlg, HWND hwndLIST_KEYWORD )
 
 	strcpy( szPath, "" );
 	/* ファイルオープンダイアログの初期化 */
-	cDlgOpenFile.Create( 
-		m_hInstance, 
-		hwndDlg, 
-		"*.kwd", 
-		szPath, 
-		(const char **)&pszMRU, 
+	cDlgOpenFile.Create(
+		m_hInstance,
+		hwndDlg,
+		"*.kwd",
+		szPath,
+		(const char **)&pszMRU,
 		(const char **)&pszOPENFOLDER
 	);
 	if( !cDlgOpenFile.DoModal_GetOpenFileName( szPath ) ){
@@ -414,7 +414,7 @@ void CPropCommon::p7_Import_List_KeyWord( HWND hwndDlg, HWND hwndLIST_KEYWORD )
 	}
 	pFile = fopen( szPath, "r" );
 	if( NULL == pFile ){
-		::MYMESSAGEBOX(	hwndDlg, MB_OK | MB_ICONSTOP, GSTR_APPNAME,
+		::MYMESSAGEBOX( hwndDlg, MB_OK | MB_ICONSTOP, GSTR_APPNAME,
 			"ファイルを開けませんでした。\n\n%s", szPath
 		);
 		return;
@@ -427,7 +427,7 @@ void CPropCommon::p7_Import_List_KeyWord( HWND hwndDlg, HWND hwndLIST_KEYWORD )
 				for( i = 0; i < (int)strlen( szLine ); ++i ){
 					if( szLine[i] == '\r' || szLine[i] == '\n' ){
 						szLine[i] = '\0';
-					} 
+					}
 				}
 			}
 			if( 0 < (int)strlen( szLine ) ){
@@ -460,12 +460,12 @@ void CPropCommon::p7_Export_List_KeyWord( HWND hwndDlg, HWND hwndLIST_KEYWORD )
 	
 	strcpy( szPath, "" );
 	/* ファイルオープンダイアログの初期化 */
-	cDlgOpenFile.Create( 
-		m_hInstance, 
-		hwndDlg, 
-		"*.kwd", 
-		szPath, 
-		(const char **)&pszMRU, 
+	cDlgOpenFile.Create(
+		m_hInstance,
+		hwndDlg,
+		"*.kwd",
+		szPath,
+		(const char **)&pszMRU,
 		(const char **)&pszOPENFOLDER
 	);
 	if( !cDlgOpenFile.DoModal_GetSaveFileName( szPath ) ){
@@ -481,7 +481,7 @@ void CPropCommon::p7_Export_List_KeyWord( HWND hwndDlg, HWND hwndLIST_KEYWORD )
 	}
 	fputs( "// ", pFile );
 	fputs( m_CKeyWordSetMgr.GetTypeName( m_CKeyWordSetMgr.m_nCurrentKeyWordSetIdx ), pFile );
-	fputs( "　キーワード定義ファイル", pFile );
+	fputs( "  キーワード定義ファイル", pFile );
 	fputs( "\n", pFile );
 	fputs( "\n", pFile );
 
