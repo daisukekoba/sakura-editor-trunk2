@@ -28,7 +28,7 @@ struct ARRHEAD {
 
 //	共有メモリのバージョン 1～unsinged intの最大値
 //	共有メモリの形式を変更したときはここも修正すること
-const unsigned int uShareDataVersion = 2;
+const unsigned int uShareDataVersion = 4;
 
 
 CShareData::~CShareData()
@@ -345,7 +345,10 @@ bool CShareData::Init(void)
 			//Sept. 14, 2000 JEPRO	Ctrl+. に「選択範囲内全行引用符付きコピー」を追加
 			{ 0x00be, ".",0, 0, F_COPYLINESASPASSAGE, 0, 0, 0, 0, 0 },
 			{ 0x00bf, "/",0, 0, F_HOKAN, 0, 0, 0, 0, 0 },
-			{ 0x00df, "_",0, 0, F_UNDO, 0, 0, 0, 0, 0 },
+			//	Nov. 15, 2000 genta PC/ATキーボードに合わせてキーコードを変更
+			//	PC98救済のため，従来のキーコードに対応する項目を追加．
+			{ 0x00e2, "_",0, 0, F_UNDO, 0, 0, 0, 0, 0 },
+			{ 0x00df, "_(PC-98)",0, 0, F_UNDO, 0, 0, 0, 0, 0 },
 			//Oct. 7, 2000 JEPRO	長くて表示しきれない所がでてきてしまうのでアプリケーションキー→アプリキーに短縮
 			{ VK_APPS, "アプリキー",F_MENU_RBUTTON, F_MENU_RBUTTON, F_MENU_RBUTTON, F_MENU_RBUTTON, F_MENU_RBUTTON, F_MENU_RBUTTON, F_MENU_RBUTTON, F_MENU_RBUTTON }
 		};
@@ -442,7 +445,7 @@ bool CShareData::Init(void)
 		m_pShareData->m_Common.m_bAutoIndent_ZENSPACE = TRUE;	/* 日本語空白もインデント */
 
 		//	Oct. 27, 2000 genta
-		m_pShareData->m_Common.m_bRestoreCurPosition = true;	//	カーソル位置復元
+		m_pShareData->m_Common.m_bRestoreCurPosition = TRUE;	//	カーソル位置復元
 
 //		m_pShareData->m_Common.m_bEnableLineISlog = TRUE;		/* ★廃止★行番号種別　物理行／論理行 */
 
@@ -734,7 +737,8 @@ tt 時刻マーカー。「 AM 」「 PM 」「午前」「午後」など。
 		strcpy( m_pShareData->m_Common.m_szTimeFormat, "tthh\'時\'mm\'分\'ss\'秒\'"  );//時刻書式
 
 		m_pShareData->m_Common.m_bMenuIcon = TRUE;	/* メニューにアイコンを表示する */
-
+		//	Nov. 12, 2000 genta
+		m_pShareData->m_Common.m_bAutoMIMEdecode = FALSE;	//	ファイル読み込み時にMIMEのdecodeを行うか
 
 //		/* MRU 外部コマンド */
 //		m_pShareData->m_Common.m_MRU_ExtCmd.m_nExtCmdArrNum = 0;
@@ -881,6 +885,7 @@ tt 時刻マーカー。「 AM 」「 PM 」「午前」「午後」など。
 		m_pShareData->m_Types[nIdx].m_nCurrentPrintSetting = 0;			/* 現在選択している印刷設定 */
 		m_pShareData->m_Types[nIdx].m_nDefaultOutline = OUTLINE_TEXT;	/* アウトライン解析方法 */
 		m_pShareData->m_Types[nIdx].m_nSmartIndent = SMARTINDENT_NONE;	/* スマートインデント種別 */
+		m_pShareData->m_Types[nIdx].m_nImeState = IME_CMODE_NOCONVERSION;	/* スマートインデント種別 */
 
 
 		static char* pszTypeNameArr[] = {
