@@ -32,9 +32,9 @@
 #define F_PRINT_PREVIEW				30151	//印刷プレビュー
 #define F_PRINT_PAGESETUP			30152	//印刷ページ設定	//Sept. 14, 2000 jepro 「印刷のページレイアウトの設定」から「印刷ページ設定」に変更
 //#define F_PRINT_DIALOG				30151	//印刷ダイアログ
-#define	F_OPEN_HfromtoC				30160	//同名のC/C++ヘッダ(ソース)を開く	//Feb. 7, 2001 JEPRO 追加
-#define F_OPEN_HHPP					30161	//同名のC/C++ヘッダファイルを開く	//Feb. 9, 2001 jepro「.cまたは.cppと同名の.hを開く」から変更
-#define F_OPEN_CCPP					30162	//同名のC/C++ソースファイルを開く	//Feb. 9, 2001 jepro「.hと同名の.c(なければ.cpp)を開く」から変更
+#define F_OPEN_HHPP					30160	//同名のC/C++ヘッダファイルを開く	//Feb. 9, 2001 jepro「.cまたは.cppと同名の.hを開く」から変更
+#define F_OPEN_CCPP					30161	//同名のC/C++ソースファイルを開く	//Feb. 9, 2001 jepro「.hと同名の.c(なければ.cpp)を開く」から変更
+#define	F_OPEN_HfromtoC				30162	//同名のC/C++ヘッダ(ソース)を開く	//Feb. 7, 2001 JEPRO 追加
 #define F_ACTIVATE_SQLPLUS			30170 	/* Oracle SQL*Plusをアクティブ表示 */
 #define F_PLSQL_COMPILE_ON_SQLPLUS	30171 	/* Oracle SQL*Plusで実行 */	//Sept. 17, 2000 jepro 説明の「コンパイル」を「実行」に統一
 #define F_BROWSE					30180	//ブラウズ
@@ -281,8 +281,8 @@
 #define F_NEXTWINDOW		31340	//次のウィンドウ
 #define F_PREVWINDOW		31341	//前のウィンドウ
 #define F_MAXIMIZE_V		31350	//縦方向に最大化
-#define F_MAXIMIZE_H		31351	//横方向に最大化	//2001.02.10 by MIK
-#define F_MINIMIZE_ALL		31352	//すべて最小化		//Sept. 17, 2000 jepro 説明の「全て」を「すべて」に統一
+#define F_MINIMIZE_ALL		31351	//すべて最小化		//Sept. 17, 2000 jepro 説明の「全て」を「すべて」に統一
+#define F_MAXIMIZE_H		31352	//横方向に最大化	//2001.02.10 by MIK
 #define F_REDRAW			31360	//再描画
 #define F_WIN_OUTPUT		31370	//アウトプットウィンドウ表示
 
