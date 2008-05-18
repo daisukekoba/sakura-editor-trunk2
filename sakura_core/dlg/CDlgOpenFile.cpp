@@ -22,7 +22,7 @@
 #include "debug/Debug.h"
 #include "sakura_rc.h"
 #include "global.h"
-#include "funccode.h"	//Stonee, 2001/05/18
+#include "func/Funccode.h"	//Stonee, 2001/05/18
 #include "CFileExt.h"
 #include <dlgs.h>    // stc3,...
 #include <cderr.h>   // FNERR...,CDERR...
@@ -765,7 +765,7 @@ bool CDlgOpenFile::DoModalOpenDlg( SLoadInfo* pLoadInfo )
 	cFileExt.AppendExtRaw( _T("すべてのファイル"), _T("*.*") );
 	cFileExt.AppendExtRaw( _T("テキストファイル"), _T("*.txt") );
 	for( int i = 0; i < MAX_TYPES; i++ ){
-		const STypeConfig& types = m_pShareData->GetTypeSetting(CTypeConfig(i));
+		const STypeConfig& types = CDocTypeManager().GetTypeSetting(CTypeConfig(i));
 		cFileExt.AppendExt( types.m_szTypeName, types.m_szTypeExts );
 	}
 

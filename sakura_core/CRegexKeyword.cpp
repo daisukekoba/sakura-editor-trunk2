@@ -18,9 +18,9 @@
 //@@@ 2001.11.17 add start MIK
 
 #include "stdafx.h"
-#include "global.h"
 #include "CRegexKeyword.h"
 #include "CBregexp.h"
+#include "view/colors/CColorStrategy.h"
 
 #if 0
 #include <stdio.h>

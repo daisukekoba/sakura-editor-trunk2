@@ -27,7 +27,6 @@
 #include "debug/Debug.h"
 #include "debug/CRunningTimer.h"
 #include "charset/charcode.h"
-#include "mymessage.h"
 #include "CWaitCursor.h"
 #include "window/CEditWnd.h"
 #include "dlg/CDlgCancel.h"
@@ -54,6 +53,7 @@
 #include "util/module.h"
 #include "util/tchar_template.h"
 #include "util/os.h" //WM_MOUSEWHEEL,IMR_RECONVERTSTRING,WM_XBUTTON*,IMR_CONFIRMRECONVERTSTRING
+#include "view/colors/CColorStrategy.h"
 
 
 CEditView*	g_m_pcEditView;
@@ -322,7 +322,7 @@ BOOL CEditView::Create(
 	m_pcDropTarget->Register_DropTarget( GetHwnd() );
 
 	/* 辞書Tip表示ウィンドウ作成 */
-	m_cTipWnd.Create( G_AppInstance(), GetHwnd()/*GetDllShareData().m_hwndTray*/ );
+	m_cTipWnd.Create( G_AppInstance(), GetHwnd()/*GetDllShareData().m_sHandles.m_hwndTray*/ );
 
 	/* 再描画用コンパチブルＤＣ */
 	// 2007.09.09 Moca 互換BMPによる画面バッファ

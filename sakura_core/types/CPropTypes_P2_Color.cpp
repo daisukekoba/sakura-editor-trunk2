@@ -10,6 +10,8 @@
 #include "CDlgSameColor.h"
 #include "CDlgKeywordSelect.h"
 #include "util/shell.h"
+#include "view/colors/CColorStrategy.h"
+#include "env/CShareData_IO.h"
 using namespace std;
 
 WNDPROC	m_wpColorListProc;
@@ -75,7 +77,7 @@ void CPropTypes::_Import_Colors( HWND hwndDlg )
 		m_hInstance,
 		hwndDlg,
 		_T("*.col"),
-		GetDllShareData().m_szIMPORTFOLDER, // インポート用フォルダ
+		GetDllShareData().m_sHistory.m_szIMPORTFOLDER, // インポート用フォルダ
 		std::vector<LPCTSTR>(),
 		std::vector<LPCTSTR>()
 	);
@@ -86,8 +88,8 @@ void CPropTypes::_Import_Colors( HWND hwndDlg )
 
 	/* ファイルのフルパスを、フォルダとファイル名に分割 */
 	/* [c:\work\test\aaa.txt] → [c:\work\test] + [aaa.txt] */
-	::SplitPath_FolderAndFile( szPath, GetDllShareData().m_szIMPORTFOLDER, NULL );
-	_tcscat( GetDllShareData().m_szIMPORTFOLDER, _T("\\") );
+	::SplitPath_FolderAndFile( szPath, GetDllShareData().m_sHistory.m_szIMPORTFOLDER, NULL );
+	_tcscat( GetDllShareData().m_sHistory.m_szIMPORTFOLDER, _T("\\") );
 
 
 	/* 色設定Ver1か */
@@ -147,7 +149,7 @@ void CPropTypes::_Import_Colors( HWND hwndDlg )
 		ColorInfoArr[i] = m_Types.m_ColorInfoArr[i];
 		_tcscpy( ColorInfoArr[i].m_szName, m_Types.m_ColorInfoArr[i].m_szName );
 	}
-	CShareData::IO_ColorSet( &cProfile, LTEXT(STR_COLORDATA_SECTION), ColorInfoArr );
+	CShareData_IO::IO_ColorSet( &cProfile, LTEXT(STR_COLORDATA_SECTION), ColorInfoArr );
 
 
 //complete:;
@@ -172,7 +174,7 @@ void CPropTypes::_Export_Colors( HWND hwndDlg )
 		m_hInstance,
 		hwndDlg,
 		_T("*.col"),
-		GetDllShareData().m_szIMPORTFOLDER, // インポート用フォルダ
+		GetDllShareData().m_sHistory.m_szIMPORTFOLDER, // インポート用フォルダ
 		std::vector<LPCTSTR>(),
 		std::vector<LPCTSTR>()
 	);
@@ -182,13 +184,13 @@ void CPropTypes::_Export_Colors( HWND hwndDlg )
 
 	/* ファイルのフルパスをフォルダとファイル名に分割 */
 	/* [c:\work\test\aaa.txt] → [c:\work\test] + [aaa.txt] */
-	::SplitPath_FolderAndFile( szPath, GetDllShareData().m_szIMPORTFOLDER, NULL );
-	_tcscat( GetDllShareData().m_szIMPORTFOLDER, _T("\\") );
+	::SplitPath_FolderAndFile( szPath, GetDllShareData().m_sHistory.m_szIMPORTFOLDER, NULL );
+	_tcscat( GetDllShareData().m_sHistory.m_szIMPORTFOLDER, _T("\\") );
 
 	/* 色設定 I/O */
 	CDataProfile	cProfile;
 	cProfile.SetWritingMode();
-	CShareData::IO_ColorSet( &cProfile, LTEXT(STR_COLORDATA_SECTION), m_Types.m_ColorInfoArr );
+	CShareData_IO::IO_ColorSet( &cProfile, LTEXT(STR_COLORDATA_SECTION), m_Types.m_ColorInfoArr );
 	cProfile.WriteProfile( szPath, LTEXT(STR_COLORDATA_HEAD3) );	//Jan. 15, 2001 Stonee
 
 	return;

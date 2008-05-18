@@ -29,6 +29,7 @@
 #include "mem/CMemoryIterator.h"
 #include "doc/CEditDoc.h" /// 2003/07/20 genta
 #include "util/window.h"
+#include "view/colors/CColorStrategy.h"
 
 //レイアウト中の禁則タイプ	//@@@ 2002.04.20 MIK
 #define	KINSOKU_TYPE_NONE			0	//なし

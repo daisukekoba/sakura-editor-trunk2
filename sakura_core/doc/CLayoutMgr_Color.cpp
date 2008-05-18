@@ -1,5 +1,6 @@
 #include "stdafx.h"
 #include "CLayoutMgr.h"
+#include "view/colors/CColorStrategy.h"
 
 // 2005.11.20 Mocaコメントの色分けがON/OFF関係なく行われていたバグを修正
 bool CLayoutMgr::_CheckColorMODE(

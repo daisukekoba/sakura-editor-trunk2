@@ -101,7 +101,7 @@ ELoadResult CLoadAgent::OnLoad(const SLoadInfo& sLoadInfo)
 	}
 
 	// 文書種別
-	pcDoc->m_cDocType.SetDocumentType( CShareData::getInstance()->GetDocumentType( sLoadInfo.cFilePath ), true );
+	pcDoc->m_cDocType.SetDocumentType( CDocTypeManager().GetDocumentTypeOfPath( sLoadInfo.cFilePath ), true );
 
 	/* レイアウト情報の変更 */
 	CProgressSubject* pOld = CEditApp::Instance()->m_pcVisualProgress->CProgressListener::Listen(&pcDoc->m_cLayoutMgr);

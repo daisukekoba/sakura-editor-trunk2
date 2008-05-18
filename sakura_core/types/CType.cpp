@@ -7,7 +7,7 @@
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 STypeConfig* CTypeConfig::GetTypeConfig()
 {
-	return &GetDllShareData().GetTypeSetting(*this);
+	return &CDocTypeManager().GetTypeSetting(*this);
 }
 
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
@@ -18,7 +18,7 @@ void CType::InitTypeConfig(int nIdx)
 	DLLSHAREDATA* pShareData = &GetDllShareData();
 
 	//規定値をコピー
-	pShareData->GetTypeSetting(CTypeConfig(nIdx)) = pShareData->GetTypeSetting(CTypeConfig(0));
+	CDocTypeManager().GetTypeSetting(CTypeConfig(nIdx)) = CDocTypeManager().GetTypeSetting(CTypeConfig(0));
 
 	//インデックスを設定
 	CTypeConfig(nIdx)->m_nIdx = nIdx;
@@ -89,15 +89,15 @@ void CShareData::InitTypeConfigs(DLLSHAREDATA* pShareData)
 void CShareData::InitKeyword(DLLSHAREDATA* pShareData)
 {
 	/* 強調キーワードのテストデータ */
-	pShareData->m_CKeyWordSetMgr.m_nCurrentKeyWordSetIdx = 0;
+	pShareData->m_Common.m_sSpecialKeyword.m_CKeyWordSetMgr.m_nCurrentKeyWordSetIdx = 0;
 
 	int nSetCount = -1;
 
 #define PopulateKeyword(name,case_sensitive,aryname) \
 	extern const wchar_t* g_ppszKeywords##aryname[]; \
 	extern int g_nKeywords##aryname; \
-	pShareData->m_CKeyWordSetMgr.AddKeyWordSet( (name), (case_sensitive) );	\
-	pShareData->m_CKeyWordSetMgr.SetKeyWordArr( ++nSetCount, g_nKeywords##aryname, g_ppszKeywords##aryname );
+	pShareData->m_Common.m_sSpecialKeyword.m_CKeyWordSetMgr.AddKeyWordSet( (name), (case_sensitive) );	\
+	pShareData->m_Common.m_sSpecialKeyword.m_CKeyWordSetMgr.SetKeyWordArr( ++nSetCount, g_nKeywords##aryname, g_ppszKeywords##aryname );
 	
 	PopulateKeyword( L"C/C++",			true,	CPP );			/* セット 0の追加 */
 	PopulateKeyword( L"HTML",			false,	HTML );			/* セット 1の追加 */

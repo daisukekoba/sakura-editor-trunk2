@@ -1,8 +1,9 @@
 #include "stdafx.h"
 #include "CType.h"
 #include "doc/CDocOutline.h"
-#include "CFuncInfoArr.h"
+#include "outline/CFuncInfoArr.h"
 #include "COpeBlk.h"
+#include "view/colors/CColorStrategy.h"
 
 //!CPPキーワードで始まっていれば true
 inline bool IsHeadCppKeyword(const wchar_t* pData)

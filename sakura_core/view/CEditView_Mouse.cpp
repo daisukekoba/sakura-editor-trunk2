@@ -5,6 +5,7 @@
 #include "util/os.h"
 #include "parse/CWordParse.h"
 #include "COpeBlk.h"
+#include "view/colors/CColorStrategy.h"
 #include "CClipboard.h"
 
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
@@ -59,7 +60,7 @@ void CEditView::OnLBUTTONDOWN( WPARAM fwKeys, int _xPos , int _yPos )
 
 	if(tripleClickMode){
 		// マウス左トリプルクリックに対応する機能コードはm_Common.m_pKeyNameArr[5]に入っている
-		nFuncID = GetDllShareData().m_pKeyNameArr[MOUSEFUNCTION_TRIPLECLICK].m_nFuncCodeArr[getCtrlKeyState()];
+		nFuncID = GetDllShareData().m_Common.m_sKeyBind.m_pKeyNameArr[MOUSEFUNCTION_TRIPLECLICK].m_nFuncCodeArr[getCtrlKeyState()];
 		if( 0 == nFuncID ){
 			tripleClickMode = 0;	// 割り当て機能無しの時はトリプルクリック OFF
 		}
@@ -538,7 +539,7 @@ void CEditView::OnRBUTTONUP( WPARAM fwKeys, int xPos , int yPos )
 	/* Shift,Ctrl,Altキーが押されていたか */
 	nIdx = getCtrlKeyState();
 	/* マウス右クリックに対応する機能コードはm_Common.m_pKeyNameArr[1]に入っている */
-	nFuncID = GetDllShareData().m_pKeyNameArr[MOUSEFUNCTION_RIGHT].m_nFuncCodeArr[nIdx];
+	nFuncID = GetDllShareData().m_Common.m_sKeyBind.m_pKeyNameArr[MOUSEFUNCTION_RIGHT].m_nFuncCodeArr[nIdx];
 	if( nFuncID != 0 ){
 		/* コマンドコードによる処理振り分け */
 		//	May 19, 2006 genta マウスからのメッセージはCMD_FROM_MOUSEを上位ビットに入れて送る
@@ -567,7 +568,7 @@ void CEditView::OnMBUTTONDOWN( WPARAM fwKeys, int xPos , int yPos )
 	/* Shift,Ctrl,Altキーが押されていたか */
 	nIdx = getCtrlKeyState();
 	/* マウス左サイドボタンに対応する機能コードはm_Common.m_pKeyNameArr[2]に入っている */
-	nFuncID = GetDllShareData().m_pKeyNameArr[MOUSEFUNCTION_CENTER].m_nFuncCodeArr[nIdx];
+	nFuncID = GetDllShareData().m_Common.m_sKeyBind.m_pKeyNameArr[MOUSEFUNCTION_CENTER].m_nFuncCodeArr[nIdx];
 	if( nFuncID != 0 ){
 		/* コマンドコードによる処理振り分け */
 		//	May 19, 2006 genta マウスからのメッセージはCMD_FROM_MOUSEを上位ビットに入れて送る
@@ -594,7 +595,7 @@ void CEditView::OnXLBUTTONDOWN( WPARAM fwKeys, int xPos , int yPos )
 	/* Shift,Ctrl,Altキーが押されていたか */
 	nIdx = getCtrlKeyState();
 	/* マウス左サイドボタンに対応する機能コードはm_Common.m_pKeyNameArr[3]に入っている */
-	nFuncID = GetDllShareData().m_pKeyNameArr[MOUSEFUNCTION_LEFTSIDE].m_nFuncCodeArr[nIdx];
+	nFuncID = GetDllShareData().m_Common.m_sKeyBind.m_pKeyNameArr[MOUSEFUNCTION_LEFTSIDE].m_nFuncCodeArr[nIdx];
 	if( nFuncID != 0 ){
 		/* コマンドコードによる処理振り分け */
 		//	May 19, 2006 genta マウスからのメッセージはCMD_FROM_MOUSEを上位ビットに入れて送る
@@ -622,7 +623,7 @@ void CEditView::OnXRBUTTONDOWN( WPARAM fwKeys, int xPos , int yPos )
 	/* Shift,Ctrl,Altキーが押されていたか */
 	nIdx = getCtrlKeyState();
 	/* マウス右サイドボタンに対応する機能コードはm_Common.m_pKeyNameArr[4]に入っている */
-	nFuncID = GetDllShareData().m_pKeyNameArr[MOUSEFUNCTION_RIGHTSIDE].m_nFuncCodeArr[nIdx];
+	nFuncID = GetDllShareData().m_Common.m_sKeyBind.m_pKeyNameArr[MOUSEFUNCTION_RIGHTSIDE].m_nFuncCodeArr[nIdx];
 	if( nFuncID != 0 ){
 		/* コマンドコードによる処理振り分け */
 		//	May 19, 2006 genta マウスからのメッセージはCMD_FROM_MOUSEを上位ビットに入れて送る
@@ -1020,9 +1021,9 @@ void CEditView::OnLBUTTONDBLCLK( WPARAM fwKeys, int _xPos , int _yPos )
 	int	nIdx = getCtrlKeyState();
 
 	/* マウス左クリックに対応する機能コードはm_Common.m_pKeyNameArr[?]に入っている 2007.11.15 nasukoji */
-	EFunctionCode	nFuncID = GetDllShareData().m_pKeyNameArr[
+	EFunctionCode	nFuncID = GetDllShareData().m_Common.m_sKeyBind.m_pKeyNameArr[
 		m_dwTripleClickCheck ? MOUSEFUNCTION_QUADCLICK : MOUSEFUNCTION_DOUBLECLICK
-		].m_nFuncCodeArr[nIdx];
+	].m_nFuncCodeArr[nIdx];
 	if(m_dwTripleClickCheck){
 		// 非選択状態にした後左クリックしたことにする
 		// すべて選択の場合は、3.5クリック時の選択状態保持とドラッグ開始時の
@@ -1034,7 +1035,7 @@ void CEditView::OnLBUTTONDBLCLK( WPARAM fwKeys, int _xPos , int _yPos )
 
 		if(! nFuncID){
 			m_dwTripleClickCheck = 0;	// トリプルクリックチェック OFF
-			nFuncID = GetDllShareData().m_pKeyNameArr[MOUSEFUNCTION_DOUBLECLICK].m_nFuncCodeArr[nIdx];
+			nFuncID = GetDllShareData().m_Common.m_sKeyBind.m_pKeyNameArr[MOUSEFUNCTION_DOUBLECLICK].m_nFuncCodeArr[nIdx];
 			OnLBUTTONDOWN( fwKeys, ptMouse.x , ptMouse.y );	// カーソルをクリック位置へ移動する
 		}
 	}

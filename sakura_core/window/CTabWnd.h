@@ -39,7 +39,7 @@ class CTabWnd;
 
 #include "CWnd.h"
 #include "doc/CEditDoc.h"
-#include "CShareData.h"
+#include "env/CShareData.h"
 #include <string>
 #include <map>
 

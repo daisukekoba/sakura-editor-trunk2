@@ -98,6 +98,23 @@ public:
 	int  DetectWidthOfLineNumberArea_calculate() const;
 
 	// -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
+	//                           判定                              //
+	// -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
+	bool IsRectIntersected(const RECT& rc) const
+	{
+		//rcが無効またはゼロ領域の場合はfalse
+		if( rc.left >= rc.right )return false;
+		if( rc.top  >= rc.bottom )return false;
+
+		if( rc.left >= this->GetAreaRight() )return false; //右外
+		if( rc.right <= this->GetAreaLeft() )return false; //左外
+		if( rc.top >= this->GetAreaBottom() )return false; //下外
+		if( rc.bottom <= this->GetAreaTop() )return false; //上外
+		
+		return true;
+	}
+
+	// -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 	//                        その他取得                           //
 	// -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 	int GetRulerHeight() const

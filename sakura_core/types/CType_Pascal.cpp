@@ -1,5 +1,6 @@
 #include "stdafx.h"
 #include "types/CType.h"
+#include "view/colors/CColorStrategy.h"
 
 /* Pascal */
 //Mar. 10, 2001 JEPRO	”¼Šp”’l‚ğF•ª‚¯•\¦

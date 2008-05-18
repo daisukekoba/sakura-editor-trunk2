@@ -4,6 +4,7 @@
 #include "view/CEditView.h"
 #include "doc/CEditDoc.h"
 #include "types/CTypeSupport.h"
+#include "view/colors/CColorStrategy.h"
 
 CRuler::CRuler(const CEditView* pEditView, const CEditDoc* pEditDoc)
 : m_pEditView(pEditView)

@@ -25,7 +25,7 @@
 
 #include <windows.h>
 #include <objidl.h>  // LPDATAOBJECT
-#include "CShareData.h"
+#include "env/CShareData.h"
 #include "CTipWnd.h"
 #include "CDicMgr.h"
 #include "CHokanMgr.h"
@@ -85,7 +85,7 @@ typedef struct tagRECONVERTSTRING {
 const int CMD_FROM_MOUSE = 2;
 
 class CEditView;
-struct SDrawStrategyInfo;
+struct SColorStrategyInfo;
 
 /*-----------------------------------------------------------------------
 クラスの宣言
@@ -199,11 +199,6 @@ public:
 	LRESULT OnMOUSEWHEEL( WPARAM, LPARAM );				/* マウスホイールのメッセージ処理 */
 
 	// -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
-	//                           設定                              //
-	// -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
-	void SetCurrentColor( HDC, int );							/* 現在の色を指定 */
-
-	// -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 	//                           描画                              //
 	// -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 	// 2006.05.14 Moca  互換BMPによる画面バッファ
@@ -217,9 +212,15 @@ protected:
 	);
 
 	//! レイアウト行を1行描画
-	bool DrawLayoutLine(SDrawStrategyInfo* pInfo);
+	bool DrawLayoutLine(SColorStrategyInfo* pInfo);
+
+	//色分け
+public:
+	EColorIndexType GetColorIndex( HDC, const CLayout*, int );				/* 指定位置のColorIndexの取得 02/12/13 ai */
+	void SetCurrentColor( HDC, EColorIndexType );							/* 現在の色を指定 */
 
 	//画面バッファ
+protected:
 	bool CreateOrUpdateCompatibleBitmap( int cx, int cy );	//!< メモリBMPを作成または更新
 	void UseCompatibleDC(BOOL fCache);
 public:
@@ -239,6 +240,7 @@ public:
 	{
 		m_bDrawSWITCH = b;
 	}
+
 
 
 	// -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
@@ -270,8 +272,6 @@ public:
 	void SyncScrollH( CLayoutInt );									/* 水平同期スクロール */
 
 	void SetBracketPairPos( bool );								/* 対括弧の強調表示位置設定 03/02/18 ai */
-protected:
-	int GetColorIndex( HDC, const CLayout*, int );				/* 指定位置のColorIndexの取得 02/12/13 ai */
 
 
 	// -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //

@@ -1,7 +1,8 @@
 #include "stdafx.h"
 #include "types/CType.h"
 #include "doc/CDocOutline.h"
-#include "CFuncInfoArr.h"
+#include "outline/CFuncInfoArr.h"
+#include "view/colors/CColorStrategy.h"
 
 /* HTML */
 //Oct. 31, 2000 JEPRO VC++の生成するテキストファイルも読み込めるようにする

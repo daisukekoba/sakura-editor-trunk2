@@ -1,5 +1,6 @@
 #include "stdafx.h"
 #include "types/CType.h"
+#include "view/colors/CColorStrategy.h"
 
 void _DefaultConfig(STypeConfig* pType)
 {

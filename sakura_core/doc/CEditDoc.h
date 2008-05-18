@@ -27,10 +27,10 @@
 #include "CAutoSaveAgent.h"
 #include "doc/CDocLineMgr.h"
 #include "CEol.h"
-#include "CFuncLookup.h"
+#include "func/CFuncLookup.h"
 #include "CLayoutMgr.h"
 #include "COpeBuf.h"
-#include "CShareData.h"
+#include "env/CShareData.h"
 #include <string>
 #include "doc/CDocListener.h"
 #include "util/design_template.h"

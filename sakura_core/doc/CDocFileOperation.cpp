@@ -3,7 +3,7 @@
 #include "CWaitCursor.h"
 #include "CControlTray.h"
 #include "util/window.h"
-#include "CSakuraEnvironment.h"
+#include "env/CSakuraEnvironment.h"
 #include "doc/CDocVisitor.h"
 
 

@@ -111,8 +111,8 @@ BOOL CEditView::KeySearchCore( const CNativeW* pcmemCurText )
 	if(m_pcEditDoc->m_cDocType.GetDocumentAttribute().m_bUseKeyHelpPrefix)
 		nCmpLen = wcslen( pcmemCurText->GetStringPtr() );	// 2006.04.10 fon
 	m_cTipWnd.m_KeyWasHit = FALSE;
-	for(int i=0;i<GetDllShareData().GetTypeSetting(nTypeNo).m_nKeyHelpNum;i++){	//最大数：MAX_KEYHELP_FILE
-		if( GetDllShareData().GetTypeSetting(nTypeNo).m_KeyHelpArr[i].m_bUse ){
+	for(int i=0;i<CDocTypeManager().GetTypeSetting(nTypeNo).m_nKeyHelpNum;i++){	//最大数：MAX_KEYHELP_FILE
+		if( CDocTypeManager().GetTypeSetting(nTypeNo).m_KeyHelpArr[i].m_bUse ){
 			// 2006.04.10 fon (nCmpLen,pcmemRefKey,nSearchLine)引数を追加
 			CNativeW*	pcmemRefText;
 			int nSearchResult=m_cDicMgr.CDicMgr::Search(
@@ -120,7 +120,7 @@ BOOL CEditView::KeySearchCore( const CNativeW* pcmemCurText )
 				nCmpLen,
 				&pcmemRefKey,
 				&pcmemRefText,
-				GetDllShareData().GetTypeSetting(nTypeNo).m_KeyHelpArr[i].m_szPath,
+				CDocTypeManager().GetTypeSetting(nTypeNo).m_KeyHelpArr[i].m_szPath,
 				&nLine
 			);
 			if(nSearchResult){
@@ -135,7 +135,7 @@ BOOL CEditView::KeySearchCore( const CNativeW* pcmemCurText )
 					else
 						m_cTipWnd.m_cInfo.AppendString( _T("■") );	/* 先頭の場合 */
 					/* 辞書のパス挿入 */
-					m_cTipWnd.m_cInfo.AppendString( GetDllShareData().GetTypeSetting(nTypeNo).m_KeyHelpArr[i].m_szPath );
+					m_cTipWnd.m_cInfo.AppendString( CDocTypeManager().GetTypeSetting(nTypeNo).m_KeyHelpArr[i].m_szPath );
 					m_cTipWnd.m_cInfo.AppendString( _T("\n") );
 					/* 前方一致でヒットした単語を挿入 */
 					if(m_pcEditDoc->m_cDocType.GetDocumentAttribute().m_bUseKeyHelpPrefix){	/* 選択範囲で前方一致検索 */
@@ -261,7 +261,7 @@ void CEditView::GetCurrentTextForSearchDlg( CNativeW& cmemCurText )
 			GetCurrentTextForSearch( cmemCurText );	// カーソル位置単語を取得
 		}
 		else{
-			cmemCurText.SetString( GetDllShareData().m_aSearchKeys[0] );	// 履歴からとってくる
+			cmemCurText.SetString( GetDllShareData().m_sSearchKeywords.m_aSearchKeys[0] );	// 履歴からとってくる
 		}
 	}
 }
@@ -275,6 +275,7 @@ void CEditView::GetCurrentTextForSearchDlg( CNativeW& cmemCurText )
 /* 現在位置が検索文字列に該当するか */
 //2002.02.08 hor
 //正規表現で検索したときの速度改善のため、マッチ先頭位置を引数に追加
+//Jun. 26, 2001 genta	正規表現ライブラリの差し替え
 bool CEditView::IsSearchString(
 	const wchar_t*	pszData,
 	CLogicInt		nDataLen,
@@ -285,7 +286,6 @@ bool CEditView::IsSearchString(
 {
 	CLogicInt		nKeyLength;
 
-	//	From Here Jun. 26, 2001 genta	正規表現ライブラリの差し替え
 	*pnSearchStart = nPos;	// 2002.02.08 hor
 
 	if( m_sCurSearchOption.bRegularExp ){
@@ -300,13 +300,13 @@ bool CEditView::IsSearchString(
 		if( m_CurRegexp.Match( pszData, nDataLen, nPos ) ){
 			*pnSearchStart = m_CurRegexp.GetIndex();	// 2002.02.08 hor
 			*pnSearchEnd = m_CurRegexp.GetLastIndex();
-	//	To Here Jun. 26, 2001 genta
 			return true;
-
-		}else{
+		}
+		else{
 			return false;
 		}
-	}else{
+	}
+	else{
 		nKeyLength = CLogicInt(wcslen( m_szCurSrchKey ));		/* 検索条件 */
 
 		// 2001/06/23 単語単位の検索のために追加

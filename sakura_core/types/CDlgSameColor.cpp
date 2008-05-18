@@ -33,6 +33,7 @@
 #include "sakura.hh"
 #include "CDlgSameColor.h"
 #include "util/shell.h"
+#include "view/colors/CColorStrategy.h"
 
 static const DWORD p_helpids[] = {	// 2006.10.10 ryoji
 	IDOK,						HIDOK_SAMECOLOR,						// OK

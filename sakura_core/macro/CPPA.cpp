@@ -35,11 +35,11 @@
 #include "stdafx.h"
 #include "CPPA.h"
 #include "view/CEditView.h"
-#include "Funccode.h"
+#include "func/Funccode.h"
 #include "debug/Debug.h"
 #include "CMacro.h"
 #include "macro/CSMacroMgr.h"// 2002/2/10 aroka
-#include "CShareData.h"
+#include "env/CShareData.h"
 #include "CControlTray.h"
 #include "doc/CEditDoc.h"	//	2002/5/13 YAZAKI ÉwÉbÉ_êÆóù
 #include "OleTypes.h"

@@ -1,6 +1,7 @@
 #include "stdafx.h"
 #include "CEditView_Paint.h"
 #include "types/CTypeSupport.h"
+#include "view/colors/CColorStrategy.h"
 
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 //                           Š‡ŒÊ                              //
@@ -128,7 +129,7 @@ void CEditView::DrawBracketPair( bool bDraw )
 			const wchar_t*	pLine = m_pcEditDoc->m_cLayoutMgr.GetLineStr( ptColLine.GetY2(), &nLineLen, &pcLayout );
 			if( pLine )
 			{
-				int		nColorIndex;
+				EColorIndexType		nColorIndex;
 				CLogicInt	OutputX = LineColmnToIndex( pcLayout, ptColLine.GetX2() );
 				if( bDraw )	{
 					nColorIndex = COLORIDX_BRACKET_PAIR;

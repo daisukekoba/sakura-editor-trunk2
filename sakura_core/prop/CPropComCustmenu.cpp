@@ -721,7 +721,7 @@ void CPropCommon::p8_Import_CustMenuSetting( HWND hwndDlg )
 		G_AppInstance(),
 		hwndDlg,
 		_T("*.mnu"),
-		m_pShareData->m_szIMPORTFOLDER // インポート用フォルダ
+		m_pShareData->m_sHistory.m_szIMPORTFOLDER // インポート用フォルダ
 	);
 	if( !cDlgOpenFile.DoModal_GetOpenFileName( szPath ) ){
 		return;
@@ -729,8 +729,8 @@ void CPropCommon::p8_Import_CustMenuSetting( HWND hwndDlg )
 
 	/* ファイルのフルパスを、フォルダとファイル名に分割 */
 	/* [c:\work\test\aaa.txt] → [c:\work\test] + [aaa.txt] */
-	::SplitPath_FolderAndFile( szPath, m_pShareData->m_szIMPORTFOLDER, NULL );
-	_tcscat( m_pShareData->m_szIMPORTFOLDER, _T("\\") );
+	::SplitPath_FolderAndFile( szPath, m_pShareData->m_sHistory.m_szIMPORTFOLDER, NULL );
+	_tcscat( m_pShareData->m_sHistory.m_szIMPORTFOLDER, _T("\\") );
 
 
 	//ヘッダ確認
@@ -784,7 +784,7 @@ void CPropCommon::p8_Export_CustMenuSetting( HWND hwndDlg )
 		G_AppInstance(),
 		hwndDlg,
 		_T("*.mnu"),
-		m_pShareData->m_szIMPORTFOLDER // インポート用フォルダ
+		m_pShareData->m_sHistory.m_szIMPORTFOLDER // インポート用フォルダ
 	);
 	if( !cDlgOpenFile.DoModal_GetSaveFileName( szPath ) ){
 		return;
@@ -792,8 +792,8 @@ void CPropCommon::p8_Export_CustMenuSetting( HWND hwndDlg )
 
 	/* ファイルのフルパスを、フォルダとファイル名に分割 */
 	/* [c:\work\test\aaa.txt] → [c:\work\test] + [aaa.txt] */
-	::SplitPath_FolderAndFile( szPath, m_pShareData->m_szIMPORTFOLDER, NULL );
-	_tcscat( m_pShareData->m_szIMPORTFOLDER, _T("\\") );
+	::SplitPath_FolderAndFile( szPath, m_pShareData->m_sHistory.m_szIMPORTFOLDER, NULL );
+	_tcscat( m_pShareData->m_sHistory.m_szIMPORTFOLDER, _T("\\") );
 
 	// オープン
 	CTextOutputStream out(szPath);

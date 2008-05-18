@@ -19,7 +19,7 @@
 */
 
 #include "stdafx.h"
-#include "funccode.h"
+#include "func/Funccode.h"
 #include "CMacro.h"
 #include "CControlTray.h"
 #include "view/CEditView.h" //2002/2/10 aroka
@@ -29,7 +29,7 @@
 #include "OleTypes.h" //2003-02-21 鬼
 #include "io/CTextStream.h"
 #include "window/CEditWnd.h"
-#include "CSakuraEnvironment.h"
+#include "env/CSakuraEnvironment.h"
 
 CMacro::CMacro( EFunctionCode nFuncID )
 {
@@ -87,7 +87,7 @@ void CMacro::AddLParam( LPARAM lParam, const CEditView* pcEditView )
 	case F_SEARCH_NEXT:
 	case F_SEARCH_PREV:
 		{
-			AddStringParam( GetDllShareData().m_aSearchKeys[0] );	//	lParamを追加。
+			AddStringParam( GetDllShareData().m_sSearchKeywords.m_aSearchKeys[0] );	//	lParamを追加。
 
 			LPARAM lFlag = 0x00;
 			lFlag |= GetDllShareData().m_Common.m_sSearch.m_sSearchOption.bWordOnly		? 0x01 : 0x00;
@@ -102,8 +102,8 @@ void CMacro::AddLParam( LPARAM lParam, const CEditView* pcEditView )
 	case F_REPLACE:
 	case F_REPLACE_ALL:
 		{
-			AddStringParam( GetDllShareData().m_aSearchKeys[0] );	//	lParamを追加。
-			AddStringParam( GetDllShareData().m_aReplaceKeys[0] );	//	lParamを追加。
+			AddStringParam( GetDllShareData().m_sSearchKeywords.m_aSearchKeys[0] );	//	lParamを追加。
+			AddStringParam( GetDllShareData().m_sSearchKeywords.m_aReplaceKeys[0] );	//	lParamを追加。
 
 			LPARAM lFlag = 0x00;
 			lFlag |= GetDllShareData().m_Common.m_sSearch.m_sSearchOption.bWordOnly		? 0x01 : 0x00;
@@ -121,9 +121,9 @@ void CMacro::AddLParam( LPARAM lParam, const CEditView* pcEditView )
 		break;
 	case F_GREP:
 		{
-			AddStringParam( GetDllShareData().m_aSearchKeys[0] );	//	lParamを追加。
-			AddStringParam( GetDllShareData().m_aGrepFiles[0] );	//	lParamを追加。
-			AddStringParam( GetDllShareData().m_aGrepFolders[0] );	//	lParamを追加。
+			AddStringParam( GetDllShareData().m_sSearchKeywords.m_aSearchKeys[0] );	//	lParamを追加。
+			AddStringParam( GetDllShareData().m_sSearchKeywords.m_aGrepFiles[0] );	//	lParamを追加。
+			AddStringParam( GetDllShareData().m_sSearchKeywords.m_aGrepFolders[0] );	//	lParamを追加。
 
 			LPARAM lFlag = 0x00;
 			lFlag |= GetDllShareData().m_Common.m_sSearch.m_bGrepSubFolder				? 0x01 : 0x00;
@@ -467,7 +467,7 @@ void CMacro::HandleCommand(
 				}
 
 				/* 検索文字列 */
-				CShareData::getInstance()->AddToSearchKeyArr( Argument[0] );
+				CSearchKeywordManager().AddToSearchKeyArr( Argument[0] );
 			}
 			//	設定値バックアップ
 			//	マクロパラメータ→設定値変換
@@ -599,10 +599,10 @@ void CMacro::HandleCommand(
 			}
 
 			/* 検索文字列 */
-			CShareData::getInstance()->AddToSearchKeyArr( Argument[0] );
+			CSearchKeywordManager().AddToSearchKeyArr( Argument[0] );
 
 			/* 検索文字列 */
-			CShareData::getInstance()->AddToReplaceKeyArr( Argument[1] );
+			CSearchKeywordManager().AddToReplaceKeyArr( Argument[1] );
 
 			LPARAM lFlag = Argument[2] != NULL ? _wtoi(Argument[2]) : 0;
 			GetDllShareData().m_Common.m_sSearch.m_sSearchOption.bWordOnly			= lFlag & 0x01 ? 1 : 0;

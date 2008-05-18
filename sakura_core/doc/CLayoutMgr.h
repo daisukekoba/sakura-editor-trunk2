@@ -38,7 +38,7 @@ class CMemory;// 2002/2/10 aroka
 class CEditDoc;// 2003/07/20 genta
 struct STypeConfig;// 2005.11.20 Moca
 #include "basis/SakuraBasis.h"
-
+enum EColorIndexType;
 
 struct LayoutReplaceArg {
 	CLayoutRange	sDelRange;		//!< 削除範囲。レイアウト単位。

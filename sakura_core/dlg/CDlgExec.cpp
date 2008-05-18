@@ -17,7 +17,7 @@
 
 #include "stdafx.h"
 #include "dlg/CDlgExec.h"
-#include "funccode.h"	//Stonee, 2001/03/12  コメントアウトされてたのを有効にした
+#include "func/Funccode.h"	//Stonee, 2001/03/12  コメントアウトされてたのを有効にした
 #include "sakura_rc.h"
 #include <windows.h>		//Mar. 28, 2001 JEPRO (一応入れたが不要？)
 #include <stdio.h>			//Mar. 28, 2001 JEPRO (一応入れたが不要？)
@@ -105,12 +105,12 @@ void CDlgExec::SetData( void )
 	/*****************************
 	*         データ設定         *
 	*****************************/
-	_tcscpy( m_szCommand, m_pShareData->m_aCommands[0] );
+	_tcscpy( m_szCommand, m_pShareData->m_sHistory.m_aCommands[0] );
 	hwndCombo = ::GetDlgItem( GetHwnd(), IDC_COMBO_m_szCommand );
 	::SendMessageAny( hwndCombo, CB_RESETCONTENT, 0, 0 );
 	::DlgItem_SetText( GetHwnd(), IDC_COMBO_TEXT, m_szCommand );
-	for( i = 0; i < m_pShareData->m_aCommands.size(); ++i ){
-		Combo_AddString( hwndCombo, m_pShareData->m_aCommands[i] );
+	for( i = 0; i < m_pShareData->m_sHistory.m_aCommands.size(); ++i ){
+		Combo_AddString( hwndCombo, m_pShareData->m_sHistory.m_aCommands[i] );
 	}
 	::SendMessageAny( hwndCombo, CB_SETCURSEL, 0, 0 );
 	return;

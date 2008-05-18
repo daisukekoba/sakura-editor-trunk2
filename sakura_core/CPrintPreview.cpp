@@ -30,7 +30,8 @@
 #include "CEditApp.h"
 #include "util/window.h"
 #include "util/shell.h"
-#include "CSakuraEnvironment.h"
+#include "env/CSakuraEnvironment.h"
+#include "view/colors/CColorStrategy.h"
 using namespace std;
 
 #define MIN_PREVIEW_ZOOM 10

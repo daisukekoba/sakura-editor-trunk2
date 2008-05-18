@@ -1,7 +1,7 @@
 #pragma once
 
 #include "view/CEditView.h"
-#include "CShareData.h"
+#include "env/CShareData.h"
 #include "doc/CEditDoc.h"
 
 //2007.08.28 kobake ’Ç‰Á

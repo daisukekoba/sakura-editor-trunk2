@@ -20,7 +20,6 @@
 #include "prop/CPropCommon.h"
 #include "dlg/CDlgOpenFile.h"
 #include "macro/CSMacroMgr.h" // 2002/2/10 aroka
-#include "KeyCode.h"	/// 2002/2/3 aroka from here
 #include "debug/Debug.h" ///
 #include <stdio.h>	/// 2002/2/3 aroka from here
 #include "io/CTextStream.h"
@@ -535,7 +534,7 @@ void CPropCommon::p5_Import_KeySetting( HWND hwndDlg )
 	TCHAR			szInitDir[_MAX_PATH + 1];
 
 	_tcscpy( szPath, _T("") );
-	_tcscpy( szInitDir, m_pShareData->m_szIMPORTFOLDER );	/* インポート用フォルダ */
+	_tcscpy( szInitDir, m_pShareData->m_sHistory.m_szIMPORTFOLDER );	/* インポート用フォルダ */
 	/* ファイルオープンダイアログの初期化 */
 	cDlgOpenFile.Create(
 		G_AppInstance(),
@@ -548,8 +547,8 @@ void CPropCommon::p5_Import_KeySetting( HWND hwndDlg )
 	}
 	/* ファイルのフルパスを、フォルダとファイル名に分割 */
 	/* [c:\work\test\aaa.txt] → [c:\work\test] + [aaa.txt] */
-	::SplitPath_FolderAndFile( szPath, m_pShareData->m_szIMPORTFOLDER, NULL );
-	_tcscat( m_pShareData->m_szIMPORTFOLDER, _T("\\") );
+	::SplitPath_FolderAndFile( szPath, m_pShareData->m_sHistory.m_szIMPORTFOLDER, NULL );
+	_tcscat( m_pShareData->m_sHistory.m_szIMPORTFOLDER, _T("\\") );
 
 
 
@@ -657,7 +656,7 @@ void CPropCommon::p5_Export_KeySetting( HWND hwndDlg )
 	TCHAR			szInitDir[_MAX_PATH + 1];
 
 	_tcscpy( szPath, _T("") );
-	_tcscpy( szInitDir, m_pShareData->m_szIMPORTFOLDER );	/* インポート用フォルダ */
+	_tcscpy( szInitDir, m_pShareData->m_sHistory.m_szIMPORTFOLDER );	/* インポート用フォルダ */
 	/* ファイルオープンダイアログの初期化 */
 	cDlgOpenFile.Create(
 		G_AppInstance(),
@@ -670,8 +669,8 @@ void CPropCommon::p5_Export_KeySetting( HWND hwndDlg )
 	}
 	/* ファイルのフルパスを、フォルダとファイル名に分割 */
 	/* [c:\work\test\aaa.txt] → [c:\work\test] + [aaa.txt] */
-	::SplitPath_FolderAndFile( szPath, m_pShareData->m_szIMPORTFOLDER, NULL );
-	_tcscat( m_pShareData->m_szIMPORTFOLDER, _T("\\") );
+	::SplitPath_FolderAndFile( szPath, m_pShareData->m_sHistory.m_szIMPORTFOLDER, NULL );
+	_tcscat( m_pShareData->m_sHistory.m_szIMPORTFOLDER, _T("\\") );
 
 	//@@@ 2001.11.07 add start MIK: テキスト形式で保存
 	{

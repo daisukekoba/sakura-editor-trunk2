@@ -1,7 +1,7 @@
 #include "stdafx.h"
 #include "types/CType.h"
 #include "doc/CDocOutline.h"
-#include "CFuncInfoArr.h"
+#include "outline/CFuncInfoArr.h"
 
 /* PL/SQL */
 void CType_Sql::InitTypeConfigImp(STypeConfig* pType)

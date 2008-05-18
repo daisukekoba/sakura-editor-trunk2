@@ -9,6 +9,7 @@
 #include "charset/charcode.h"
 #include "window/CEditWnd.h"
 #include <vector>
+#include "view/colors/CColorStrategy.h"
 using namespace std;
 
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //

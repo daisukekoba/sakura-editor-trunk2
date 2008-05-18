@@ -26,15 +26,15 @@
 #include <io.h>
 #include "doc/CEditDoc.h"
 #include "debug/Debug.h"
-#include "funccode.h"
+#include "func/Funccode.h"
 #include "debug/CRunningTimer.h"
 #include "charset/charcode.h"
 #include <DLGS.H>
-#include "CShareData.h"
+#include "env/CShareData.h"
 #include "window/CEditWnd.h"
 #include "sakura_rc.h"
 #include "global.h"
-#include "CFuncInfoArr.h" /// 2002/2/3 aroka
+#include "outline/CFuncInfoArr.h" /// 2002/2/3 aroka
 #include "CMarkMgr.h"///
 #include "doc/CDocLine.h" /// 2002/2/3 aroka
 #include "CPrintPreview.h"
@@ -51,7 +51,7 @@
 #include "util/module.h"
 #include "CEditApp.h"
 #include "util/other_util.h"
-#include "CSakuraEnvironment.h"
+#include "env/CSakuraEnvironment.h"
 #include "CNormalProcess.h"
 #include "CControlTray.h"
 #include "docplus/CModifyManager.h"
@@ -129,7 +129,7 @@ void CEditDoc::Clear()
 	m_cDocFile.m_sFileInfo.cFileTime.ClearFILETIME();
 
 	// 「基本」のタイプ別設定を適用
-	m_cDocType.SetDocumentType( CShareData::getInstance()->GetDocumentType( m_cDocFile.GetFilePath() ), true );
+	m_cDocType.SetDocumentType( CDocTypeManager().GetDocumentTypeOfPath( m_cDocFile.GetFilePath() ), true );
 	STypeConfig& ref = m_cDocType.GetDocumentAttribute();
 	m_cLayoutMgr.SetLayoutInfo(
 		TRUE,
@@ -214,7 +214,7 @@ BOOL CEditDoc::Create(
 	MY_RUNNINGTIMER( cRunningTimer, "CEditDoc::Create" );
 
 	//	Oct. 2, 2001 genta
-	m_cFuncLookup.Init( GetDllShareData().m_MacroTable, &GetDllShareData().m_Common );
+	m_cFuncLookup.Init( GetDllShareData().m_Common.m_sMacro.m_MacroTable, &GetDllShareData().m_Common );
 
 
 	MY_TRACETIME( cRunningTimer, "End: PropSheet" );
@@ -487,10 +487,10 @@ void CEditDoc::OnChangeSetting()
 	}
 
 	/* 共有データ構造体のアドレスを返す */
-	CShareData::getInstance()->TransformFileName_MakeCache();
+	CFileNameManager::Instance()->TransformFileName_MakeCache();
 
 	// 文書種別
-	m_cDocType.SetDocumentType( CShareData::getInstance()->GetDocumentType( m_cDocFile.GetFilePath() ), false );
+	m_cDocType.SetDocumentType( CDocTypeManager().GetDocumentTypeOfPath( m_cDocFile.GetFilePath() ), false );
 
 	CLogicPoint* posSaveAry = m_pcEditWnd->SavePhysPosOfAllView();
 
