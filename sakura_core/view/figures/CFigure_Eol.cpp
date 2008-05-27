@@ -15,11 +15,11 @@ void _DispWrap(HDC hdc, DispPos* pDispPos, const CEditView* pcView);
 void _DispEOF( HDC hdc, DispPos* pDispPos, const CEditView* pcView);
 
 //空(から)行描画
-bool _DispEmptyLine(HDC hdc, DispPos* pDispPos, const CEditView* pcView);
+bool _DispEmptyLine(CGraphics& gr, DispPos* pDispPos, const CEditView* pcView);
 
 //改行記号描画
 //2007.08.30 kobake 追加
-void _DispEOL(HDC hdc, DispPos* pDispPos, CEol cEol, bool bSearchStringMode, const CEditView* pcView);
+void _DispEOL(CGraphics& gr, DispPos* pDispPos, CEol cEol, bool bSearchStringMode, const CEditView* pcView);
 
 
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
@@ -37,7 +37,7 @@ bool CFigure_Eol::DrawImp(SColorStrategyInfo* pInfo)
 	// NULL == pLineの場合
 	if(!pInfo->pLine){
 		if(pInfo->nPos==0){
-			_DispEmptyLine(pInfo->hdc,pInfo->pDispPos,pInfo->pcView);
+			_DispEmptyLine(pInfo->gr,pInfo->pDispPos,pInfo->pcView);
 			pInfo->nPos++;
 			return true;
 		}
@@ -64,19 +64,19 @@ bool CFigure_Eol::DrawImp(SColorStrategyInfo* pInfo)
 	{
 		// 改行が存在した場合は、改行記号を表示
 		if(cEol.GetLen()){
-			_DispEOL(pInfo->hdc,pInfo->pDispPos,pcLayout2->GetLayoutEol(),pInfo->bSearchStringMode,pInfo->pcView);
+			_DispEOL(pInfo->gr,pInfo->pDispPos,pcLayout2->GetLayoutEol(),pInfo->bSearchStringMode,pInfo->pcView);
 			pInfo->nPos+=cEol.GetLen();
 		}
 		// 最終行の場合は、EOFを表示
 		else if(pInfo->pDispPos->GetLayoutLineRef()+1==CEditDoc::GetInstance(0)->m_cLayoutMgr.GetLineCount() && pInfo->pDispPos->GetDrawCol() < nWrapKeta){
 			if( TypeDataPtr->m_ColorInfoArr[COLORIDX_EOF].m_bDisp ){
-				_DispEOF(pInfo->hdc,pInfo->pDispPos,pInfo->pcView);
+				_DispEOF(pInfo->gr,pInfo->pDispPos,pInfo->pcView);
 			}
 			pInfo->nPos+=CLogicInt(1);
 		}
 		// それ以外では、折り返し記号を表示
 		else{
-			_DispWrap(pInfo->hdc,pInfo->pDispPos,pcView);
+			_DispWrap(pInfo->gr,pInfo->pDispPos,pcView);
 			pInfo->nPos+=CLogicInt(1);
 		}
 	}
@@ -84,12 +84,12 @@ bool CFigure_Eol::DrawImp(SColorStrategyInfo* pInfo)
 	// 行末背景描画
 	RECT rcClip;
 	if(pInfo->pcView->GetTextArea().GenerateClipRectRight(&rcClip,*pInfo->pDispPos)){
-		cTextType.FillBack(pInfo->hdc,rcClip);
+		cTextType.FillBack(pInfo->gr,rcClip);
 	}
 
 	// 縦線描画
 	pInfo->pcView->GetTextDrawer().DispVerticalLines(
-		pInfo->hdc,
+		pInfo->gr,
 		pInfo->pDispPos->GetDrawPos().y,
 		pInfo->pDispPos->GetDrawPos().y + nLineHeight,
 		CLayoutInt(0),
@@ -99,7 +99,7 @@ bool CFigure_Eol::DrawImp(SColorStrategyInfo* pInfo)
 	// 反転描画
 	if( pInfo->pcView->GetSelectionInfo().IsTextSelected() ){
 		pInfo->pcView->DispTextSelected(
-			pInfo->hdc,
+			pInfo->gr,
 			pInfo->pDispPos->GetLayoutLineRef(),
 			CMyPoint(pInfo->sDispPosBegin.GetDrawPos().x, pInfo->pDispPos->GetDrawPos().y),
 			pInfo->pDispPos->GetDrawCol()
@@ -116,7 +116,7 @@ bool CFigure_Eol::DrawImp(SColorStrategyInfo* pInfo)
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 
 //! 空行を描画。EOFを描画した場合はtrueを返す。
-bool _DispEmptyLine(HDC hdc, DispPos* pDispPos, const CEditView* pcView)
+bool _DispEmptyLine(CGraphics& gr, DispPos* pDispPos, const CEditView* pcView)
 {
 	bool bEof=false;
 
@@ -131,7 +131,7 @@ bool _DispEmptyLine(HDC hdc, DispPos* pDispPos, const CEditView* pcView)
 		// 背景描画
 		RECT rcClip;
 		pcView->GetTextArea().GenerateClipRectLine(&rcClip,*pDispPos);
-		cTextType.FillBack(hdc,rcClip);
+		cTextType.FillBack(gr,rcClip);
 	}
 
 	// EOF記号の表示
@@ -141,7 +141,7 @@ bool _DispEmptyLine(HDC hdc, DispPos* pDispPos, const CEditView* pcView)
 	if( nCount == 0 && pcView->GetTextArea().GetViewTopLine() == 0 && pDispPos->GetLayoutLineRef() == 0 ){
 		// EOF記号の表示
 		if( cEofType.IsDisp() ){
-			_DispEOF(hdc,pDispPos,pcView);
+			_DispEOF(gr,pDispPos,pcView);
 		}
 
 		bEof = true;
@@ -161,7 +161,7 @@ bool _DispEmptyLine(HDC hdc, DispPos* pDispPos, const CEditView* pcView)
 			if( WCODE::IsLineDelimiter(pLine[nLineLen-1]) || nLineCols >= nWrapKetas ){
 				// EOF記号の表示
 				if( cEofType.IsDisp() ){
-					_DispEOF(hdc,pDispPos,pcView);
+					_DispEOF(gr,pDispPos,pcView);
 				}
 
 				bEof = true;
@@ -171,7 +171,7 @@ bool _DispEmptyLine(HDC hdc, DispPos* pDispPos, const CEditView* pcView)
 
 	// 2006.04.29 Moca 選択処理のため縦線処理を追加
 	pcView->GetTextDrawer().DispVerticalLines(
-		hdc,
+		gr,
 		nYPrev,
 		nYPrev + pcView->GetTextMetrics().GetHankakuDy(),
 		CLayoutInt(0),
@@ -282,7 +282,7 @@ void _DispEOF(
 //May 23, 2000 genta
 //@@@ 2001.12.21 YAZAKI 改行記号の書きかたが変だったので修正
 void _DrawEOL(
-	HDC				hdc,
+	CGraphics&		gr,
 	const CMyRect&	rcEol,
 	CEol			cEol,
 	bool			bBold,
@@ -290,19 +290,19 @@ void _DrawEOL(
 );
 
 //2007.08.30 kobake 追加
-void _DispEOL(HDC hdc, DispPos* pDispPos, CEol cEol, bool bSearchStringMode, const CEditView* pcView)
+void _DispEOL(CGraphics& gr, DispPos* pDispPos, CEol cEol, bool bSearchStringMode, const CEditView* pcView)
 {
 	RECT rcClip2;
 	if(pcView->GetTextArea().GenerateClipRect(&rcClip2,*pDispPos,2)){
 
 		// 色決定
 		CTypeSupport cSupport(pcView,pcView->GetTextDrawer()._GetColorIdx(COLORIDX_EOL,bSearchStringMode));
-		cSupport.SetFont(hdc);
-		cSupport.SetColors(hdc);
+		cSupport.SetFont(gr);
+		cSupport.SetColors(gr);
 
 		// 2003.08.17 ryoji 改行文字が欠けないように
 		::ExtTextOutW_AnyBuild(
-			hdc,
+			gr,
 			pDispPos->GetDrawPos().x,
 			pDispPos->GetDrawPos().y,
 			ExtTextOutOption(),
@@ -318,7 +318,7 @@ void _DispEOL(HDC hdc, DispPos* pDispPos, CEol cEol, bool bSearchStringMode, con
 
 			// リージョン作成、選択。
 			HRGN hRgn = ::CreateRectRgnIndirect(&rcClip2);
-			::SelectClipRgn(hdc, hRgn);
+			::SelectClipRgn(gr, hRgn);
 			
 			// 描画領域
 			CMyRect rcEol;
@@ -326,10 +326,10 @@ void _DispEOL(HDC hdc, DispPos* pDispPos, CEol cEol, bool bSearchStringMode, con
 			rcEol.SetSize(pcView->GetTextMetrics().GetHankakuWidth(), pcView->GetTextMetrics().GetHankakuHeight());
 
 			// 描画
-			_DrawEOL(hdc, rcEol, cEol, cSupport.IsFatFont(), cSupport.GetTextColor());
+			_DrawEOL(gr, rcEol, cEol, cSupport.IsFatFont(), cSupport.GetTextColor());
 
 			// リージョン破棄
-			::SelectClipRgn(hdc, NULL);
+			::SelectClipRgn(gr, NULL);
 			::DeleteObject(hRgn);
 			
 			// To Here 2003.08.17 ryoji 改行文字が欠けないように
@@ -353,7 +353,7 @@ void _DispEOL(HDC hdc, DispPos* pDispPos, CEol cEol, bool bSearchStringMode, con
 						矢印の先頭を、sx, syにして描画ルーチン書き直し。
 */
 void _DrawEOL(
-	HDC				hdc,		//!< Device Context Handle
+	CGraphics&		gr,		//!< Device Context Handle
 	const CMyRect&	rcEol,		//!< 描画領域
 	CEol			cEol,		//!< 行末コード種別
 	bool			bBold,		//!< TRUE: 太字
@@ -361,66 +361,61 @@ void _DrawEOL(
 )
 {
 	int sx, sy;	//	矢印の先頭
-	HANDLE	hPen;
-	HPEN	hPenOld;
-	hPen = ::CreatePen( PS_SOLID, 1, pColor );
-	hPenOld = (HPEN)::SelectObject( hdc, hPen );
+	gr.SetPenColor( pColor );
 
 	switch( cEol.GetType() ){
 	case EOL_CRLF:	//	下左矢印
 		sx = rcEol.left;						//X左端
 		sy = rcEol.top + ( rcEol.Height() / 2);	//Y中心
-		::MoveToEx( hdc, sx + rcEol.Width(), sy - rcEol.Height() / 4, NULL );	//	上へ
-		::LineTo(   hdc, sx + rcEol.Width(), sy );			//	下へ
-		::LineTo(   hdc, sx, sy );					//	先頭へ
-		::LineTo(   hdc, sx + rcEol.Height() / 4, sy + rcEol.Height() / 4 );	//	先頭から下へ
-		::MoveToEx( hdc, sx, sy, NULL);				//	先頭へ戻り
-		::LineTo(   hdc, sx + rcEol.Height() / 4, sy - rcEol.Height() / 4 );	//	先頭から上へ
+		::MoveToEx( gr, sx + rcEol.Width(), sy - rcEol.Height() / 4, NULL );	//	上へ
+		::LineTo(   gr, sx + rcEol.Width(), sy );			//	下へ
+		::LineTo(   gr, sx, sy );					//	先頭へ
+		::LineTo(   gr, sx + rcEol.Height() / 4, sy + rcEol.Height() / 4 );	//	先頭から下へ
+		::MoveToEx( gr, sx, sy, NULL);				//	先頭へ戻り
+		::LineTo(   gr, sx + rcEol.Height() / 4, sy - rcEol.Height() / 4 );	//	先頭から上へ
 		if ( bBold ) {
-			::MoveToEx( hdc, sx + rcEol.Width() + 1, sy - rcEol.Height() / 4, NULL );	//	上へ（右へずらす）
+			::MoveToEx( gr, sx + rcEol.Width() + 1, sy - rcEol.Height() / 4, NULL );	//	上へ（右へずらす）
 			++sy;
-			::LineTo( hdc, sx + rcEol.Width() + 1, sy );	//	右へ（右にひとつずれている）
-			::LineTo(   hdc, sx, sy );					//	先頭へ
-			::LineTo(   hdc, sx + rcEol.Height() / 4, sy + rcEol.Height() / 4 );	//	先頭から下へ
-			::MoveToEx( hdc, sx, sy, NULL);				//	先頭へ戻り
-			::LineTo(   hdc, sx + rcEol.Height() / 4, sy - rcEol.Height() / 4 );	//	先頭から上へ
+			::LineTo( gr, sx + rcEol.Width() + 1, sy );	//	右へ（右にひとつずれている）
+			::LineTo(   gr, sx, sy );					//	先頭へ
+			::LineTo(   gr, sx + rcEol.Height() / 4, sy + rcEol.Height() / 4 );	//	先頭から下へ
+			::MoveToEx( gr, sx, sy, NULL);				//	先頭へ戻り
+			::LineTo(   gr, sx + rcEol.Height() / 4, sy - rcEol.Height() / 4 );	//	先頭から上へ
 		}
 		break;
 	case EOL_CR:	//	左向き矢印	// 2007.08.17 ryoji EOL_LF -> EOL_CR
 		sx = rcEol.left;
 		sy = rcEol.top + ( rcEol.Height() / 2 );
-		::MoveToEx( hdc, sx + rcEol.Width(), sy, NULL );	//	右へ
-		::LineTo(   hdc, sx, sy );					//	先頭へ
-		::LineTo(   hdc, sx + rcEol.Height() / 4, sy + rcEol.Height() / 4 );	//	先頭から下へ
-		::MoveToEx( hdc, sx, sy, NULL);				//	先頭へ戻り
-		::LineTo(   hdc, sx + rcEol.Height() / 4, sy - rcEol.Height() / 4 );	//	先頭から上へ
+		::MoveToEx( gr, sx + rcEol.Width(), sy, NULL );	//	右へ
+		::LineTo(   gr, sx, sy );					//	先頭へ
+		::LineTo(   gr, sx + rcEol.Height() / 4, sy + rcEol.Height() / 4 );	//	先頭から下へ
+		::MoveToEx( gr, sx, sy, NULL);				//	先頭へ戻り
+		::LineTo(   gr, sx + rcEol.Height() / 4, sy - rcEol.Height() / 4 );	//	先頭から上へ
 		if ( bBold ) {
 			++sy;
-			::MoveToEx( hdc, sx + rcEol.Width(), sy, NULL );	//	右へ
-			::LineTo(   hdc, sx, sy );					//	先頭へ
-			::LineTo(   hdc, sx + rcEol.Height() / 4, sy + rcEol.Height() / 4 );	//	先頭から下へ
-			::MoveToEx( hdc, sx, sy, NULL);				//	先頭へ戻り
-			::LineTo(   hdc, sx + rcEol.Height() / 4, sy - rcEol.Height() / 4 );	//	先頭から上へ
+			::MoveToEx( gr, sx + rcEol.Width(), sy, NULL );	//	右へ
+			::LineTo(   gr, sx, sy );					//	先頭へ
+			::LineTo(   gr, sx + rcEol.Height() / 4, sy + rcEol.Height() / 4 );	//	先頭から下へ
+			::MoveToEx( gr, sx, sy, NULL);				//	先頭へ戻り
+			::LineTo(   gr, sx + rcEol.Height() / 4, sy - rcEol.Height() / 4 );	//	先頭から上へ
 		}
 		break;
 	case EOL_LF:	//	下向き矢印	// 2007.08.17 ryoji EOL_CR -> EOL_LF
 		sx = rcEol.left + ( rcEol.Width() / 2 );
 		sy = rcEol.top + ( rcEol.Height() * 3 / 4 );
-		::MoveToEx( hdc, sx, rcEol.top + rcEol.Height() / 4 + 1, NULL );	//	上へ
-		::LineTo(   hdc, sx, sy );								//	上から下へ
-		::LineTo(   hdc, sx - rcEol.Height() / 4, sy - rcEol.Height() / 4);	//	そのまま左上へ
-		::MoveToEx( hdc, sx, sy, NULL);							//	矢印の先端に戻る
-		::LineTo(   hdc, sx + rcEol.Height() / 4, sy - rcEol.Height() / 4);	//	そして右上へ
+		::MoveToEx( gr, sx, rcEol.top + rcEol.Height() / 4 + 1, NULL );	//	上へ
+		::LineTo(   gr, sx, sy );								//	上から下へ
+		::LineTo(   gr, sx - rcEol.Height() / 4, sy - rcEol.Height() / 4);	//	そのまま左上へ
+		::MoveToEx( gr, sx, sy, NULL);							//	矢印の先端に戻る
+		::LineTo(   gr, sx + rcEol.Height() / 4, sy - rcEol.Height() / 4);	//	そして右上へ
 		if( bBold ){
 			++sx;
-			::MoveToEx( hdc, sx, rcEol.top + rcEol.Height() / 4 + 1, NULL );
-			::LineTo(   hdc, sx, sy );								//	上から下へ
-			::LineTo(   hdc, sx - rcEol.Height() / 4, sy - rcEol.Height() / 4);	//	そのまま左上へ
-			::MoveToEx( hdc, sx, sy, NULL);							//	矢印の先端に戻る
-			::LineTo(   hdc, sx + rcEol.Height() / 4, sy - rcEol.Height() / 4);	//	そして右上へ
+			::MoveToEx( gr, sx, rcEol.top + rcEol.Height() / 4 + 1, NULL );
+			::LineTo(   gr, sx, sy );								//	上から下へ
+			::LineTo(   gr, sx - rcEol.Height() / 4, sy - rcEol.Height() / 4);	//	そのまま左上へ
+			::MoveToEx( gr, sx, sy, NULL);							//	矢印の先端に戻る
+			::LineTo(   gr, sx + rcEol.Height() / 4, sy - rcEol.Height() / 4);	//	そして右上へ
 		}
 		break;
 	}
-	::SelectObject( hdc, hPenOld );
-	::DeleteObject( hPen );
 }

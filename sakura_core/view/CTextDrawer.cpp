@@ -163,7 +163,7 @@ void CTextDrawer::DispText( HDC hdc, int x, int y, const wchar_t* pData, int nLe
 	@note Common::m_nVertLineOffsetにより、指定桁の前の文字の上に作画されることがある。
 */
 void CTextDrawer::DispVerticalLines(
-	HDC			hdc,		//!< 作画するウィンドウのDC
+	CGraphics&	gr,			//!< 作画するウィンドウのDC
 	int			nTop,		//!< 線を引く上端のクライアント座標y
 	int			nBottom,	//!< 線を引く下端のクライアント座標y
 	CLayoutInt	nLeftCol,	//!< 線を引く範囲の左桁の指定
@@ -197,15 +197,14 @@ void CTextDrawer::DispVerticalLines(
 	// ドット線(下線属性を転用/テスト用)
 	const bool bDot = cVertType.HasUnderLine();
 	const bool bExorPen = ( cVertType.GetTextColor() == cTextType.GetBackColor() );
-	HPEN hPen;
 	int nROP_Old = 0;
 	if( bExorPen ){
-		hPen = ::CreatePen( PS_SOLID, 0, cVertType.GetBackColor() );
-		nROP_Old = ::SetROP2( hdc, R2_NOTXORPEN );
-	}else{
-		hPen = ::CreatePen( PS_SOLID, 0, cVertType.GetTextColor() );
+		gr.SetPenColor( cVertType.GetBackColor() );
+		nROP_Old = ::SetROP2( gr, R2_NOTXORPEN );
 	}
-	HPEN hPenOld = (HPEN)::SelectObject( hdc, hPen );
+	else{
+		gr.SetPenColor( cVertType.GetTextColor() );
+	}
 
 	int k;
 	for( k = 0; k < MAX_VERTLINES && typeData.m_nVertLineIdx[k] != 0; k++ ){
@@ -255,32 +254,30 @@ void CTextDrawer::DispVerticalLines(
 					}
 					for( ; y < nBottom; y += 2 ){
 						if( nPosX < nPosXRight ){
-							::MoveToEx( hdc, nPosX, y, NULL );
-							::LineTo( hdc, nPosX, y + 1 );
+							::MoveToEx( gr, nPosX, y, NULL );
+							::LineTo( gr, nPosX, y + 1 );
 						}
 						if( bBold && nPosXLeft <= nPosXBold ){
-							::MoveToEx( hdc, nPosXBold, y, NULL );
-							::LineTo( hdc, nPosXBold, y + 1 );
+							::MoveToEx( gr, nPosXBold, y, NULL );
+							::LineTo( gr, nPosXBold, y + 1 );
 						}
 					}
 				}else{
 					if( nPosX < nPosXRight ){
-						::MoveToEx( hdc, nPosX, nTop, NULL );
-						::LineTo( hdc, nPosX, nBottom );
+						::MoveToEx( gr, nPosX, nTop, NULL );
+						::LineTo( gr, nPosX, nBottom );
 					}
 					if( bBold && nPosXLeft <= nPosXBold ){
-						::MoveToEx( hdc, nPosXBold, nTop, NULL );
-						::LineTo( hdc, nPosXBold, nBottom );
+						::MoveToEx( gr, nPosXBold, nTop, NULL );
+						::LineTo( gr, nPosXBold, nBottom );
 					}
 				}
 			}
 		}
 	}
 	if( bExorPen ){
-		::SetROP2( hdc, nROP_Old );
+		::SetROP2( gr, nROP_Old );
 	}
-	::SelectObject( hdc, hPenOld );
-	::DeleteObject( hPen );
 }
 
 

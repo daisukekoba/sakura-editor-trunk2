@@ -1014,18 +1014,15 @@ void CPropTypes::_DrawColorButton( DRAWITEMSTRUCT* pDis, COLORREF cColor )
 	COLORREF	cBtnShadow		= (COLORREF)::GetSysColor(COLOR_3DSHADOW);
 	COLORREF	cBtnDkShadow	= (COLORREF)::GetSysColor(COLOR_3DDKSHADOW);
 	COLORREF	cBtnFace		= (COLORREF)::GetSysColor(COLOR_3DFACE);
-	COLORREF	cRim;
-	HBRUSH		hBrush;
-	HBRUSH		hBrushOld;
-	HPEN		hPen;
-	HPEN		hPenOld;
 	RECT		rc;
 	RECT		rcFocus;
 
+	//描画対象
+	CGraphics gr(pDis->hDC);
+
 	/* ボタンの表面の色で塗りつぶす */
-	hBrush = ::CreateSolidBrush( cBtnFace );
-	::FillRect( pDis->hDC, &(pDis->rcItem), hBrush );
-	::DeleteObject( hBrush );
+	gr.SetBrushColor( cBtnFace );
+	::FillRect( pDis->hDC, &(pDis->rcItem), gr.GetCurrentBrush() );
 
 	/* 枠の描画 */
 	rcFocus = rc = pDis->rcItem;
@@ -1037,29 +1034,21 @@ void CPropTypes::_DrawColorButton( DRAWITEMSTRUCT* pDis, COLORREF cColor )
 //	rc.right -= 11;
 
 	if( pDis->itemState & ODS_SELECTED ){
-		hPen = ::CreatePen( PS_SOLID, 0, cBtnDkShadow );
-		hPenOld = (HPEN)::SelectObject( pDis->hDC, hPen );
-		::MoveToEx( pDis->hDC, 0, pDis->rcItem.bottom - 2, NULL );
-		::LineTo( pDis->hDC, 0, 0 );
-		::LineTo( pDis->hDC, pDis->rcItem.right - 1, 0 );
-		::SelectObject( pDis->hDC, hPenOld );
-		::DeleteObject( hPen );
 
-		hPen = ::CreatePen( PS_SOLID, 0, cBtnShadow );
-		hPenOld = (HPEN)::SelectObject( pDis->hDC, hPen );
-		::MoveToEx( pDis->hDC, 1, pDis->rcItem.bottom - 3, NULL );
-		::LineTo( pDis->hDC, 1, 1 );
-		::LineTo( pDis->hDC, pDis->rcItem.right - 2, 1 );
-		::SelectObject( pDis->hDC, hPenOld );
-		::DeleteObject( hPen );
+		gr.SetPenColor(cBtnDkShadow);
+		::MoveToEx( gr, 0, pDis->rcItem.bottom - 2, NULL );
+		::LineTo( gr, 0, 0 );
+		::LineTo( gr, pDis->rcItem.right - 1, 0 );
 
-		hPen = ::CreatePen( PS_SOLID, 0, cBtnHiLight );
-		hPenOld = (HPEN)::SelectObject( pDis->hDC, hPen );
-		::MoveToEx( pDis->hDC, 0, pDis->rcItem.bottom - 1, NULL );
-		::LineTo( pDis->hDC, pDis->rcItem.right - 1, pDis->rcItem.bottom - 1 );
-		::LineTo( pDis->hDC, pDis->rcItem.right - 1, -1 );
-		::SelectObject( pDis->hDC, hPenOld );
-		::DeleteObject( hPen );
+		gr.SetPenColor(cBtnShadow);
+		::MoveToEx( gr, 1, pDis->rcItem.bottom - 3, NULL );
+		::LineTo( gr, 1, 1 );
+		::LineTo( gr, pDis->rcItem.right - 2, 1 );
+
+		gr.SetPenColor(cBtnHiLight);
+		::MoveToEx( gr, 0, pDis->rcItem.bottom - 1, NULL );
+		::LineTo( gr, pDis->rcItem.right - 1, pDis->rcItem.bottom - 1 );
+		::LineTo( gr, pDis->rcItem.right - 1, -1 );
 
 		rc.top += 1;
 		rc.left += 1;
@@ -1071,44 +1060,29 @@ void CPropTypes::_DrawColorButton( DRAWITEMSTRUCT* pDis, COLORREF cColor )
 		rcFocus.right += 1;
 		rcFocus.bottom += 1;
 
-	}else{
-		hPen = ::CreatePen( PS_SOLID, 0, cBtnHiLight );
-		hPenOld = (HPEN)::SelectObject( pDis->hDC, hPen );
-		::MoveToEx( pDis->hDC, 0, pDis->rcItem.bottom - 2, NULL );
-		::LineTo( pDis->hDC, 0, 0 );
-		::LineTo( pDis->hDC, pDis->rcItem.right - 1, 0 );
-		::SelectObject( pDis->hDC, hPenOld );
-		::DeleteObject( hPen );
-
-		hPen = ::CreatePen( PS_SOLID, 0, cBtnShadow );
-		hPenOld = (HPEN)::SelectObject( pDis->hDC, hPen );
-		::MoveToEx( pDis->hDC, 1, pDis->rcItem.bottom - 2, NULL );
-		::LineTo( pDis->hDC, pDis->rcItem.right - 2, pDis->rcItem.bottom - 2 );
-		::LineTo( pDis->hDC, pDis->rcItem.right - 2, 0 );
-		::SelectObject( pDis->hDC, hPenOld );
-		::DeleteObject( hPen );
-
-		hPen = ::CreatePen( PS_SOLID, 0, cBtnDkShadow );
-		hPenOld = (HPEN)::SelectObject( pDis->hDC, hPen );
-		::MoveToEx( pDis->hDC, 0, pDis->rcItem.bottom - 1, NULL );
-		::LineTo( pDis->hDC, pDis->rcItem.right - 1, pDis->rcItem.bottom - 1 );
-		::LineTo( pDis->hDC, pDis->rcItem.right - 1, -1 );
-		::SelectObject( pDis->hDC, hPenOld );
-		::DeleteObject( hPen );
 	}
-	if( pDis->itemState & ODS_DISABLED ){
-	}else{
+	else{
+		gr.SetPenColor(cBtnHiLight);
+		::MoveToEx( gr, 0, pDis->rcItem.bottom - 2, NULL );
+		::LineTo( gr, 0, 0 );
+		::LineTo( gr, pDis->rcItem.right - 1, 0 );
+
+		gr.SetPenColor(cBtnShadow);
+		::MoveToEx( gr, 1, pDis->rcItem.bottom - 2, NULL );
+		::LineTo( gr, pDis->rcItem.right - 2, pDis->rcItem.bottom - 2 );
+		::LineTo( gr, pDis->rcItem.right - 2, 0 );
+
+		gr.SetPenColor(cBtnDkShadow);
+		::MoveToEx( gr, 0, pDis->rcItem.bottom - 1, NULL );
+		::LineTo( gr, pDis->rcItem.right - 1, pDis->rcItem.bottom - 1 );
+		::LineTo( gr, pDis->rcItem.right - 1, -1 );
+	}
+	
+	if((pDis->itemState & ODS_DISABLED)==0){
 		/* 指定色で塗りつぶす */
-		hBrush = ::CreateSolidBrush( cColor );
-		hBrushOld = (HBRUSH)::SelectObject( pDis->hDC, hBrush );
-		cRim = cBtnShadow;
-		hPen = ::CreatePen( PS_SOLID, 0, cRim );
-		hPenOld = (HPEN)::SelectObject( pDis->hDC, hPen );
-		::RoundRect( pDis->hDC, rc.left, rc.top, rc.right, rc.bottom , 5, 5 );
-		::SelectObject( pDis->hDC, hPenOld );
-		::SelectObject( pDis->hDC, hBrushOld );
-		::DeleteObject( hPen );
-		::DeleteObject( hBrush );
+		gr.SetBrushColor(cColor);
+		gr.SetPenColor(cBtnShadow);
+		::RoundRect( gr, rc.left, rc.top, rc.right, rc.bottom , 5, 5 );
 	}
 
 	/* フォーカスの長方形 */
@@ -1117,7 +1091,7 @@ void CPropTypes::_DrawColorButton( DRAWITEMSTRUCT* pDis, COLORREF cColor )
 		rcFocus.left -= 3;
 		rcFocus.right += 2;
 		rcFocus.bottom += 2;
-		::DrawFocusRect( pDis->hDC, &rcFocus );
+		::DrawFocusRect( gr, &rcFocus );
 	}
 }
 
@@ -1248,16 +1222,15 @@ void CPropTypes::RearrangeKeywordSet( HWND hwndDlg )
 /* 色種別リスト オーナー描画 */
 void CPropTypes::DrawColorListItem( DRAWITEMSTRUCT* pDis )
 {
-	HBRUSH		hBrush;
-	HBRUSH		hBrushOld;
-	HPEN		hPen;
-	HPEN		hPenOld;
 	ColorInfo*	pColorInfo;
 //	RECT		rc0,rc1,rc2;
 	RECT		rc1;
 	COLORREF	cRim = (COLORREF)::GetSysColor( COLOR_3DSHADOW );
 
 	if( pDis == NULL || pDis->itemData == NULL ) return;
+
+	//描画対象
+	CGraphics gr(pDis->hDC);
 
 //	rc0 = pDis->rcItem;
 	rc1 = pDis->rcItem;
@@ -1267,57 +1240,42 @@ void CPropTypes::DrawColorListItem( DRAWITEMSTRUCT* pDis )
 	pColorInfo = (ColorInfo*)pDis->itemData;
 
 	/* アイテム矩形塗りつぶし */
-	hBrush = ::CreateSolidBrush( ::GetSysColor( COLOR_WINDOW ) );
-	::FillRect( pDis->hDC, &pDis->rcItem, hBrush );
-	::DeleteObject( hBrush );
-
-
+	gr.SetBrushColor( ::GetSysColor( COLOR_WINDOW ) );
+	::FillRect( pDis->hDC, &pDis->rcItem, gr.GetCurrentBrush() );
+	
 	/* アイテムが選択されている */
 	if( pDis->itemState & ODS_SELECTED ){
-		hBrush = ::CreateSolidBrush( ::GetSysColor( COLOR_HIGHLIGHT ) );
-		::SetTextColor( pDis->hDC, ::GetSysColor( COLOR_HIGHLIGHTTEXT ) );
+		gr.SetBrushColor( ::GetSysColor( COLOR_HIGHLIGHT ) );
+		::SetTextColor( gr, ::GetSysColor( COLOR_HIGHLIGHTTEXT ) );
 	}else{
-		hBrush = ::CreateSolidBrush( ::GetSysColor( COLOR_WINDOW ) );
-		::SetTextColor( pDis->hDC, ::GetSysColor( COLOR_WINDOWTEXT ) );
+		gr.SetBrushColor( ::GetSysColor( COLOR_WINDOW ) );
+		::SetTextColor( gr, ::GetSysColor( COLOR_WINDOWTEXT ) );
 	}
-
-//	/* 選択ハイライト矩形 */
-//	::FillRect( pDis->hDC, &rc1, hBrush );
-//	::DeleteObject( hBrush );
-//	/* テキスト */
-//	::SetBkMode( pDis->hDC, TRANSPARENT );
-//	::TextOutW_AnyBuild( pDis->hDC, rc1.left, rc1.top, pColorInfo->m_szName, wcslen( pColorInfo->m_szName ) );
-//	if( pColorInfo->m_bFatFont ){	/* 太字か */
-//		::TextOutW_AnyBuild( pDis->hDC, rc1.left + 1, rc1.top, pColorInfo->m_szName, wcslen( pColorInfo->m_szName ) );
-//	}
-//	return;
-
 
 	rc1.left+= (2 + 16);
 	rc1.top += 2;
 	rc1.right -= ( 2 + 27 );
 	rc1.bottom -= 2;
 	/* 選択ハイライト矩形 */
-	::FillRect( pDis->hDC, &rc1, hBrush );
-	::DeleteObject( hBrush );
+	::FillRect( gr, &rc1, gr.GetCurrentBrush() );
 	/* テキスト */
-	::SetBkMode( pDis->hDC, TRANSPARENT );
-	::TextOut( pDis->hDC, rc1.left, rc1.top, pColorInfo->m_szName, _tcslen( pColorInfo->m_szName ) );
+	::SetBkMode( gr, TRANSPARENT );
+	::TextOut( gr, rc1.left, rc1.top, pColorInfo->m_szName, _tcslen( pColorInfo->m_szName ) );
 	if( pColorInfo->m_bFatFont ){	/* 太字か */
-		::TextOut( pDis->hDC, rc1.left + 1, rc1.top, pColorInfo->m_szName, _tcslen( pColorInfo->m_szName ) );
+		::TextOut( gr, rc1.left + 1, rc1.top, pColorInfo->m_szName, _tcslen( pColorInfo->m_szName ) );
 	}
 	if( pColorInfo->m_bUnderLine ){	/* 下線か */
 		SIZE	sz;
-		::GetTextExtentPoint32( pDis->hDC, pColorInfo->m_szName, _tcslen( pColorInfo->m_szName ), &sz );
-		::MoveToEx( pDis->hDC, rc1.left,		rc1.bottom - 2, NULL );
-		::LineTo( pDis->hDC, rc1.left + sz.cx,	rc1.bottom - 2 );
-		::MoveToEx( pDis->hDC, rc1.left,		rc1.bottom - 1, NULL );
-		::LineTo( pDis->hDC, rc1.left + sz.cx,	rc1.bottom - 1 );
+		::GetTextExtentPoint32( gr, pColorInfo->m_szName, _tcslen( pColorInfo->m_szName ), &sz );
+		::MoveToEx( gr, rc1.left,		rc1.bottom - 2, NULL );
+		::LineTo( gr, rc1.left + sz.cx,	rc1.bottom - 2 );
+		::MoveToEx( gr, rc1.left,		rc1.bottom - 1, NULL );
+		::LineTo( gr, rc1.left + sz.cx,	rc1.bottom - 1 );
 	}
 
 	/* アイテムにフォーカスがある */	// 2006.05.01 ryoji 描画条件の不正を修正
 	if( pDis->itemState & ODS_FOCUS ){
-		::DrawFocusRect( pDis->hDC, &pDis->rcItem );
+		::DrawFocusRect( gr, &pDis->rcItem );
 	}
 
 	/* 「色分け/表示する」のチェック */
@@ -1328,25 +1286,21 @@ void CPropTypes::DrawColorListItem( DRAWITEMSTRUCT* pDis )
 	rc1.bottom = rc1.top + 12;
 	if( pColorInfo->m_bDisp ){	/* 色分け/表示する */
 		// 2006.04.26 ryoji テキスト色を使う（「ハイコントラスト黒」のような設定でも見えるように）
-		hPen = ::CreatePen( PS_SOLID, 1, ::GetSysColor( COLOR_WINDOWTEXT ) );
-		hPenOld = (HPEN)::SelectObject( pDis->hDC, hPen );
+		gr.SetPenColor( ::GetSysColor( COLOR_WINDOWTEXT ) );
 
-		::MoveToEx( pDis->hDC,	rc1.left + 2, rc1.top + 6, NULL );
-		::LineTo( pDis->hDC,	rc1.left + 5, rc1.bottom - 3 );
-		::LineTo( pDis->hDC,	rc1.right - 2, rc1.top + 4 );
+		::MoveToEx( gr,	rc1.left + 2, rc1.top + 6, NULL );
+		::LineTo( gr,	rc1.left + 5, rc1.bottom - 3 );
+		::LineTo( gr,	rc1.right - 2, rc1.top + 4 );
 		rc1.top -= 1;
 		rc1.bottom -= 1;
-		::MoveToEx( pDis->hDC,	rc1.left + 2, rc1.top + 6, NULL );
-		::LineTo( pDis->hDC,	rc1.left + 5, rc1.bottom - 3 );
-		::LineTo( pDis->hDC,	rc1.right - 2, rc1.top + 4 );
+		::MoveToEx( gr,	rc1.left + 2, rc1.top + 6, NULL );
+		::LineTo( gr,	rc1.left + 5, rc1.bottom - 3 );
+		::LineTo( gr,	rc1.right - 2, rc1.top + 4 );
 		rc1.top -= 1;
 		rc1.bottom -= 1;
-		::MoveToEx( pDis->hDC,	rc1.left + 2, rc1.top + 6, NULL );
-		::LineTo( pDis->hDC,	rc1.left + 5, rc1.bottom - 3 );
-		::LineTo( pDis->hDC,	rc1.right - 2, rc1.top + 4 );
-
-		::SelectObject( pDis->hDC, hPenOld );
-		::DeleteObject( hPen );
+		::MoveToEx( gr,	rc1.left + 2, rc1.top + 6, NULL );
+		::LineTo( gr,	rc1.left + 5, rc1.bottom - 3 );
+		::LineTo( gr,	rc1.right - 2, rc1.top + 4 );
 	}
 //	return;
 
@@ -1362,15 +1316,9 @@ void CPropTypes::DrawColorListItem( DRAWITEMSTRUCT* pDis )
 		rc1.right = rc1.left + 12;
 		rc1.bottom -= 2;
 
-		hBrush = ::CreateSolidBrush( pColorInfo->m_colBACK );
-		hBrushOld = (HBRUSH)::SelectObject( pDis->hDC, hBrush );
-		hPen = ::CreatePen( PS_SOLID, 1, cRim );
-		hPenOld = (HPEN)::SelectObject( pDis->hDC, hPen );
+		gr.SetBrushColor( pColorInfo->m_colBACK );
+		gr.SetPenColor( cRim );
 		::RoundRect( pDis->hDC, rc1.left, rc1.top, rc1.right, rc1.bottom , 3, 3 );
-		::SelectObject( pDis->hDC, hPenOld );
-		::SelectObject( pDis->hDC, hBrushOld );
-		::DeleteObject( hPen );
-		::DeleteObject( hBrush );
 	}
 
 
@@ -1380,15 +1328,9 @@ void CPropTypes::DrawColorListItem( DRAWITEMSTRUCT* pDis )
 	rc1.top += 2;
 	rc1.right = rc1.left + 12;
 	rc1.bottom -= 2;
-	hBrush = ::CreateSolidBrush( pColorInfo->m_colTEXT );
-	hBrushOld = (HBRUSH)::SelectObject( pDis->hDC, hBrush );
-	hPen = ::CreatePen( PS_SOLID, 1, cRim );
-	hPenOld = (HPEN)::SelectObject( pDis->hDC, hPen );
+	gr.SetBrushColor( pColorInfo->m_colTEXT );
+	gr.SetPenColor( cRim );
 	::RoundRect( pDis->hDC, rc1.left, rc1.top, rc1.right, rc1.bottom , 3, 3 );
-	::SelectObject( pDis->hDC, hPenOld );
-	::SelectObject( pDis->hDC, hBrushOld );
-	::DeleteObject( hPen );
-	::DeleteObject( hBrush );
 
 }
 

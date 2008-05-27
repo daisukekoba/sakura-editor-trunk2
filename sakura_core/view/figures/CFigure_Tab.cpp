@@ -3,9 +3,9 @@
 #include "types/CTypeSupport.h"
 
 //2007.08.28 kobake 追加
-void _DispTab( HDC hdc, DispPos* pDispPos, const CEditView* pcView );
+void _DispTab( CGraphics& gr, DispPos* pDispPos, const CEditView* pcView );
 //タブ矢印描画関数	//@@@ 2003.03.26 MIK
-void _DrawTabArrow( HDC hdc, int nPosX, int nPosY, int nWidth, int nHeight, int bBold, COLORREF pColor );
+void _DrawTabArrow( CGraphics& gr, int nPosX, int nPosY, int nWidth, int nHeight, bool bBold, COLORREF pColor );
 
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 //                         CFigure_Tab                           //
@@ -19,7 +19,7 @@ bool CFigure_Tab::DrawImp(SColorStrategyInfo* pInfo)
 	const STypeConfig* TypeDataPtr = &pcDoc->m_cDocType.GetDocumentAttribute();
 
 	if( pInfo->pLine[pInfo->nPos] == WCODE::TAB ){
-		_DispTab( pInfo->hdc, pInfo->pDispPos, pInfo->pcView );
+		_DispTab( pInfo->gr, pInfo->pDispPos, pInfo->pcView );
 		return true;
 	}
 	return false;
@@ -36,7 +36,7 @@ bool CFigure_Tab::DrawImp(SColorStrategyInfo* pInfo)
 //	Sep. 23, 2002 genta LayoutMgrの値を使う
 //@@@ 2001.03.16 by MIK
 //@@@ 2003.03.26 MIK タブ矢印表示
-void _DispTab( HDC hdc, DispPos* pDispPos, const CEditView* pcView )
+void _DispTab( CGraphics& gr, DispPos* pDispPos, const CEditView* pcView )
 {
 	DispPos& sPos=*pDispPos;
 
@@ -86,7 +86,7 @@ void _DispTab( HDC hdc, DispPos* pDispPos, const CEditView* pcView )
 
 		//タブテキスト (または背景のみ)
 		::ExtTextOutW_AnyBuild(
-			hdc,
+			gr,
 			sPos.GetDrawPos().x,
 			sPos.GetDrawPos().y,
 			ExtTextOutOption(),
@@ -99,7 +99,7 @@ void _DispTab( HDC hdc, DispPos* pDispPos, const CEditView* pcView )
 		//タブ矢印表示
 		if( cTabType.IsDisp() && TypeDataPtr->m_bTabArrow && rcClip2.left <= sPos.GetDrawPos().x ){ // Apr. 1, 2003 MIK 行番号と重なる
 			_DrawTabArrow(
-				hdc,
+				gr,
 				sPos.GetDrawPos().x,
 				sPos.GetDrawPos().y,
 				pMetrics->GetHankakuWidth(),
@@ -118,37 +118,32 @@ void _DispTab( HDC hdc, DispPos* pDispPos, const CEditView* pcView )
 	タブ矢印描画関数
 */
 void _DrawTabArrow(
-	HDC hdc,
-	int nPosX,   //ピクセルX
-	int nPosY,   //ピクセルY
-	int nWidth,  //ピクセルW
-	int nHeight, //ピクセルH
-	int bBold,
-	COLORREF pColor
-	){
-	HPEN hPen    = ::CreatePen( PS_SOLID, 1, pColor );
-	HPEN hPenOld = (HPEN)::SelectObject( hdc, hPen );
+	CGraphics&	_gr,
+	int			nPosX,   //ピクセルX
+	int			nPosY,   //ピクセルY
+	int			nWidth,  //ピクセルW
+	int			nHeight, //ピクセルH
+	bool		bBold,
+	COLORREF	pColor
+)
+{
+	// 一時的なペンを使用するため、新しく CGraphics オブジェクトを作成。
+	CGraphics gr(_gr);
 
+	// ペン設定
+	gr.SetPenColor( pColor );
+
+	// 幅調整
 	nWidth--;
 
-	//	矢印の先頭
+	// 矢印の先頭
 	int sx = nPosX + nWidth;
 	int sy = nPosY + ( nHeight / 2 );
 
-	::MoveToEx( hdc, sx - nWidth, sy, NULL );				//	左へ
-	::LineTo(   hdc, sx, sy );								//	最後へ
-	::LineTo(   hdc, sx - nHeight / 4, sy + nHeight / 4 );	//	最後から下へ
-	::MoveToEx( hdc, sx, sy, NULL);							//	最後へ戻り
-	::LineTo(   hdc, sx - nHeight / 4, sy - nHeight / 4 );	//	最後から上へ
-	if ( bBold ) {
-		++sy;
-		::MoveToEx( hdc, sx - nWidth, sy, NULL );				//	左へ
-		::LineTo(   hdc, sx, sy );								//	最後へ
-		::LineTo(   hdc, sx - nHeight / 4, sy + nHeight / 4 );	//	最後から下へ
-		::MoveToEx( hdc, sx, sy, NULL);							//	最後へ戻り
-		::LineTo(   hdc, sx - nHeight / 4, sy - nHeight / 4 );	//	最後から上へ
+	for(int i = 0; i < (bBold?2:1); i++){
+		int y = sy + i;
+		gr.DrawLine(sx - nWidth,	y,	sx,					y				);	//「─」左端から右端
+		gr.DrawLine(sx,				y,	sx - nHeight / 4,	y + nHeight / 4	);	//「／」右端から斜め左下
+		gr.DrawLine(sx,				y,	sx - nHeight / 4,	y - nHeight / 4	);	//「＼」右端から斜め左上
 	}
-
-	::SelectObject( hdc, hPenOld );
-	::DeleteObject( hPen );
 }

@@ -20,7 +20,7 @@ public:
 		const CLayout*	pcLayout2 = CEditDoc::GetInstance(0)->m_cLayoutMgr.SearchLineByLayoutY( pInfo->pDispPos->GetLayoutLineRef() );
 		if(pInfo->nPos < pcLayout2->GetLengthWithoutEOL()){
 			pInfo->pcView->GetTextDrawer().DispText(
-				pInfo->hdc,
+				pInfo->gr,
 				pInfo->pDispPos,
 				&pInfo->pLine[pInfo->nPos],
 				1

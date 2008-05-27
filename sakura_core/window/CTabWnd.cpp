@@ -1041,7 +1041,9 @@ LRESULT CTabWnd::OnDrawItem( HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam 
 		// タブ一覧メニューを描画する
 		TABMENU_DATA* pData = (TABMENU_DATA*)lpdis->itemData;
 
+		//描画対象
 		HDC hdc = lpdis->hDC;
+		CGraphics gr(hdc);
 		RECT rcItem = lpdis->rcItem;
 
 		// 状態に従ってテキストと背景色を決める
@@ -1059,7 +1061,7 @@ LRESULT CTabWnd::OnDrawItem( HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam 
 		}
 
 		// 背景描画
-		::FillRect( hdc, &rcItem, (HBRUSH)(clrBk + 1) );
+		::FillRect( gr, &rcItem, (HBRUSH)(clrBk + 1) );
 
 		// アイコン描画
 		if( NULL != m_hIml && 0 <= pData->iImage )
@@ -1069,33 +1071,25 @@ LRESULT CTabWnd::OnDrawItem( HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam 
 		}
 
 		// テキスト描画
-		COLORREF clrTextOld = ::SetTextColor( hdc, clrText );
-		int iBkModeOld = ::SetBkMode( hdc, TRANSPARENT );
+		gr.SetTextForeColor( clrText );
+		gr.SetTextBackTransparent(true);
 		HFONT hfnt = CreateMenuFont();
-		HFONT hfntOld = (HFONT)::SelectObject( hdc, hfnt );
+		gr.SetMyFont(hfnt);
 		RECT rcText = rcItem;
 		rcText.left += (CX_SMICON + 8);
 
-		::DrawText( hdc, pData->szText, -1, &rcText, DT_SINGLELINE | DT_LEFT | DT_VCENTER );
+		::DrawText( gr, pData->szText, -1, &rcText, DT_SINGLELINE | DT_LEFT | DT_VCENTER );
 
-		::SetTextColor( hdc, clrTextOld );
-		::SetBkMode( hdc, iBkModeOld );
-		::SelectObject( hdc, hfntOld );
+		gr.RestoreTextColors();
+		gr.RestoreFont();
 		::DeleteObject( hfnt );
 
 		// チェック状態なら外枠描画
 		if( lpdis->itemState & ODS_CHECKED )
 		{
-			HPEN hpen = ::CreatePen( PS_SOLID, 0, ::GetSysColor( COLOR_HIGHLIGHT ) );
-			HBRUSH hbr = (HBRUSH)::GetStockObject( NULL_BRUSH );
-			HPEN hpenOld = (HPEN)::SelectObject( hdc, hpen );
-			HBRUSH hbrOld = (HBRUSH)::SelectObject( hdc, hbr );
-
-			::Rectangle( hdc, rcItem.left, rcItem.top, rcItem.right, rcItem.bottom );
-
-			::SelectObject( hdc, hpenOld );
-			::SelectObject( hdc, hbrOld );
-			::DeleteObject( hpen );
+			gr.SetPenColor( ::GetSysColor(COLOR_HIGHLIGHT) );
+			gr.SetNullBrush();
+			::Rectangle( gr, rcItem.left, rcItem.top, rcItem.right, rcItem.bottom );
 		}
 	}
 
@@ -1231,18 +1225,20 @@ LRESULT CTabWnd::OnPaint( HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam )
 	PAINTSTRUCT ps;
 	RECT rc;
 
+	//描画対象
 	hdc = ::BeginPaint( hwnd, &ps );
+	CGraphics gr(hdc);
 
 	// 背景を描画する
 	::GetClientRect( hwnd, &rc );
-	::FillRect( hdc, &rc, (HBRUSH)(COLOR_3DFACE + 1) );
+	::FillRect( gr, &rc, (HBRUSH)(COLOR_3DFACE + 1) );
 
 	// ボタンを描画する
-	DrawListBtn( hdc, &rc );
-	DrawCloseBtn( hdc, &rc );	// 2006.10.21 ryoji 追加
+	DrawListBtn( gr, &rc );
+	DrawCloseBtn( gr, &rc );	// 2006.10.21 ryoji 追加
 
 	// 上側に境界線を描画する
-	::DrawEdge(hdc, &rc, EDGE_ETCHED, BF_TOP);
+	::DrawEdge(gr, &rc, EDGE_ETCHED, BF_TOP);
 
 	// Windowsクラシックスタイルの場合はアクティブタブの上部にトップバンドを描画する	// 2006.03.27 ryoji
 	if( !m_bVisualStyle )
@@ -1283,7 +1279,7 @@ LRESULT CTabWnd::OnPaint( HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam )
 			if( rcCurSel.left < rcCurSel.right )
 			{
 				HBRUSH hBr = ::CreateSolidBrush( RGB( 255, 128, 0 ) );
-				::FillRect( hdc, &rcCurSel, hBr );
+				::FillRect( gr, &rcCurSel, hBr );
 				::DeleteObject( hBr );
 			}
 		}
@@ -2139,19 +2135,12 @@ HIMAGELIST CTabWnd::ImageList_Duplicate( HIMAGELIST himl )
 */
 void CTabWnd::DrawBtnBkgnd( HDC hdc, const LPRECT lprcBtn, BOOL bBtnHilighted )
 {
-	HPEN hpen, hpenOld;
-	HBRUSH hbr, hbrOld;
-
 	if( bBtnHilighted )
 	{
-		hpen = ::CreatePen( PS_SOLID, 0, ::GetSysColor( COLOR_HIGHLIGHT ) );
-		hbr = (HBRUSH)::GetSysColorBrush( COLOR_MENU );
-		hpenOld = (HPEN)::SelectObject( hdc, hpen );
-		hbrOld = (HBRUSH)::SelectObject( hdc, hbr );
-		::Rectangle( hdc, lprcBtn->left, lprcBtn->top, lprcBtn->right, lprcBtn->bottom );
-		::SelectObject( hdc, hpenOld );
-		::SelectObject( hdc, hbrOld );
-		::DeleteObject( hpen );
+		CGraphics gr(hdc);
+		gr.SetPenColor( ::GetSysColor(COLOR_HIGHLIGHT) );
+		gr.SetBrushColor( ::GetSysColor(COLOR_MENU) );
+		::Rectangle( gr, lprcBtn->left, lprcBtn->top, lprcBtn->right, lprcBtn->bottom );
 	}
 }
 
@@ -2159,38 +2148,30 @@ void CTabWnd::DrawBtnBkgnd( HDC hdc, const LPRECT lprcBtn, BOOL bBtnHilighted )
 	@date 2006.02.01 ryoji 新規作成
 	@date 2006.10.21 ryoji 背景描画を関数呼び出しに変更
 */
-void CTabWnd::DrawListBtn( HDC hdc, const LPRECT lprcClient )
+void CTabWnd::DrawListBtn( CGraphics& gr, const LPRECT lprcClient )
 {
 	const POINT ptBase[4] = { {4, 8}, {7, 11}, {8, 11}, {11, 8} };	// 描画イメージ形状
 	POINT pt[4];
-	int i;
-	HPEN hpen, hpenOld;
-	HBRUSH hbr, hbrOld;
 
 	RECT rcBtn;
 	GetListBtnRect( lprcClient, &rcBtn );
-	DrawBtnBkgnd( hdc, &rcBtn, m_bListBtnHilighted );	// 2006.10.21 ryoji
+	DrawBtnBkgnd( gr, &rcBtn, m_bListBtnHilighted );	// 2006.10.21 ryoji
 
 	int nIndex = m_bListBtnHilighted? COLOR_MENUTEXT: COLOR_BTNTEXT;
-	hpen = ::CreatePen( PS_SOLID, 0, ::GetSysColor( nIndex ) );
-	hbr = (HBRUSH)::GetSysColorBrush( nIndex );
-	hpenOld = (HPEN)::SelectObject( hdc, hpen );
-	hbrOld = (HBRUSH)::SelectObject( hdc, hbr );
-	for( i = 0; i < _countof(ptBase); i++ )
+	gr.SetPenColor( ::GetSysColor( nIndex ) );
+	gr.SetBrushColor( ::GetSysColor( nIndex ) ); //$$ GetSysColorBrushを用いた実装のほうが効率は良い
+	for( int i = 0; i < _countof(ptBase); i++ )
 	{
 		pt[i].x = ptBase[i].x + rcBtn.left;
 		pt[i].y = ptBase[i].y + rcBtn.top;
 	}
-	::Polygon( hdc, pt, _countof(pt) );
-	::SelectObject( hdc, hpenOld );
-	::SelectObject( hdc, hbrOld );
-	::DeleteObject( hpen );
+	::Polygon( gr, pt, _countof(pt) );
 }
 
 /*! 閉じるボタン描画処理
 	@date 2006.10.21 ryoji 新規作成
 */
-void CTabWnd::DrawCloseBtn( HDC hdc, const LPRECT lprcClient )
+void CTabWnd::DrawCloseBtn( CGraphics& gr, const LPRECT lprcClient )
 {
 	const POINT ptBase1[6][2] =	// [x]描画イメージ形状（直線6本）
 	{
@@ -2217,27 +2198,20 @@ void CTabWnd::DrawCloseBtn( HDC hdc, const LPRECT lprcClient )
 
 	POINT pt[2];
 	int i;
-	HPEN hpen, hpenOld;
-	HBRUSH hbr, hbrOld;
 
 	RECT rcBtn;
 	GetCloseBtnRect( lprcClient, &rcBtn );
 
 	// ボタンの左側にセパレータを描画する	// 2007.02.27 ryoji
-	hpen = ::CreatePen( PS_SOLID, 0, ::GetSysColor( COLOR_3DSHADOW ) );
-	hpenOld = (HPEN)::SelectObject( hdc, hpen );
-	::MoveToEx( hdc, rcBtn.left - 4, rcBtn.top + 1, NULL );
-	::LineTo( hdc, rcBtn.left - 4, rcBtn.bottom - 1 );
-	::SelectObject( hdc, hpenOld );
-	::DeleteObject( hpen );
+	gr.SetPenColor( ::GetSysColor( COLOR_3DSHADOW ) );
+	::MoveToEx( gr, rcBtn.left - 4, rcBtn.top + 1, NULL );
+	::LineTo( gr, rcBtn.left - 4, rcBtn.bottom - 1 );
 
-	DrawBtnBkgnd( hdc, &rcBtn, m_bCloseBtnHilighted );
+	DrawBtnBkgnd( gr, &rcBtn, m_bCloseBtnHilighted );
 
 	int nIndex = m_bCloseBtnHilighted? COLOR_MENUTEXT: COLOR_BTNTEXT;
-	hpen = ::CreatePen( PS_SOLID, 0, ::GetSysColor( nIndex ) );
-	hbr = (HBRUSH)::GetSysColorBrush( nIndex );
-	hpenOld = (HPEN)::SelectObject( hdc, hpen );
-	hbrOld = (HBRUSH)::SelectObject( hdc, hbr );
+	gr.SetPenColor( ::GetSysColor(nIndex) );
+	gr.SetBrushColor( ::GetSysColor(nIndex) );
 	if( m_pShareData->m_Common.m_sTabBar.m_bDispTabWnd &&
 		!m_pShareData->m_Common.m_sTabBar.m_bDispTabWndMultiWin &&
 		!m_pShareData->m_Common.m_sTabBar.m_bTab_CloseOneWin			// 2007.02.13 ryoji 条件追加（ウィンドウの閉じるボタンは全部閉じる）
@@ -2250,8 +2224,8 @@ void CTabWnd::DrawCloseBtn( HDC hdc, const LPRECT lprcClient )
 			pt[0].y = ptBase1[i][0].y + rcBtn.top;
 			pt[1].x = ptBase1[i][1].x + rcBtn.left;
 			pt[1].y = ptBase1[i][1].y + rcBtn.top;
-			::MoveToEx( hdc, pt[0].x, pt[0].y, NULL );
-			::LineTo( hdc, pt[1].x, pt[1].y );
+			::MoveToEx( gr, pt[0].x, pt[0].y, NULL );
+			::LineTo( gr, pt[1].x, pt[1].y );
 		}
 	}
 	else
@@ -2263,12 +2237,9 @@ void CTabWnd::DrawCloseBtn( HDC hdc, const LPRECT lprcClient )
 			pt[0].y = ptBase2[i][0].y + rcBtn.top;
 			pt[1].x = ptBase2[i][1].x + rcBtn.left;
 			pt[1].y = ptBase2[i][1].y + rcBtn.top;
-			::Rectangle( hdc, pt[0].x, pt[0].y, pt[1].x, pt[1].y );
+			::Rectangle( gr, pt[0].x, pt[0].y, pt[1].x, pt[1].y );
 		}
 	}
-	::SelectObject( hdc, hpenOld );
-	::SelectObject( hdc, hbrOld );
-	::DeleteObject( hpen );
 }
 
 /*! 一覧ボタンの矩形取得処理

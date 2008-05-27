@@ -977,6 +977,14 @@
 				>
 			</File>
 			<File
+				RelativePath="..\sakura_core\CGraphics.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\sakura_core\CGraphics.h"
+				>
+			</File>
+			<File
 				RelativePath="..\sakura_core\CGrepAgent.cpp"
 				>
 			</File>

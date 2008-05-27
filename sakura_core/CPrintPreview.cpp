@@ -223,17 +223,15 @@ LRESULT CPrintPreview::OnPaint(
 	);
 
 	// マージン枠の表示
-	HPEN			hPen, hPenOld;
-	hPen = ::CreatePen( PS_SOLID, 0, RGB(128,128,128) ); // 2006.08.14 Moca 127を128に変更
-	hPenOld = (HPEN)::SelectObject( hdc, hPen );
+	CGraphics gr(hdc);
+	gr.SetPenColor( RGB(128,128,128) ); // 2006.08.14 Moca 127を128に変更
 	::Rectangle( hdc,
 		m_nPreview_ViewMarginLeft + m_pPrintSetting->m_nPrintMarginLX,
 		nDirectY * ( m_nPreview_ViewMarginTop + m_pPrintSetting->m_nPrintMarginTY ),
 		m_nPreview_ViewMarginLeft + m_nPreview_PaperAllWidth - m_pPrintSetting->m_nPrintMarginRX + 1,
 		nDirectY * ( m_nPreview_ViewMarginTop + m_nPreview_PaperAllHeight - m_pPrintSetting->m_nPrintMarginBY )
 	);
-	::SelectObject( hdc, hPenOld );
-	::DeleteObject( hPen );
+	gr.RestorePen();
 
 	::SetTextColor( hdc, RGB( 0, 0, 0 ) );
 

@@ -217,7 +217,7 @@ protected:
 	//色分け
 public:
 	EColorIndexType GetColorIndex( HDC, const CLayout*, int );				/* 指定位置のColorIndexの取得 02/12/13 ai */
-	void SetCurrentColor( HDC, EColorIndexType );							/* 現在の色を指定 */
+	void SetCurrentColor( CGraphics& gr, EColorIndexType );							/* 現在の色を指定 */
 
 	//画面バッファ
 protected:
@@ -580,7 +580,6 @@ public:
 	COLORREF		m_crBack;				/* テキストの背景色 */			// 2006.12.07 ryoji
 	int				m_nOldUnderLineY;		// 前回作画したカーソルアンダーラインの位置 0未満=非表示
 	int				m_nOldCursorLineX;		/* 前回作画したカーソル位置縦線の位置 */ // 2007.09.09 Moca
-	HFONT			m_hFontOld;
 	bool			m_bUnderLineON;
 
 public:

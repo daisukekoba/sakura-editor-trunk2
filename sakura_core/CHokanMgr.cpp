@@ -75,18 +75,13 @@ LRESULT APIENTRY HokanList_SubclassProc( HWND hwnd, UINT uMsg, WPARAM wParam, LP
 
 CHokanMgr::CHokanMgr()
 {
-//	m_hFont = NULL;
-//	m_hFontOld = NULL;
 	m_cmemCurWord.SetString(L"");
 
 	m_pcmemKouho = NULL;
 	m_nKouhoNum = 0;;
 	m_nCurKouhoIdx = -1;
 	m_pszCurKouho = NULL;
-//	m_pcEditView = NULL;
 	m_bTimerFlag = TRUE;
-//	hm_wpHokanListProc = FALSE;
-	return;
 }
 
 CHokanMgr::~CHokanMgr()

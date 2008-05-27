@@ -230,7 +230,7 @@ EColorIndexType CEditView::GetColorIndex(
 
 
 /* 現在の色を指定 */
-void CEditView::SetCurrentColor( HDC hdc, EColorIndexType eColorIndex )
+void CEditView::SetCurrentColor( CGraphics& gr, EColorIndexType eColorIndex )
 {
 	//インデックス決定
 	int		nColorIdx = -1;
@@ -248,14 +248,9 @@ void CEditView::SetCurrentColor( HDC hdc, EColorIndexType eColorIndex )
 	if( -1 != nColorIdx ){
 		const ColorInfo& info = m_pcEditDoc->m_cDocType.GetDocumentAttribute().m_ColorInfoArr[nColorIdx];
 		if( info.m_bDisp ){
-			::SetTextColor( hdc, info.m_colTEXT );
-			::SetBkColor( hdc, info.m_colBACK );
-			if( NULL != m_hFontOld ){
-				::SelectObject( hdc, m_hFontOld );
-			}
-			/* フォントを選ぶ */
-			m_hFontOld = (HFONT)::SelectObject(
-				hdc,
+			gr.SetForegroundColor(info.m_colTEXT);
+			gr.SetBackgroundColor(info.m_colBACK);
+			gr.SetMyFont(
 				GetFontset().ChooseFontHandle(
 					info.m_bFatFont,
 					info.m_bUnderLine
@@ -278,12 +273,14 @@ void CEditView::SetCurrentColor( HDC hdc, EColorIndexType eColorIndex )
 			互換DC/BMPが無い場合は、普通の作画処理をする。
 @date 2007.09.09 Moca 元々無効化されていた第三パラメータのbUseMemoryDCをbDrawFromComptibleBmpに変更。
 */
-void CEditView::OnPaint( HDC hdc, PAINTSTRUCT *pPs, BOOL bDrawFromComptibleBmp )
+void CEditView::OnPaint( HDC _hdc, PAINTSTRUCT *pPs, BOOL bDrawFromComptibleBmp )
 {
 //	MY_RUNNINGTIMER( cRunningTimer, "CEditView::OnPaint" );
 
+	CGraphics gr(_hdc);
+
 	// 2004.01.28 Moca デスクトップに作画しないように
-	if( NULL == hdc )return;
+	if( NULL == gr )return;
 
 	if( !GetDrawSwitch() )return;
 
@@ -303,7 +300,7 @@ void CEditView::OnPaint( HDC hdc, PAINTSTRUCT *pPs, BOOL bDrawFromComptibleBmp )
 	if( bDrawFromComptibleBmp
 		&& m_hdcCompatDC && m_hbmpCompatBMP ){
 		::BitBlt(
-			hdc,
+			gr,
 			pPs->rcPaint.left,
 			pPs->rcPaint.top,
 			pPs->rcPaint.right - pPs->rcPaint.left,
@@ -359,8 +356,8 @@ void CEditView::OnPaint( HDC hdc, PAINTSTRUCT *pPs, BOOL bDrawFromComptibleBmp )
 	// bUseMemoryDC = FALSE;
 	BOOL bUseMemoryDC = (m_hdcCompatDC != NULL);
 	if( bUseMemoryDC ){
-		hdcOld = hdc;
-		hdc = m_hdcCompatDC;
+		hdcOld = gr;
+		gr = m_hdcCompatDC;
 	}
 
 	/* 03/02/18 対括弧の強調表示(消去) ai */
@@ -374,7 +371,7 @@ void CEditView::OnPaint( HDC hdc, PAINTSTRUCT *pPs, BOOL bDrawFromComptibleBmp )
 		rc.right  = GetTextArea().GetAreaRight();
 		rc.bottom = GetTextArea().GetAreaTop();
 
-		cTextType.FillBack(hdc,rc);
+		cTextType.FillBack(gr,rc);
 	}
 	
 	/* 行番号の表示 */
@@ -386,16 +383,15 @@ void CEditView::OnPaint( HDC hdc, PAINTSTRUCT *pPs, BOOL bDrawFromComptibleBmp )
 		rc.right  = GetTextArea().GetAreaLeft() - GetDllShareData().m_Common.m_sWindow.m_nLineNumRightSpace; //	Sep. 23 ,2002 genta 余白はテキスト色のまま残す
 		rc.bottom = GetTextArea().GetAreaTop();
 		HBRUSH hBrush = ::CreateSolidBrush( TypeDataPtr->m_ColorInfoArr[COLORIDX_GYOU].m_colBACK );
-		::FillRect( hdc, &rc, hBrush );
+		::FillRect( gr, &rc, hBrush );
 		::DeleteObject( hBrush );
 	}
 	//	To Here Sep. 7, 2001 genta
 
-	::SetBkMode( hdc, TRANSPARENT );
-	m_hFontOld = NULL;
+	::SetBkMode( gr, TRANSPARENT );
 
-	cTextType.SetFont(hdc);
-	cTextType.SetColors(hdc);
+	cTextType.SetFont(gr);
+	cTextType.SetColors(gr);
 
 
 	int nTop = pPs->rcPaint.top;
@@ -458,7 +454,7 @@ void CEditView::OnPaint( HDC hdc, PAINTSTRUCT *pPs, BOOL bDrawFromComptibleBmp )
 
 		//1行描画
 		bool bDispResult = DrawLogicLine(
-			hdc,
+			gr,
 			&sPos,
 			nLayoutLineTo
 		);
@@ -469,10 +465,8 @@ void CEditView::OnPaint( HDC hdc, PAINTSTRUCT *pPs, BOOL bDrawFromComptibleBmp )
 		}
 
 	}
-	if( NULL != m_hFontOld ){
-		::SelectObject( hdc, m_hFontOld );
-		m_hFontOld = NULL;
-	}
+
+	gr.RestoreFont();
 
 
 	// -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
@@ -488,15 +482,15 @@ void CEditView::OnPaint( HDC hdc, PAINTSTRUCT *pPs, BOOL bDrawFromComptibleBmp )
 			rcBack.top    = sPos.GetDrawPos().y;
 			rcBack.bottom = pPs->rcPaint.bottom;
 
-			cTextType.FillBack(hdc,rcBack);
+			cTextType.FillBack(gr,rcBack);
 
 			// 2006.04.29 行部分は行ごとに作画し、ここでは縦線の残りを作画
-			GetTextDrawer().DispVerticalLines( hdc, sPos.GetDrawPos().y, pPs->rcPaint.bottom, CLayoutInt(0), CLayoutInt(-1) );
+			GetTextDrawer().DispVerticalLines( gr, sPos.GetDrawPos().y, pPs->rcPaint.bottom, CLayoutInt(0), CLayoutInt(-1) );
 		}
 	}
 
-	cTextType.RewindColors(hdc);
-	cTextType.RewindFont(hdc);
+	cTextType.RewindColors(gr);
+	cTextType.RewindFont(gr);
 
 
 	// -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
@@ -508,12 +502,12 @@ void CEditView::OnPaint( HDC hdc, PAINTSTRUCT *pPs, BOOL bDrawFromComptibleBmp )
 		//	2005.11.08 Moca 作画条件変更
 		if( GetTextArea().GetAreaLeft() < nXPos && nXPos < GetTextArea().GetAreaRight() ){
 			/// 折り返し記号の色のペンを設定
-			cWrapType.SetSolidPen(hdc,0);
+			cWrapType.SetSolidPen(gr,0);
 
-			::MoveToEx( hdc, nXPos, GetTextArea().GetAreaTop(), NULL );
-			::LineTo( hdc, nXPos, GetTextArea().GetAreaBottom() );
+			::MoveToEx( gr, nXPos, GetTextArea().GetAreaTop(), NULL );
+			::LineTo( gr, nXPos, GetTextArea().GetAreaBottom() );
 
-			cWrapType.RewindPen(hdc);
+			cWrapType.RewindPen(gr);
 		}
 	}
 
@@ -523,7 +517,7 @@ void CEditView::OnPaint( HDC hdc, PAINTSTRUCT *pPs, BOOL bDrawFromComptibleBmp )
 	// -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 	if ( pPs->rcPaint.top < GetTextArea().GetRulerHeight() ) { // ルーラーが再描画範囲にあるときのみ再描画する 2002.02.25 Add By KK
 		GetRuler().SetRedrawFlag(); //2002.02.25 Add By KK ルーラー全体を描画。
-		GetRuler().DispRuler( hdc );
+		GetRuler().DispRuler( gr );
 	}
 
 	// -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
@@ -537,7 +531,7 @@ void CEditView::OnPaint( HDC hdc, PAINTSTRUCT *pPs, BOOL bDrawFromComptibleBmp )
 			pPs->rcPaint.top,
 			pPs->rcPaint.right - pPs->rcPaint.left,
 			pPs->rcPaint.bottom - pPs->rcPaint.top,
-			hdc,
+			gr,
 			pPs->rcPaint.left,
 			pPs->rcPaint.top,
 			SRCCOPY
@@ -607,7 +601,7 @@ bool CEditView::DrawLogicLine(
 //	MY_RUNNINGTIMER( cRunningTimer, "CEditView::DrawLogicLine" );
 	SColorStrategyInfo sInfo;
 	SColorStrategyInfo* pInfo = &sInfo;
-	pInfo->hdc = _hdc;
+	pInfo->gr.Init(_hdc);
 	pInfo->pDispPos = _pDispPos;
 	pInfo->pcView = this;
 
@@ -705,7 +699,7 @@ bool CEditView::DrawLayoutLine(SColorStrategyInfo* pInfo)
 	if( pInfo->pDispPos->GetDrawPos().y >= GetTextArea().GetAreaTop() ){
 		// 行番号表示
 		pInfo->pcView->GetTextDrawer().DispLineNumber(
-			pInfo->hdc,
+			pInfo->gr,
 			pInfo->pDispPos->GetLayoutLineRef(),
 			pInfo->pDispPos->GetDrawPos().y
 		);
@@ -725,7 +719,7 @@ bool CEditView::DrawLayoutLine(SColorStrategyInfo* pInfo)
 	{
 		RECT rcClip;
 		if(GetTextArea().GenerateClipRect(&rcClip,*pInfo->pDispPos,(Int)pcLayout2->GetIndent())){
-			cTextType.FillBack(pInfo->hdc,rcClip);
+			cTextType.FillBack(pInfo->gr,rcClip);
 		}
 		//描画位置進める
 		pInfo->pDispPos->ForwardDrawCol((Int)pcLayout2->GetIndent());
@@ -774,7 +768,7 @@ bool CEditView::DrawLayoutLine(SColorStrategyInfo* pInfo)
 	// 行末背景描画
 	RECT rcClip;
 	if(pInfo->pcView->GetTextArea().GenerateClipRectRight(&rcClip,*pInfo->pDispPos)){
-		cTextType.FillBack(pInfo->hdc,rcClip);
+		cTextType.FillBack(pInfo->gr,rcClip);
 	}
 
 	//行を進める

@@ -16,7 +16,7 @@ bool CFigure_HanSpace::DrawImp(SColorStrategyInfo* pInfo)
 	const STypeConfig* TypeDataPtr = &pcDoc->m_cDocType.GetDocumentAttribute();
 
 	if(pInfo->pLine[pInfo->nPos] == L' ' && TypeDataPtr->m_ColorInfoArr[COLORIDX_SPACE].m_bDisp){
-		_DispHankakuSpace(pInfo->hdc,pInfo->pDispPos,pInfo->bSearchStringMode,pInfo->pcView);
+		_DispHankakuSpace(pInfo->gr,pInfo->pDispPos,pInfo->bSearchStringMode,pInfo->pcView);
 		return true;
 	}
 	return false;

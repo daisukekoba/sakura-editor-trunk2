@@ -31,7 +31,7 @@ public:
 
 	// -- -- w’èŒ…cü•`‰æ -- -- //
 	//!	w’èŒ…cü•`‰æŠÖ”	// 2005.11.08 Moca
-	void DispVerticalLines( HDC hdc, int nTop, int nBottom, CLayoutInt nLeftCol, CLayoutInt nRightCol ) const;
+	void DispVerticalLines( CGraphics& gr, int nTop, int nBottom, CLayoutInt nLeftCol, CLayoutInt nRightCol ) const;
 
 	// -- -- s”Ô† -- -- //
 	void DispLineNumber( HDC hdc, CLayoutInt nLineNum, int y ) const;		// s”Ô†•\¦

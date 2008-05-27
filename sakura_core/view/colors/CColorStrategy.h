@@ -102,7 +102,7 @@ struct SColorStrategyInfo{
 
 	//参照
 	CEditView*	pcView;
-	HDC			hdc;	//(SColorInfoでは未使用)
+	CGraphics	gr;	//(SColorInfoでは未使用)
 
 	//スキャン位置
 	LPCWSTR		pLine;
@@ -128,7 +128,7 @@ struct SColorStrategyInfo{
 		SColorStrategyInfo* pInfo = this;
 		pInfo->nCOMMENTMODE = eNewColor;
 		if( !pInfo->bSearchStringMode ){
-			pInfo->pcView->SetCurrentColor( pInfo->hdc, pInfo->nCOMMENTMODE );
+			pInfo->pcView->SetCurrentColor( pInfo->gr, pInfo->nCOMMENTMODE );
 		}
 	}
 
