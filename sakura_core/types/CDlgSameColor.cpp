@@ -313,7 +313,7 @@ BOOL CDlgSameColor::OnDrawItem( WPARAM wParam, LPARAM lParam )
 	rc.bottom -= 2;
 	rc.right -= 2;
 	gr.SetBrushColor( cr );
-	gr.SetPenColor( ::GetSysColor(COLOR_3DSHADOW) );
+	gr.SetPen( ::GetSysColor(COLOR_3DSHADOW) );
 	::RoundRect( gr, rc.left, rc.top, rc.right, rc.bottom , 5, 5 );
 
 	return TRUE;
@@ -396,7 +396,7 @@ LRESULT CALLBACK CDlgSameColor::ColorStatic_SubclassProc( HWND hwnd, UINT uMsg, 
 		{
 			CGraphics gr(hDC);
 			gr.SetBrushColor( pCDlgSameColor->m_cr );
-			gr.SetPenColor( ::GetSysColor(COLOR_3DSHADOW) );
+			gr.SetPen( ::GetSysColor(COLOR_3DSHADOW) );
 			::RoundRect( gr, rc.left, rc.top, rc.right, rc.bottom, 5, 5 );
 		}
 		::EndPaint( hwnd, &ps );

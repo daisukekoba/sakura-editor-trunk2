@@ -390,8 +390,7 @@ void CEditView::OnPaint( HDC _hdc, PAINTSTRUCT *pPs, BOOL bDrawFromComptibleBmp 
 
 	::SetBkMode( gr, TRANSPARENT );
 
-	cTextType.SetFont(gr);
-	cTextType.SetColors(gr);
+	cTextType.SetGraphicsState_WhileThisObj(gr);
 
 
 	int nTop = pPs->rcPaint.top;
@@ -466,7 +465,7 @@ void CEditView::OnPaint( HDC _hdc, PAINTSTRUCT *pPs, BOOL bDrawFromComptibleBmp 
 
 	}
 
-	gr.RestoreFont();
+	gr.ClearMyFont();
 
 
 	// -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
@@ -489,8 +488,7 @@ void CEditView::OnPaint( HDC _hdc, PAINTSTRUCT *pPs, BOOL bDrawFromComptibleBmp 
 		}
 	}
 
-	cTextType.RewindColors(gr);
-	cTextType.RewindFont(gr);
+	cTextType.RewindGraphicsState(gr);
 
 
 	// -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
@@ -502,12 +500,12 @@ void CEditView::OnPaint( HDC _hdc, PAINTSTRUCT *pPs, BOOL bDrawFromComptibleBmp 
 		//	2005.11.08 Moca 作画条件変更
 		if( GetTextArea().GetAreaLeft() < nXPos && nXPos < GetTextArea().GetAreaRight() ){
 			/// 折り返し記号の色のペンを設定
-			cWrapType.SetSolidPen(gr,0);
+			gr.PushPen(cWrapType.GetTextColor(),0);
 
 			::MoveToEx( gr, nXPos, GetTextArea().GetAreaTop(), NULL );
 			::LineTo( gr, nXPos, GetTextArea().GetAreaBottom() );
 
-			cWrapType.RewindPen(gr);
+			gr.PopPen();
 		}
 	}
 

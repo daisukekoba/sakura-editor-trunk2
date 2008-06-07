@@ -199,11 +199,11 @@ void CTextDrawer::DispVerticalLines(
 	const bool bExorPen = ( cVertType.GetTextColor() == cTextType.GetBackColor() );
 	int nROP_Old = 0;
 	if( bExorPen ){
-		gr.SetPenColor( cVertType.GetBackColor() );
+		gr.SetPen( cVertType.GetBackColor() );
 		nROP_Old = ::SetROP2( gr, R2_NOTXORPEN );
 	}
 	else{
-		gr.SetPenColor( cVertType.GetTextColor() );
+		gr.SetPen( cVertType.GetTextColor() );
 	}
 
 	int k;
@@ -287,7 +287,7 @@ void CTextDrawer::DispVerticalLines(
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 
 void CTextDrawer::DispLineNumber(
-	HDC				hdc,
+	CGraphics&		gr,
 	CLayoutInt		nLineNum,
 	int				y
 ) const
@@ -321,29 +321,9 @@ void CTextDrawer::DispLineNumber(
 		}
 	}
 
+	//DIFF色設定
 	EDiffMark type = CDiffLineGetter(pCDocLine).GetLineDiffMark();
-	{
-		//DIFF差分マーク表示	//@@@ 2002.05.25 MIK
-		if( type )
-		{
-			switch( type )
-			{
-			case MARK_DIFF_APPEND:	//追加
-				if( CTypeSupport(pView,COLORIDX_DIFF_APPEND).IsDisp() )
-					nColorIndex = COLORIDX_DIFF_APPEND;
-				break;
-			case MARK_DIFF_CHANGE:	//変更
-				if( CTypeSupport(pView,COLORIDX_DIFF_CHANGE).IsDisp() )
-					nColorIndex = COLORIDX_DIFF_CHANGE;
-				break;
-			case MARK_DIFF_DELETE:	//削除
-			case MARK_DIFF_DEL_EX:	//削除
-				if( CTypeSupport(pView,COLORIDX_DIFF_DELETE).IsDisp() )
-					nColorIndex = COLORIDX_DIFF_DELETE;
-				break;
-			}
-		}
-	}
+	CDiffLineGetter(pCDocLine).GetDiffColor(&nColorIndex);
 
 	// 02/10/16 ai
 	// ブックマークの表示
@@ -379,9 +359,9 @@ void CTextDrawer::DispLineNumber(
 		int nLineCols = wcslen( szLineNum );
 
 		//色、フォント
-		cTextType.SetBkColor(hdc);    //背景色：テキストの背景色 //	Sep. 23, 2002 余白をテキストの背景色にする
-		cColorType.SetTextColor(hdc); //テキスト：行番号の色
-		cColorType.SetFont(hdc);      //フォント：行番号のフォント
+		gr.PushTextBackColor(cTextType.GetBackColor());		//背景色：テキストの背景色 //	Sep. 23, 2002 余白をテキストの背景色にする
+		gr.PushTextForeColor(cColorType.GetTextColor());	//テキスト：行番号の色
+		gr.PushMyFont(cColorType.GetTypeFont());			    //フォント：行番号のフォント
 
 		// 余白を埋める
 		RECT	rcClip;
@@ -390,7 +370,7 @@ void CTextDrawer::DispLineNumber(
 		rcClip.top    = y;
 		rcClip.bottom = y + nLineHeight;
 		::ExtTextOutW_AnyBuild(
-			hdc,
+			gr,
 			rcClip.left,
 			y,
 			ExtTextOutOption(),
@@ -401,7 +381,7 @@ void CTextDrawer::DispLineNumber(
 		);
 		
 		//	Sep. 23, 2002 余白をテキストの背景色にするため，背景色の設定を移動
-		SetBkColor( hdc, cColorType.GetBackColor() );		/* 行番号背景の色 */
+		SetBkColor( gr, cColorType.GetBackColor() );		/* 行番号背景の色 */
 
 		int drawNumTop = (pView->GetTextArea().m_nViewAlignLeftCols - nLineCols - 1) * ( nCharWidth );
 
@@ -417,7 +397,7 @@ void CTextDrawer::DispLineNumber(
 		rcClip.right = nLineNumAreaWidth;
 		rcClip.top = y;
 		rcClip.bottom = y + nLineHeight;
-		::ExtTextOutW_AnyBuild( hdc,
+		::ExtTextOutW_AnyBuild( gr,
 			drawNumTop,
 			y,
 			ExtTextOutOption(),
@@ -429,14 +409,14 @@ void CTextDrawer::DispLineNumber(
 
 		/* 行番号区切り 0=なし 1=縦線 2=任意 */
 		if( 1 == pTypes->m_nLineTermType ){
-			cColorType.SetSolidPen(hdc,0);
-			::MoveToEx( hdc, nLineNumAreaWidth - 2, y, NULL );
-			::LineTo( hdc, nLineNumAreaWidth - 2, y + nLineHeight );
-			cColorType.RewindPen(hdc);
+			gr.PushPen(cColorType.GetTextColor(),0);
+			::MoveToEx( gr, nLineNumAreaWidth - 2, y, NULL );
+			::LineTo( gr, nLineNumAreaWidth - 2, y + nLineHeight );
+			gr.PopPen();
 		}
-		cColorType.RewindColors(hdc);
-		cTextType.RewindColors(hdc);
-		cColorType.RewindFont(hdc);
+		gr.PopTextForeColor();
+		gr.PopTextBackColor();
+		gr.PopMyFont();
 	}
 	else{
 		RECT	rcClip;
@@ -445,7 +425,7 @@ void CTextDrawer::DispLineNumber(
 		rcClip.right  = pView->GetTextArea().GetAreaLeft() - GetDllShareData().m_Common.m_sWindow.m_nLineNumRightSpace; //	Sep. 23 ,2002 genta 余白はテキスト色のまま残す
 		rcClip.top    = y;
 		rcClip.bottom = y + nLineHeight;
-		cColorType.FillBack(hdc,rcClip);
+		cColorType.FillBack(gr,rcClip);
 		
 		// Mar. 5, 2003, Moca
 		// 行番号とテキストの隙間の描画
@@ -453,61 +433,20 @@ void CTextDrawer::DispLineNumber(
 		rcClip.right  = pView->GetTextArea().GetAreaLeft();
 		rcClip.top    = y;
 		rcClip.bottom = y + nLineHeight;
-		cTextType.FillBack(hdc,rcClip);
+		cTextType.FillBack(gr,rcClip);
 	}
 
 	// 2001.12.03 hor
 	/* とりあえずブックマークに縦線 */
 	if(CBookmarkGetter(pCDocLine).IsBookmarked() && !cMarkType.IsDisp() )
 	{
-		cColorType.SetSolidPen(hdc,2);
-		::MoveToEx( hdc, 1, y, NULL );
-		::LineTo( hdc, 1, y + nLineHeight );
-		cColorType.RewindPen(hdc);
+		gr.PushPen(cColorType.GetTextColor(),2);
+		::MoveToEx( gr, 1, y, NULL );
+		::LineTo( gr, 1, y + nLineHeight );
+		gr.PopPen();
 	}
 
-	if( type )	//DIFF差分マーク表示	//@@@ 2002.05.25 MIK
-	{
-		int	cy = y + nLineHeight / 2;
-
-		cColorType.SetSolidPen(hdc,1);
-
-		switch( type )
-		{
-		case MARK_DIFF_APPEND:	//追加
-			::MoveToEx( hdc, 3, cy, NULL );
-			::LineTo  ( hdc, 6, cy );
-			::MoveToEx( hdc, 4, cy - 2, NULL );
-			::LineTo  ( hdc, 4, cy + 3 );
-			break;
-
-		case MARK_DIFF_CHANGE:	//変更
-			::MoveToEx( hdc, 3, cy - 4, NULL );
-			::LineTo  ( hdc, 3, cy );
-			::MoveToEx( hdc, 3, cy + 2, NULL );
-			::LineTo  ( hdc, 3, cy + 3 );
-			break;
-
-		case MARK_DIFF_DELETE:	//削除
-			cy -= 3;
-			::MoveToEx( hdc, 3, cy, NULL );
-			::LineTo  ( hdc, 5, cy );
-			::LineTo  ( hdc, 3, cy + 2 );
-			::LineTo  ( hdc, 3, cy );
-			::LineTo  ( hdc, 7, cy + 4 );
-			break;
-		
-		case MARK_DIFF_DEL_EX:	//削除(EOF)
-			cy += 3;
-			::MoveToEx( hdc, 3, cy, NULL );
-			::LineTo  ( hdc, 5, cy );
-			::LineTo  ( hdc, 3, cy - 2 );
-			::LineTo  ( hdc, 3, cy );
-			::LineTo  ( hdc, 7, cy - 4 );
-			break;
-		}
-
-		cColorType.RewindPen(hdc);
-	}
+	//DIFFマーク描画
+	CDiffLineGetter(pCDocLine).DrawDiffMark(gr,y,nLineHeight,cColorType);
 }
 

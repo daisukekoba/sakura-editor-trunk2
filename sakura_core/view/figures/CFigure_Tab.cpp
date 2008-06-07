@@ -131,7 +131,7 @@ void _DrawTabArrow(
 	CGraphics gr(_gr);
 
 	// ƒyƒ“İ’è
-	gr.SetPenColor( pColor );
+	gr.SetPen( pColor );
 
 	// •’²®
 	nWidth--;

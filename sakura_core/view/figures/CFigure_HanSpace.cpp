@@ -2,7 +2,7 @@
 #include "CFigure_HanSpace.h"
 #include "types/CTypeSupport.h"
 
-void _DispHankakuSpace( HDC hdc, DispPos* pDispPos, bool bSearchStringMode, CEditView* pcView );
+void _DispHankakuSpace( CGraphics& gr, DispPos* pDispPos, bool bSearchStringMode, CEditView* pcView );
 
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 //                      CFigure_HanSpace                         //
@@ -27,7 +27,7 @@ bool CFigure_HanSpace::DrawImp(SColorStrategyInfo* pInfo)
 //                         描画実装                            //
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 
-void _DispHankakuSpace( HDC hdc, DispPos* pDispPos, bool bSearchStringMode, CEditView* pcView )
+void _DispHankakuSpace( CGraphics& gr, DispPos* pDispPos, bool bSearchStringMode, CEditView* pcView )
 {
 	//クリッピング矩形を計算。画面外なら描画しない
 	CMyRect rcClip;
@@ -35,14 +35,13 @@ void _DispHankakuSpace( HDC hdc, DispPos* pDispPos, bool bSearchStringMode, CEdi
 	{
 		// 色決定
 		CTypeSupport cSupport(pcView,pcView->GetTextDrawer()._GetColorIdx(COLORIDX_SPACE,bSearchStringMode));
-		cSupport.SetFont(hdc);
-		cSupport.SetColors(hdc);
+		cSupport.SetGraphicsState_WhileThisObj(gr);
 		
 		//小文字"o"の下半分を出力
 		CMyRect rcClipBottom=rcClip;
 		rcClipBottom.top=rcClip.top+rcClip.Height()/2;
 		::ExtTextOutW_AnyBuild(
-			hdc,
+			gr,
 			pDispPos->GetDrawPos().x,
 			pDispPos->GetDrawPos().y,
 			ExtTextOutOption(),
@@ -56,7 +55,7 @@ void _DispHankakuSpace( HDC hdc, DispPos* pDispPos, bool bSearchStringMode, CEdi
 		CMyRect rcClipTop=rcClip;
 		rcClipTop.bottom=rcClip.top+rcClip.Height()/2;
 		::ExtTextOutW_AnyBuild(
-			hdc,
+			gr,
 			pDispPos->GetDrawPos().x,
 			pDispPos->GetDrawPos().y,
 			ExtTextOutOption(),

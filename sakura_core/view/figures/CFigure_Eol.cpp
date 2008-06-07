@@ -4,7 +4,7 @@
 #include "types/CTypeSupport.h"
 
 //折り返し描画
-void _DispWrap(HDC hdc, DispPos* pDispPos, const CEditView* pcView);
+void _DispWrap(CGraphics& gr, DispPos* pDispPos, const CEditView* pcView);
 
 //EOF描画関数
 //実際には pX と nX が更新される。
@@ -12,7 +12,7 @@ void _DispWrap(HDC hdc, DispPos* pDispPos, const CEditView* pcView);
 //2007.08.25 kobake 戻り値を void に変更。引数 x, y を DispPos に変更
 //2007.08.25 kobake 引数から nCharWidth, nLineHeight を削除
 //2007.08.28 kobake 引数 fuOptions を削除
-void _DispEOF( HDC hdc, DispPos* pDispPos, const CEditView* pcView);
+void _DispEOF( CGraphics& gr, DispPos* pDispPos, const CEditView* pcView);
 
 //空(から)行描画
 bool _DispEmptyLine(CGraphics& gr, DispPos* pDispPos, const CEditView* pcView);
@@ -186,7 +186,7 @@ bool _DispEmptyLine(CGraphics& gr, DispPos* pDispPos, const CEditView* pcView)
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 
 // 折り返し描画
-void _DispWrap(HDC hdc, DispPos* pDispPos, const CEditView* pcView)
+void _DispWrap(CGraphics& gr, DispPos* pDispPos, const CEditView* pcView)
 {
 	RECT rcClip2;
 	if(pcView->GetTextArea().GenerateClipRect(&rcClip2,*pDispPos,1))
@@ -199,8 +199,7 @@ void _DispWrap(HDC hdc, DispPos* pDispPos, const CEditView* pcView)
 		if( cWrapType.IsDisp() )
 		{
 			szText = L"<";
-			cWrapType.SetFont(hdc);
-			cWrapType.SetColors(hdc);
+			cWrapType.SetGraphicsState_WhileThisObj(gr);
 		}
 		else
 		{
@@ -209,7 +208,7 @@ void _DispWrap(HDC hdc, DispPos* pDispPos, const CEditView* pcView)
 
 		//描画
 		::ExtTextOutW_AnyBuild(
-			hdc,
+			gr,
 			pDispPos->GetDrawPos().x,
 			pDispPos->GetDrawPos().y,
 			ExtTextOutOption(),
@@ -232,7 +231,7 @@ EOF記号の描画
 @date 2007.08.30 kobake 引数 EofColInfo 削除
 */
 void _DispEOF(
-	HDC					hdc,		//!< [in] 描画対象のDevice Context
+	CGraphics&			gr,			//!< [in] 描画対象のDevice Context
 	DispPos*			pDispPos,	//!< [in] 表示座標
 	const CEditView*	pcView
 )
@@ -253,12 +252,11 @@ void _DispEOF(
 	if(pArea->GenerateClipRect(&rcClip,*pDispPos,nEofLen))
 	{
 		//色設定
-		cEofType.SetColors(hdc);
-		cEofType.SetFont(hdc);
+		cEofType.SetGraphicsState_WhileThisObj(gr);
 
 		//描画
 		::ExtTextOutW_AnyBuild(
-			hdc,
+			gr,
 			pDispPos->GetDrawPos().x,
 			pDispPos->GetDrawPos().y,
 			ExtTextOutOption(),
@@ -297,8 +295,7 @@ void _DispEOL(CGraphics& gr, DispPos* pDispPos, CEol cEol, bool bSearchStringMod
 
 		// 色決定
 		CTypeSupport cSupport(pcView,pcView->GetTextDrawer()._GetColorIdx(COLORIDX_EOL,bSearchStringMode));
-		cSupport.SetFont(gr);
-		cSupport.SetColors(gr);
+		cSupport.SetGraphicsState_WhileThisObj(gr);
 
 		// 2003.08.17 ryoji 改行文字が欠けないように
 		::ExtTextOutW_AnyBuild(
@@ -361,7 +358,7 @@ void _DrawEOL(
 )
 {
 	int sx, sy;	//	矢印の先頭
-	gr.SetPenColor( pColor );
+	gr.SetPen( pColor );
 
 	switch( cEol.GetType() ){
 	case EOL_CRLF:	//	下左矢印

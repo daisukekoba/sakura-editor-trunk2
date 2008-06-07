@@ -152,8 +152,7 @@ void CEditView::DrawBracketPair( bool bDraw )
 
 				//色設定
 				CTypeSupport cTextType(this,COLORIDX_TEXT);
-				cTextType.SetFont(gr);
-				cTextType.SetColors(gr);
+				cTextType.SetGraphicsState_WhileThisObj(gr);
 
 				SetCurrentColor( gr, nColorIndex );
 
@@ -176,10 +175,7 @@ void CEditView::DrawBracketPair( bool bDraw )
 					GetTextDrawer().DispVerticalLines( gr, nTop, nTop + nHeight, ptColLine.x, ptColLine.x + CLayoutInt(2) ); //※括弧が全角幅である場合を考慮
 				}
 
-				gr.RestoreFont();
-
-				cTextType.RewindFont(gr);
-				cTextType.RewindColors(gr);
+				cTextType.RewindGraphicsState(gr);
 
 				if( ( m_pcEditDoc->m_pcEditWnd->m_nActivePaneIndex == m_nMyIndex )
 					&& ( ( ptColLine.y == GetCaret().GetCaretLayoutPos().GetY() ) || ( ptColLine.y - 1 == GetCaret().GetCaretLayoutPos().GetY() ) ) ){	// 03/02/27 ai 行の間隔が"0"の時にアンダーラインが欠ける事がある為修正

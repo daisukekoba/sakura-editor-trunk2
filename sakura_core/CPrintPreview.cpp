@@ -224,14 +224,14 @@ LRESULT CPrintPreview::OnPaint(
 
 	// マージン枠の表示
 	CGraphics gr(hdc);
-	gr.SetPenColor( RGB(128,128,128) ); // 2006.08.14 Moca 127を128に変更
+	gr.SetPen( RGB(128,128,128) ); // 2006.08.14 Moca 127を128に変更
 	::Rectangle( hdc,
 		m_nPreview_ViewMarginLeft + m_pPrintSetting->m_nPrintMarginLX,
 		nDirectY * ( m_nPreview_ViewMarginTop + m_pPrintSetting->m_nPrintMarginTY ),
 		m_nPreview_ViewMarginLeft + m_nPreview_PaperAllWidth - m_pPrintSetting->m_nPrintMarginRX + 1,
 		nDirectY * ( m_nPreview_ViewMarginTop + m_nPreview_PaperAllHeight - m_pPrintSetting->m_nPrintMarginBY )
 	);
-	gr.RestorePen();
+	gr.ClearPen();
 
 	::SetTextColor( hdc, RGB( 0, 0, 0 ) );
 

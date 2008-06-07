@@ -34,7 +34,7 @@ public:
 	void DispVerticalLines( CGraphics& gr, int nTop, int nBottom, CLayoutInt nLeftCol, CLayoutInt nRightCol ) const;
 
 	// -- -- 行番号 -- -- //
-	void DispLineNumber( HDC hdc, CLayoutInt nLineNum, int y ) const;		// 行番号表示
+	void DispLineNumber( CGraphics& gr, CLayoutInt nLineNum, int y ) const;		// 行番号表示
 
 public: //####仮
 	// -- -- 実装補助 -- -- //

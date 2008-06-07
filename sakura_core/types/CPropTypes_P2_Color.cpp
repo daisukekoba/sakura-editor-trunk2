@@ -1035,17 +1035,17 @@ void CPropTypes::_DrawColorButton( DRAWITEMSTRUCT* pDis, COLORREF cColor )
 
 	if( pDis->itemState & ODS_SELECTED ){
 
-		gr.SetPenColor(cBtnDkShadow);
+		gr.SetPen(cBtnDkShadow);
 		::MoveToEx( gr, 0, pDis->rcItem.bottom - 2, NULL );
 		::LineTo( gr, 0, 0 );
 		::LineTo( gr, pDis->rcItem.right - 1, 0 );
 
-		gr.SetPenColor(cBtnShadow);
+		gr.SetPen(cBtnShadow);
 		::MoveToEx( gr, 1, pDis->rcItem.bottom - 3, NULL );
 		::LineTo( gr, 1, 1 );
 		::LineTo( gr, pDis->rcItem.right - 2, 1 );
 
-		gr.SetPenColor(cBtnHiLight);
+		gr.SetPen(cBtnHiLight);
 		::MoveToEx( gr, 0, pDis->rcItem.bottom - 1, NULL );
 		::LineTo( gr, pDis->rcItem.right - 1, pDis->rcItem.bottom - 1 );
 		::LineTo( gr, pDis->rcItem.right - 1, -1 );
@@ -1062,17 +1062,17 @@ void CPropTypes::_DrawColorButton( DRAWITEMSTRUCT* pDis, COLORREF cColor )
 
 	}
 	else{
-		gr.SetPenColor(cBtnHiLight);
+		gr.SetPen(cBtnHiLight);
 		::MoveToEx( gr, 0, pDis->rcItem.bottom - 2, NULL );
 		::LineTo( gr, 0, 0 );
 		::LineTo( gr, pDis->rcItem.right - 1, 0 );
 
-		gr.SetPenColor(cBtnShadow);
+		gr.SetPen(cBtnShadow);
 		::MoveToEx( gr, 1, pDis->rcItem.bottom - 2, NULL );
 		::LineTo( gr, pDis->rcItem.right - 2, pDis->rcItem.bottom - 2 );
 		::LineTo( gr, pDis->rcItem.right - 2, 0 );
 
-		gr.SetPenColor(cBtnDkShadow);
+		gr.SetPen(cBtnDkShadow);
 		::MoveToEx( gr, 0, pDis->rcItem.bottom - 1, NULL );
 		::LineTo( gr, pDis->rcItem.right - 1, pDis->rcItem.bottom - 1 );
 		::LineTo( gr, pDis->rcItem.right - 1, -1 );
@@ -1081,7 +1081,7 @@ void CPropTypes::_DrawColorButton( DRAWITEMSTRUCT* pDis, COLORREF cColor )
 	if((pDis->itemState & ODS_DISABLED)==0){
 		/* 指定色で塗りつぶす */
 		gr.SetBrushColor(cColor);
-		gr.SetPenColor(cBtnShadow);
+		gr.SetPen(cBtnShadow);
 		::RoundRect( gr, rc.left, rc.top, rc.right, rc.bottom , 5, 5 );
 	}
 
@@ -1286,7 +1286,7 @@ void CPropTypes::DrawColorListItem( DRAWITEMSTRUCT* pDis )
 	rc1.bottom = rc1.top + 12;
 	if( pColorInfo->m_bDisp ){	/* 色分け/表示する */
 		// 2006.04.26 ryoji テキスト色を使う（「ハイコントラスト黒」のような設定でも見えるように）
-		gr.SetPenColor( ::GetSysColor( COLOR_WINDOWTEXT ) );
+		gr.SetPen( ::GetSysColor( COLOR_WINDOWTEXT ) );
 
 		::MoveToEx( gr,	rc1.left + 2, rc1.top + 6, NULL );
 		::LineTo( gr,	rc1.left + 5, rc1.bottom - 3 );
@@ -1317,7 +1317,7 @@ void CPropTypes::DrawColorListItem( DRAWITEMSTRUCT* pDis )
 		rc1.bottom -= 2;
 
 		gr.SetBrushColor( pColorInfo->m_colBACK );
-		gr.SetPenColor( cRim );
+		gr.SetPen( cRim );
 		::RoundRect( pDis->hDC, rc1.left, rc1.top, rc1.right, rc1.bottom , 3, 3 );
 	}
 
@@ -1329,7 +1329,7 @@ void CPropTypes::DrawColorListItem( DRAWITEMSTRUCT* pDis )
 	rc1.right = rc1.left + 12;
 	rc1.bottom -= 2;
 	gr.SetBrushColor( pColorInfo->m_colTEXT );
-	gr.SetPenColor( cRim );
+	gr.SetPen( cRim );
 	::RoundRect( pDis->hDC, rc1.left, rc1.top, rc1.right, rc1.bottom , 3, 3 );
 
 }

@@ -1071,23 +1071,23 @@ LRESULT CTabWnd::OnDrawItem( HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam 
 		}
 
 		// テキスト描画
-		gr.SetTextForeColor( clrText );
+		gr.PushTextForeColor( clrText );
 		gr.SetTextBackTransparent(true);
 		HFONT hfnt = CreateMenuFont();
-		gr.SetMyFont(hfnt);
+		gr.PushMyFont(hfnt);
 		RECT rcText = rcItem;
 		rcText.left += (CX_SMICON + 8);
 
 		::DrawText( gr, pData->szText, -1, &rcText, DT_SINGLELINE | DT_LEFT | DT_VCENTER );
 
 		gr.RestoreTextColors();
-		gr.RestoreFont();
+		gr.PopMyFont();
 		::DeleteObject( hfnt );
 
 		// チェック状態なら外枠描画
 		if( lpdis->itemState & ODS_CHECKED )
 		{
-			gr.SetPenColor( ::GetSysColor(COLOR_HIGHLIGHT) );
+			gr.SetPen( ::GetSysColor(COLOR_HIGHLIGHT) );
 			gr.SetNullBrush();
 			::Rectangle( gr, rcItem.left, rcItem.top, rcItem.right, rcItem.bottom );
 		}
@@ -2138,7 +2138,7 @@ void CTabWnd::DrawBtnBkgnd( HDC hdc, const LPRECT lprcBtn, BOOL bBtnHilighted )
 	if( bBtnHilighted )
 	{
 		CGraphics gr(hdc);
-		gr.SetPenColor( ::GetSysColor(COLOR_HIGHLIGHT) );
+		gr.SetPen( ::GetSysColor(COLOR_HIGHLIGHT) );
 		gr.SetBrushColor( ::GetSysColor(COLOR_MENU) );
 		::Rectangle( gr, lprcBtn->left, lprcBtn->top, lprcBtn->right, lprcBtn->bottom );
 	}
@@ -2158,7 +2158,7 @@ void CTabWnd::DrawListBtn( CGraphics& gr, const LPRECT lprcClient )
 	DrawBtnBkgnd( gr, &rcBtn, m_bListBtnHilighted );	// 2006.10.21 ryoji
 
 	int nIndex = m_bListBtnHilighted? COLOR_MENUTEXT: COLOR_BTNTEXT;
-	gr.SetPenColor( ::GetSysColor( nIndex ) );
+	gr.SetPen( ::GetSysColor( nIndex ) );
 	gr.SetBrushColor( ::GetSysColor( nIndex ) ); //$$ GetSysColorBrushを用いた実装のほうが効率は良い
 	for( int i = 0; i < _countof(ptBase); i++ )
 	{
@@ -2203,14 +2203,14 @@ void CTabWnd::DrawCloseBtn( CGraphics& gr, const LPRECT lprcClient )
 	GetCloseBtnRect( lprcClient, &rcBtn );
 
 	// ボタンの左側にセパレータを描画する	// 2007.02.27 ryoji
-	gr.SetPenColor( ::GetSysColor( COLOR_3DSHADOW ) );
+	gr.SetPen( ::GetSysColor( COLOR_3DSHADOW ) );
 	::MoveToEx( gr, rcBtn.left - 4, rcBtn.top + 1, NULL );
 	::LineTo( gr, rcBtn.left - 4, rcBtn.bottom - 1 );
 
 	DrawBtnBkgnd( gr, &rcBtn, m_bCloseBtnHilighted );
 
 	int nIndex = m_bCloseBtnHilighted? COLOR_MENUTEXT: COLOR_BTNTEXT;
-	gr.SetPenColor( ::GetSysColor(nIndex) );
+	gr.SetPen( ::GetSysColor(nIndex) );
 	gr.SetBrushColor( ::GetSysColor(nIndex) );
 	if( m_pShareData->m_Common.m_sTabBar.m_bDispTabWnd &&
 		!m_pShareData->m_Common.m_sTabBar.m_bDispTabWndMultiWin &&

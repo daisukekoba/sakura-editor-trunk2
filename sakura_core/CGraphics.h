@@ -5,6 +5,7 @@
 #pragma once
 
 #include <windows.h>
+#include <vector>
 
 //! オリジナル値保存クラス
 template <class T>
@@ -55,19 +56,35 @@ public:
 	void SetForegroundColor(COLORREF color);	//!< 描画色を設定
 	void SetBackgroundColor(COLORREF color);	//!< 背景色を設定
 
-	//テキスト
+	//テキスト文字色
+	void PushTextForeColor(COLORREF color);
+	void PopTextForeColor();
+	void ClearTextForeColor();
 	void SetTextForeColor(COLORREF color);
+
+	//テキスト背景色
+	void PushTextBackColor(COLORREF color);
+	void PopTextBackColor();
+	void ClearTextBackColor();
 	void SetTextBackColor(COLORREF color);
+
+	//テキストモード
 	void SetTextBackTransparent(bool b);
+
+	//テキスト
 	void RestoreTextColors();
 
 	//フォント
+	void PushMyFont(HFONT hFont);
+	void PopMyFont();
+	void ClearMyFont();
 	void SetMyFont(HFONT hFont);				//!< フォント設定
-	void RestoreFont();
 
 	//ペン
-	void SetPenColor(COLORREF color);
-	void RestorePen();
+	void PushPen(COLORREF color, int nPenWidth);
+	void PopPen();
+	void SetPen(COLORREF color);
+	void ClearPen();
 
 	//ブラシ
 	void SetBrushColor(COLORREF color);
@@ -82,20 +99,22 @@ private:
 	typedef TOriginalHolder<COLORREF>	COrgColor;
 	typedef TOriginalHolder<int>		COrgInt;
 private:
-	HDC			m_hdc;
+	HDC					m_hdc;
 
 	//テキスト
-	COrgColor	m_clrTextForeOrg;
-	COrgColor	m_clrTextBackOrg;
-	COrgInt		m_nTextModeOrg;
-	HFONT		m_hfntOld;
+	std::vector<COLORREF>	m_vTextForeColors;
+	std::vector<COLORREF>	m_vTextBackColors;
+	std::vector<HFONT>		m_vFonts;
+
+	//テキスト
+	COrgInt				m_nTextModeOrg;
 
 	//ペン
-	HPEN		m_hpnOrg;
-	HPEN		m_hpnCurrent;
+	HPEN				m_hpnOrg;
+	std::vector<HPEN>	m_vPens;
 
 	//ブラシ
-	HBRUSH		m_hbrOrg;
-	HBRUSH		m_hbrCurrent;
-	bool		m_bDynamicBrush;	//m_hbrCurrentを動的に作成した場合はtrue
+	HBRUSH				m_hbrOrg;
+	HBRUSH				m_hbrCurrent;
+	bool				m_bDynamicBrush;	//m_hbrCurrentを動的に作成した場合はtrue
 };
