@@ -34,6 +34,9 @@ bool CColor_Tab::EndColor(SColorStrategyInfo* pInfo)
 
 EColorIndexType CColor_ZenSpace::BeginColor(SColorStrategyInfo* pInfo)
 {
+#ifdef NEW_ZENSPACE
+	return _COLORIDX_NOCHANGE;
+#else
 	if(!pInfo->pLine)return _COLORIDX_NOCHANGE;
 
 	const CEditDoc* pcDoc = CEditDoc::GetInstance(0);
@@ -43,6 +46,7 @@ EColorIndexType CColor_ZenSpace::BeginColor(SColorStrategyInfo* pInfo)
 		return COLORIDX_ZENSPACE;
 	}
 	return _COLORIDX_NOCHANGE;
+#endif
 }
 
 bool CColor_ZenSpace::EndColor(SColorStrategyInfo* pInfo)

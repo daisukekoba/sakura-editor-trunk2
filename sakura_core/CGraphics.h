@@ -81,7 +81,7 @@ public:
 	void SetMyFont(HFONT hFont);				//!< フォント設定
 
 	//ペン
-	void PushPen(COLORREF color, int nPenWidth);
+	void PushPen(COLORREF color, int nPenWidth, int nStyle = PS_SOLID);
 	void PopPen();
 	void SetPen(COLORREF color);
 	void ClearPen();

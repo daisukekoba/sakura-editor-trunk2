@@ -193,11 +193,9 @@ void CGraphics::SetMyFont(HFONT hFont)
 //                           ƒyƒ“                              //
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 
-
-
-void CGraphics::PushPen(COLORREF color, int nPenWidth)
+void CGraphics::PushPen(COLORREF color, int nPenWidth, int nStyle)
 {
-	HPEN hpnNew = CreatePen(PS_SOLID,nPenWidth,color);
+	HPEN hpnNew = CreatePen(nStyle,nPenWidth,color);
 	HPEN hpnOld = (HPEN)SelectObject(m_hdc,hpnNew);
 	m_vPens.push_back(hpnNew);
 	if(!m_hpnOrg){

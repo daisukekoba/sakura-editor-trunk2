@@ -34,18 +34,33 @@ void _DispZenkakuSpace( CGraphics& gr, DispPos* pDispPos, CEditView* pcView )
 	RECT rc;
 	if(pcView->GetTextArea().GenerateClipRect(&rc,*pDispPos,2))
 	{
-//		::FillRect(gr,&rc,(HBRUSH)GetStockObject(BLACK_BRUSH));
-
-		//ï`âÊï∂éöóÒ
+#ifdef NEW_ZENSPACE
+		//îwåi
+		gr.SetBrushColor(::GetBkColor(gr));
+		::FillRect(gr,&rc,gr.GetCurrentBrush());
+		
+		//éläpå`
+		COLORREF c = ::GetTextColor(gr);
+		rc.left+=1;
+		rc.top+=1;
+		rc.right-=1;
+		rc.bottom-=1;
+//		gr.SetNullBrush();
+//		gr.PushPen(c,1,PS_DOT);
+//		Rectangle(gr,rc.left,rc.top,rc.right,rc.bottom);
+//		gr.PopPen();
+		for(int x=rc.left+1;x<rc.right-1;x+=2){
+			::SetPixel(gr,x,rc.top,c);
+			::SetPixel(gr,x,rc.bottom-1,c);
+		}
+		for(int y=rc.top+1;y<rc.bottom-1;y+=2){
+			::SetPixel(gr,rc.left,y,c);
+			::SetPixel(gr,rc.right-1,y,c);
+		}
+#else
+		//ï`âÊ
 		const wchar_t* szZenSpace =
 			CTypeSupport(pcView,COLORIDX_ZENSPACE).IsDisp()?L"Å†":L"Å@";
-
-		//îwåi
-//		PatBlt(hdc,rc.left,rc.top,rc.right-rc.left,rc.bottom-rc.top,SRCCOPY);FillRect(hdc,&rc,A);
-
-//		Rectangle(hdc,rc.left+2,rc.top+2,rc.right-2,rc.bottom-2);
-		//*
-		//ï`âÊ
 		::ExtTextOutW_AnyBuild(
 			gr,
 			pDispPos->GetDrawPos().x,
@@ -56,7 +71,7 @@ void _DispZenkakuSpace( CGraphics& gr, DispPos* pDispPos, CEditView* pcView )
 			wcslen(szZenSpace),
 			pcView->GetTextMetrics().GetDxArray_AllZenkaku()
 		);
-		//*/
+#endif
 	}
 
 	//à íuêiÇﬂÇÈ
