@@ -542,11 +542,14 @@ int CDlgGrep::GetData( void )
 		CSearchKeywordManager().AddToSearchKeyArr( m_szText );
 	}
 
-	/* 検索ファイル */
-	CSearchKeywordManager().AddToGrepFileArr( m_szFile );
+	// この編集中のテキストから検索する場合、履歴に残さない	Uchi 2008/5/23
+	if (!m_bFromThisText) {
+		/* 検索ファイル */
+		CSearchKeywordManager().AddToGrepFileArr( m_szFile );
 
-	/* 検索フォルダ */
-	CSearchKeywordManager().AddToGrepFolderArr( m_szFolder );
+		/* 検索フォルダ */
+		CSearchKeywordManager().AddToGrepFolderArr( m_szFolder );
+	}
 
 	return TRUE;
 }
