@@ -219,7 +219,14 @@ CLayoutInt CEditView::OnHScroll( int nScrollCode, int nPos )
 	return nScrollVal;
 }
 
-/* スクロールバーの状態を更新する */
+/** スクロールバーの状態を更新する
+
+	タブバーのタブ切替時は SIF_DISABLENOSCROLL フラグでの有効化／無効化が正常に動作しない
+	（不可視でサイズ変更していることによる影響か？）ので SIF_DISABLENOSCROLL で有効／無効
+	の切替に失敗した場合には強制切替する
+
+	@date 2008.05.24 ryoji 有効／無効の強制切替を追加
+*/
 void CEditView::AdjustScrollBars()
 {
 	if( !GetDrawSwitch() ){
@@ -230,6 +237,7 @@ void CEditView::AdjustScrollBars()
 	CLayoutInt	nAllLines;
 	int			nVScrollRate;
 	SCROLLINFO	si;
+	bool		bEnable;
 
 	if( NULL != m_hwndVScrollBar ){
 		/* 垂直スクロールバー */
@@ -254,7 +262,11 @@ void CEditView::AdjustScrollBars()
 		//	縦スクロールバーがDisableになったときは必ず全体が画面内に収まるように
 		//	スクロールさせる
 		//	2005.11.01 aroka 判定条件誤り修正 (バーが消えてもスクロールしない)
-		if( GetTextArea().m_nViewRowNum >= nAllLines ){
+		bEnable = ( GetTextArea().m_nViewRowNum < nAllLines );
+		if( bEnable != (::IsWindowEnabled( m_hwndVScrollBar ) != 0) ){
+			::EnableWindow( m_hwndVScrollBar, bEnable? TRUE: FALSE );	// SIF_DISABLENOSCROLL 誤動作時の強制切替
+		}
+		if( !bEnable ){
 			ScrollAtV( CLayoutInt(0) );
 		}
 	}
@@ -271,7 +283,11 @@ void CEditView::AdjustScrollBars()
 		::SetScrollInfo( m_hwndHScrollBar, SB_CTL, &si, TRUE );
 
 		//	2006.1.28 aroka 判定条件誤り修正 (バーが消えてもスクロールしない)
-		if( GetTextArea().m_nViewColNum >= m_pcEditDoc->m_cLayoutMgr.GetMaxLineKetas() ){
+		bEnable = ( GetTextArea().m_nViewColNum < m_pcEditDoc->m_cLayoutMgr.GetMaxLineKetas() );
+		if( bEnable != (::IsWindowEnabled( m_hwndHScrollBar ) != 0) ){
+			::EnableWindow( m_hwndHScrollBar, bEnable? TRUE: FALSE );	// SIF_DISABLENOSCROLL 誤動作時の強制切替
+		}
+		if( !bEnable ){
 			ScrollAtH( CLayoutInt(0) );
 		}
 	}
