@@ -1088,7 +1088,7 @@ LRESULT CTabWnd::OnDrawItem( HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam 
 		if( lpdis->itemState & ODS_CHECKED )
 		{
 			gr.SetPen( ::GetSysColor(COLOR_HIGHLIGHT) );
-			gr.SetNullBrush();
+			gr.SetBrushColor(-1); //NULL_BRUSH
 			::Rectangle( gr, rcItem.left, rcItem.top, rcItem.right, rcItem.bottom );
 		}
 	}

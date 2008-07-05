@@ -108,7 +108,7 @@ CDlgFuncList::CDlgFuncList()
 	m_nCurLine = CLayoutInt(0);				/* 現在行 */
 	//	Apr. 23, 2005 genta 行番号を左端へ
 	m_nSortCol = 0;				/* ソートする列番号 2004.04.06 zenryaku 標準は行番号(1列目) */
-	m_bLineNumIsCRLF = FALSE;	/* 行番号の表示 FALSE=折り返し単位／TRUE=改行単位 */
+	m_bLineNumIsCRLF = false;	/* 行番号の表示 FALSE=折り返し単位／TRUE=改行単位 */
 	m_bWaitTreeProcess = false;	// 2002.02.16 hor Treeのダブルクリックでフォーカス移動できるように 2/4
 	m_nSortType = 0;
 }
@@ -153,7 +153,7 @@ HWND CDlgFuncList::DoModeless(
 	CFuncInfoArr*	pcFuncInfoArr,
 	CLayoutInt		nCurLine,
 	int				nListType,
-	int				bLineNumIsCRLF		/* 行番号の表示 FALSE=折り返し単位／TRUE=改行単位 */
+	bool			bLineNumIsCRLF		/* 行番号の表示 FALSE=折り返し単位／TRUE=改行単位 */
 )
 {
 	m_pcFuncInfoArr = pcFuncInfoArr;	/* 関数情報配列 */

@@ -12,7 +12,7 @@ EColorIndexType CColor_Eol::BeginColor(SColorStrategyInfo* pInfo)
 	pcLayout2 = CEditDoc::GetInstance(0)->m_cLayoutMgr.SearchLineByLayoutY( pInfo->pDispPos->GetLayoutLineRef() );
 	int nLineHeight = pInfo->pcView->GetTextMetrics().GetHankakuDy();  //s‚Ìc•H
 
-	if(!pInfo->pLine){
+	if(!pInfo->pLineOfLayout){
 		if(pInfo->pDispPos->GetLayoutLineRef()==CEditDoc::GetInstance(0)->m_cLayoutMgr.GetLineCount()){
 			return COLORIDX_EOL;
 		}
@@ -20,8 +20,8 @@ EColorIndexType CColor_Eol::BeginColor(SColorStrategyInfo* pInfo)
 			return _COLORIDX_NOCHANGE;
 		}
 	}
-	else if( pInfo->nPos >= pInfo->nLineLen - pcLayout2->GetLayoutEol().GetLen() ){
-		pInfo->nCOMMENTEND = pInfo->nPos + pcLayout2->GetLayoutEol().GetLen();
+	else if( pInfo->nPosInLogic >= pInfo->pDispPos->GetLayoutRef()->GetDocLineRef()->GetLengthWithoutEOL() ){
+		pInfo->nCOMMENTEND = pInfo->nPosInLogic + pcLayout2->GetLayoutEol().GetLen();
 		return COLORIDX_EOL;
 	}
 	return _COLORIDX_NOCHANGE;
@@ -29,7 +29,7 @@ EColorIndexType CColor_Eol::BeginColor(SColorStrategyInfo* pInfo)
 
 bool CColor_Eol::EndColor(SColorStrategyInfo* pInfo)
 {
-	if(pInfo->nPos>=pInfo->nCOMMENTEND){
+	if(pInfo->nPosInLogic>=pInfo->nCOMMENTEND){
 		return true;
 	}
 	return false;

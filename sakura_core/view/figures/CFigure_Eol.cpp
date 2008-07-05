@@ -26,7 +26,21 @@ void _DispEOL(CGraphics& gr, DispPos* pDispPos, CEol cEol, bool bSearchStringMod
 //                        CFigure_Eol                            //
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 
+bool CFigure_Eol::Match(const wchar_t* pText) const
+{
+	if(pText[0]==L'\r' && pText[1]==L'\n' && pText[2]==L'\0')return true;
+	if(pText[0]==L'\n' && pText[1]==L'\0')return true;
+	if(pText[0]==L'\r' && pText[1]==L'\0')return true;
+	return false;
+}
+
+CLayoutInt CFigure_Eol::GetLayoutLength(const wchar_t* pText, CLayoutInt nStartCol) const
+{
+	return CLayoutInt(2);
+}
+
 // 2006.04.29 Moca 選択処理のため縦線処理を追加
+//$$ 高速化可能。
 bool CFigure_Eol::DrawImp(SColorStrategyInfo* pInfo)
 {
 	const CEditDoc* pcDoc = CEditDoc::GetInstance(0);
@@ -35,10 +49,10 @@ bool CFigure_Eol::DrawImp(SColorStrategyInfo* pInfo)
 	CEditView* pcView = &CEditWnd::Instance()->GetActiveView();
 
 	// NULL == pLineの場合
-	if(!pInfo->pLine){
-		if(pInfo->nPos==0){
+	if(!pInfo->pLineOfLayout){
+		if(pInfo->nPosInLogic==0){
 			_DispEmptyLine(pInfo->gr,pInfo->pDispPos,pInfo->pcView);
-			pInfo->nPos++;
+			pInfo->nPosInLogic++;
 			return true;
 		}
 		else{
@@ -56,7 +70,7 @@ bool CFigure_Eol::DrawImp(SColorStrategyInfo* pInfo)
 	CEol cEol = pcLayout2->GetLayoutEol();
 
 	// ちょうど行末なら、以下へ進む
-	if( pInfo->nPos != pInfo->nLineLen - cEol.GetLen() ){
+	if( pInfo->nPosInLogic != pInfo->nLineLenOfLayoutWithNexts - cEol.GetLen() ){
 		return false;
 	}
 
@@ -65,19 +79,19 @@ bool CFigure_Eol::DrawImp(SColorStrategyInfo* pInfo)
 		// 改行が存在した場合は、改行記号を表示
 		if(cEol.GetLen()){
 			_DispEOL(pInfo->gr,pInfo->pDispPos,pcLayout2->GetLayoutEol(),pInfo->bSearchStringMode,pInfo->pcView);
-			pInfo->nPos+=cEol.GetLen();
+			pInfo->nPosInLogic+=cEol.GetLen();
 		}
 		// 最終行の場合は、EOFを表示
 		else if(pInfo->pDispPos->GetLayoutLineRef()+1==CEditDoc::GetInstance(0)->m_cLayoutMgr.GetLineCount() && pInfo->pDispPos->GetDrawCol() < nWrapKeta){
 			if( TypeDataPtr->m_ColorInfoArr[COLORIDX_EOF].m_bDisp ){
 				_DispEOF(pInfo->gr,pInfo->pDispPos,pInfo->pcView);
 			}
-			pInfo->nPos+=CLogicInt(1);
+			pInfo->nPosInLogic+=CLogicInt(1);
 		}
 		// それ以外では、折り返し記号を表示
 		else{
 			_DispWrap(pInfo->gr,pInfo->pDispPos,pcView);
-			pInfo->nPos+=CLogicInt(1);
+			pInfo->nPosInLogic+=CLogicInt(1);
 		}
 	}
 
@@ -314,8 +328,7 @@ void _DispEOL(CGraphics& gr, DispPos* pDispPos, CEol cEol, bool bSearchStringMod
 			// From Here 2003.08.17 ryoji 改行文字が欠けないように
 
 			// リージョン作成、選択。
-			HRGN hRgn = ::CreateRectRgnIndirect(&rcClip2);
-			::SelectClipRgn(gr, hRgn);
+			gr.SetClipping(rcClip2);
 			
 			// 描画領域
 			CMyRect rcEol;
@@ -326,8 +339,7 @@ void _DispEOL(CGraphics& gr, DispPos* pDispPos, CEol cEol, bool bSearchStringMod
 			_DrawEOL(gr, rcEol, cEol, cSupport.IsFatFont(), cSupport.GetTextColor());
 
 			// リージョン破棄
-			::SelectClipRgn(gr, NULL);
-			::DeleteObject(hRgn);
+			gr.ClearClipping();
 			
 			// To Here 2003.08.17 ryoji 改行文字が欠けないように
 		}

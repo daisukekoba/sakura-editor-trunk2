@@ -149,8 +149,10 @@ public:
 	// -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 	//                         サポート                            //
 	// -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
-	//!クリッピング矩形を作成。表示範囲外だった場合はfalseを返す。
 	//$ Generateなんていう大げさな名前じゃなくて、Get～で良い気がしてきた
+	//!クリッピング矩形を作成。表示範囲外だった場合はfalseを返す。
+	void GenerateCharRect(RECT* rc,const DispPos& sPos,int nHankakuNum) const;
+	bool TrimRectByArea(RECT* rc) const;
 	bool GenerateClipRect(RECT* rc,const DispPos& sPos,int nHankakuNum) const;
 	bool GenerateClipRectRight(RECT* rc,const DispPos& sPos) const; //!< 右端まで全部
 	bool GenerateClipRectLine(RECT* rc,const DispPos& sPos) const;  //!< 行全部

@@ -901,9 +901,9 @@ int CPropTypes::GetData_Color( HWND hwndDlg )
 	}
 	/* 行番号の表示 FALSE=折り返し単位／TRUE=改行単位 */
 	if( ::IsDlgButtonChecked( hwndDlg, IDC_RADIO_LINENUM_LAYOUT ) ){
-		m_Types.m_bLineNumIsCRLF = FALSE;
+		m_Types.m_bLineNumIsCRLF = false;
 	}else{
-		m_Types.m_bLineNumIsCRLF = TRUE;
+		m_Types.m_bLineNumIsCRLF = true;
 	}
 
 	/* セット名コンボボックスの値セット */

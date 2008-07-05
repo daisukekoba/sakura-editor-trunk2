@@ -12,7 +12,7 @@
 // 2005.01.13 MIK 強調キーワード数追加に伴う配列化
 EColorIndexType CColor_KeywordSet::BeginColor(SColorStrategyInfo* pInfo)
 {
-	if(!pInfo->pLine)return _COLORIDX_NOCHANGE;
+	if(!pInfo->pLineOfLayout)return _COLORIDX_NOCHANGE;
 
 	const CEditDoc* pcDoc = CEditDoc::GetInstance(0);
 	const STypeConfig* TypeDataPtr = &pcDoc->m_cDocType.GetDocumentAttribute();
@@ -24,15 +24,15 @@ EColorIndexType CColor_KeywordSet::BeginColor(SColorStrategyInfo* pInfo)
 			現在位置からキーワードを抜き出し、そのキーワードが登録単語ならば、色を変える
 	*/
 	if( TypeDataPtr->m_ColorInfoArr[COLORIDX_KEYWORD1].m_bDisp &&  /* 強調キーワードを表示する */ // 2002/03/13 novice
-		pInfo->IsPosKeywordHead() && IS_KEYWORD_CHAR( pInfo->pLine[pInfo->nPos] )
+		pInfo->IsPosKeywordHead() && IS_KEYWORD_CHAR( pInfo->pLineOfLayout[pInfo->GetPosInLayout()] )
 	){
 		// キーワードの開始 -> iKeyBegin
-		int iKeyBegin = pInfo->nPos;
+		int iKeyBegin = pInfo->nPosInLogic;
 
 		// キーワードの終端 -> iKeyEnd
 		int iKeyEnd;
-		for( iKeyEnd = iKeyBegin + 1; iKeyEnd <= pInfo->nLineLen - 1; ++iKeyEnd ){
-			if( !IS_KEYWORD_CHAR( pInfo->pLine[iKeyEnd] ) ){
+		for( iKeyEnd = iKeyBegin + 1; iKeyEnd <= pInfo->nLineLenOfLayoutWithNexts - 1; ++iKeyEnd ){
+			if( !IS_KEYWORD_CHAR( pInfo->pLineOfLayout[iKeyEnd] ) ){
 				break;
 			}
 		}
@@ -49,7 +49,7 @@ EColorIndexType CColor_KeywordSet::BeginColor(SColorStrategyInfo* pInfo)
 				/* ｎ番目のセットから指定キーワードをサーチ 無いときは-1を返す */						//MIK
 				int nIdx = GetDllShareData().m_Common.m_sSpecialKeyword.m_CKeyWordSetMgr.SearchKeyWord2(							//MIK 2000.12.01 binary search
 					TypeDataPtr->m_nKeyWordSetIdx[i] ,													//MIK
-					&pInfo->pLine[iKeyBegin],															//MIK
+					&pInfo->pLineOfLayout[iKeyBegin],															//MIK
 					nKeyLen																				//MIK
 				);																						//MIK
 				if( nIdx != -1 ){																		//MIK
@@ -64,7 +64,7 @@ EColorIndexType CColor_KeywordSet::BeginColor(SColorStrategyInfo* pInfo)
 
 bool CColor_KeywordSet::EndColor(SColorStrategyInfo* pInfo)
 {
-	if( pInfo->nPos == pInfo->nCOMMENTEND ){
+	if( pInfo->nPosInLogic == pInfo->nCOMMENTEND ){
 		return true;
 	}
 	return false;

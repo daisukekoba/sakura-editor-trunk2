@@ -654,6 +654,7 @@ void CShareData_IO::ShareData_IO_CustMenu( CDataProfile& cProfile, CommonSetting
 		int nSize = menu.m_nCustMenuItemNumArr[i];
 		for( j = 0; j < nSize; ++j ){
 			// start マクロ名でも設定できるように 2008/5/24 Uchi
+			auto_sprintf( szKeyName, LTEXT("nCMIF[%02d][%02d]"), i, j );
 			if (cProfile.IsReadingMode()) {
 				cProfile.IOProfileData(pszSecName, szKeyName, MakeStringBufferW(szFuncName));
 				if ( WCODE::Is09(*szFuncName) ) {
@@ -1033,7 +1034,7 @@ void CShareData_IO::ShareData_IO_Types( CDataProfile& cProfile )
 				types.m_nKeyWordSetIdx[0]		= buf[ 4];
 				types.m_nKeyWordSetIdx[1]		= buf[ 5];
 				types.m_nStringType				= buf[ 6];
-				types.m_bLineNumIsCRLF			= buf[ 7];
+				types.m_bLineNumIsCRLF			= (buf[ 7]!=0);
 				types.m_nLineTermType			= buf[ 8];
 				types.m_bWordWrap				= buf[ 9];
 				types.m_nCurrentPrintSetting	= buf[10];
@@ -1472,7 +1473,7 @@ void CShareData_IO::ShareData_IO_Other( CDataProfile& cProfile )
 	}
 
 	/* 指定行へジャンプの「改行単位の行番号」か「折り返し単位の行番号」か */
-	cProfile.IOProfileData( pszSecName, LTEXT("bLineNumIsCRLF")	, pShare->m_bLineNumIsCRLF );
+	cProfile.IOProfileData( pszSecName, LTEXT("bLineNumIsCRLF")	, pShare->m_bLineNumIsCRLF_ForJump );
 	
 	/* DIFF差分表示 */	//@@@ 2002.05.27 MIK
 	cProfile.IOProfileData( pszSecName, LTEXT("nDiffFlgOpt")	, pShare->m_nDiffFlgOpt );

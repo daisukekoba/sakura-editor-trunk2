@@ -5,30 +5,30 @@
 #include "CFigure_ZenSpace.h"
 #include "CFigure_HanSpace.h"
 #include "doc/CLayout.h"
-
-
-#if 1
+#include "charset/charcode.h"
 
 
 //! ’ÊíƒeƒLƒXƒg•`‰æ
-class CDraw_Text : public CFigureStrategy{
+class CFigure_Text : public CFigure{
 public:
 	bool DrawImp(SColorStrategyInfo* pInfo)
 	{
-		if(!pInfo->pLine)return false;
-
-		const CLayout*	pcLayout2 = CEditDoc::GetInstance(0)->m_cLayoutMgr.SearchLineByLayoutY( pInfo->pDispPos->GetLayoutLineRef() );
-		if(pInfo->nPos < pcLayout2->GetLengthWithoutEOL()){
-			pInfo->pcView->GetTextDrawer().DispText(
-				pInfo->gr,
-				pInfo->pDispPos,
-				&pInfo->pLine[pInfo->nPos],
-				1
-			);
-			pInfo->nPos++;
-			return true;
-		}
-		return false;
+		pInfo->pcView->GetTextDrawer().DispText(
+			pInfo->gr,
+			pInfo->pDispPos,
+			&pInfo->pLineOfLayout[pInfo->GetPosInLayout()],
+			1
+		);
+		pInfo->nPosInLogic++;
+		return true;
+	}
+	bool Match(const wchar_t* pText) const
+	{
+		return true;
+	}
+	CLayoutInt GetLayoutLength(const wchar_t* pText, CLayoutInt nStartCol) const
+	{
+		return CLayoutInt(WCODE::IsZenkaku(pText[0])?2:1);
 	}
 };
 
@@ -37,25 +37,38 @@ public:
 //                         •`‰æ“‡                            //
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 
-//! 1•¶Žš•`‰æB‚à‚¤•`‰æ‚·‚é•¶Žš‚ª–³‚­‚È‚Á‚½‚çtrue‚ð•Ô‚·
-bool DrawChar(SColorStrategyInfo* pInfo)
+
+// -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
+//                      CFigureManager                         //
+// -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
+CFigureManager::CFigureManager()
 {
-	if( pInfo->pDispPos->GetDrawPos().y >= pInfo->pcView->GetTextArea().GetAreaTop() ){
-		if(CFigure_Tab().DrawImp(pInfo)){}
-		else if(CFigure_HanSpace().DrawImp(pInfo)){}
-		else if(CFigure_ZenSpace().DrawImp(pInfo)){}
-		else if(CFigure_Eol().DrawImp(pInfo)){}
-		else if(CDraw_Text().DrawImp(pInfo)){}
-		else{
-			return true;
-		}
-		return false;
-	}
-	else{
-		return false; //####”÷–­
-	}
+	m_vFigures.push_back(new CFigure_Tab());
+	m_vFigures.push_back(new CFigure_HanSpace());
+	m_vFigures.push_back(new CFigure_ZenSpace());
+	m_vFigures.push_back(new CFigure_Eol());
+	m_vFigures.push_back(new CFigure_Text());
 }
 
+CFigureManager::~CFigureManager()
+{
+	for(int i=0;i<(int)m_vFigures.size();i++){
+		SAFE_DELETE(m_vFigures[i]);
+	}
+	m_vFigures.clear();
+}
 
+//$$ ‚‘¬‰»‰Â”\
+CFigure& CFigureManager::GetFigure(const wchar_t* pText)
+{
+	for(int i=0;i<(int)m_vFigures.size();i++){
+		CFigure* pcFigure = m_vFigures[i];
+		if(pcFigure->Match(pText)){
+			return *pcFigure;
+		}
+	}
+	assert(0);
+	static CFigure_Text cDummy;
+	return cDummy;
+}
 
-#endif

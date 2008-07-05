@@ -2951,6 +2951,14 @@
 						>
 					</File>
 					<File
+						RelativePath="..\sakura_core\view\figures\CFigureManager.cpp"
+						>
+					</File>
+					<File
+						RelativePath="..\sakura_core\view\figures\CFigureManager.h"
+						>
+					</File>
+					<File
 						RelativePath="..\sakura_core\view\figures\CFigureStrategy.cpp"
 						>
 					</File>

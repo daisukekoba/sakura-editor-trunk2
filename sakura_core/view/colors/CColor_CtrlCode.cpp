@@ -12,21 +12,21 @@
 
 EColorIndexType CColor_CtrlCode::BeginColor(SColorStrategyInfo* pInfo)
 {
-	if(!pInfo->pLine)return _COLORIDX_NOCHANGE;
+	if(!pInfo->pLineOfLayout)return _COLORIDX_NOCHANGE;
 
 	const CEditDoc* pcDoc = CEditDoc::GetInstance(0);
 	const STypeConfig* TypeDataPtr = &pcDoc->m_cDocType.GetDocumentAttribute();
 
 	if(TypeDataPtr->m_ColorInfoArr[COLORIDX_CTRLCODE].m_bDisp	/* コントロールコードを色分け */
-		&&WCODE::IsControlCode(pInfo->pLine[pInfo->nPos]))
+		&&WCODE::IsControlCode(pInfo->pLineOfLayout[pInfo->GetPosInLayout()]))
 	{
 		this->nCOMMENTMODE_OLD = pInfo->nCOMMENTMODE;
 		this->nCOMMENTEND_OLD = pInfo->nCOMMENTEND;
 
 		/* コントロールコード列の終端を探す */
 		int i;
-		for( i = pInfo->nPos + 1; i <= pInfo->nLineLen - 1; ++i ){
-			if(!WCODE::IsControlCode(pInfo->pLine[i])){
+		for( i = pInfo->nPosInLogic + 1; i <= pInfo->nLineLenOfLayoutWithNexts - 1; ++i ){
+			if(!WCODE::IsControlCode(pInfo->pLineOfLayout[i])){
 				break;
 			}
 		}
@@ -39,7 +39,7 @@ EColorIndexType CColor_CtrlCode::BeginColor(SColorStrategyInfo* pInfo)
 
 bool CColor_CtrlCode::EndColor(SColorStrategyInfo* pInfo)
 {
-	if( pInfo->nPos == pInfo->nCOMMENTEND ){
+	if( pInfo->nPosInLogic == pInfo->nCOMMENTEND ){
 		pInfo->nCOMMENTMODE = this->nCOMMENTMODE_OLD;
 		pInfo->nCOMMENTEND = this->nCOMMENTEND_OLD;
 		return true;

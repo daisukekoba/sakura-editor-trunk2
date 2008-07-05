@@ -1279,7 +1279,7 @@ void CPrintPreview::DrawPageText(
 				/* 行番号の表示 FALSE=折り返し単位／TRUE=改行単位 */
 				if( m_pParentWnd->GetDocument().m_cDocType.GetDocumentAttribute().m_bLineNumIsCRLF ){
 					/* 論理行番号表示モード */
-					if( 0 != pcLayout->GetLogicOffset() ){
+					if( 0 != pcLayout->GetLogicOffset() ){ //折り返しレイアウト行
 						wcscpy( szLineNum, L" " );
 					}else{
 						_itow( pcLayout->GetLogicLineNo() + 1, szLineNum, 10 );	/* 対応する論理行番号 */

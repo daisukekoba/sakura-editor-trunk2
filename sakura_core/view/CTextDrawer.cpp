@@ -294,14 +294,13 @@ void CTextDrawer::DispLineNumber(
 {
 	//$$ 高速化：SearchLineByLayoutYにキャッシュを持たせる
 	const CLayout*	pcLayout = CEditDoc::GetInstance(0)->m_cLayoutMgr.SearchLineByLayoutY( nLineNum );
-	if(!pcLayout)return;
 
 	const CEditView* pView=m_pEditView;
 	const STypeConfig* pTypes=&pView->m_pcEditDoc->m_cDocType.GetDocumentAttribute();
 
 	int				nLineHeight = pView->GetTextMetrics().GetHankakuDy();
 	int				nCharWidth = pView->GetTextMetrics().GetHankakuDx();
-	//	Sep. 23, 2002 genta 共通式のくくりだし
+	// 行番号表示部分X幅	Sep. 23, 2002 genta 共通式のくくりだし
 	int				nLineNumAreaWidth = pView->GetTextArea().m_nViewAlignLeftCols * nCharWidth;
 
 	CTypeSupport cTextType(pView,COLORIDX_TEXT);
@@ -311,7 +310,7 @@ void CTextDrawer::DispLineNumber(
 	//                     nColorIndexを決定                       //
 	// -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 	EColorIndexType nColorIndex = COLORIDX_GYOU;	/* 行番号 */
-	const CDocLine*	pCDocLine;
+	const CDocLine*	pCDocLine = NULL;
 	if( pcLayout ){
 		pCDocLine = pcLayout->GetDocLineRef();
 
@@ -321,15 +320,16 @@ void CTextDrawer::DispLineNumber(
 		}
 	}
 
-	//DIFF色設定
-	EDiffMark type = CDiffLineGetter(pCDocLine).GetLineDiffMark();
-	CDiffLineGetter(pCDocLine).GetDiffColor(&nColorIndex);
+	if(pCDocLine){
+		//DIFF色設定
+		CDiffLineGetter(pCDocLine).GetDiffColor(&nColorIndex);
 
-	// 02/10/16 ai
-	// ブックマークの表示
-	if(CBookmarkGetter(pCDocLine).IsBookmarked()){
-		if( CTypeSupport(pView,COLORIDX_MARK).IsDisp() ) {
-			nColorIndex = COLORIDX_MARK;
+		// 02/10/16 ai
+		// ブックマークの表示
+		if(CBookmarkGetter(pCDocLine).IsBookmarked()){
+			if( CTypeSupport(pView,COLORIDX_MARK).IsDisp() ) {
+				nColorIndex = COLORIDX_MARK;
+			}
 		}
 	}
 
@@ -340,68 +340,55 @@ void CTextDrawer::DispLineNumber(
 	CTypeSupport cColorType(pView,nColorIndex);
 	CTypeSupport cMarkType(pView,COLORIDX_MARK);
 
-	if( CTypeSupport(pView,COLORIDX_GYOU).IsDisp() ){ /* 行番号表示／非表示 */
-		wchar_t szLineNum[18];
+	//該当行の行番号エリア矩形
+	RECT	rcLineNum;
+	rcLineNum.left = 0;
+	rcLineNum.right = nLineNumAreaWidth;
+	rcLineNum.top = y;
+	rcLineNum.bottom = y + nLineHeight;
 
-		/* 行番号の表示 FALSE=折り返し単位／TRUE=改行単位 */
-		if( pTypes->m_bLineNumIsCRLF ){
-			/* 論理行番号表示モード */
-			if( NULL == pcLayout || 0 != pcLayout->GetLogicOffset() ){
-				wcscpy( szLineNum, L" " );
-			}else{
-				_itow( pcLayout->GetLogicLineNo() + 1, szLineNum, 10 );	/* 対応する論理行番号 */
-			}
-		}else{
-			/* 物理行（レイアウト行）番号表示モード */
-			_itow( (Int)nLineNum + 1, szLineNum, 10 );
-		}
-
-		int nLineCols = wcslen( szLineNum );
-
-		//色、フォント
-		gr.PushTextBackColor(cTextType.GetBackColor());		//背景色：テキストの背景色 //	Sep. 23, 2002 余白をテキストの背景色にする
+	if(!pcLayout){
+		//行が存在しない場合は、テキスト描画色で塗りつぶし
+		cTextType.FillBack(gr,rcLineNum);
+	}
+	else if( CTypeSupport(pView,COLORIDX_GYOU).IsDisp() ){ /* 行番号表示／非表示 */
 		gr.PushTextForeColor(cColorType.GetTextColor());	//テキスト：行番号の色
-		gr.PushMyFont(cColorType.GetTypeFont());			    //フォント：行番号のフォント
+		gr.PushTextBackColor( cColorType.GetBackColor() );	//テキスト：行番号背景の色
+		gr.PushMyFont(cColorType.GetTypeFont());			//フォント：行番号のフォント
 
-		// 余白を埋める
-		RECT	rcClip;
-		rcClip.left   = nLineNumAreaWidth;
-		rcClip.right  = pView->GetTextArea().GetAreaLeft();
-		rcClip.top    = y;
-		rcClip.bottom = y + nLineHeight;
-		::ExtTextOutW_AnyBuild(
-			gr,
-			rcClip.left,
-			y,
-			ExtTextOutOption(),
-			&rcClip,
-			L" ",
-			1,
-			pView->GetTextMetrics().GetDxArray_AllHankaku()
-		);
-		
-		//	Sep. 23, 2002 余白をテキストの背景色にするため，背景色の設定を移動
-		SetBkColor( gr, cColorType.GetBackColor() );		/* 行番号背景の色 */
+		//描画文字列
+		wchar_t szLineNum[18];
+		int nLineCols;
+		{
+			/* 行番号の表示 FALSE=折り返し単位／TRUE=改行単位 */
+			if( pTypes->m_bLineNumIsCRLF ){
+				/* 論理行番号表示モード */
+				if( NULL == pcLayout || 0 != pcLayout->GetLogicOffset() ){ //折り返しレイアウト行
+					wcscpy( szLineNum, L" " );
+				}else{
+					_itow( pcLayout->GetLogicLineNo() + 1, szLineNum, 10 );	/* 対応する論理行番号 */
+				}
+			}else{
+				/* 物理行（レイアウト行）番号表示モード */
+				_itow( (Int)nLineNum + 1, szLineNum, 10 );
+			}
+			nLineCols = wcslen( szLineNum );
 
-		int drawNumTop = (pView->GetTextArea().m_nViewAlignLeftCols - nLineCols - 1) * ( nCharWidth );
-
-		/* 行番号区切り 0=なし 1=縦線 2=任意 */
-		if( 2 == pTypes->m_nLineTermType ){
-			//	Sep. 22, 2002 genta
-			szLineNum[ nLineCols ] = pTypes->m_cLineTermChar;
-			szLineNum[ ++nLineCols ] = '\0';
+			/* 行番号区切り 0=なし 1=縦線 2=任意 */
+			if( 2 == pTypes->m_nLineTermType ){
+				//	Sep. 22, 2002 genta
+				szLineNum[ nLineCols ] = pTypes->m_cLineTermChar;
+				szLineNum[ ++nLineCols ] = '\0';
+			}
 		}
-		rcClip.left = 0;
 
 		//	Sep. 23, 2002 genta
-		rcClip.right = nLineNumAreaWidth;
-		rcClip.top = y;
-		rcClip.bottom = y + nLineHeight;
+		int drawNumTop = (pView->GetTextArea().m_nViewAlignLeftCols - nLineCols - 1) * ( nCharWidth );
 		::ExtTextOutW_AnyBuild( gr,
 			drawNumTop,
 			y,
 			ExtTextOutOption(),
-			&rcClip,
+			&rcLineNum,
 			szLineNum,
 			nLineCols,
 			pView->GetTextMetrics().GetDxArray_AllHankaku()
@@ -414,39 +401,41 @@ void CTextDrawer::DispLineNumber(
 			::LineTo( gr, nLineNumAreaWidth - 2, y + nLineHeight );
 			gr.PopPen();
 		}
+
 		gr.PopTextForeColor();
 		gr.PopTextBackColor();
 		gr.PopMyFont();
 	}
 	else{
-		RECT	rcClip;
 		// 行番号エリアの背景描画
-		rcClip.left   = 0;
-		rcClip.right  = pView->GetTextArea().GetAreaLeft() - GetDllShareData().m_Common.m_sWindow.m_nLineNumRightSpace; //	Sep. 23 ,2002 genta 余白はテキスト色のまま残す
-		rcClip.top    = y;
-		rcClip.bottom = y + nLineHeight;
-		cColorType.FillBack(gr,rcClip);
-		
-		// Mar. 5, 2003, Moca
-		// 行番号とテキストの隙間の描画
-		rcClip.left   = rcClip.right;
-		rcClip.right  = pView->GetTextArea().GetAreaLeft();
-		rcClip.top    = y;
-		rcClip.bottom = y + nLineHeight;
-		cTextType.FillBack(gr,rcClip);
+		cColorType.FillBack(gr,rcLineNum);
 	}
 
-	// 2001.12.03 hor
-	/* とりあえずブックマークに縦線 */
-	if(CBookmarkGetter(pCDocLine).IsBookmarked() && !cMarkType.IsDisp() )
+	//行属性描画 ($$$分離予定)
+	if(pCDocLine)
 	{
-		gr.PushPen(cColorType.GetTextColor(),2);
-		::MoveToEx( gr, 1, y, NULL );
-		::LineTo( gr, 1, y + nLineHeight );
-		gr.PopPen();
+		// 2001.12.03 hor
+		/* とりあえずブックマークに縦線 */
+		if(CBookmarkGetter(pCDocLine).IsBookmarked() && !cMarkType.IsDisp() )
+		{
+			gr.PushPen(cColorType.GetTextColor(),2);
+			::MoveToEx( gr, 1, y, NULL );
+			::LineTo( gr, 1, y + nLineHeight );
+			gr.PopPen();
+		}
+
+		//DIFFマーク描画
+		CDiffLineGetter(pCDocLine).DrawDiffMark(gr,y,nLineHeight,cColorType);
 	}
 
-	//DIFFマーク描画
-	CDiffLineGetter(pCDocLine).DrawDiffMark(gr,y,nLineHeight,cColorType);
+	// 行番号とテキストの隙間の描画
+	{
+		RECT rcRest;
+		rcRest.left   = rcLineNum.right;
+		rcRest.right  = pView->GetTextArea().GetAreaLeft();
+		rcRest.top    = y;
+		rcRest.bottom = y + nLineHeight;
+		cTextType.FillBack(gr,rcRest);
+	}
 }
 

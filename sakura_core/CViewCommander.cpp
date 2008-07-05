@@ -3576,7 +3576,7 @@ void CViewCommander::Command_JUMP( void )
 
 	if( !GetEditWindow()->m_cDlgJump.m_bPLSQL ){	/* PL/SQLソースの有効行か */
 		/* 行番号の表示 FALSE=折り返し単位／TRUE=改行単位 */
-		if( GetDllShareData().m_bLineNumIsCRLF ){
+		if( GetDllShareData().m_bLineNumIsCRLF_ForJump ){
 			if( CLogicInt(0) >= nLineNum ){
 				nLineNum = CLogicInt(1);
 			}

@@ -63,11 +63,11 @@ public:
 	// -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 	//                           •`‰æ                              //
 	// -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
-	void FillBack(HDC hdc,const RECT& rc)
+	void FillBack(CGraphics& gr,const RECT& rc)
 	{
-		HBRUSH hBrush = ::CreateSolidBrush( m_pTypes->m_ColorInfoArr[m_nColorIdx].m_colBACK );
-		::FillRect( hdc, &rc, hBrush );
-		::DeleteObject( hBrush );
+		gr.PushBrushColor( m_pTypes->m_ColorInfoArr[m_nColorIdx].m_colBACK );
+		gr.FillMyRect(rc);
+		gr.PopBrushColor();
 	}
 
 	// -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //

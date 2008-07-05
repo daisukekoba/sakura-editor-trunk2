@@ -4,6 +4,7 @@
 
 #include "stdafx.h"
 #include "CGraphics.h"
+#include "util/std_macro.h"
 
 void CGraphics::Init(HDC hdc)
 {
@@ -18,10 +19,71 @@ void CGraphics::Init(HDC hdc)
 
 CGraphics::~CGraphics()
 {
+	ClearClipping();
 	ClearMyFont();
 	ClearPen();
-	RestoreBrush();
+	ClearBrush();
 	RestoreTextColors();
+}
+
+// -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
+//                       クリッピング                          //
+// -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
+
+
+void CGraphics::_InitClipping()
+{
+	if(m_vClippingRgns.empty()){
+		//元のクリッピング領域を取得
+		RECT rcDummy = {0,0,1,1};
+		HRGN hrgnOrg = ::CreateRectRgnIndirect(&rcDummy);
+		int nRet = ::GetClipRgn(m_hdc,hrgnOrg);
+		if(nRet!=1){
+			::DeleteObject(hrgnOrg);
+			hrgnOrg = NULL;
+		}
+		//保存
+		m_vClippingRgns.push_back(hrgnOrg);
+	}
+}
+
+void CGraphics::PushClipping(const RECT& rc)
+{
+	_InitClipping();
+	//新しく作成→HDCに設定→スタックに保存
+	HRGN hrgnNew = CreateRectRgnIndirect(&rc);
+	::SelectClipRgn(m_hdc,hrgnNew);
+	m_vClippingRgns.push_back(hrgnNew);
+}
+
+void CGraphics::PopClipping()
+{
+	if(m_vClippingRgns.size()>=2){
+		//最後の要素を削除
+		::DeleteObject(m_vClippingRgns.back());
+		m_vClippingRgns.pop_back();
+		//この時点の最後の要素をHDCに設定
+		::SelectClipRgn(m_hdc,m_vClippingRgns.back());
+	}
+}
+
+void CGraphics::ClearClipping()
+{
+	//元のクリッピングに戻す
+	if(!m_vClippingRgns.empty()){
+		::SelectClipRgn(m_hdc,m_vClippingRgns[0]);
+	}
+	//領域をすべて削除
+	for(int i=0;i<(int)m_vClippingRgns.size();i++){
+		::DeleteObject(m_vClippingRgns[i]);
+	}
+	m_vClippingRgns.clear();
+}
+
+void CGraphics::SetClipping(const RECT& rc)
+{
+	ClearClipping();
+	PushClipping(rc);
 }
 
 
@@ -255,35 +317,57 @@ void CGraphics::ClearPen()
 //                          ブラシ                             //
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 
+void CGraphics::_InitBrushColor()
+{
+	if(m_vBrushes.empty()){
+		//元のブラシを取得
+		HBRUSH hbrOrg = (HBRUSH)::SelectObject(m_hdc,::GetStockObject(NULL_BRUSH));
+		::SelectObject(m_hdc,hbrOrg);
+		//保存
+		m_vBrushes.push_back(hbrOrg);
+	}
+}
+
+void CGraphics::PushBrushColor(COLORREF color)
+{
+	//####ここで効率化できる
+
+	_InitClipping();
+	//新しく作成→HDCに設定→スタックに保存
+	HBRUSH hbrNew = (color!=(COLORREF)-1)?CreateSolidBrush(color):(HBRUSH)GetStockObject(NULL_BRUSH);
+	::SelectObject(m_hdc,hbrNew);
+	m_vBrushes.push_back(hbrNew);
+}
+
+void CGraphics::PopBrushColor()
+{
+	if(m_vBrushes.size()>=2){
+		//最後から2番目の要素をHDCに設定
+		::SelectObject(m_hdc,m_vBrushes[m_vBrushes.size()-2]);
+		//最後の要素を削除
+		::DeleteObject(m_vBrushes.back());
+		m_vBrushes.pop_back();
+	}
+}
+
+void CGraphics::ClearBrush()
+{
+	//元のブラシに戻す
+	if(!m_vBrushes.empty()){
+		::SelectObject(m_hdc,m_vBrushes[0]);
+	}
+	//ブラシをすべて削除 (0番要素以外)
+	for(int i=1;i<(int)m_vBrushes.size();i++){
+		::DeleteObject(m_vBrushes[i]);
+	}
+	m_vBrushes.resize(t_min(1,(int)m_vBrushes.size()));
+}
+
+
 void CGraphics::SetBrushColor(COLORREF color)
 {
-	RestoreBrush();
-	m_hbrCurrent = ::CreateSolidBrush(color);
-	m_bDynamicBrush = true;
-	m_hbrOrg = (HBRUSH)::SelectObject(m_hdc,m_hbrCurrent);
-}
-
-void CGraphics::SetNullBrush()
-{
-	RestoreBrush();
-	m_hbrCurrent = (HBRUSH)::GetStockObject(NULL_BRUSH);
-	m_bDynamicBrush = false;
-	m_hbrOrg = (HBRUSH)::SelectObject(m_hdc,m_hbrCurrent);
-}
-
-void CGraphics::RestoreBrush()
-{
-	if(m_hbrOrg){
-		SelectObject(m_hdc,m_hbrOrg);
-		m_hbrOrg = NULL;
-	}
-	if(m_hbrCurrent){
-		if(m_bDynamicBrush){
-			DeleteObject(m_hbrCurrent);
-			m_bDynamicBrush = false;
-		}
-		m_hbrCurrent = NULL;
-	}
+	ClearBrush();
+	PushBrushColor(color);
 }
 
 
@@ -296,4 +380,14 @@ void CGraphics::DrawLine(int x1, int y1, int x2, int y2)
 	::MoveToEx(m_hdc,x1,y1,NULL);
 	::LineTo(m_hdc,x2,y2);
 }
+
+//矩形塗り潰し
+void CGraphics::FillMyRect(const RECT& rc)
+{
+	::FillRect(m_hdc,&rc,GetCurrentBrush());
+#ifdef _DEBUG
+	::SetPixel(m_hdc,-1,-1,0); //###########実験
+#endif
+}
+
 

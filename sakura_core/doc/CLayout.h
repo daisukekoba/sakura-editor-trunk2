@@ -57,16 +57,16 @@ public:
 	
 	// m_ptLogicPos.xで補正したあとの文字列を得る
 	const wchar_t* GetPtr() const   { return m_pCDocLine->GetPtr() + m_ptLogicPos.x; };
-	int GetLengthWithEOL() const    { return m_nLength;	};	//	ただしEOLは常に1文字とカウント？？
-	int GetLengthWithoutEOL() const { return m_nLength - (m_cEol.GetLen() ? 1 : 0);	};
+	CLogicInt GetLengthWithEOL() const    { return m_nLength;	};	//	ただしEOLは常に1文字とカウント？？
+	CLogicInt GetLengthWithoutEOL() const { return m_nLength - (m_cEol.GetLen() ? 1 : 0);	};
 	//CLogicInt GetLength() const {	return m_nLength;	};	//	CMemoryIterator用（EOL含む）
 	CLayoutInt GetIndent() const {	return m_nIndent;	};	//!< このレイアウト行のインデントサイズを取得。単位は半角文字。	CMemoryIterator用
 
 	//取得インターフェース
-	CLogicInt GetLogicLineNo() const{ return m_ptLogicPos.GetY2(); }
+	CLogicInt GetLogicLineNo() const{ if(this)return m_ptLogicPos.GetY2(); else return CLogicInt(-1); } //$$$高速化
 	CLogicInt GetLogicOffset() const{ return m_ptLogicPos.GetX2(); }
 	CLogicPoint GetLogicPos() const{ return m_ptLogicPos; }
-	EColorIndexType GetColorTypePrev() const{ return m_nTypePrev; }
+	EColorIndexType GetColorTypePrev() const{ return m_nTypePrev; } //#########汚っ
 
 	//変更インターフェース
 	void OffsetLogicLineNo(CLogicInt n){ m_ptLogicPos.y+=n; }

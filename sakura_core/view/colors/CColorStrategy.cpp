@@ -12,6 +12,16 @@
 #include "CColor_Eol.h"
 #include "CColor_Found.h"
 #include "CColor_Eol.h"
+#include "doc/CLayout.h"
+
+CLogicInt SColorStrategyInfo::GetPosInLayout() const
+{
+	return nPosInLogic - pDispPos->GetLayoutRef()->GetLogicOffset();
+}
+
+
+
+
 
 CColorStrategyPool::CColorStrategyPool()
 {

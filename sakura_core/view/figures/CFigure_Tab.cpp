@@ -11,18 +11,26 @@ void _DrawTabArrow( CGraphics& gr, int nPosX, int nPosY, int nWidth, int nHeight
 //                         CFigure_Tab                           //
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 
-bool CFigure_Tab::DrawImp(SColorStrategyInfo* pInfo)
+bool CFigure_Tab::Match(const wchar_t* pText) const
 {
-	if(!pInfo->pLine)return false;
-
-	const CEditDoc* pcDoc = CEditDoc::GetInstance(0);
-	const STypeConfig* TypeDataPtr = &pcDoc->m_cDocType.GetDocumentAttribute();
-
-	if( pInfo->pLine[pInfo->nPos] == WCODE::TAB ){
-		_DispTab( pInfo->gr, pInfo->pDispPos, pInfo->pcView );
+	if( pText[0] == WCODE::TAB ){
 		return true;
 	}
 	return false;
+}
+
+//$$ 高速化可能。
+//$$ 整理可能。Matchの所でnStartColを取るとよい。CFigure_Tabインスタンスにタブ幅メンバを持たせる？
+CLayoutInt CFigure_Tab::GetLayoutLength(const wchar_t* pText, CLayoutInt nStartCol) const
+{
+	const CEditDoc* pcDoc = CEditDoc::GetInstance(0);
+	return pcDoc->m_cLayoutMgr.GetActualTabSpace( nStartCol );
+}
+
+bool CFigure_Tab::DrawImp(SColorStrategyInfo* pInfo)
+{
+	_DispTab( pInfo->gr, pInfo->pDispPos, pInfo->pcView );
+	return true;
 }
 
 

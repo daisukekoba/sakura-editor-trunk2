@@ -2,24 +2,38 @@
 #include "CFigure_HanSpace.h"
 #include "types/CTypeSupport.h"
 
-void _DispHankakuSpace( CGraphics& gr, DispPos* pDispPos, bool bSearchStringMode, CEditView* pcView );
+#ifdef NEW_ZENSPACE
+#define _DispHanSpace _DispHanSpaceNew
+#else
+#define _DispHanSpace _DispHanSpaceOld
+#endif
+
+void _DispHanSpace( CGraphics& gr, DispPos* pDispPos, bool bSearchStringMode, CEditView* pcView );
 
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
-//                      CFigure_HanSpace                         //
+//                     CFigure_HanSpace                        //
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 
-bool CFigure_HanSpace::DrawImp(SColorStrategyInfo* pInfo)
+bool CFigure_HanSpace::Match(const wchar_t* pText) const
 {
-	if(!pInfo->pLine)return false;
-
 	const CEditDoc* pcDoc = CEditDoc::GetInstance(0);
 	const STypeConfig* TypeDataPtr = &pcDoc->m_cDocType.GetDocumentAttribute();
 
-	if(pInfo->pLine[pInfo->nPos] == L' ' && TypeDataPtr->m_ColorInfoArr[COLORIDX_SPACE].m_bDisp){
-		_DispHankakuSpace(pInfo->gr,pInfo->pDispPos,pInfo->bSearchStringMode,pInfo->pcView);
+	if(pText[0] == L' ' && TypeDataPtr->m_ColorInfoArr[COLORIDX_SPACE].m_bDisp){
 		return true;
 	}
 	return false;
+}
+
+CLayoutInt CFigure_HanSpace::GetLayoutLength(const wchar_t* pText, CLayoutInt nStartCol) const
+{
+	return CLayoutInt(1);
+}
+
+bool CFigure_HanSpace::DrawImp(SColorStrategyInfo* pInfo)
+{
+	_DispHanSpace(pInfo->gr,pInfo->pDispPos,pInfo->bSearchStringMode,pInfo->pcView);
+	return true;
 }
 
 
@@ -27,7 +41,37 @@ bool CFigure_HanSpace::DrawImp(SColorStrategyInfo* pInfo)
 //                         描画実装                            //
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 
-void _DispHankakuSpace( CGraphics& gr, DispPos* pDispPos, bool bSearchStringMode, CEditView* pcView )
+//! 新しい形式の半角スペース描画
+void _DispHanSpaceNew( CGraphics& gr, DispPos* pDispPos, bool bSearchStringMode, CEditView* pcView )
+{
+	RECT rc;
+	if(pcView->GetTextArea().GenerateClipRect(&rc,*pDispPos,1))
+	{
+		//背景
+		gr.SetBrushColor(GetBkColor(gr));
+		::FillRect(gr,&rc,gr.GetCurrentBrush());
+	
+		//四角形
+		COLORREF c = ::GetTextColor(gr);
+		rc.left+=1;
+		rc.top+=1;
+		rc.right-=1;
+		rc.bottom-=1;
+		for(int x=rc.left+1;x<rc.right-1;x+=2){
+			ApiWrap::SetPixelSurely(gr,x,rc.bottom-1,c);
+		}
+		for(int y=(rc.top+rc.bottom)/2+1;y<rc.bottom-1;y+=2){
+			ApiWrap::SetPixelSurely(gr,rc.left,y,c);
+			ApiWrap::SetPixelSurely(gr,rc.right-1,y,c);
+		}
+	}
+
+	//位置進める
+	pDispPos->ForwardDrawCol(1);
+}
+
+//! 古い形式の半角スペース描画
+void _DispHanSpaceOld( CGraphics& gr, DispPos* pDispPos, bool bSearchStringMode, CEditView* pcView )
 {
 	//クリッピング矩形を計算。画面外なら描画しない
 	CMyRect rcClip;

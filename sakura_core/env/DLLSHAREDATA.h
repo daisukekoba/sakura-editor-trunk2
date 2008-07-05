@@ -97,13 +97,16 @@ struct DLLSHAREDATA{
 
 	//外部コマンド実行ダイアログのオプション
 	int							m_nExecFlgOpt;				/* 外部コマンド実行オプション */	//	2006.12.03 maru オプションの拡張のため
-	//指定行へジャンプダイアログのオプション
-	BOOL						m_bLineNumIsCRLF;			/* 指定行へジャンプの「改行単位の行番号」か「折り返し単位の行番号」か */
 	//DIFF差分表示ダイアログのオプション
 	int							m_nDiffFlgOpt;				/* DIFF差分表示 */	//@@@ 2002.05.27 MIK
 	//タグファイルの作成ダイアログのオプション
 	TCHAR						m_szTagsCmdLine[_MAX_PATH];	/* TAGSコマンドラインオプション */	//@@@ 2003.05.12 MIK
 	int							m_nTagsOpt;					/* TAGSオプション(チェック) */	//@@@ 2003.05.12 MIK
+
+
+	// -- -- テンポラリ -- -- //
+	//指定行へジャンプダイアログのオプション
+	bool						m_bLineNumIsCRLF_ForJump;			/* 指定行へジャンプの「改行単位の行番号」か「折り返し単位の行番号」か */
 };
 
 

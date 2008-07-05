@@ -13,17 +13,17 @@ static int IsNumber( const wchar_t*, int, int );/* 数値ならその長さを返す */	//@
 
 EColorIndexType CColor_Numeric::BeginColor(SColorStrategyInfo* pInfo)
 {
-	if(!pInfo->pLine)return _COLORIDX_NOCHANGE;
+	if(!pInfo->pLineOfLayout)return _COLORIDX_NOCHANGE;
 
 	const CEditDoc* pcDoc = CEditDoc::GetInstance(0);
 	const STypeConfig* TypeDataPtr = &pcDoc->m_cDocType.GetDocumentAttribute();
 	int	nnn;
 	
 	if( pInfo->IsPosKeywordHead() && TypeDataPtr->m_ColorInfoArr[COLORIDX_DIGIT].m_bDisp
-		&& (nnn = IsNumber( pInfo->pLine, pInfo->nPos, pInfo->nLineLen )) > 0 )		/* 半角数字を表示する */
+		&& (nnn = IsNumber( pInfo->pLineOfLayout, pInfo->nPosInLogic, pInfo->nLineLenOfLayoutWithNexts )) > 0 )		/* 半角数字を表示する */
 	{
 		/* キーワード文字列の終端をセットする */
-		pInfo->nCOMMENTEND = pInfo->nPos + nnn;
+		pInfo->nCOMMENTEND = pInfo->nPosInLogic + nnn;
 		return COLORIDX_DIGIT;	/* 半角数値である */ // 2002/03/13 novice
 	}
 	return _COLORIDX_NOCHANGE;
@@ -32,7 +32,7 @@ EColorIndexType CColor_Numeric::BeginColor(SColorStrategyInfo* pInfo)
 
 bool CColor_Numeric::EndColor(SColorStrategyInfo* pInfo)
 {
-	if( pInfo->nPos == pInfo->nCOMMENTEND ){
+	if( pInfo->nPosInLogic == pInfo->nCOMMENTEND ){
 		return true;
 	}
 	return false;

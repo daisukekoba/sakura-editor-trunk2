@@ -57,8 +57,7 @@ void CTextArea::UpdateAreaMetrics(HDC hdc)
 	pView->GetTextMetrics().SetHankakuDy( pView->GetTextMetrics().GetHankakuHeight() + pView->m_pcEditDoc->m_cDocType.GetDocumentAttribute().m_nLineSpace );
 }
 
-
-bool CTextArea::GenerateClipRect(RECT* rc,const DispPos& sPos,int nHankakuNum) const
+void CTextArea::GenerateCharRect(RECT* rc,const DispPos& sPos,int nHankakuNum) const
 {
 	const CEditView* pView=m_pEditView;
 
@@ -66,7 +65,10 @@ bool CTextArea::GenerateClipRect(RECT* rc,const DispPos& sPos,int nHankakuNum) c
 	rc->right  = sPos.GetDrawPos().x + pView->GetTextMetrics().GetHankakuDx() * nHankakuNum;
 	rc->top    = sPos.GetDrawPos().y;
 	rc->bottom = sPos.GetDrawPos().y + pView->GetTextMetrics().GetHankakuDy();
+}
 
+bool CTextArea::TrimRectByArea(RECT* rc) const
+{
 	//左はみ出し調整
 	if( rc->left < GetAreaLeft() ){
 		rc->left = GetAreaLeft();
@@ -79,6 +81,14 @@ bool CTextArea::GenerateClipRect(RECT* rc,const DispPos& sPos,int nHankakuNum) c
 	//$ 元動作踏襲：画面上下のはみ出し判定は省略
 
 	return true;
+}
+
+bool CTextArea::GenerateClipRect(RECT* rc,const DispPos& sPos,int nHankakuNum) const
+{
+	const CEditView* pView=m_pEditView;
+
+	GenerateCharRect(rc,sPos,nHankakuNum);
+	return TrimRectByArea(rc);
 }
 
 //!右の残りを表す矩形を生成する

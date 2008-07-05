@@ -142,8 +142,8 @@ EColorIndexType CEditView::GetColorIndex(
 	/* 論理行データの取得 */
 	if( pcLayout ){
 		// 2002/2/10 aroka CMemory変更
-		pInfo->nLineLen = pcLayout->GetDocLineRef()->GetLengthWithEOL()/* - pcLayout->GetLogicOffset()*/;	// 03/10/24 ai 折り返し行のColorIndexが正しく取得できない問題に対応
-		pInfo->pLine = pcLayout->GetPtr()/* + pcLayout->GetLogicOffset()*/;			// 03/10/24 ai 折り返し行のColorIndexが正しく取得できない問題に対応
+		pInfo->nLineLenOfLayoutWithNexts = pcLayout->GetDocLineRef()->GetLengthWithEOL()/* - pcLayout->GetLogicOffset()*/;	// 03/10/24 ai 折り返し行のColorIndexが正しく取得できない問題に対応
+		pInfo->pLineOfLayout = pcLayout->GetPtr()/* + pcLayout->GetLogicOffset()*/;			// 03/10/24 ai 折り返し行のColorIndexが正しく取得できない問題に対応
 
 		// 2005.11.20 Moca 色が正しくないことがある問題に対処
 		const CLayout* pcLayoutLineFirst = pcLayout;
@@ -158,8 +158,8 @@ EColorIndexType CEditView::GetColorIndex(
 		nLineOffset = pcLayout->GetLogicOffset();	// 2008/5/29 Uchi
 	}
 	else{
-		pInfo->pLine = NULL;
-		pInfo->nLineLen = CLogicInt(0);
+		pInfo->pLineOfLayout = NULL;
+		pInfo->nLineLenOfLayoutWithNexts = CLogicInt(0);
 		pInfo->nCOMMENTMODE = COLORIDX_TEXT; // 2002/03/13 novice
 		pInfo->nCOMMENTEND = 0;
 		pcLayout2 = NULL;
@@ -170,10 +170,10 @@ EColorIndexType CEditView::GetColorIndex(
 	//@SetCurrentColor( hdc, pInfo->nCOMMENTMODE );
 	pInfo->nColorIndex = pInfo->nCOMMENTMODE;	// 02/12/18 ai
 
-	pInfo->nPos = CLogicInt(0);
+	pInfo->nPosInLogic = CLogicInt(0);
 	nLineBgn = 0;
 
-	if( NULL != pInfo->pLine ){
+	if( NULL != pInfo->pLineOfLayout ){
 
 		//@@@ 2001.11.17 add start MIK
 		if( TypeDataPtr->m_bUseRegexKeyword )
@@ -182,11 +182,11 @@ EColorIndexType CEditView::GetColorIndex(
 		}
 		//@@@ 2001.11.17 add end MIK
 
-		while( pInfo->nPos <= nCol ){	// 03/10/24 ai 行頭のColorIndexが取得できない問題に対応
+		while( pInfo->nPosInLogic <= nCol ){	// 03/10/24 ai 行頭のColorIndexが取得できない問題に対応
 
-			nLineBgn = pInfo->nPos;
+			nLineBgn = pInfo->nPosInLogic;
 
-			while( pInfo->nPos - nLineBgn <= nCol ){	// 02/12/18 ai
+			while( pInfo->nPosInLogic - nLineBgn <= nCol ){	// 02/12/18 ai
 				//色終了
 				if(pInfo->pStrategy){
 					if(pInfo->pStrategy->EndColor(pInfo)){
@@ -199,7 +199,7 @@ EColorIndexType CEditView::GetColorIndex(
 				}
 
 				//行終了
-				if(pInfo->nPos >= pcLayout2->GetLengthWithEOL()){
+				if(pInfo->nPosInLogic >= pcLayout2->GetLengthWithEOL()){
 					break;
 				}
 
@@ -219,9 +219,9 @@ EColorIndexType CEditView::GetColorIndex(
 					}
 				}
 
-				pInfo->nPos += CLogicInt(1);
+				pInfo->nPosInLogic += CLogicInt(1);
 			}
-			if( pInfo->nPos > nCol ){	// 03/10/24 ai 行頭のColorIndexが取得できない問題に対応
+			if( pInfo->nPosInLogic > nCol ){	// 03/10/24 ai 行頭のColorIndexが取得できない問題に対応
 				break;
 			}
 		}
@@ -279,14 +279,12 @@ void CEditView::SetCurrentColor( CGraphics& gr, EColorIndexType eColorIndex )
 void CEditView::OnPaint( HDC _hdc, PAINTSTRUCT *pPs, BOOL bDrawFromComptibleBmp )
 {
 //	MY_RUNNINGTIMER( cRunningTimer, "CEditView::OnPaint" );
-
 	CGraphics gr(_hdc);
 
 	// 2004.01.28 Moca デスクトップに作画しないように
 	if( NULL == gr )return;
 
 	if( !GetDrawSwitch() )return;
-
 	//@@@
 #ifdef _DEBUG
 	::MYTRACE( _T("OnPaint(%d,%d)-(%d,%d) : %d\n"),
@@ -399,8 +397,6 @@ void CEditView::OnPaint( HDC _hdc, PAINTSTRUCT *pPs, BOOL bDrawFromComptibleBmp 
 
 	int nTop = pPs->rcPaint.top;
 
-
-
 	// -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 	//           描画開始レイアウト絶対行 -> nLayoutLine             //
 	// -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
@@ -476,7 +472,8 @@ void CEditView::OnPaint( HDC _hdc, PAINTSTRUCT *pPs, BOOL bDrawFromComptibleBmp 
 	//              テキストの無い部分の塗りつぶし                 //
 	// -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 	if( IsBkBitmap() ){
-	}else{
+	}
+	else{
 		/* テキストのない部分を背景色で塗りつぶす */
 		if( sPos.GetDrawPos().y < pPs->rcPaint.bottom ){
 			RECT rcBack;
@@ -608,8 +605,6 @@ bool CEditView::DrawLogicLine(
 	pInfo->pDispPos = _pDispPos;
 	pInfo->pcView = this;
 
-	// 表示を開始するレイアウト
-	const CLayout* pcLayout = m_pcEditDoc->m_cLayoutMgr.SearchLineByLayoutY( pInfo->pDispPos->GetLayoutLineRef() );
 //	if( !pcLayout ){
 //		return true;
 //	}
@@ -631,23 +626,16 @@ bool CEditView::DrawLogicLine(
 	int nCharDx  = GetTextMetrics().GetHankakuDx();  //半角
 
 	//処理する文字位置
-	pInfo->nPos = CLogicInt(0); //☆開始
+	pInfo->nPosInLogic = CLogicInt(0); //☆開始
 
 	// -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 	//          論理行データの取得 -> pLine, pLineLen              //
 	// -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
-	if( pcLayout ){
-		// 2002/2/10 aroka CMemory変更
-		pInfo->nLineLen = pcLayout->GetDocLineRef()->GetLengthWithEOL() - pcLayout->GetLogicOffset();
-		pInfo->pLine    = pcLayout->GetDocLineRef()->GetPtr() + pcLayout->GetLogicOffset();
-	}
-	else{
-		pInfo->pLine = NULL;
-		pInfo->nLineLen = CLogicInt(0);
-	}
-
 	// 前行の最終設定色
-	pInfo->ChangeColor(pcLayout?pcLayout->GetColorTypePrev():COLORIDX_TEXT);
+	{
+		const CLayout* pcLayout = m_pcEditDoc->m_cLayoutMgr.SearchLineByLayoutY( pInfo->pDispPos->GetLayoutLineRef() );
+		pInfo->ChangeColor(pcLayout?pcLayout->GetColorTypePrev():COLORIDX_TEXT);
+	}
 	pInfo->nCOMMENTEND = 0; //☆開始
 
 	//サポート
@@ -672,12 +660,23 @@ bool CEditView::DrawLogicLine(
 		//レイアウト行を1行描画
 		bool bDrawLayoutLine = DrawLayoutLine(pInfo);
 
-		//描画し終わったら終了
-		if(bDrawLayoutLine)
+		//行を進める
+		CLogicInt nOldLogicLineNo = pInfo->pDispPos->GetLayoutRef()->GetLogicLineNo();
+		pInfo->pDispPos->ForwardDrawLine(1);		//描画Y座標＋＋
+		pInfo->pDispPos->ForwardLayoutLineRef(1);	//レイアウト行＋＋
+
+		// ロジック行を描画し終わったら抜ける
+		if(pInfo->pDispPos->GetLayoutRef()->GetLogicLineNo()!=nOldLogicLineNo){
 			break;
+		}
+
+		// nLineToを超えたら抜ける
+		if(pInfo->pDispPos->GetLayoutLineRef() >= nLineTo + CLayoutInt(1)){
+			break;
+		}
 	}
 
-	return pInfo->pLine==NULL;
+	return pInfo->pLineOfLayout==NULL;
 }
 
 /*!
@@ -689,24 +688,35 @@ bool CEditView::DrawLayoutLine(SColorStrategyInfo* pInfo)
 	CTypeSupport cTextType(this,COLORIDX_TEXT);
 	CTypeSupport cSearchType(this,COLORIDX_SEARCH);
 
+	// 描画範囲外の場合は抜ける
+	if( pInfo->pDispPos->GetDrawPos().y < pInfo->pcView->GetTextArea().GetAreaTop() ){
+		return false;
+	}
+
+	// レイアウト情報
+	const CLayout* pcLayout = m_pcEditDoc->m_cLayoutMgr.SearchLineByLayoutY( pInfo->pDispPos->GetLayoutLineRef() );
+	if( pcLayout ){
+		pInfo->pLineOfLayout				= pcLayout->GetDocLineRef()->GetPtr() + pcLayout->GetLogicOffset();
+		pInfo->nLineLenOfLayoutWithNexts	= pcLayout->GetDocLineRef()->GetLengthWithEOL() - pcLayout->GetLogicOffset();
+	}
+	else{
+		pInfo->pLineOfLayout				= NULL;
+		pInfo->nLineLenOfLayoutWithNexts	= CLogicInt(0);
+	}
+
 	// コンフィグ
 	int nLineHeight = GetTextMetrics().GetHankakuDy();  //行の縦幅？
 	STypeConfig* TypeDataPtr = &m_pcEditDoc->m_cDocType.GetDocumentAttribute();
 
-	//ワーク用CLayoutポインタ
-	const CLayout*	pcLayout2 = m_pcEditDoc->m_cLayoutMgr.SearchLineByLayoutY( pInfo->pDispPos->GetLayoutLineRef() );
 
 	// -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 	//                        行番号描画                           //
 	// -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
-	if( pInfo->pDispPos->GetDrawPos().y >= GetTextArea().GetAreaTop() ){
-		// 行番号表示
-		pInfo->pcView->GetTextDrawer().DispLineNumber(
-			pInfo->gr,
-			pInfo->pDispPos->GetLayoutLineRef(),
-			pInfo->pDispPos->GetDrawPos().y
-		);
-	}
+	pInfo->pcView->GetTextDrawer().DispLineNumber(
+		pInfo->gr,
+		pInfo->pDispPos->GetLayoutLineRef(),
+		pInfo->pDispPos->GetDrawPos().y
+	);
 
 
 	// -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
@@ -718,14 +728,14 @@ bool CEditView::DrawLayoutLine(SColorStrategyInfo* pInfo)
 	// -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 	//                 行頭(インデント)背景描画                    //
 	// -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
-	if(pcLayout2 && pcLayout2->GetIndent()!=0)
+	if(pcLayout && pcLayout->GetIndent()!=0)
 	{
 		RECT rcClip;
-		if(GetTextArea().GenerateClipRect(&rcClip,*pInfo->pDispPos,(Int)pcLayout2->GetIndent())){
+		if(GetTextArea().GenerateClipRect(&rcClip,*pInfo->pDispPos,(Int)pcLayout->GetIndent())){
 			cTextType.FillBack(pInfo->gr,rcClip);
 		}
 		//描画位置進める
-		pInfo->pDispPos->ForwardDrawCol((Int)pcLayout2->GetIndent());
+		pInfo->pDispPos->ForwardDrawCol((Int)pcLayout->GetIndent());
 	}
 
 
@@ -733,7 +743,9 @@ bool CEditView::DrawLayoutLine(SColorStrategyInfo* pInfo)
 	//                 通常文字列以外描画ループ                    //
 	// -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 	//行終端または折り返しに達するまでループ
-	while(1){
+	const CTextArea* pcArea = &this->GetTextArea();
+	if(pcLayout)while(1)
+	{
 		//色終了
 		if(pInfo->pStrategy){
 			if( pInfo->pStrategy->EndColor(pInfo) ){
@@ -755,16 +767,33 @@ bool CEditView::DrawLayoutLine(SColorStrategyInfo* pInfo)
 			}
 		}
 
+		//1文字情報取得 $$高速化可能
+		CFigure& cFigure = CFigureManager::Instance()->GetFigure(&pInfo->pLineOfLayout[pInfo->GetPosInLayout()]);
+
 		//1文字描画
-		CLogicInt nPosOld = pInfo->nPos;
-		bool bDrawDone = DrawChar(pInfo);
-		if(pInfo->nPos == nPosOld){
-			pInfo->nPos += CLogicInt(1);
+		CLogicInt nPosOld = pInfo->nPosInLogic;
+		cFigure.DrawImp(pInfo);
+		if(pInfo->nPosInLogic == nPosOld){
+			pInfo->nPosInLogic += CLogicInt(1);
 		}
 
-		//行終了
-		if(bDrawDone){
+		//レイアウト行終了
+		if(pInfo->nPosInLogic - pcLayout->GetLogicOffset() >= pcLayout->GetLengthWithEOL() ){
 			break;
+		}
+	}
+
+	// 必要ならEOF描画
+	void _DispEOF( CGraphics& gr, DispPos* pDispPos, const CEditView* pcView);
+	if(pcLayout && pcLayout->GetNextLayout()==NULL && pcLayout->GetLayoutEol().GetLen()==0){
+		// 有文字行のEOF
+		_DispEOF(pInfo->gr,pInfo->pDispPos,pInfo->pcView);
+	}
+	else if(!pcLayout && pInfo->pDispPos->GetLayoutLineRef()==m_pcEditDoc->m_cLayoutMgr.GetLineCount()){
+		// 空行のEOF
+		CLayout* pBottom = m_pcEditDoc->m_cLayoutMgr.GetBottomLayout();
+		if(pBottom==NULL || (pBottom && pBottom->GetLayoutEol().GetLen())){
+			_DispEOF(pInfo->gr,pInfo->pDispPos,pInfo->pcView);
 		}
 	}
 
@@ -772,15 +801,6 @@ bool CEditView::DrawLayoutLine(SColorStrategyInfo* pInfo)
 	RECT rcClip;
 	if(pInfo->pcView->GetTextArea().GenerateClipRectRight(&rcClip,*pInfo->pDispPos)){
 		cTextType.FillBack(pInfo->gr,rcClip);
-	}
-
-	//行を進める
-	pInfo->pDispPos->ForwardDrawLine(1);		//描画Y座標＋＋
-	pInfo->pDispPos->ForwardLayoutLineRef(1);	//レイアウト行＋＋
-
-	// 対象の論理行を描画し終わった場合はtrueを返す
-	if(pInfo->nPos >= pInfo->nLineLen){
-		return true;
 	}
 
 	return false;

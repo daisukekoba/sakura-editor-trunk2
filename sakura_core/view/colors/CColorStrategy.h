@@ -105,9 +105,9 @@ struct SColorStrategyInfo{
 	CGraphics	gr;	//(SColorInfoでは未使用)
 
 	//スキャン位置
-	LPCWSTR		pLine;
-	CLogicInt	nLineLen;
-	CLogicInt	nPos;
+	LPCWSTR		pLineOfLayout;
+	CLogicInt	nLineLenOfLayoutWithNexts;
+	CLogicInt	nPosInLogic;
 
 	//描画位置
 	DispPos*	pDispPos;
@@ -135,9 +135,15 @@ struct SColorStrategyInfo{
 	//! 現在のスキャン位置がキーワード先頭であるかどうか
 	bool IsPosKeywordHead() const
 	{
-		return (nPos==0 || !IS_KEYWORD_CHAR(pLine[nPos-1]));
+		return (nPosInLogic==0 || !IS_KEYWORD_CHAR(pLineOfLayout[GetPosInLayout()-1]));
 	}
 
+	//! 現在のスキャン位置
+	CLogicInt GetPosInLogic() const
+	{
+		return nPosInLogic;
+	}
+	CLogicInt GetPosInLayout() const;
 };
 
 class CColorStrategy{

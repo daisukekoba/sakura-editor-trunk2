@@ -8,11 +8,11 @@
 
 EColorIndexType CColor_Tab::BeginColor(SColorStrategyInfo* pInfo)
 {
-	if(!pInfo->pLine)return _COLORIDX_NOCHANGE;
+	if(!pInfo->pLineOfLayout)return _COLORIDX_NOCHANGE;
 
 	const CEditDoc* pcDoc = CEditDoc::GetInstance(0);
 	const STypeConfig* TypeDataPtr = &pcDoc->m_cDocType.GetDocumentAttribute();
-	if( pInfo->pLine[pInfo->nPos] == WCODE::TAB ){
+	if( pInfo->pLineOfLayout[pInfo->GetPosInLayout()] == WCODE::TAB ){
 		return COLORIDX_TAB;
 	}
 	return _COLORIDX_NOCHANGE;
@@ -20,7 +20,7 @@ EColorIndexType CColor_Tab::BeginColor(SColorStrategyInfo* pInfo)
 
 bool CColor_Tab::EndColor(SColorStrategyInfo* pInfo)
 {
-	if( pInfo->pLine[pInfo->nPos] != WCODE::TAB ){
+	if( pInfo->pLineOfLayout[pInfo->GetPosInLayout()] != WCODE::TAB ){
 		return true;
 	}
 	return false;
@@ -36,22 +36,21 @@ EColorIndexType CColor_ZenSpace::BeginColor(SColorStrategyInfo* pInfo)
 {
 #ifdef NEW_ZENSPACE
 	return _COLORIDX_NOCHANGE;
-#else
-	if(!pInfo->pLine)return _COLORIDX_NOCHANGE;
+#endif
+	if(!pInfo->pLineOfLayout)return _COLORIDX_NOCHANGE;
 
 	const CEditDoc* pcDoc = CEditDoc::GetInstance(0);
 	const STypeConfig* TypeDataPtr = &pcDoc->m_cDocType.GetDocumentAttribute();
-	if( WCODE::IsZenkakuSpace(pInfo->pLine[pInfo->nPos]) )
+	if( WCODE::IsZenkakuSpace(pInfo->pLineOfLayout[pInfo->GetPosInLayout()]) )
 	{
 		return COLORIDX_ZENSPACE;
 	}
 	return _COLORIDX_NOCHANGE;
-#endif
 }
 
 bool CColor_ZenSpace::EndColor(SColorStrategyInfo* pInfo)
 {
-	if( !WCODE::IsZenkakuSpace(pInfo->pLine[pInfo->nPos]) ){
+	if( !WCODE::IsZenkakuSpace(pInfo->pLineOfLayout[pInfo->GetPosInLayout()]) ){
 		return true;
 	}
 	return false;
@@ -63,11 +62,14 @@ bool CColor_ZenSpace::EndColor(SColorStrategyInfo* pInfo)
 
 EColorIndexType CColor_HanSpace::BeginColor(SColorStrategyInfo* pInfo)
 {
-	if(!pInfo->pLine)return _COLORIDX_NOCHANGE;
+#ifdef NEW_ZENSPACE
+	return _COLORIDX_NOCHANGE;
+#endif
+	if(!pInfo->pLineOfLayout)return _COLORIDX_NOCHANGE;
 
 	const CEditDoc* pcDoc = CEditDoc::GetInstance(0);
 	const STypeConfig* TypeDataPtr = &pcDoc->m_cDocType.GetDocumentAttribute();
-	if (pInfo->pLine[pInfo->nPos] == L' ' && TypeDataPtr->m_ColorInfoArr[COLORIDX_SPACE].m_bDisp )
+	if (pInfo->pLineOfLayout[pInfo->GetPosInLayout()] == L' ' && TypeDataPtr->m_ColorInfoArr[COLORIDX_SPACE].m_bDisp )
 	{
 		return COLORIDX_SPACE;
 	}
@@ -76,7 +78,7 @@ EColorIndexType CColor_HanSpace::BeginColor(SColorStrategyInfo* pInfo)
 
 bool CColor_HanSpace::EndColor(SColorStrategyInfo* pInfo)
 {
-	if( pInfo->pLine[pInfo->nPos] != L' ' ){
+	if( pInfo->pLineOfLayout[pInfo->GetPosInLayout()] != L' ' ){
 		return true;
 	}
 	return false;

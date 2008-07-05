@@ -40,7 +40,7 @@ public:
 	||  Attributes & Operations
 	*/
 	INT_PTR DispatchEvent( HWND hWnd, UINT wMsg, WPARAM wParam, LPARAM lParam );	// 2007.11.07 ryoji 標準以外のメッセージを捕捉する
-	HWND DoModeless( HINSTANCE, HWND, LPARAM, CFuncInfoArr*, CLayoutInt, int, int );/* モードレスダイアログの表示 */
+	HWND DoModeless( HINSTANCE, HWND, LPARAM, CFuncInfoArr*, CLayoutInt, int, bool );/* モードレスダイアログの表示 */
 	void ChangeView( LPARAM );	/* モードレス時：検索対象となるビューの変更 */
 	
 	/*! 現在の種別と同じなら

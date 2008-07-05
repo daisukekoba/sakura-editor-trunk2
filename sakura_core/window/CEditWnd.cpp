@@ -2260,6 +2260,18 @@ void CEditWnd::InitMenu( HMENU hMenu, UINT uPos, BOOL fSystemMenu )
 			m_CMenuDrawer.MyAppendMenu( hMenu, MF_BYPOSITION | MF_STRING, F_FONT			, _T("フォント設定(&F)...") );		//Sept. 17, 2000 jepro キャプションに「設定」を追加
 			m_CMenuDrawer.MyAppendMenu( hMenu, MF_BYPOSITION | MF_STRING, F_FAVORITE		, _T("履歴の管理(&O)...") );	//履歴の管理	//@@@ 2003.04.08 MIK
 			m_CMenuDrawer.MyAppendMenuSep( hMenu, MF_BYPOSITION | MF_SEPARATOR, 0, NULL );
+
+			// 2008.05.30 nasukoji	テキストの折り返し方法の変更（一時設定）を追加
+			hMenuPopUp = ::CreatePopupMenu();
+			m_CMenuDrawer.MyAppendMenu( hMenuPopUp, MF_BYPOSITION | MF_STRING, F_TMPWRAPNOWRAP, _T("折り返さない(&X)") );		// 折り返さない（一時設定）
+			m_CMenuDrawer.MyAppendMenu( hMenuPopUp, MF_BYPOSITION | MF_STRING, F_TMPWRAPSETTING, _T("指定桁で折り返す(&S)") );	// 指定桁で折り返す（一時設定）
+			m_CMenuDrawer.MyAppendMenu( hMenuPopUp, MF_BYPOSITION | MF_STRING, F_TMPWRAPWINDOW, _T("右端で折り返す(&W)") );		// 右端で折り返す（一時設定）
+			// 折り返し方法に一時設定を適用中
+			if( GetDocument().m_bTextWrapMethodCurTemp )
+				m_CMenuDrawer.MyAppendMenu( hMenu, MF_BYPOSITION | MF_STRING | MF_POPUP, (UINT)hMenuPopUp , _T("折り返し方法（一時設定適用中）(&X)") );
+			else
+				m_CMenuDrawer.MyAppendMenu( hMenu, MF_BYPOSITION | MF_STRING | MF_POPUP, (UINT)hMenuPopUp , _T("折り返し方法(&X)") );
+
 //@@@ 2002.01.14 YAZAKI 折り返さないコマンド追加
 // 20051022 aroka タイプ別設定値に戻すコマンド追加
 			//	Aug. 14, 2005 genta 折り返し幅をLayoutMgrから取得するように
