@@ -86,11 +86,13 @@ void CEditView::OnLBUTTONDOWN( WPARAM fwKeys, int _xPos , int _yPos )
 				/* 選択範囲のデータを取得 */
 				if( GetSelectedData( &cmemCurText, FALSE, NULL, FALSE, GetDllShareData().m_Common.m_sEdit.m_bAddCRLFWhenCopy ) ){
 					DWORD dwEffects;
+					DWORD dwEffectsSrc = ( CAppMode::Instance()->IsViewMode() || !m_pcEditDoc->m_cDocLocker.IsDocWritable() )?
+											DROPEFFECT_COPY: DROPEFFECT_COPY | DROPEFFECT_MOVE;
 					int nOpe = m_pcEditDoc->m_cDocEditor.m_cOpeBuf.GetCurrentPointer();
 					int nTickDrag = ::GetTickCount();
 					m_pcEditWnd->SetDragSourceView( this );
 					CDataObject data( cmemCurText.GetStringPtr(), cmemCurText.GetStringLength(), GetSelectionInfo().IsBoxSelecting() );
-					dwEffects = data.DragDrop( TRUE, DROPEFFECT_COPY | DROPEFFECT_MOVE );
+					dwEffects = data.DragDrop( TRUE, dwEffectsSrc );
 					m_pcEditWnd->SetDragSourceView( NULL );
 					if( m_pcEditDoc->m_cDocEditor.m_cOpeBuf.GetCurrentPointer() == nOpe ){	// ドキュメント変更なしか？	// 2007.12.09 ryoji
 						m_pcEditWnd->SetActivePane( m_nMyIndex );
@@ -111,7 +113,7 @@ void CEditView::OnLBUTTONDOWN( WPARAM fwKeys, int _xPos , int _yPos )
 									GetCaret().MoveCursorToClientPoint( CMyPoint(GetTextArea().GetDocumentLeftClientPointX(), ptMouse.y) );
 								}
 							}
-						}else if( DROPEFFECT_MOVE == dwEffects ){
+						}else if( DROPEFFECT_MOVE == (dwEffectsSrc & dwEffects) ){
 							// 移動範囲を削除する
 							// ドロップ先が移動を処理したが自ドキュメントにここまで変更が無い
 							// →ドロップ先は外部のウィンドウである
@@ -126,6 +128,8 @@ void CEditView::OnLBUTTONDOWN( WPARAM fwKeys, int _xPos , int _yPos )
 							if( NULL != m_pcOpeBlk ){
 								if( 0 < m_pcOpeBlk->GetNum() ){
 									m_pcEditDoc->m_cDocEditor.m_cOpeBuf.AppendOpeBlk( m_pcOpeBlk );
+									if( !m_pcEditWnd->UpdateTextWrap() )	// 折り返し方法関連の更新	// 2008.06.10 ryoji
+										m_pcEditWnd->RedrawAllViews( this );	//	他のペインの表示を更新
 								}else{
 									delete m_pcOpeBlk;
 								}
@@ -386,7 +390,9 @@ normal_action:;
 				GetSelectionInfo().DrawSelectArea();
 			}
 		}
-		if( ptMouse.x < GetTextArea().GetAreaLeft() ){
+		// 行番号エリアをクリックした
+		// 2008.05.22 nasukoji	シフトキーを押している場合は行頭クリックとして扱う
+		if( ptMouse.x < GetTextArea().GetAreaLeft() && !GetKeyState_Shift() ){
 			/* 現在のカーソル位置から選択を開始する */
 			GetSelectionInfo().m_bBeginLineSelect = TRUE;
 
@@ -1445,7 +1451,8 @@ STDMETHODIMP CEditView::Drop( LPDATAOBJECT pDataObject, DWORD dwKeyState, POINTL
 		if( 0 < m_pcOpeBlk->GetNum() ){	/* 操作の数を返す */
 			/* 操作の追加 */
 			m_pcEditDoc->m_cDocEditor.m_cOpeBuf.AppendOpeBlk( m_pcOpeBlk );
-			m_pcEditWnd->RedrawInactivePane();	// 他のペインの表示	// 2007.07.22 ryoji
+			if( !m_pcEditWnd->UpdateTextWrap() )	// 折り返し方法関連の更新	// 2008.06.10 ryoji
+				m_pcEditWnd->RedrawAllViews( this );	// 他のペインの表示を更新	// 2007.07.22 ryoji
 		}else{
 			delete m_pcOpeBlk;
 		}
@@ -1487,6 +1494,9 @@ DWORD CEditView::TranslateDropEffect( DWORD dwKeyState, POINTL pt, DWORD dwEffec
 		return DROPEFFECT_NONE;
 	};
 
+	// 2008.06.21 ryoji
+	// Win 98/Me 環境では外部からのドラッグ時に GetKeyState() ではキー状態を正しく取得できないため、
+	// Drag & Drop インターフェースで渡される dwKeyState を用いて判定する。
 #if 1
 	// ドラッグ元が外部ウィンドウかどうかによって受け方を変える
 	// ※汎用テキストエディタではこちらが主流っぽい
@@ -1496,9 +1506,9 @@ DWORD CEditView::TranslateDropEffect( DWORD dwKeyState, POINTL pt, DWORD dwEffec
 	// ※MS 製品（MS Office, Visual Studioなど）ではこちらが主流っぽい
 	if( dwEffect & DROPEFFECT_MOVE ){
 #endif
-		dwEffect &= GetKeyState_Control()? DROPEFFECT_COPY: DROPEFFECT_MOVE;
+		dwEffect &= (MK_CONTROL & dwKeyState)? DROPEFFECT_COPY: DROPEFFECT_MOVE;
 	}else{
-		dwEffect &= GetKeyState_Shift()? DROPEFFECT_MOVE: DROPEFFECT_COPY;
+		dwEffect &= (MK_SHIFT & dwKeyState)? DROPEFFECT_MOVE: DROPEFFECT_COPY;
 	}
 	return dwEffect;
 }

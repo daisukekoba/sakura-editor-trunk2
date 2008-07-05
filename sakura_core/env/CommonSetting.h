@@ -473,6 +473,19 @@ struct CommonSetting_Others
 	RECT		m_rcOpenDialog;				// 「開く」ダイアログのサイズと位置
 };
 
+// -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
+//                          ステータスバー                     //
+// -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
+//	2008/6/21	Uchi
+struct CommonSetting_Statusbar
+{
+	// 示文字コードの指定
+	BOOL		m_bDispUniInSjis;				// SJISで文字コード値をUnicodeで出力する
+	BOOL		m_bDispUniInJis;				// JISで文字コード値をUnicodeで出力する
+	BOOL		m_bDispUniInEuc;				// EUCで文字コード値をUnicodeで出力する
+	BOOL		m_bDispUtf8Byte;				// UTF-8で表示をバイトコードで行う
+	BOOL		m_bDispSPCodepoint;				// サロゲートペアをコードポイントで表示
+};
 
 
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
@@ -505,6 +518,8 @@ struct CommonSetting
 	CommonSetting_Compare			m_sCompare;
 	CommonSetting_View				m_sView;
 	CommonSetting_Others			m_sOthers;
+	//
+	CommonSetting_Statusbar			m_sStatusbar;				// 2008/6/21 Uchi
 };
 
 

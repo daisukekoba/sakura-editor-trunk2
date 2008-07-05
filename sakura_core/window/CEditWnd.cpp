@@ -13,7 +13,7 @@
 	Copyright (C) 2005, genta, MIK, Moca, aroka, ryoji
 	Copyright (C) 2006, genta, ryoji, aroka, fon, yukihane
 	Copyright (C) 2007, ryoji
-	Copyright (C) 2008, ryoji
+	Copyright (C) 2008, ryoji, nasukoji
 
 	This source code is designed for sakura editor.
 	Please contact the copyright holders to use this code for other purpose.
@@ -597,6 +597,11 @@ void CEditWnd::SetDocumentTypeWhenCreate(
 	CTypeConfig		nDocumentType	//!< [in] 文書タイプ．-1のとき強制指定無し．
 )
 {
+	// 文字コードの指定	2008/6/14 Uchi
+	if (IsValidCodeType(nCharCode)) {
+		GetDocument().SetDocumentEncoding(nCharCode);
+	}
+
 	//	Mar. 7, 2002 genta 文書タイプの強制指定
 	//	Jun. 4 ,2004 genta ファイル名指定が無くてもタイプ強制指定を有効にする
 	if( nDocumentType.IsValid() ){
@@ -2263,18 +2268,34 @@ void CEditWnd::InitMenu( HMENU hMenu, UINT uPos, BOOL fSystemMenu )
 				CLayoutInt ketas;
 				CEditView::TOGGLE_WRAP_ACTION mode = this->GetActiveView().GetWrapMode( &ketas );
 				if( mode == CEditView::TGWRAP_NONE ){
-					pszLabel = _T("幅の変更は出来ません(&W)");
+					pszLabel = _T("折り返し桁数(&W)");
 					m_CMenuDrawer.MyAppendMenu( hMenu, MF_BYPOSITION | MF_STRING | MF_GRAYED, F_WRAPWINDOWWIDTH , pszLabel );
 				}
 				else {
+					TCHAR szBuf[60];
+					pszLabel = szBuf;
 					if( mode == CEditView::TGWRAP_FULL ){
-						pszLabel = _T("折り返さない(&W)");
+						_stprintf(
+							szBuf,
+							_T("折り返し桁数: %d 桁（最大）(&W)"),
+							MAXLINEKETAS
+						);
 					}
 					else if( mode == CEditView::TGWRAP_WINDOW ){
-						pszLabel = _T("現在のウィンドウ幅で折り返し(&W)");
+						_stprintf(
+							szBuf,
+							_T("折り返し桁数: %d 桁（右端）(&W)"),
+							this->GetActiveView().ViewColNumToWrapColNum(
+								this->GetActiveView().GetTextArea().m_nViewColNum
+							)
+						);
 					}
 					else {	// TGWRAP_PROP
-						pszLabel = _T("タイプ別設定の幅で折り返し(&W)");
+						_stprintf(
+							szBuf,
+							_T("折り返し桁数: %d 桁（指定）(&W)"),
+							GetDocument().m_cDocType.GetDocumentAttribute().m_nMaxLineKetas
+						);
 					}
 					m_CMenuDrawer.MyAppendMenu( hMenu, MF_BYPOSITION | MF_STRING, F_WRAPWINDOWWIDTH , pszLabel );
 				}
@@ -2801,7 +2822,8 @@ LRESULT CEditWnd::OnSize( WPARAM wParam, LPARAM lParam )
 		// 2003.08.26 Moca CR0LF0廃止に従い、適当に調整
 		// 2004-02-28 yasu 文字列を出力時の書式に合わせる
 		// 幅を変えた場合にはCEditView::ShowCaretPosInfo()での表示方法を見直す必要あり．
-		const TCHAR*	pszLabel[7] = { _T(""), _T("99999 行 9999 列"), _T("CRLF"), _T("0000"), _T("Unicode"), _T("REC"), _T("上書") };	//Oct. 30, 2000 JEPRO 千万行も要らん
+		// ※pszLabel[3]: ステータスバー文字コード表示領域は大きめにとっておく
+		const TCHAR*	pszLabel[7] = { _T(""), _T("99999 行 9999 列"), _T("CRLF"), _T("00000000"), _T("Unicode"), _T("REC"), _T("上書") };	//Oct. 30, 2000 JEPRO 千万行も要らん	文字コード枠を広げる 2008/6/21	Uchi
 		int			nStArrNum = 7;
 		//	To Here
 		int			nAllWidth = rc.right - rc.left;
@@ -3574,7 +3596,7 @@ void CEditWnd::PrintMenubarMessage( const TCHAR* msg ) const
 	hFontOld = (HFONT)::SelectObject( hdc, m_hFontCaretPosInfo );
 	nStrLen = MAX_LEN;
 	rc.left = po.x - nStrLen * m_nCaretPosInfoCharWidth - ( ::GetSystemMetrics( SM_CXSIZEFRAME ) + 2 );
-	rc.right = rc.left + nStrLen * m_nCaretPosInfoCharWidth;
+	rc.right = rc.left + nStrLen * m_nCaretPosInfoCharWidth + 2;
 	rc.top = po.y - m_nCaretPosInfoCharHeight - 2;
 	rc.bottom = rc.top + m_nCaretPosInfoCharHeight;
 	::SetTextColor( hdc, ::GetSysColor( COLOR_MENUTEXT ) );
@@ -3588,7 +3610,7 @@ void CEditWnd::PrintMenubarMessage( const TCHAR* msg ) const
 		m_pnCaretPosInfoDx[i] = ( m_nCaretPosInfoCharWidth );
 	}
 	*/
-	::ExtTextOut( hdc,rc.left,rc.top,ETO_OPAQUE,&rc,szText,nStrLen,NULL/*m_pnCaretPosInfoDx*/); //2007.10.17 kobake めんどいので今のところは文字間隔配列を使わない。
+	::ExtTextOut( hdc,rc.left,rc.top,ETO_CLIPPED | ETO_OPAQUE,&rc,szText,nStrLen,NULL/*m_pnCaretPosInfoDx*/); //2007.10.17 kobake めんどいので今のところは文字間隔配列を使わない。
 	::SelectObject( hdc, hFontOld );
 	::ReleaseDC( GetHwnd(), hdc );
 }
@@ -4037,27 +4059,50 @@ int CEditWnd::GetActivePane( void ) const
 }
 
 
+/** すべてのペインの描画スイッチを設定する
 
-/** 非アクティブなペインをRedrawする
+	@param bDraw [in] 描画スイッチの設定値
+
+	@date 2008.06.08 ryoji 新規作成
+*/
+void CEditWnd::SetDrawSwitchOfAllViews( bool bDraw )
+{
+	int i;
+	CEditView* pcView;
+
+	for( i = 0; i < _countof( m_pcEditViewArr ); i++ ){
+		pcView = m_pcEditViewArr[i];
+		pcView->SetDrawSwitch( bDraw );
+	}
+}
+
+
+/** すべてのペインをRedrawする
 
 	スクロールバーの状態更新はパラメータでフラグ制御 or 別関数にしたほうがいい？
 	@date 2007.07.22 ryoji スクロールバーの状態更新を追加
+
+	@param pcViewExclude [in] Redrawから除外するビュー
+	@date 2008.06.08 ryoji pcViewExclude パラメータ追加
 */
-void CEditWnd::RedrawInactivePane(void)
+void CEditWnd::RedrawAllViews( CEditView* pcViewExclude )
 {
-	if ( m_cSplitterWnd.GetAllSplitCols() == 2 ){
-		this->m_pcEditViewArr[m_nActivePaneIndex^1]->AdjustScrollBars();
-		this->m_pcEditViewArr[m_nActivePaneIndex^1]->Redraw();
-	}
-	if ( m_cSplitterWnd.GetAllSplitRows() == 2 ){
-		this->m_pcEditViewArr[m_nActivePaneIndex^2]->AdjustScrollBars();
-		this->m_pcEditViewArr[m_nActivePaneIndex^2]->Redraw();
-		if ( m_cSplitterWnd.GetAllSplitCols() == 2 ){
-			this->m_pcEditViewArr[(m_nActivePaneIndex^1)^2]->AdjustScrollBars();
-			this->m_pcEditViewArr[(m_nActivePaneIndex^1)^2]->Redraw();
+	int i;
+	CEditView* pcView;
+
+	for( i = 0; i < _countof( m_pcEditViewArr ); i++ ){
+		pcView = m_pcEditViewArr[i];
+		if( pcView == pcViewExclude )
+			continue;
+		if( i == m_nActivePaneIndex ){
+			pcView->RedrawAll();
+		}else{
+			pcView->Redraw();
+			pcView->AdjustScrollBars();
 		}
 	}
 }
+
 
 void CEditWnd::Views_DisableSelectArea(bool bRedraw)
 {
@@ -4098,12 +4143,51 @@ BOOL CEditWnd::DetectWidthOfLineNumberAreaAllPane( bool bRedraw )
 }
 
 
+
+/** 右端で折り返す
+	@param nViewColNum	[in] 右端で折り返すペインの番号
+	@retval 折り返しを変更したかどうか
+	@date 2008.06.08 ryoji 新規作成
+*/
+BOOL CEditWnd::WrapWindowWidth( int nPane )
+{
+	// 右端で折り返す
+	CLayoutInt nWidth = m_pcEditViewArr[nPane]->ViewColNumToWrapColNum( m_pcEditViewArr[nPane]->GetTextArea().m_nViewColNum );
+	if( GetDocument().m_cLayoutMgr.GetMaxLineKetas() != nWidth ){
+		ChangeLayoutParam( false, GetDocument().m_cLayoutMgr.GetTabSpace(), nWidth );
+		return TRUE;
+	}
+	return FALSE;
+}
+
+/** 折り返し方法関連の更新
+	@retval 画面更新したかどうか
+	@date 2008.06.10 ryoji 新規作成
+*/
+BOOL CEditWnd::UpdateTextWrap( void )
+{
+	// この関数はコマンド実行ごとに処理の最終段階で利用する
+	// （アンドゥ登録＆全ビュー更新のタイミング）
+	if( GetDocument().m_nTextWrapMethodCur == WRAP_WINDOW_WIDTH ){
+		BOOL bWrap = WrapWindowWidth( 0 );	// 右端で折り返す
+		if( bWrap ){
+			// WrapWindowWidth() で追加した更新リージョンで画面更新する
+			for( int i = 0; i < _countof(m_pcEditViewArr); i++ ){
+				::UpdateWindow( m_pcEditViewArr[i]->GetHwnd() );
+			}
+		}
+		return bWrap;	// 画面更新＝折り返し変更
+	}
+	return FALSE;	// 画面更新しなかった
+}
+
 /*!	レイアウトパラメータの変更
 
 	具体的にはタブ幅と折り返し位置を変更する．
 	現在のドキュメントのレイアウトのみを変更し，共通設定は変更しない．
 
 	@date 2005.08.14 genta 新規作成
+	@date 2008.06.18 ryoji レイアウト変更途中はカーソル移動の画面スクロールを見せない（画面のちらつき抑止）
 */
 void CEditWnd::ChangeLayoutParam( bool bShowProgress, CLayoutInt nTabSize, CLayoutInt nMaxLineKetas )
 {
@@ -4124,11 +4208,15 @@ void CEditWnd::ChangeLayoutParam( bool bShowProgress, CLayoutInt nTabSize, CLayo
 	GetDocument().m_cLayoutMgr.ChangeLayoutParam( nTabSize, nMaxLineKetas );
 
 	//	座標の復元
+	//	レイアウト変更途中はカーソル移動の画面スクロールを見せない	// 2008.06.18 ryoji
+	SetDrawSwitchOfAllViews( false );
 	RestorePhysPosOfAllView( posSave );
+	SetDrawSwitchOfAllViews( true );
 
-	for( int i = 0; i < 4; i++ ){
+	for( int i = 0; i < _countof(m_pcEditViewArr); i++ ){
 		if( m_pcEditViewArr[i]->GetHwnd() ){
 			InvalidateRect( m_pcEditViewArr[i]->GetHwnd(), NULL, TRUE );
+			m_pcEditViewArr[i]->AdjustScrollBars();	// 2008.06.18 ryoji
 		}
 	}
 

@@ -36,8 +36,8 @@ const int LINEREADBUFSIZE	= 10240;	//!< ƒtƒ@ƒCƒ‹‚©‚ç1s•ªƒf[ƒ^‚ð“Ç‚Ýž‚Þ‚Æ‚«‚Ìƒ
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 //                        ‹¤—Lƒƒ‚ƒŠ                           //
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
-#define N_SHAREDATA_VERSION		1020
-#define STR_SHAREDATA_VERSION	"1020"
+#define N_SHAREDATA_VERSION		1021
+#define STR_SHAREDATA_VERSION	"1021"
 #define	GSTR_SHAREDATA	(_T("SakuraShareData") _T(_CODE_SUFFIX_) _T(_DEBUG_SUFFIX_) _T(STR_SHAREDATA_VERSION))
 
 

@@ -113,7 +113,7 @@ EConvertResult CShiftJis::UnicodeToSJIS( CMemory* pMem )
 	char* pDst = new char[nDstLen+1];
 
 	//変換
-	BOOL bLost = FALSE;
+	BOOL bLost = TRUE;
 	nDstLen = WideCharToMultiByte(
 		CP_SJIS,				// 2008/5/12 Uchi
 		0,
@@ -142,6 +142,41 @@ EConvertResult CShiftJis::UnicodeToSJIS( CMemory* pMem )
 }
 
 
+// 文字コード表示用	UNICODE → Hex 変換	2008/6/9 Uchi
+EConvertResult CShiftJis::UnicodeToHex(const wchar_t* cSrc, const int iSLen, TCHAR* pDst)
+{
+	//変換先バッファ確保
+	unsigned char sCvt[8];
 
+	// 2008/6/21 Uchi
+	if (CShareData::getInstance()->GetShareData()->m_Common.m_sStatusbar.m_bDispUniInSjis) {
+		// Unicodeで表示
+		return CCodeBase::UnicodeToHex(cSrc, iSLen, pDst);
+	}
 
+	//変換
+	BOOL bLost = FALSE;
+	int nDstLen = WideCharToMultiByte(
+		CP_SJIS,
+		0,
+		cSrc,
+		1,
+		(char*)sCvt,
+		8,
+		NULL,
+		&bLost
+	);
 
+	//結果
+	if (bLost) {
+		return RESULT_LOSESOME;
+	}
+
+	int		i;
+	TCHAR*	p; 
+	for (i = 0, p = pDst; i < nDstLen; i++, p += 2) {
+		auto_sprintf( p, _T("%02x"), sCvt[i]);
+	}
+
+	return RESULT_COMPLETE;
+}

@@ -14,7 +14,7 @@
 	Copyright (C) 2005, Moca, MIK, genta, ryoji, りんご, aroka
 	Copyright (C) 2006, aroka, ryoji, genta
 	Copyright (C) 2007, ryoji, genta, maru
-	Copyright (C) 2008, ryoji, Uchi
+	Copyright (C) 2008, ryoji, Uchi, nasukoji
 
 	This source code is designed for sakura editor.
 	Please contact the copyright holder to use this code for other purpose.
@@ -252,6 +252,9 @@ struct ARRHEAD {
 	Version 86:
 	タイプ別設定最大値増加 2007.12.13 ryoji
 
+	Version 87:
+	テキストの折り返し方法追加 2008.05.30 nasukoji
+
 	Version 1000:
 	バージョン1000以降を本家統合までの間、使わせてください。かなり頻繁に構成が変更されると思われるので。by kobake 2008.03.02
 */
@@ -304,8 +307,6 @@ bool CShareData::InitShareData()
 {
 	MY_RUNNINGTIMER(cRunningTimer,"CShareData::Init" );
 
-//	MessageBoxA(NULL,"share","init",MB_OK);
-
 	if (CShareData::_instance == NULL)	//	Singleton風
 		CShareData::_instance = this;
 
@@ -321,10 +322,10 @@ bool CShareData::InitShareData()
 		GSTR_SHAREDATA
 	);
 	if( NULL == m_hFileMap ){
-		::MessageBoxA(
+		::MessageBox(
 			NULL,
-			"CreateFileMapping()に失敗しました",
-			"予期せぬエラー",
+			_T("CreateFileMapping()に失敗しました"),
+			_T("予期せぬエラー"),
 			MB_OK | MB_APPLMODAL | MB_ICONSTOP
 		);
 		return false;
@@ -648,6 +649,14 @@ bool CShareData::InitShareData()
 
 		m_pShareData->m_Common.m_sWindow.m_bMenuIcon = TRUE;		/* メニューにアイコンを表示する */
 
+		// [ステータスバー]タブ
+		// 表示文字コードの指定		2008/6/21	Uchi
+		m_pShareData->m_Common.m_sStatusbar.m_bDispUniInSjis	= FALSE;	// SJISで文字コード値をUnicodeで出力する
+		m_pShareData->m_Common.m_sStatusbar.m_bDispUniInJis		= FALSE;	// JISで文字コード値をUnicodeで出力する
+		m_pShareData->m_Common.m_sStatusbar.m_bDispUniInEuc		= FALSE;	// EUCで文字コード値をUnicodeで出力する
+		m_pShareData->m_Common.m_sStatusbar.m_bDispUtf8Byte		= FALSE;	// UTF-8で表示をバイトコードで行う
+		m_pShareData->m_Common.m_sStatusbar.m_bDispSPCodepoint	= TRUE;		// サロゲートペアをコードポイントで表示
+
 
 		m_pShareData->m_sHistory.m_aCommands.clear();
 
@@ -873,7 +882,7 @@ void CShareData::TraceOut( LPCTSTR lpFmt, ... )
 		// ちょっと不恰好だけど、TraceOut() の引数にいちいち起動元を指定するのも．．．
 		SLoadInfo sLoadInfo;
 		sLoadInfo.cFilePath = _T("");
-		sLoadInfo.eCharCode = CODE_SJIS;
+		sLoadInfo.eCharCode = CODE_UNICODE;		// CODE_SJIS->	2008/6/8 Uchi
 		sLoadInfo.bViewMode = false;
 		CControlTray::OpenNewEditor( NULL, m_hwndTraceOutSource, sLoadInfo, _T("-DEBUGMODE"), true );
 		//	2001/06/23 N.Nakatani 窓が出るまでウエイトをかけるように修正

@@ -134,6 +134,7 @@ EColorIndexType CEditView::GetColorIndex(
 
 	int						nLineBgn;
 	const CLayout*			pcLayout2;
+	int						nLineOffset;		// 2008/5/29 Uchi
 	SColorStrategyInfo sInfo;
 	SColorStrategyInfo* pInfo = &sInfo;
 	sInfo.pcView = this;
@@ -154,6 +155,7 @@ EColorIndexType CEditView::GetColorIndex(
 		pInfo->nCOMMENTEND = 0;
 		pcLayout2 = pcLayout;
 
+		nLineOffset = pcLayout->GetLogicOffset();	// 2008/5/29 Uchi
 	}
 	else{
 		pInfo->pLine = NULL;
@@ -161,6 +163,7 @@ EColorIndexType CEditView::GetColorIndex(
 		pInfo->nCOMMENTMODE = COLORIDX_TEXT; // 2002/03/13 novice
 		pInfo->nCOMMENTEND = 0;
 		pcLayout2 = NULL;
+		nLineOffset = 0;							// 2008/5/29 Uchi
 	}
 
 	/* 現在の色を指定 */
@@ -326,6 +329,7 @@ void CEditView::OnPaint( HDC _hdc, PAINTSTRUCT *pPs, BOOL bDrawFromComptibleBmp 
 	// To Here 2007.09.09 Moca
 
 	// キャレットを隠す
+	bool bCaretShowFlag_Old = GetCaret().GetCaretShowFlag();	// 2008.06.09 ryoji
 	GetCaret().HideCaret_( this->GetHwnd() ); // 2002/07/22 novice
 
 	//	May 9, 2000 genta
@@ -548,7 +552,8 @@ void CEditView::OnPaint( HDC _hdc, PAINTSTRUCT *pPs, BOOL bDrawFromComptibleBmp 
 	DrawBracketPair( true );
 
 	/* キャレットを現在位置に表示します */
-	GetCaret().ShowCaret_( this->GetHwnd() ); // 2002/07/22 novice
+	if( bCaretShowFlag_Old )	// 2008.06.09 ryoji
+		GetCaret().ShowCaret_( this->GetHwnd() ); // 2002/07/22 novice
 	return;
 }
 

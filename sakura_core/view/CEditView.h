@@ -14,6 +14,7 @@
 	Copyright (C) 2005, genta, Moca, MIK, ryoji, maru
 	Copyright (C) 2006, genta, aroka, fon, yukihane, ryoji
 	Copyright (C) 2007, ryoji, maru
+	Copyright (C) 2008, ryoji
 
 	This source code is designed for sakura editor.
 	Please contact the copyright holder to use this code for other purpose.
@@ -247,9 +248,11 @@ public:
 	//                        スクロール                           //
 	// -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 public:
-	void AdjustScrollBars();								/* スクロールバーの状態を更新する */
-	BOOL CreateScrollBar();		/* スクロールバー作成 */	// 2006.12.19 ryoji
-	void DestroyScrollBar();	/* スクロールバー破棄 */	// 2006.12.19 ryoji
+	void AdjustScrollBars();											/* スクロールバーの状態を更新する */
+	BOOL CreateScrollBar();												/* スクロールバー作成 */	// 2006.12.19 ryoji
+	void DestroyScrollBar();											/* スクロールバー破棄 */	// 2006.12.19 ryoji
+	CLayoutInt GetWrapOverhang( void ) const;							/* 折り返し桁以後のぶら下げ余白計算 */	// 2008.06.08 ryoji
+	CLayoutInt ViewColNumToWrapColNum( CLayoutInt nViewColNum ) const;	/* 「右端で折り返す」用にビューの桁数から折り返し桁数を計算する */	// 2008.06.08 ryoji
 
 	// -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 	//                           IME                               //
@@ -265,8 +268,8 @@ public:
 	CLayoutInt  ScrollAtV( CLayoutInt );										/* 指定上端行位置へスクロール */
 	CLayoutInt  ScrollAtH( CLayoutInt );										/* 指定左端桁位置へスクロール */
 	//	From Here Sep. 11, 2004 genta ずれ維持の同期スクロール
-	CLayoutInt  ScrollByV( CLayoutInt vl ){	return ScrollAtV( GetTextArea().GetViewTopLine() + vl );}			/* 指定行スクロール*/
-	CLayoutInt  ScrollByH( CLayoutInt hl ){	return ScrollAtH( GetTextArea().GetViewLeftCol() + hl );}					/* 指定桁スクロール */
+	CLayoutInt  ScrollByV( CLayoutInt vl ){	return ScrollAtV( GetTextArea().GetViewTopLine() + vl );}	/* 指定行スクロール*/
+	CLayoutInt  ScrollByH( CLayoutInt hl ){	return ScrollAtH( GetTextArea().GetViewLeftCol() + hl );}	/* 指定桁スクロール */
 public:
 	void SyncScrollV( CLayoutInt );									/* 垂直同期スクロール */
 	void SyncScrollH( CLayoutInt );									/* 水平同期スクロール */

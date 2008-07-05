@@ -14,6 +14,7 @@
 	Copyright (C) 2005, Moca, genta, aroka
 	Copyright (C) 2006, ryoji
 	Copyright (C) 2007, ryoji
+	Copyright (C) 2008, ryoji, nasukoji
 
 	This source code is designed for sakura editor.
 	Please contact the copyright holder to use this code for other purpose.
@@ -127,6 +128,11 @@ public:
 	//環境情報
 public:
 	CFuncLookup		m_cFuncLookup;				//!< 機能名，機能番号などのresolve
+
+	//未整理変数
+public:
+	int				m_nTextWrapMethodCur;		// 折り返し方法					// 2008.05.30 nasukoji
+	bool			m_bTextWrapMethodCurTemp;	// 折り返し方法一時設定適用中	// 2008.05.30 nasukoji
 };
 
 

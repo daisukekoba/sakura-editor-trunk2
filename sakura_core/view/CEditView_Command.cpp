@@ -257,6 +257,7 @@ open_c:;
 
 	@date 2006.01.08 genta メニュー表示で同一の判定を使うため，Command_WRAPWINDOWWIDTH()より分離．
 	@date 2006.01.08 genta 判定条件を見直し
+	@date 2008.06.08 ryoji ウィンドウ幅設定にぶら下げ余白を追加
 */
 CEditView::TOGGLE_WRAP_ACTION CEditView::GetWrapMode( CLayoutInt* _newKetas )
 {
@@ -276,6 +277,7 @@ CEditView::TOGGLE_WRAP_ACTION CEditView::GetWrapMode( CLayoutInt* _newKetas )
 			ウィンドウ幅が極端に狭い場合にはウィンドウ幅に合わせることは出来ないが，
 			設定値と最大値のトグルは可能．
 
+		0)現在のテキストの折り返し方法!=指定桁で折り返す：変更不能
 		1)現在の折り返し幅==ウィンドウ幅 : 最大値
 		2)現在の折り返し幅!=ウィンドウ幅
 		3)→ウィンドウ幅が極端に狭い場合
@@ -290,12 +292,12 @@ CEditView::TOGGLE_WRAP_ACTION CEditView::GetWrapMode( CLayoutInt* _newKetas )
 		c)　└→ウィンドウ幅
 	*/
 	
-	if (GetDocument()->m_cLayoutMgr.GetMaxLineKetas() == GetTextArea().m_nViewColNum ){
+	if (GetDocument()->m_cLayoutMgr.GetMaxLineKetas() == ViewColNumToWrapColNum( GetTextArea().m_nViewColNum ) ){
 		// a)
 		newKetas = CLayoutInt(MAXLINEKETAS);
 		return TGWRAP_FULL;
 	}
-	else if( 10 > GetTextArea().m_nViewColNum - 1 ){ // 2)
+	else if( MINLINEKETAS > GetTextArea().m_nViewColNum - GetWrapOverhang() ){ // 2)
 		// 3)
 		if( GetDocument()->m_cLayoutMgr.GetMaxLineKetas() != MAXLINEKETAS ){
 			// 4)
@@ -321,7 +323,7 @@ CEditView::TOGGLE_WRAP_ACTION CEditView::GetWrapMode( CLayoutInt* _newKetas )
 		}
 		else {	// b) c)
 			//	現在のウィンドウ幅
-			newKetas = GetTextArea().m_nViewColNum;
+			newKetas = ViewColNumToWrapColNum( GetTextArea().m_nViewColNum );
 			return TGWRAP_WINDOW;
 		}
 	}
