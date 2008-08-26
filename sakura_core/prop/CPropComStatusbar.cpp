@@ -25,11 +25,11 @@
 
 #include "sakura.hh"
 static const DWORD p_helpids[] = {
-	IDC_CHECK_DISP_UNICODE_IN_SJIS,		HIDC_CHECK_DISP_UNICODE_IN_SJIS,		// SJISで文字コード値をUnicodeで出力する
-	IDC_CHECK_DISP_UNICODE_IN_JIS,		HIDC_CHECK_DISP_UNICODE_IN_JIS,			// JISで文字コード値をUnicodeで出力する
-	IDC_CHECK_DISP_UNICODE_IN_EUC,		HIDC_CHECK_DISP_UNICODE_IN_EUC,			// EUCで文字コード値をUnicodeで出力する
-	IDC_CHECK_DISP_UTF8_BYTE,			HIDC_CHECK_DISP_UTF8_BYTE,				// UTF-8で表示をバイトコードで行う
-	IDC_CHECK_DISP_SP_CODEPOINT,		HIDC_CHECK_DISP_SP_CODEPOINT,			// サロゲートペアをコードポイントで表示
+	IDC_CHECK_DISP_UNICODE_IN_SJIS,		HIDC_CHECK_DISP_UNICODE_IN_SJIS,		// SJISで文字コード値をUnicodeで表示する
+	IDC_CHECK_DISP_UNICODE_IN_JIS,		HIDC_CHECK_DISP_UNICODE_IN_JIS,			// JISで文字コード値をUnicodeで表示する
+	IDC_CHECK_DISP_UNICODE_IN_EUC,		HIDC_CHECK_DISP_UNICODE_IN_EUC,			// EUCで文字コード値をUnicodeで表示する
+	IDC_CHECK_DISP_UTF8_CODEPOINT,		HIDC_CHECK_DISP_UTF8_CODEPOINT,			// UTF-8をコードポイントで表示する
+	IDC_CHECK_DISP_SP_CODEPOINT,		HIDC_CHECK_DISP_SP_CODEPOINT,			// サロゲートペアをコードポイントで表示する
 	0, 0
 };
 
@@ -53,9 +53,6 @@ INT_PTR CPropCommon::DispatchEvent_PROP_STATUSBAR(
     LPARAM		lParam 		// second message parameter
 )
 {
-	WORD		wNotifyCode;
-	WORD		wID;
-	HWND		hwndCtl;
 	NMHDR*		pNMHDR;
 	NM_UPDOWN*	pMNUD;
 	int			idCtrl;
@@ -68,28 +65,8 @@ INT_PTR CPropCommon::DispatchEvent_PROP_STATUSBAR(
 		// Modified by KEITA for WIN64 2003.9.6
 		::SetWindowLongPtr( hwndDlg, DWLP_USER, lParam );
 
-		/* ユーザーがエディット コントロールに入力できるテキストの長さを制限する */
-
 		return TRUE;
 	case WM_COMMAND:
-		wNotifyCode	= HIWORD(wParam);	/* 通知コード */
-		wID			= LOWORD(wParam);	/* 項目ID､ コントロールID､ またはアクセラレータID */
-		hwndCtl		= (HWND) lParam;	/* コントロールのハンドル */
-		switch( wNotifyCode ){
-		/* ボタン／チェックボックスがクリックされた */
-		case BN_CLICKED:
-			switch( wID ){
-			case IDC_CHECK_DRAGDROP:	/* タスクトレイを使う */
-				if( ::IsDlgButtonChecked( hwndDlg, IDC_CHECK_DRAGDROP ) ){
-					::EnableWindow( ::GetDlgItem( hwndDlg, IDC_CHECK_DROPSOURCE ), TRUE );
-				}
-				else{
-					::EnableWindow( ::GetDlgItem( hwndDlg, IDC_CHECK_DROPSOURCE ), FALSE );
-				}
-				return TRUE;
-			}
-			break;
-		}
 		break;
 
 	case WM_NOTIFY:
@@ -108,7 +85,7 @@ INT_PTR CPropCommon::DispatchEvent_PROP_STATUSBAR(
 			return TRUE;
 
 		case PSN_SETACTIVE: //@@@ 2002.01.03 YAZAKI 最後に表示していたシートを正しく覚えていないバグ修正
-			m_nPageNum = ID_PAGENUM_STATUSBAR;	//Oct. 25, 2000 JEPRO ZENPAN1→ZENPAN に変更(参照しているのはCPropCommon.cppのみの1箇所)
+			m_nPageNum = ID_PAGENUM_STATUSBAR;
 			return TRUE;
 		}
 		break;	/* WM_NOTIFY */
@@ -147,7 +124,7 @@ void CPropCommon::SetData_PROP_STATUSBAR( HWND hwndDlg )
 	// EUCで文字コード値をUnicodeで出力する
 	::CheckDlgButton( hwndDlg, IDC_CHECK_DISP_UNICODE_IN_EUC,  m_Common.m_sStatusbar.m_bDispUniInEuc );
 	// UTF-8で表示をバイトコードで行う
-	::CheckDlgButton( hwndDlg, IDC_CHECK_DISP_UTF8_BYTE,       m_Common.m_sStatusbar.m_bDispUtf8Byte );
+	::CheckDlgButton( hwndDlg, IDC_CHECK_DISP_UTF8_CODEPOINT,  m_Common.m_sStatusbar.m_bDispUtf8Codepoint );
 	// サロゲートペアをコードポイントで表示
 	::CheckDlgButton( hwndDlg, IDC_CHECK_DISP_SP_CODEPOINT,    m_Common.m_sStatusbar.m_bDispSPCodepoint );
 	return;
@@ -159,15 +136,15 @@ int CPropCommon::GetData_PROP_STATUSBAR( HWND hwndDlg )
 {
 	// 示文字コードの指定
 	// SJISで文字コード値をUnicodeで出力する
-	m_Common.m_sStatusbar.m_bDispUniInSjis   = ::IsDlgButtonChecked( hwndDlg, IDC_CHECK_DISP_UNICODE_IN_SJIS );
+	m_Common.m_sStatusbar.m_bDispUniInSjis		= ::IsDlgButtonChecked( hwndDlg, IDC_CHECK_DISP_UNICODE_IN_SJIS );
 	// JISで文字コード値をUnicodeで出力する
-	m_Common.m_sStatusbar.m_bDispUniInJis    = ::IsDlgButtonChecked( hwndDlg, IDC_CHECK_DISP_UNICODE_IN_JIS );
+	m_Common.m_sStatusbar.m_bDispUniInJis		= ::IsDlgButtonChecked( hwndDlg, IDC_CHECK_DISP_UNICODE_IN_JIS );
 	// EUCで文字コード値をUnicodeで出力する
-	m_Common.m_sStatusbar.m_bDispUniInEuc    = ::IsDlgButtonChecked( hwndDlg, IDC_CHECK_DISP_UNICODE_IN_EUC );
+	m_Common.m_sStatusbar.m_bDispUniInEuc		= ::IsDlgButtonChecked( hwndDlg, IDC_CHECK_DISP_UNICODE_IN_EUC );
 	// UTF-8で表示をバイトコードで行う
-	m_Common.m_sStatusbar.m_bDispUtf8Byte    = ::IsDlgButtonChecked( hwndDlg, IDC_CHECK_DISP_UTF8_BYTE );
+	m_Common.m_sStatusbar.m_bDispUtf8Codepoint	= ::IsDlgButtonChecked( hwndDlg, IDC_CHECK_DISP_UTF8_CODEPOINT );
 	// サロゲートペアをコードポイントで表示
-	m_Common.m_sStatusbar.m_bDispSPCodepoint = ::IsDlgButtonChecked( hwndDlg, IDC_CHECK_DISP_SP_CODEPOINT );
+	m_Common.m_sStatusbar.m_bDispSPCodepoint	= ::IsDlgButtonChecked( hwndDlg, IDC_CHECK_DISP_SP_CODEPOINT );
 
 	return TRUE;
 }

@@ -191,10 +191,10 @@ void CEditView::ExecCmd( const TCHAR* pszCmd, int nFlgOpt )
 			::GetLocalTime( &systime );
 			CFormatManager().MyGetDateFormat( systime, szTextDate, _countof( szTextDate ) - 1 );
 			CFormatManager().MyGetTimeFormat( systime, szTextTime, _countof( szTextTime ) - 1 );
-			CShareData::getInstance()->TraceOut( _T("\r\n%ls\r\n"), _T("#============================================================") );
-			CShareData::getInstance()->TraceOut( _T("#DateTime : %ls %ls\r\n"), szTextDate, szTextTime );
-			CShareData::getInstance()->TraceOut( _T("#CmdLine  : %ls\r\n"), pszCmd );
-			CShareData::getInstance()->TraceOut( _T("#%ls\r\n"), _T("============================================================") );
+			CShareData::getInstance()->TraceOut( _T("\r\n%ts\r\n"), _T("#============================================================") );
+			CShareData::getInstance()->TraceOut( _T("#DateTime : %ts %ts\r\n"), szTextDate, szTextTime );
+			CShareData::getInstance()->TraceOut( _T("#CmdLine  : %ts\r\n"), pszCmd );
+			CShareData::getInstance()->TraceOut( _T("#%ts\r\n"), _T("============================================================") );
 		}
 		
 		//char‚Å“Ç‚Þ

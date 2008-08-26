@@ -36,8 +36,8 @@ const int LINEREADBUFSIZE	= 10240;	//!< ƒtƒ@ƒCƒ‹‚©‚ç1s•ªƒf[ƒ^‚ð“Ç‚Ýž‚Þ‚Æ‚«‚Ìƒ
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 //                        ‹¤—Lƒƒ‚ƒŠ                           //
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
-#define N_SHAREDATA_VERSION		1022
-#define STR_SHAREDATA_VERSION	"1022"
+#define N_SHAREDATA_VERSION		1023
+#define STR_SHAREDATA_VERSION	"1023"
 #define	GSTR_SHAREDATA	(_T("SakuraShareData") _T(_CODE_SUFFIX_) _T(_DEBUG_SUFFIX_) _T(STR_SHAREDATA_VERSION))
 
 
@@ -182,6 +182,9 @@ enum e_PM_SETCARETPOS_SELECTSTATE {
 
 /*! ƒvƒƒZƒX‚Ì‰‰ñƒAƒCƒhƒŠƒ“ƒO’Ê’m */
 #define MYWM_FIRST_IDLE (WM_APP+217)	//@@@ 2008.04.19 ryoji
+
+/*! “ÆŽ©‚Ìƒhƒƒbƒvƒtƒ@ƒCƒ‹’Ê’m */
+#define MYWM_DROPFILES (WM_APP+218)	//@@@ 2008.06.18 ryoji
 
 /* Ä•ÏŠ·‘Î‰ž */ // 20020331 aroka
 #ifndef WM_IME_REQUEST

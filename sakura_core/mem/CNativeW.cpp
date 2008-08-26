@@ -197,6 +197,14 @@ CLogicInt CNativeW::GetSizeOfChar( const wchar_t* pData, int nDataLen, int nIdx 
 	if( nIdx >= nDataLen )
 		return CLogicInt(0);
 
+	// サロゲートチェック					2008/7/5 Uchi
+	if (WCODE::IsUTF16High(pData[nIdx])) {
+		if (nIdx <= nDataLen && WCODE::IsUTF16Low(pData[nIdx + 1])) {
+			// サロゲートペア 2個分
+			return CLogicInt(2);
+		}
+	}
+
 	return CLogicInt(1);
 }
 
@@ -206,6 +214,19 @@ CLayoutInt CNativeW::GetKetaOfChar( const wchar_t* pData, int nDataLen, int nIdx
 	//文字列範囲外なら 0
 	if( nIdx >= nDataLen )
 		return CLayoutInt(0);
+
+	// サロゲートチェック BMP 以外は全角扱い		2008/7/5 Uchi
+	if (WCODE::IsUTF16High(pData[nIdx])) {
+		return CLayoutInt(2);	// 仮
+	}
+	if (WCODE::IsUTF16Low(pData[nIdx])) {
+		if (nIdx > 0 && WCODE::IsUTF16High(pData[nIdx - 1])) {
+			// サロゲートペア（下位）
+			return CLayoutInt(0);
+		}
+		// 単独（ブロークンペア）
+		return CLayoutInt(2);
+	}
 
 	//半角文字なら 1
 	if(WCODE::IsHankaku(pData[nIdx]) )
@@ -226,6 +247,19 @@ const wchar_t* CNativeW::GetCharNext( const wchar_t* pData, int nDataLen, const 
 	if( pNext >= &pData[nDataLen] ){
 		pNext = &pData[nDataLen];
 	}
+
+	// サロゲートペア対応	2008/7/6 Uchi
+	if (WCODE::IsUTF16High(*pDataCurrent)) {
+		if( pNext+1 >= &pData[nDataLen] ){
+			pNext = &pData[nDataLen];
+		}
+		else {
+			if (WCODE::IsUTF16Low(*pNext)) {
+				pNext += 1;
+			}
+		}
+	}
+
 	return pNext;
 }
 
@@ -237,6 +271,19 @@ const wchar_t* CNativeW::GetCharPrev( const wchar_t* pData, int nDataLen, const 
 	if( pPrev < pData ){
 		pPrev = pData;
 	}
+
+	// サロゲートペア対応	2008/7/6 Uchi
+	if (WCODE::IsUTF16Low(*pPrev)) {
+		if( pPrev-1 <= pData ){
+			pPrev = pData;
+		}
+		else {
+			if (WCODE::IsUTF16High(*(pPrev-1))) {
+				pPrev -= 1;
+			}
+		}
+	}
+
 	return pPrev;
 //	return ::CharPrevW_AnyBuild( pData, pDataCurrent );
 }

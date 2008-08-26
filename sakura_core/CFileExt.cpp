@@ -114,7 +114,7 @@ const TCHAR *CFileExt::GetExtFilter( void )
 	for( i = 0; i < m_nCount; i++ )
 	{
 		auto_sprintf( szWork,
-			_T("%ls (%ls)|%ls|"),
+			_T("%ts (%ts)|%ts|"),
 			m_puFileExtInfo[i].m_szName,
 			m_puFileExtInfo[i].m_szExt,
 			m_puFileExtInfo[i].m_szExt );

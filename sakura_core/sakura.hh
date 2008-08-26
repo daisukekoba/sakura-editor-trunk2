@@ -757,7 +757,7 @@
 
 //プロパティ
 #define HIDOK_PROP				12600	//
-#define HIDCANCEL_PROP			12601	//
+//#define HIDCANCEL_PROP			12601	//	del 2008/7/4 Uchi
 #define HIDC_PROP_BUTTON_HELP	12602	//
 #define HIDC_PROP_EDIT1			12603	//
 
@@ -780,7 +780,7 @@
 #define HIDC_JUMP_RADIO_LINENUM_CRLF	12808	//改行単位
 
 //バージョン情報
-#define HIDC_ABOUT_BUTTON_CONTACT	12900	//
+//#define HIDC_ABOUT_BUTTON_CONTACT	12900	//	del 2008/7/4 Uchi
 #define HIDOK_ABOUT					12901	//
 #define HIDC_ABOUT_EDIT_ABOUT		12902	//
 
@@ -924,11 +924,11 @@
 
 
 // 共通設定ステータスバー			// 2008/6/21	Uchi
-#define HIDC_CHECK_DISP_UNICODE_IN_SJIS	14200		// SJISで文字コード値をUnicodeで出力する
-#define HIDC_CHECK_DISP_UNICODE_IN_JIS	14201		// JISで文字コード値をUnicodeで出力する
-#define HIDC_CHECK_DISP_UNICODE_IN_EUC	14202		// EUCで文字コード値をUnicodeで出力する
-#define HIDC_CHECK_DISP_UTF8_BYTE		14203		// UTF-8で表示をバイトコードで行う
-#define HIDC_CHECK_DISP_SP_CODEPOINT	14204		// サロゲートペアをコードポイントで表示
+#define HIDC_CHECK_DISP_UNICODE_IN_SJIS	14200		// SJISで文字コード値をUnicodeで表示する
+#define HIDC_CHECK_DISP_UNICODE_IN_JIS	14201		// JISで文字コード値をUnicodeで表示する
+#define HIDC_CHECK_DISP_UNICODE_IN_EUC	14202		// EUCで文字コード値をUnicodeで表示する
+#define HIDC_CHECK_DISP_UTF8_CODEPOINT	14203		// UTF-8をコードポイントで表示する
+#define HIDC_CHECK_DISP_SP_CODEPOINT	14204		// サロゲートペアをコードポイントで表示する
 
 
 #define HIDC_STATIC						19999 //不明

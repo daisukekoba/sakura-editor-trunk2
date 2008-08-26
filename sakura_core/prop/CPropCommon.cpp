@@ -170,7 +170,7 @@ CPropCommon::CPropCommon()
 
 	m_hwndParent = NULL;	/* オーナーウィンドウのハンドル */
 	m_hwndThis  = NULL;		/* このダイアログのハンドル */
-	m_nPageNum = 0;
+	m_nPageNum = ID_PAGENUM_GENERAL;
 
 	/* ヘルプファイルのフルパスを返す */
 	m_szHelpFile = CEditApp::Instance()->GetHelpFilePath();
@@ -213,32 +213,6 @@ void CPropCommon::Create( HWND hwndParent, CImageListMgr* cIcons, CSMacroMgr* pM
 
 
 
-/* 色選択ダイアログ */
-BOOL CPropCommon::SelectColor( HWND hwndParent, COLORREF* pColor )
-{
-	int			i;
-	CHOOSECOLOR	cc;
-	DWORD	dwCustColors[16] ;
-	for( i = 0; i < 16; i++ ){
-		dwCustColors[i] = (DWORD)RGB( 255, 255, 255 );
-	}
-	cc.lStructSize = sizeof_raw( cc );
-	cc.hwndOwner = hwndParent;
-	cc.hInstance = NULL;
-	cc.rgbResult = *pColor;
-	cc.lpCustColors = (LPDWORD) dwCustColors;
-	cc.Flags = /*CC_PREVENTFULLOPEN |*/ CC_RGBINIT;
-	cc.lCustData = NULL;
-	cc.lpfnHook = NULL;
-	cc.lpTemplateName = NULL;
-	if( !::ChooseColor( &cc ) ){
-		return FALSE;
-	}
-	*pColor = cc.rgbResult;
-	return TRUE;
-}
-
-
 
 //	From Here Jun. 2, 2001 genta
 /*!
@@ -270,23 +244,24 @@ int CPropCommon::DoPropertySheet( int nPageNum/*, int nActiveItem*/ )
 	//	From Here Jun. 2, 2001 genta
 	//	Feb. 11, 2007 genta URLをTABと入れ換え	// 2007.02.13 順序変更（TABをWINの次に）
 	//!	「共通設定」プロパティシートの作成時に必要な情報の配列．
+	//	順序変更 Win,Toolbar,Tab,Statusbarの順に、File,FileName 順に	2008/6/22 Uchi 
 	static ComPropSheetInfo ComPropSheetInfoList[] = {
 		{ _T("全般"), 				IDD_PROP1P1,		DlgProc_PROP_GENERAL },
 		{ _T("ウィンドウ"),			IDD_PROP_WIN,		DlgProc_PROP_WIN },
+		{ _T("ツールバー"),			IDD_PROP_TOOLBAR,	DlgProc_PROP_TOOLBAR },
 		{ _T("タブバー"),			IDD_PROP_TAB,		DlgProc_PROP_TAB },
+		{ _T("ステータスバー"),		IDD_PROP_STATUSBAR,	DlgProc_PROP_STATUSBAR},	// 文字コード表示指定	2008/6/21	Uchi
 		{ _T("編集"),				IDD_PROP_EDIT,		DlgProc_PROP_EDIT },
 		{ _T("ファイル"),			IDD_PROP_FILE,		DlgProc_PROP_FILE },
+		{ _T("ファイル名表示"),		IDD_PROP_FNAME,		DlgProc_PROP_FILENAME},
 		{ _T("バックアップ"),		IDD_PROP_BACKUP,	DlgProc_PROP_BACKUP },
 		{ _T("書式"),				IDD_PROP_FORMAT,	DlgProc_PROP_FORMAT },
 		{ _T("検索"),				IDD_PROP_GREP,		DlgProc_PROP_GREP },	// 2006.08.23 ryoji タイトル変更（Grep -> 検索）
 		{ _T("キー割り当て"),		IDD_PROP_KEYBIND,	DlgProc_PROP_KEYBIND },
 		{ _T("カスタムメニュー"),	IDD_PROP_CUSTMENU,	DlgProc_PROP_CUSTMENU },
-		{ _T("ツールバー"),			IDD_PROP_TOOLBAR,	DlgProc_PROP_TOOLBAR },
 		{ _T("強調キーワード"),		IDD_PROP_KEYWORD,	DlgProc_PROP_KEYWORD },
 		{ _T("支援"),				IDD_PROP_HELPER,	DlgProc_PROP_HELPER },
 		{ _T("マクロ"),				IDD_PROP_MACRO,		DlgProc_PROP_MACRO },
-		{ _T("ファイル名表示"),		IDD_PROP_FNAME,		DlgProc_PROP_FILENAME},
-		{ _T("ステータスバー"),		IDD_PROP_STATUSBAR,	DlgProc_PROP_STATUSBAR},	// 文字コード表示指定	2008/6/21	Uchi
 	};
 
 	PROPSHEETPAGE		psp[32];
@@ -619,7 +594,7 @@ INT_PTR CPropCommon::DispatchEvent_p1(
 				return TRUE;
 //@@@ 2002.01.03 YAZAKI 最後に表示していたシートを正しく覚えていないバグ修正
 			case PSN_SETACTIVE:
-				m_nPageNum = ID_PAGENUM_ZENPAN;	//Oct. 25, 2000 JEPRO ZENPAN1→ZENPAN に変更(参照しているのはCPropCommon.cppのみの1箇所)
+				m_nPageNum = ID_PAGENUM_GENERAL;	//Oct. 25, 2000 JEPRO ZENPAN1→ZENPAN に変更(参照しているのはCPropCommon.cppのみの1箇所)
 				return TRUE;
 			}
 			break;

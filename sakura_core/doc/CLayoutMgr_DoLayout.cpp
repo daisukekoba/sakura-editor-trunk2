@@ -261,9 +261,9 @@ SEARCH_START:;
 			}
 			// 2007.09.07 kobake   ロジック幅とレイアウト幅を区別
 			CLayoutInt nCharKetas = CNativeW::GetKetaOfChar( pWork->cLineStr, pWork->nPos );
-			if( 0 == nCharKetas ){
-				nCharKetas = CLayoutInt(1);
-			}
+//			if( 0 == nCharKetas ){				// 削除 サロゲートペア対策	2008/7/5 Uchi
+//				nCharKetas = CLayoutInt(1);
+//			}
 
 			if( pWork->nPosX + nCharKetas > m_sTypeConfig.m_nMaxLineKetas ){
 				if( pWork->nKinsokuType != KINSOKU_TYPE_KINSOKU_KUTO )

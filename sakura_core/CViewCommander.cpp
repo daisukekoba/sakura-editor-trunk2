@@ -269,8 +269,8 @@ BOOL CViewCommander::HandleCommand(
 	case F_PRINT_PREVIEW:		Command_PRINT_PREVIEW();break;			/* 印刷プレビュー */
 	case F_PRINT_PAGESETUP:		Command_PRINT_PAGESETUP();break;		/* 印刷ページ設定 */	//Sept. 14, 2000 jepro 「印刷のページレイアウトの設定」から変更
 	case F_OPEN_HfromtoC:		bRet = Command_OPEN_HfromtoC( (BOOL)lparam1 );break;	/* 同名のC/C++ヘッダ(ソース)を開く */	//Feb. 7, 2001 JEPRO 追加
-	case F_OPEN_HHPP:			bRet = Command_OPEN_HHPP( (BOOL)lparam1, TRUE );break;		/* 同名のC/C++ヘッダファイルを開く */	//Feb. 9, 2001 jepro「.cまたは.cppと同名の.hを開く」から変更
-	case F_OPEN_CCPP:			bRet = Command_OPEN_CCPP( (BOOL)lparam1, TRUE );break;		/* 同名のC/C++ソースファイルを開く */	//Feb. 9, 2001 jepro「.hと同名の.c(なければ.cpp)を開く」から変更
+//	case F_OPEN_HHPP:			bRet = Command_OPEN_HHPP( (BOOL)lparam1, TRUE );break;		/* 同名のC/C++ヘッダファイルを開く */	//Feb. 9, 2001 jepro「.cまたは.cppと同名の.hを開く」から変更		del 2008/6/23 Uchi
+//	case F_OPEN_CCPP:			bRet = Command_OPEN_CCPP( (BOOL)lparam1, TRUE );break;		/* 同名のC/C++ソースファイルを開く */	//Feb. 9, 2001 jepro「.hと同名の.c(なければ.cpp)を開く」から変更	del 2008/6/23 Uchi
 	case F_ACTIVATE_SQLPLUS:	Command_ACTIVATE_SQLPLUS();break;		/* Oracle SQL*Plusをアクティブ表示 */
 	case F_PLSQL_COMPILE_ON_SQLPLUS:									/* Oracle SQL*Plusで実行 */
 		Command_PLSQL_COMPILE_ON_SQLPLUS();
@@ -984,22 +984,10 @@ void CViewCommander::Command_RIGHT( bool bSelect, bool bIgnoreCurrentSelection, 
 						++ptPos.y;
 					}
 				}
-			}
-			//	キャレット位置が折り返し位置より右側だった場合の処理
-			//	Aug. 14, 2005 genta 折り返し幅をLayoutMgrから取得するように
-			if( ptPos.x >= GetDocument()->m_cLayoutMgr.GetMaxLineKetas() ){
-				if( GetDocument()->m_cDocType.GetDocumentAttribute().m_bKinsokuRet
-				 || GetDocument()->m_cDocType.GetDocumentAttribute().m_bKinsokuKuto )	//@@@ 2002.04.16 MIK
-				{
-					if( GetDocument()->m_cLayoutMgr.IsEndOfLine( ptPos ) )	//@@@ 2002.04.18
-					{
-						ptPos.x = CLayoutInt(0);
-						++ptPos.y;
-					}
-				}
-				else
-				{
-					ptPos.x = CLayoutInt(0);
+				//	キャレット位置が折り返し位置より右側だった場合の処理
+				//	Aug. 14, 2005 genta 折り返し幅をLayoutMgrから取得するように
+				if( ptPos.x >= GetDocument()->m_cLayoutMgr.GetMaxLineKetas() ){
+					ptPos.x = pcLayout->GetNextLayout() ? pcLayout->GetNextLayout()->GetIndent() : CLayoutInt(0);
 					++ptPos.y;
 				}
 			}
@@ -1561,9 +1549,6 @@ void CViewCommander::Command_CUT( void )
 	}else{
 		bBeginBoxSelect = false;
 	}
-	GetDocument()->m_cDocEditor.SetModified(true,true);	//	Jan. 22, 2002 genta
-	//m_pCommanderView->SetParentCaption();	/* 親ウィンドウのタイトルを更新 */
-
 
 	/* 選択範囲のデータを取得 */
 	/* 正常時はTRUE,範囲未選択の場合はFALSEを返す */
@@ -1594,8 +1579,19 @@ void CViewCommander::Command_DELETE( void )
 	}
 
 	if( !m_pCommanderView->GetSelectionInfo().IsTextSelected() ){	/* テキストが選択されているか */
-		m_pCommanderView->DeleteData( TRUE );
-		return;
+		// 2008.08.03 nasukoji	選択範囲なしでDELETEを実行した場合、カーソル位置まで半角スペースを挿入した後改行を削除して次行と連結する
+		if( GetDocument()->m_cLayoutMgr.GetLineCount() > GetCaret().GetCaretLayoutPos().GetY2() ){
+			const CLayout* pcLayout = GetDocument()->m_cLayoutMgr.SearchLineByLayoutY( GetCaret().GetCaretLayoutPos().GetY2() );
+			if( pcLayout ){
+				CLayoutInt nLineLen;
+				m_pCommanderView->LineColmnToIndex2( pcLayout, GetCaret().GetCaretLayoutPos().GetX2(), &nLineLen );
+				if( nLineLen != 0 ){	// 折り返しや改行コードより右の場合には nLineLen に行全体の表示桁数が入る
+					if( EOL_NONE != pcLayout->GetLayoutEol().GetType() ){	// 行終端は改行コードか?
+						Command_INSTEXT( TRUE, L"", CLogicInt(0), FALSE );	// カーソル位置まで半角スペース挿入
+					}
+				}
+			}
+		}
 	}
 	m_pCommanderView->DeleteData( TRUE );
 	return;
@@ -1616,22 +1612,33 @@ void CViewCommander::Command_DELETE_BACK( void )
 	//GetDocument()->m_cDocEditor.SetModified(true,true);	//	Jan. 22, 2002 genta
 	if( m_pCommanderView->GetSelectionInfo().IsTextSelected() ){				/* テキストが選択されているか */
 		m_pCommanderView->DeleteData( TRUE );
-		GetDocument()->m_cDocEditor.SetModified(true,true);	//	May 29, 2004 genta
 	}
 	else{
+		CLayoutPoint	ptLayoutPos_Old = GetCaret().GetCaretLayoutPos();
+		CLogicPoint		ptLogicPos_Old = GetCaret().GetCaretLogicPos();
 		BOOL	bBool = Command_LEFT( FALSE, FALSE );
 		if( bBool ){
-			if( !m_pCommanderView->m_bDoing_UndoRedo ){	/* アンドゥ・リドゥの実行中か */
-				/* 操作の追加 */
-				GetOpeBlk()->AppendOpe(
-					new CMoveCaretOpe(
-						GetCaret().GetCaretLogicPos(),
-						GetCaret().GetCaretLogicPos()
-					)
-				);
+			const CLayout* pcLayout = GetDocument()->m_cLayoutMgr.SearchLineByLayoutY( GetCaret().GetCaretLayoutPos().GetY2() );
+			if( pcLayout ){
+				CLayoutInt nLineLen;
+				CLogicInt nIdx = m_pCommanderView->LineColmnToIndex2( pcLayout, GetCaret().GetCaretLayoutPos().GetX2(), &nLineLen );
+				if( nLineLen == 0 ){	// 折り返しや改行コードより右の場合には nLineLen に行全体の表示桁数が入る
+					// 右からの移動では折り返し末尾文字は削除するが改行は削除しない
+					// 下から（下の行の行頭から）の移動では改行も削除する
+					if( nIdx < pcLayout->GetLengthWithoutEOL() || GetCaret().GetCaretLayoutPos().GetY2() < ptLayoutPos_Old.GetY2() ){
+						if( !m_pCommanderView->m_bDoing_UndoRedo ){	/* アンドゥ・リドゥの実行中か */
+							/* 操作の追加 */
+							GetOpeBlk()->AppendOpe(
+								new CMoveCaretOpe(
+									ptLogicPos_Old,
+									GetCaret().GetCaretLogicPos()
+								)
+							);
+						}
+						m_pCommanderView->DeleteData( TRUE );
+					}
+				}
 			}
-			m_pCommanderView->DeleteData( TRUE );
-			GetDocument()->m_cDocEditor.SetModified(true,true);	//	May 29, 2004 genta
 		}
 	}
 	m_pCommanderView->PostprocessCommand_hokan();	//	Jan. 10, 2005 genta 関数化
@@ -3424,7 +3431,9 @@ bool CViewCommander::Command_FILESAVE( bool warnbeep, bool askname )
 	CEditDoc* pcDoc = GetDocument();
 
 	//ファイル名が指定されていない場合は「名前を付けて保存」のフローへ遷移
-	if( askname && !GetDocument()->m_cDocFile.GetFilePathClass().IsValidPath() ){
+	if( !GetDocument()->m_cDocFile.GetFilePathClass().IsValidPath() ){
+		if( !askname )
+			return false;	// 保存しない
 		return pcDoc->m_cDocFileOperation.FileSaveAs();
 	}
 

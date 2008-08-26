@@ -27,8 +27,8 @@
 // ファイル内容比較 CDlgCompare.cpp	//@@@ 2002.01.07 add start MIK
 #include "sakura.hh"
 const DWORD p_helpids[] = {	//12300
-	IDC_BUTTON1,					HIDC_CMP_BUTTON1,			//上下に表示
-	IDOK2,							HIDOK2_CMP,					//左右に表示
+//	IDC_BUTTON1,					HIDC_CMP_BUTTON1,			//上下に表示
+//	IDOK2,							HIDOK2_CMP,					//左右に表示
 	IDOK,							HIDOK_CMP,					//OK
 	IDCANCEL,						HIDCANCEL_CMP,				//キャンセル
 	IDC_BUTTON_HELP,				HIDC_CMP_BUTTON_HELP,		//ヘルプ
@@ -143,7 +143,7 @@ void CDlgCompare::SetData( void )
 			}
 			auto_sprintf(
 				szMenu,
-				_T("%ls %ls"),
+				_T("%ts %ts"),
 				(0 < _tcslen(pfi->m_szPath))?pfi->m_szPath:_T("(無題)"),
 				pfi->m_bIsModified ? _T("*"):_T(" ")
 			);

@@ -1142,8 +1142,8 @@ void CLayoutMgr::LogicToLayout(
 				else{
 					nCharKetas = CNativeW::GetKetaOfChar( pData, nDataLen, i );
 				}
-				if( nCharKetas == 0 )
-					nCharKetas = CLayoutInt(1);
+//				if( nCharKetas == 0 )				// 削除 サロゲートペア対策	2008/7/5 Uchi
+//					nCharKetas = CLayoutInt(1);
 
 				//レイアウト加算
 				nCaretPosX += nCharKetas;
@@ -1275,8 +1275,8 @@ checkloop:;
 		else{
 			nCharKetas = CNativeW::GetKetaOfChar( pData, nDataLen, i );
 		}
-		if( nCharKetas == 0 )
-			nCharKetas = CLayoutInt(1);
+//		if( nCharKetas == 0 )				// 削除 サロゲートペア対策	2008/7/5 Uchi
+//			nCharKetas = CLayoutInt(1);
 
 		//レイアウト加算
 		nX += nCharKetas;
