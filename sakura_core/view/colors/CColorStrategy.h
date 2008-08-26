@@ -1,5 +1,6 @@
 #pragma once
 
+bool _IsPosKeywordHead(const CStringRef& cStr, int nPos);
 
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 //                          色定数                             //
@@ -69,9 +70,6 @@ SAKURA_CORE_API enum EColorIndexType {
 	COLORIDX_REGEX_FIRST	= 1000,
 	COLORIDX_REGEX_LAST		= 1099,
 
-	// -- -- 特殊フラグ -- -- //
-	_COLORIDX_NOCHANGE		= 2000,
-
 	// -- -- 別名 -- -- //
 	COLORIDX_DEFAULT		= COLORIDX_TEXT,
 };
@@ -98,15 +96,14 @@ class CColorStrategy;
 #include <memory> //auto_ptr
 
 struct SColorStrategyInfo{
-	SColorStrategyInfo() : sDispPosBegin(0,0), pStrategy(NULL), bSearchStringMode(false) {}
+	SColorStrategyInfo() : sDispPosBegin(0,0), pStrategy(NULL), pStrategyFound(NULL) {}
 
 	//参照
 	CEditView*	pcView;
 	CGraphics	gr;	//(SColorInfoでは未使用)
 
 	//スキャン位置
-	LPCWSTR			pLineOfLayout; //###############そのうち消すかも
-	CLogicInt		nLineLenOfLayoutWithNexts;
+	LPCWSTR			pLineOfLogic;
 	CLogicInt		nPosInLogic;
 
 	//描画位置
@@ -115,28 +112,16 @@ struct SColorStrategyInfo{
 
 	//色変え
 	CColorStrategy*		pStrategy;
-	EColorIndexType		nCOMMENTMODE;
-	int					nCOMMENTEND; //###############そのうち消すかも
-	EColorIndexType		nColorIndex;	//(SColorStrategyInfoでは未使用)
-
-	//検索フラグ (SColorInfoでは未使用)
-	bool				bSearchStringMode;
+	CColorStrategy*		pStrategyFound;
 
 	//! 色の切り替え
 	void ChangeColor(EColorIndexType eNewColor)
 	{
-		SColorStrategyInfo* pInfo = this;
-		pInfo->nCOMMENTMODE = eNewColor;
-		if( !pInfo->bSearchStringMode ){
-			pInfo->pcView->SetCurrentColor( pInfo->gr, pInfo->nCOMMENTMODE );
-		}
+		this->pcView->SetCurrentColor( this->gr, eNewColor );
 	}
 
-	//! 現在のスキャン位置がキーワード先頭であるかどうか
-	bool IsPosKeywordHead() const
-	{
-		return (nPosInLogic==0 || !IS_KEYWORD_CHAR(pLineOfLayout[GetPosInLayout()-1]));
-	}
+	void DoChangeColor(const CStringRef& cLineStr);
+	EColorIndexType GetCurrentColor() const;
 
 	//! 現在のスキャン位置
 	CLogicInt GetPosInLogic() const
@@ -154,10 +139,14 @@ public:
 	//! 色定義
 	virtual EColorIndexType GetStrategyColor() const = 0;
 	//! 色切り替え開始を検出したら、その直前までの描画を行い、さらに色設定を行う。
-	virtual EColorIndexType BeginColor(SColorStrategyInfo* pInfo) = 0;
-	virtual bool EndColor(SColorStrategyInfo* pInfo) = 0;
+	virtual void InitStrategyStatus() = 0;
+	virtual bool BeginColor(const CStringRef& cStr, int nPos) = 0;
+	virtual bool EndColor(const CStringRef& cStr, int nPos) = 0;
 	//イベント
 	virtual void OnStartScanLogic(){}
+
+	//#######ラップ
+	EColorIndexType GetStrategyColorSafe() const{ if(this)return GetStrategyColor(); else return COLORIDX_TEXT; }
 };
 
 #include "util/design_template.h"
@@ -174,13 +163,18 @@ public:
 	int				GetStrategyCount() const{ return (int)m_vStrategies.size(); }
 	CColorStrategy*	GetStrategyByColor(EColorIndexType eColor) const;
 
+	//特定取得
+	CColorStrategy* GetFoundStrategy() const{ return m_pcFoundStrategy; }
+
 	//イベント
 	void NotifyOnStartScanLogic()
 	{
+		m_pcFoundStrategy->OnStartScanLogic();
 		for(int i=0;i<GetStrategyCount();i++){
 			GetStrategy(i)->OnStartScanLogic();
 		}
 	}
 private:
 	std::vector<CColorStrategy*>	m_vStrategies;
+	CColorStrategy*					m_pcFoundStrategy;
 };

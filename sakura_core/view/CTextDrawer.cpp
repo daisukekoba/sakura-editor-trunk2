@@ -20,9 +20,9 @@ const CTextArea* CTextDrawer::GetTextArea() const
 
 using namespace std;
 
-EColorIndexType CTextDrawer::_GetColorIdx(EColorIndexType nColorIdx, bool bSearchStringMode) const
+EColorIndexType CTextDrawer::_GetColorIdx(EColorIndexType nColorIdx) const
 {
-	if(bSearchStringMode)return COLORIDX_SEARCH;						//検索ヒット色
+//	if(bSearchStringMode)return COLORIDX_SEARCH;						//検索ヒット色
 	if(CTypeSupport(m_pEditView,nColorIdx).IsDisp())return nColorIdx;	//特殊色
 	return COLORIDX_TEXT;												//通常色
 }

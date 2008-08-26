@@ -70,7 +70,10 @@ public:
 
 	//変更インターフェース
 	void OffsetLogicLineNo(CLogicInt n){ m_ptLogicPos.y+=n; }
-	void SetColorTypePrev(EColorIndexType n){ m_nTypePrev=n; }
+	void SetColorTypePrev(EColorIndexType n)
+	{
+		m_nTypePrev=n;
+	}
 
 	//!レイアウト幅を計算。インデントも改行も含まない。2007.10.11 kobake
 	CLayoutInt CalcLayoutWidth(const CLayoutMgr& cLayoutMgr) const;
@@ -88,7 +91,7 @@ public:
 	void _SetNextLayout(CLayout* pcLayout){ m_pNext = pcLayout; }
 
 	//実データ参照
-	const CDocLine* GetDocLineRef() const{ return m_pCDocLine; }
+	const CDocLine* GetDocLineRef() const{ if(this)return m_pCDocLine; else return NULL; } //$$note:高速化
 
 	//その他属性参照
 	const CEol& GetLayoutEol() const{ return m_cEol; }

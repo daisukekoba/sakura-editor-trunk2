@@ -130,6 +130,8 @@ EColorIndexType CEditView::GetColorIndex(
 	int						nCol
 )
 {
+	EColorIndexType eRet = COLORIDX_TEXT;
+
 	if(!pcLayout){
 		return COLORIDX_TEXT;
 	}
@@ -145,8 +147,7 @@ EColorIndexType CEditView::GetColorIndex(
 	pInfo->pDispPos=&_sPos;
 	{
 		// 2002/2/10 aroka CMemory変更
-		pInfo->nLineLenOfLayoutWithNexts = pcLayout->GetDocLineRef()->GetLengthWithEOL()/* - pcLayout->GetLogicOffset()*/;	// 03/10/24 ai 折り返し行のColorIndexが正しく取得できない問題に対応
-		pInfo->pLineOfLayout = pcLayout->GetPtr()/* + pcLayout->GetLogicOffset()*/;			// 03/10/24 ai 折り返し行のColorIndexが正しく取得できない問題に対応
+		pInfo->pLineOfLogic = pcLayout->GetDocLineRef()->GetPtr();
 
 		// 論理行の最初のレイアウト情報を取得 -> pcLayoutLineFirst
 		const CLayout* pcLayoutLineFirst = pcLayout;
@@ -155,9 +156,7 @@ EColorIndexType CEditView::GetColorIndex(
 		}
 
 		// 2005.11.20 Moca 色が正しくないことがある問題に対処
-		pInfo->nCOMMENTMODE = pcLayoutLineFirst->GetColorTypePrev();
-		pInfo->nCOMMENTEND = 0;
-		pInfo->nColorIndex = pInfo->nCOMMENTMODE;	/* 現在の色を指定 */	// 02/12/18 ai
+		eRet = pcLayoutLineFirst->GetColorTypePrev();	/* 現在の色を指定 */	// 02/12/18 ai
 		pInfo->nPosInLogic = CLogicInt(0);
 		//############超仮。本当はVisitorを使うべき
 		class TmpVisitor{
@@ -182,27 +181,13 @@ EColorIndexType CEditView::GetColorIndex(
 	}
 	//@@@ 2001.11.17 add end MIK
 
-	while(1){
-		//色終了
-		if(pInfo->pStrategy){
-			if(pInfo->pStrategy->EndColor(pInfo)){
-				pInfo->pStrategy = NULL;
-				pInfo->ChangeColor(COLORIDX_TEXT);
-			}
-		}
+	//文字列参照
+	const CDocLine* pcDocLine = pInfo->GetDocLine();
+	CStringRef cLineStr(pcDocLine->GetPtr(),pcDocLine->GetLengthWithEOL());
 
-		//色開始
-		if(!pInfo->pStrategy){
-			CColorStrategyPool* pool = CColorStrategyPool::Instance();
-			for(int i=0;i<pool->GetStrategyCount();i++){
-				EColorIndexType eNextColor = pool->GetStrategy(i)->BeginColor(pInfo);
-				if(eNextColor!=_COLORIDX_NOCHANGE){
-					pInfo->pStrategy = pool->GetStrategy(i);
-					pInfo->ChangeColor(eNextColor);
-					break;
-				}
-			}
-		}
+	while(1){
+		//色切替
+		pInfo->DoChangeColor(cLineStr);
 
 		//1文字進む
 		pInfo->nPosInLogic += CLogicInt(1);
@@ -213,7 +198,7 @@ EColorIndexType CEditView::GetColorIndex(
 		}
 	}
 
-	return pInfo->nColorIndex;
+	return eRet;
 }
 
 
@@ -621,7 +606,6 @@ bool CEditView::DrawLogicLine(
 		const CLayout* pcLayout = m_pcEditDoc->m_cLayoutMgr.SearchLineByLayoutY( pInfo->pDispPos->GetLayoutLineRef() );
 		pInfo->ChangeColor(pcLayout?pcLayout->GetColorTypePrev():COLORIDX_TEXT);
 	}
-	pInfo->nCOMMENTEND = 0; //☆開始
 
 	//開始ロジック位置を算出
 	{
@@ -667,7 +651,7 @@ bool CEditView::DrawLogicLine(
 		}
 	}
 
-	return pInfo->pLineOfLayout==NULL;
+	return pInfo->pLineOfLogic==NULL;
 }
 
 /*!
@@ -689,12 +673,10 @@ bool CEditView::DrawLayoutLine(SColorStrategyInfo* pInfo)
 
 	// レイアウト情報
 	if( pcLayout ){
-		pInfo->pLineOfLayout				= pcLayout->GetDocLineRef()->GetPtr() + pcLayout->GetLogicOffset();
-		pInfo->nLineLenOfLayoutWithNexts	= pcLayout->GetDocLineRef()->GetLengthWithEOL() - pcLayout->GetLogicOffset();
+		pInfo->pLineOfLogic					= pcLayout->GetDocLineRef()->GetPtr();
 	}
 	else{
-		pInfo->pLineOfLayout				= NULL;
-		pInfo->nLineLenOfLayoutWithNexts	= CLogicInt(0);
+		pInfo->pLineOfLogic					= NULL;
 	}
 
 	// コンフィグ
@@ -738,35 +720,23 @@ bool CEditView::DrawLayoutLine(SColorStrategyInfo* pInfo)
 	if(pcLayout && pcLayout->GetLogicOffset()==0){
 		CColorStrategyPool* pool = CColorStrategyPool::Instance();
 		pInfo->pStrategy = pool->GetStrategyByColor(pcLayout->GetColorTypePrev());
+		if(pInfo->pStrategy)pInfo->pStrategy->InitStrategyStatus();
 		pInfo->ChangeColor(pcLayout->GetColorTypePrev());
 	}
+
+	//文字列参照
+	const CDocLine* pcDocLine = pInfo->GetDocLine();
+	CStringRef cLineStr = pcDocLine->GetStringRefWithEOL();
+
 	//行終端または折り返しに達するまでループ
 	const CTextArea* pcArea = &this->GetTextArea();
 	if(pcLayout)while(1)
 	{
-		//色終了
-		if(pInfo->pStrategy){
-			if( pInfo->pStrategy->EndColor(pInfo) ){
-				pInfo->pStrategy = NULL;
-				pInfo->ChangeColor(COLORIDX_TEXT);
-			}
-		}
-
-		//各開始
-		if(!pInfo->pStrategy){
-			CColorStrategyPool* pool = CColorStrategyPool::Instance();
-			for(int i=0;i<pool->GetStrategyCount();i++){
-				EColorIndexType eNextColor = pool->GetStrategy(i)->BeginColor(pInfo);
-				if( eNextColor != _COLORIDX_NOCHANGE){
-					pInfo->pStrategy = pool->GetStrategy(i);
-					pInfo->ChangeColor(eNextColor);
-					break;
-				}
-			}
-		}
+		//色切替
+		pInfo->DoChangeColor(cLineStr);
 
 		//1文字情報取得 $$高速化可能
-		CFigure& cFigure = CFigureManager::Instance()->GetFigure(&pInfo->pLineOfLayout[pInfo->GetPosInLayout()]);
+		CFigure& cFigure = CFigureManager::Instance()->GetFigure(&cLineStr.GetPtr()[pInfo->GetPosInLogic()]);
 
 		//1文字描画
 		CLogicInt nPosOld = pInfo->nPosInLogic;

@@ -74,10 +74,10 @@ bool CDocFileOperation::DoLoadFlow(SLoadInfo* pLoadInfo)
 	ELoadResult eLoadResult = LOADED_FAILURE;
 
 	try{
-		//セーブ前チェック
+		//ロード前チェック
 		if(CALLBACK_INTERRUPT==m_pcDocRef->NotifyCheckLoad(pLoadInfo))throw CFlowInterruption();
 
-		//セーブ処理
+		//ロード処理
 		m_pcDocRef->NotifyBeforeLoad(*pLoadInfo);			//前処理
 		eLoadResult = m_pcDocRef->NotifyLoad(*pLoadInfo);	//本処理
 		m_pcDocRef->NotifyAfterLoad(*pLoadInfo);			//後処理

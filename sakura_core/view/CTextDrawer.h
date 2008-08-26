@@ -38,7 +38,7 @@ public:
 
 public: //####âº
 	// -- -- é¿ëïï‚èï -- -- //
-	EColorIndexType _GetColorIdx(EColorIndexType nColorIdx,bool bSearchStringMode) const;
+	EColorIndexType _GetColorIdx(EColorIndexType nColorIdx) const;
 
 
 private:

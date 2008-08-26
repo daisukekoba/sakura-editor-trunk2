@@ -3605,6 +3605,10 @@
 						>
 					</File>
 					<File
+						RelativePath="..\sakura_core\doc\CLayoutMgr_DoLayout.cpp"
+						>
+					</File>
+					<File
 						RelativePath="..\sakura_core\doc\CLayoutMgr_New.cpp"
 						>
 						<FileConfiguration

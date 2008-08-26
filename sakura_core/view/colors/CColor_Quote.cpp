@@ -5,24 +5,24 @@
 //                     クォーテーション                        //
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 
-EColorIndexType CColor_Quote::BeginColor(SColorStrategyInfo* pInfo)
+bool CColor_Quote::BeginColor(const CStringRef& cStr, int nPos)
 {
-	if(!pInfo->pLineOfLayout)return _COLORIDX_NOCHANGE;
+	if(!cStr.IsValid())return false;
 
 	const CEditDoc* pcDoc = CEditDoc::GetInstance(0);
 	const STypeConfig* TypeDataPtr = &pcDoc->m_cDocType.GetDocumentAttribute();
 
-	if( pInfo->pLineOfLayout[pInfo->GetPosInLayout()] == m_cQuote &&
+	if( cStr.At(nPos) == m_cQuote &&
 		TypeDataPtr->m_ColorInfoArr[this->GetStrategyColor()].m_bDisp	/* ダブルクォーテーション文字列を表示する */
 	){
 		m_bLastEscape = false;
 		m_bDone = false;
-		return this->GetStrategyColor();
+		return true;
 	}
-	return _COLORIDX_NOCHANGE;
+	return false;
 }
 
-bool CColor_Quote::EndColor(SColorStrategyInfo* pInfo)
+bool CColor_Quote::EndColor(const CStringRef& cStr, int nPos)
 {
 	const CEditDoc* pcDoc = CEditDoc::GetInstance(0);
 	const STypeConfig* TypeDataPtr = &pcDoc->m_cDocType.GetDocumentAttribute();
@@ -39,12 +39,12 @@ bool CColor_Quote::EndColor(SColorStrategyInfo* pInfo)
 			return false;
 		}
 		//終端
-		if(pInfo->pLineOfLayout[pInfo->GetPosInLayout()]==m_cQuote){
+		if(cStr.At(nPos)==m_cQuote){
 			m_bDone = true;
 			return false;
 		}
 		//エスケープ検出
-		if(pInfo->pLineOfLayout[pInfo->GetPosInLayout()-1]==L'\\'){
+		if(cStr.At(nPos)==L'\\'){
 			m_bLastEscape = true;
 		}
 	}
@@ -56,9 +56,9 @@ bool CColor_Quote::EndColor(SColorStrategyInfo* pInfo)
 			return false;
 		}
 		//終端
-		if(pInfo->pLineOfLayout[pInfo->GetPosInLayout()]==m_cQuote){
+		if(cStr.At(nPos)==m_cQuote){
 			//エスケープ検出
-			if(pInfo->pLineOfLayout[pInfo->GetPosInLayout()+1]==m_cQuote){
+			if(cStr.At(nPos+1)==m_cQuote){
 				m_bLastEscape = true;
 				return false;
 			}

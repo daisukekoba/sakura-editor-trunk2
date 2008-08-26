@@ -59,16 +59,19 @@ void CBlockComment::SetBlockCommentRule(
 	@retval false 一致しなかった
 */
 bool CBlockComment::Match_CommentFrom(
-	int				nPos,		//!< [in] 探索開始位置
+	int					nPos,		//!< [in] 探索開始位置
+	const CStringRef&	cStr		//!< [in] 探索対象文字列 ※探索開始位置のポインタではないことに注意
+	/*
 	int				nLineLen,	//!< [in] pLineの長さ
-	const wchar_t*	pLine		//!< [in] 探索行の先頭．探索開始位置のポインタではないことに注意
+	const wchar_t*	pLine		//!< [in] 探索行の先頭．
+	*/
 ) const
 {
 	if (
 		L'\0' != m_szBlockCommentFrom[0] &&
 		L'\0' != m_szBlockCommentTo[0]  &&
-		nPos <= nLineLen - m_nBlockFromLen &&	/* ブロックコメントデリミタ(From) */
-		0 == auto_memicmp( &pLine[nPos], m_szBlockCommentFrom, m_nBlockFromLen )
+		nPos <= cStr.GetLength() - m_nBlockFromLen &&	/* ブロックコメントデリミタ(From) */
+		0 == auto_memicmp( &cStr.GetPtr()[nPos], m_szBlockCommentFrom, m_nBlockFromLen )
 	){
 		return true;
 	}
@@ -81,16 +84,19 @@ bool CBlockComment::Match_CommentFrom(
 	@return 当てはまった位置を返すが、当てはまらなかったときは、nLineLenをそのまま返す。
 */
 int CBlockComment::Match_CommentTo(
-	int				nPos,		//!< [in] 探索開始位置
+	int					nPos,		//!< [in] 探索開始位置
+	const CStringRef&	cStr		//!< [in] 探索対象文字列 ※探索開始位置のポインタではないことに注意
+	/*
 	int				nLineLen,	//!< [in] pLineの長さ
 	const wchar_t*	pLine		//!< [in] 探索行の先頭．探索開始位置のポインタではないことに注意
+	*/
 ) const
 {
-	for( int i = nPos; i <= nLineLen - m_nBlockToLen; ++i ){
-		if( 0 == auto_memicmp( &pLine[i], m_szBlockCommentTo, m_nBlockToLen ) ){
+	for( int i = nPos; i <= cStr.GetLength() - m_nBlockToLen; ++i ){
+		if( 0 == auto_memicmp( cStr.GetPtr() + i, m_szBlockCommentTo, m_nBlockToLen ) ){
 			return i + m_nBlockToLen;
 		}
 	}
-	return nLineLen;
+	return cStr.GetLength();
 }
 

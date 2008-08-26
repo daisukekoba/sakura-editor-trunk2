@@ -5,31 +5,33 @@
 #include "doc/CLayout.h"
 #include "types/CTypeSupport.h"
 
-EColorIndexType CColor_Eol::BeginColor(SColorStrategyInfo* pInfo)
+bool CColor_Eol::BeginColor(const CStringRef& cStr, int nPos)
 {
-	CTypeSupport cTextType(pInfo->pcView,COLORIDX_TEXT);
+	return false;
+	/*
+	###########################################################
 	const CLayout*	pcLayout2; //ワーク用CLayoutポインタ
 	pcLayout2 = CEditDoc::GetInstance(0)->m_cLayoutMgr.SearchLineByLayoutY( pInfo->pDispPos->GetLayoutLineRef() );
 	int nLineHeight = pInfo->pcView->GetTextMetrics().GetHankakuDy();  //行の縦幅？
 
-	if(!pInfo->pLineOfLayout){
+	if(!cStr.IsValid()){
 		if(pInfo->pDispPos->GetLayoutLineRef()==CEditDoc::GetInstance(0)->m_cLayoutMgr.GetLineCount()){
 			return COLORIDX_EOL;
 		}
 		else{
-			return _COLORIDX_NOCHANGE;
+			return false;
 		}
 	}
 	else if( pInfo->nPosInLogic >= pInfo->pDispPos->GetLayoutRef()->GetDocLineRef()->GetLengthWithoutEOL() ){
-		pInfo->nCOMMENTEND = pInfo->nPosInLogic + pcLayout2->GetLayoutEol().GetLen();
 		return COLORIDX_EOL;
 	}
-	return _COLORIDX_NOCHANGE;
+	return false;
+	*/
 }
 
-bool CColor_Eol::EndColor(SColorStrategyInfo* pInfo)
+bool CColor_Eol::EndColor(const CStringRef& cStr, int nPos)
 {
-	if(pInfo->nPosInLogic>=pInfo->nCOMMENTEND){
+	if(nPos>=cStr.GetLength()){
 		return true;
 	}
 	return false;

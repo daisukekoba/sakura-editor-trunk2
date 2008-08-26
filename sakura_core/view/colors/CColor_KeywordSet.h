@@ -4,7 +4,12 @@
 
 class CColor_KeywordSet : public CColorStrategy{
 public:
-	virtual EColorIndexType GetStrategyColor() const{ return COLORIDX_KEYWORD1; } //##########‰¼
-	virtual EColorIndexType BeginColor(SColorStrategyInfo* pInfo);
-	virtual bool EndColor(SColorStrategyInfo* pInfo);
+	CColor_KeywordSet(int nKeywordIndex);
+	virtual EColorIndexType GetStrategyColor() const{ return (EColorIndexType)(COLORIDX_KEYWORD1 + m_nKeywordIndex); }
+	virtual void InitStrategyStatus(){ m_nCOMMENTEND = 0; }
+	virtual bool BeginColor(const CStringRef& cStr, int nPos);
+	virtual bool EndColor(const CStringRef& cStr, int nPos);
+private:
+	int m_nKeywordIndex;
+	int m_nCOMMENTEND;
 };

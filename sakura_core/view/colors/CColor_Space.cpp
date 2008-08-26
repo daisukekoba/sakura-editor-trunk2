@@ -6,24 +6,24 @@
 //                           タブ                              //
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 
-EColorIndexType CColor_Tab::BeginColor(SColorStrategyInfo* pInfo)
+bool CColor_Tab::BeginColor(const CStringRef& cStr, int nPos)
 {
 #ifdef NEW_ZENSPACE
-	return _COLORIDX_NOCHANGE;
+	return false;
 #endif
-	if(!pInfo->pLineOfLayout)return _COLORIDX_NOCHANGE;
+	if(!cStr.IsValid())return false;
 
 	const CEditDoc* pcDoc = CEditDoc::GetInstance(0);
 	const STypeConfig* TypeDataPtr = &pcDoc->m_cDocType.GetDocumentAttribute();
-	if( pInfo->pLineOfLayout[pInfo->GetPosInLayout()] == WCODE::TAB ){
-		return COLORIDX_TAB;
+	if( cStr.At(nPos) == WCODE::TAB ){
+		return true;
 	}
-	return _COLORIDX_NOCHANGE;
+	return false;
 }
 
-bool CColor_Tab::EndColor(SColorStrategyInfo* pInfo)
+bool CColor_Tab::EndColor(const CStringRef& cStr, int nPos)
 {
-	if( pInfo->pLineOfLayout[pInfo->GetPosInLayout()] != WCODE::TAB ){
+	if( cStr.At(nPos) != WCODE::TAB ){
 		return true;
 	}
 	return false;
@@ -35,25 +35,25 @@ bool CColor_Tab::EndColor(SColorStrategyInfo* pInfo)
 //                       全角スペース                          //
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 
-EColorIndexType CColor_ZenSpace::BeginColor(SColorStrategyInfo* pInfo)
+bool CColor_ZenSpace::BeginColor(const CStringRef& cStr, int nPos)
 {
 #ifdef NEW_ZENSPACE
-	return _COLORIDX_NOCHANGE;
+	return false;
 #endif
-	if(!pInfo->pLineOfLayout)return _COLORIDX_NOCHANGE;
+	if(!cStr.IsValid())return false;
 
 	const CEditDoc* pcDoc = CEditDoc::GetInstance(0);
 	const STypeConfig* TypeDataPtr = &pcDoc->m_cDocType.GetDocumentAttribute();
-	if( WCODE::IsZenkakuSpace(pInfo->pLineOfLayout[pInfo->GetPosInLayout()]) )
+	if( WCODE::IsZenkakuSpace(cStr.At(nPos)) )
 	{
-		return COLORIDX_ZENSPACE;
+		return true;
 	}
-	return _COLORIDX_NOCHANGE;
+	return false;
 }
 
-bool CColor_ZenSpace::EndColor(SColorStrategyInfo* pInfo)
+bool CColor_ZenSpace::EndColor(const CStringRef& cStr, int nPos)
 {
-	if( !WCODE::IsZenkakuSpace(pInfo->pLineOfLayout[pInfo->GetPosInLayout()]) ){
+	if( !WCODE::IsZenkakuSpace(cStr.At(nPos)) ){
 		return true;
 	}
 	return false;
@@ -63,25 +63,25 @@ bool CColor_ZenSpace::EndColor(SColorStrategyInfo* pInfo)
 //                       半角スペース                          //
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 
-EColorIndexType CColor_HanSpace::BeginColor(SColorStrategyInfo* pInfo)
+bool CColor_HanSpace::BeginColor(const CStringRef& cStr, int nPos)
 {
 #ifdef NEW_ZENSPACE
-	return _COLORIDX_NOCHANGE;
+	return false;
 #endif
-	if(!pInfo->pLineOfLayout)return _COLORIDX_NOCHANGE;
+	if(!cStr.IsValid())return false;
 
 	const CEditDoc* pcDoc = CEditDoc::GetInstance(0);
 	const STypeConfig* TypeDataPtr = &pcDoc->m_cDocType.GetDocumentAttribute();
-	if (pInfo->pLineOfLayout[pInfo->GetPosInLayout()] == L' ' && TypeDataPtr->m_ColorInfoArr[COLORIDX_SPACE].m_bDisp )
+	if (cStr.At(nPos) == L' ' && TypeDataPtr->m_ColorInfoArr[COLORIDX_SPACE].m_bDisp )
 	{
-		return COLORIDX_SPACE;
+		return true;
 	}
-	return _COLORIDX_NOCHANGE;
+	return false;
 }
 
-bool CColor_HanSpace::EndColor(SColorStrategyInfo* pInfo)
+bool CColor_HanSpace::EndColor(const CStringRef& cStr, int nPos)
 {
-	if( pInfo->pLineOfLayout[pInfo->GetPosInLayout()] != L' ' ){
+	if( cStr.At(nPos) != L' ' ){
 		return true;
 	}
 	return false;

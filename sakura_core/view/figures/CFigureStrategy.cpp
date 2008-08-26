@@ -16,7 +16,7 @@ public:
 		pInfo->pcView->GetTextDrawer().DispText(
 			pInfo->gr,
 			pInfo->pDispPos,
-			&pInfo->pLineOfLayout[pInfo->GetPosInLayout()],
+			&pInfo->pLineOfLogic[pInfo->GetPosInLogic()],
 			1
 		);
 		pInfo->nPosInLogic++;

@@ -9,26 +9,26 @@
 //                           URL                               //
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 
-EColorIndexType CColor_Url::BeginColor(SColorStrategyInfo* pInfo)
+bool CColor_Url::BeginColor(const CStringRef& cStr, int nPos)
 {
-	if(!pInfo->pLineOfLayout)return _COLORIDX_NOCHANGE;
+	if(!cStr.IsValid())return false;
 
 	const CEditDoc* pcDoc = CEditDoc::GetInstance(0);
 	const STypeConfig* TypeDataPtr = &pcDoc->m_cDocType.GetDocumentAttribute();
 	int	nUrlLen;
 	
-	if( pInfo->IsPosKeywordHead() && TypeDataPtr->m_ColorInfoArr[COLORIDX_URL].m_bDisp			/* URLを表示する */
-	 && IsURL( &pInfo->pLineOfLayout[pInfo->GetPosInLayout()], pInfo->nLineLenOfLayoutWithNexts - pInfo->nPosInLogic, &nUrlLen )	/* 指定アドレスがURLの先頭ならばTRUEとその長さを返す */
+	if( _IsPosKeywordHead(cStr,nPos) && TypeDataPtr->m_ColorInfoArr[COLORIDX_URL].m_bDisp			/* URLを表示する */
+	 && IsURL( cStr.GetPtr() + nPos, cStr.GetLength() - nPos, &nUrlLen )	/* 指定アドレスがURLの先頭ならばTRUEとその長さを返す */
 	){
-		pInfo->nCOMMENTEND = pInfo->nPosInLogic + nUrlLen;
-		return COLORIDX_URL;
+		this->m_nCOMMENTEND = nPos + nUrlLen;
+		return true;
 	}
-	return _COLORIDX_NOCHANGE;
+	return false;
 }
 
-bool CColor_Url::EndColor(SColorStrategyInfo* pInfo)
+bool CColor_Url::EndColor(const CStringRef& cStr, int nPos)
 {
-	if( pInfo->nPosInLogic == pInfo->nCOMMENTEND ){
+	if( nPos == this->m_nCOMMENTEND ){
 		return true;
 	}
 	return false;

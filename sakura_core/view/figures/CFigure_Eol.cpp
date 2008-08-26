@@ -19,7 +19,7 @@ bool _DispEmptyLine(CGraphics& gr, DispPos* pDispPos, const CEditView* pcView);
 
 //改行記号描画
 //2007.08.30 kobake 追加
-void _DispEOL(CGraphics& gr, DispPos* pDispPos, CEol cEol, bool bSearchStringMode, const CEditView* pcView);
+void _DispEOL(CGraphics& gr, DispPos* pDispPos, CEol cEol, const CEditView* pcView);
 
 
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
@@ -48,20 +48,6 @@ bool CFigure_Eol::DrawImp(SColorStrategyInfo* pInfo)
 
 	CEditView* pcView = &CEditWnd::Instance()->GetActiveView();
 
-	/*
-	// NULL == pLineの場合
-	if(!pInfo->pLineOfLayout){
-		if(pInfo->nPosInLogic==0){
-			_DispEmptyLine(pInfo->gr,pInfo->pDispPos,pInfo->pcView);
-			pInfo->nPosInLogic++;
-			return true;
-		}
-		else{
-			return false;
-		}
-	}
-	*/
-
 	//コンフィグ
 	CTypeSupport		cTextType	(pcView,COLORIDX_TEXT);
 	int					nLineHeight	= pcView->GetTextMetrics().GetHankakuDy();
@@ -71,18 +57,11 @@ bool CFigure_Eol::DrawImp(SColorStrategyInfo* pInfo)
 	const CLayout*	pcLayout2 = CEditDoc::GetInstance(0)->m_cLayoutMgr.SearchLineByLayoutY( pInfo->pDispPos->GetLayoutLineRef() );
 	CEol cEol = pcLayout2->GetLayoutEol();
 
-	/*
-	// ちょうど行末なら、以下へ進む
-	if( pInfo->nPosInLogic != pInfo->nLineLenOfLayoutWithNexts - cEol.GetLen() ){
-		return false;
-	}
-	*/
-
 	// 行末記号を描画
 	{
 		// 改行が存在した場合は、改行記号を表示
 		if(cEol.GetLen()){
-			_DispEOL(pInfo->gr,pInfo->pDispPos,pcLayout2->GetLayoutEol(),pInfo->bSearchStringMode,pInfo->pcView);
+			_DispEOL(pInfo->gr,pInfo->pDispPos,pcLayout2->GetLayoutEol(),pInfo->pcView);
 			pInfo->nPosInLogic+=cEol.GetLen();
 		}
 		// 最終行の場合は、EOFを表示
@@ -299,13 +278,13 @@ void _DrawEOL(
 );
 
 //2007.08.30 kobake 追加
-void _DispEOL(CGraphics& gr, DispPos* pDispPos, CEol cEol, bool bSearchStringMode, const CEditView* pcView)
+void _DispEOL(CGraphics& gr, DispPos* pDispPos, CEol cEol, const CEditView* pcView)
 {
 	RECT rcClip2;
 	if(pcView->GetTextArea().GenerateClipRect(&rcClip2,*pDispPos,2)){
 
 		// 色決定
-		CTypeSupport cSupport(pcView,pcView->GetTextDrawer()._GetColorIdx(COLORIDX_EOL,bSearchStringMode));
+		CTypeSupport cSupport(pcView,pcView->GetTextDrawer()._GetColorIdx(COLORIDX_EOL));
 		cSupport.SetGraphicsState_WhileThisObj(gr);
 
 		// 2003.08.17 ryoji 改行文字が欠けないように

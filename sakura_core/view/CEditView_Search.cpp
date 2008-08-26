@@ -277,12 +277,15 @@ void CEditView::GetCurrentTextForSearchDlg( CNativeW& cmemCurText )
 //正規表現で検索したときの速度改善のため、マッチ先頭位置を引数に追加
 //Jun. 26, 2001 genta	正規表現ライブラリの差し替え
 bool CEditView::IsSearchString(
+	const CStringRef&	cStr,
+	/*
 	const wchar_t*	pszData,
 	CLogicInt		nDataLen,
+	*/
 	CLogicInt		nPos,
 	CLogicInt*		pnSearchStart,
 	CLogicInt*		pnSearchEnd
-)
+) const
 {
 	CLogicInt		nKeyLength;
 
@@ -297,7 +300,7 @@ bool CEditView::IsSearchString(
 		** 対策として、行頭を MacthInfoに教えないといけないので、文字列の長さ・位置情報を与える形に変更
 		** 2003.05.04 かろと
 		*/
-		if( m_CurRegexp.Match( pszData, nDataLen, nPos ) ){
+		if( m_CurRegexp.Match( cStr.GetPtr(), cStr.GetLength(), nPos ) ){
 			*pnSearchStart = m_CurRegexp.GetIndex();	// 2002.02.08 hor
 			*pnSearchEnd = m_CurRegexp.GetLastIndex();
 			return true;
@@ -314,7 +317,7 @@ bool CEditView::IsSearchString(
 			/* 現在位置の単語の範囲を調べる */
 			/* 現在位置の単語の範囲を調べる */
 			CLogicInt nIdxFrom, nIdxTo;
-			if( !CWordParse::WhereCurrentWord_2( pszData, nDataLen, nPos, &nIdxFrom, &nIdxTo, NULL, NULL ) ){
+			if( !CWordParse::WhereCurrentWord_2( cStr.GetPtr(), CLogicInt(cStr.GetLength()), nPos, &nIdxFrom, &nIdxTo, NULL, NULL ) ){
 				return false;
 			}
 			if( nPos != nIdxFrom || nKeyLength != nIdxTo - nIdxFrom ){
@@ -323,17 +326,17 @@ bool CEditView::IsSearchString(
 		}
 
 		//検索条件が未定義 または 検索条件の長さより調べるデータが短いときはヒットしない
-		if( 0 == nKeyLength || nKeyLength > nDataLen - nPos ){
+		if( 0 == nKeyLength || nKeyLength > cStr.GetLength() - nPos ){
 			return false;
 		}
 		//英大文字小文字の区別をするかどうか
 		if( m_sCurSearchOption.bLoHiCase ){	/* 1==英大文字小文字の区別 */
-			if( 0 == wmemcmp( &pszData[nPos], m_szCurSrchKey, nKeyLength ) ){
+			if( 0 == wmemcmp( &cStr.GetPtr()[nPos], m_szCurSrchKey, nKeyLength ) ){
 				*pnSearchEnd = nPos + nKeyLength;
 				return true;
 			}
 		}else{
-			if( 0 == auto_memicmp( &pszData[nPos], m_szCurSrchKey, nKeyLength ) ){
+			if( 0 == auto_memicmp( &cStr.GetPtr()[nPos], m_szCurSrchKey, nKeyLength ) ){
 				*pnSearchEnd = nPos + nKeyLength;
 				return true;
 			}

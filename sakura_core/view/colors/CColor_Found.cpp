@@ -10,45 +10,44 @@ void CColor_Found::OnStartScanLogic()
 	m_nSearchEnd	= CLogicInt(-1);
 }
 
-EColorIndexType CColor_Found::BeginColor(SColorStrategyInfo* pInfo)
+bool CColor_Found::BeginColor(const CStringRef& cStr, int nPos)
 {
-	if(!pInfo->pLineOfLayout)return _COLORIDX_NOCHANGE;
+	if(!cStr.IsValid())return false;
 
 	const CEditDoc* pcDoc = CEditDoc::GetInstance(0);
 	const STypeConfig* TypeDataPtr = &pcDoc->m_cDocType.GetDocumentAttribute();
-	const CDocLine* pcDocLine = pInfo->GetDocLine();
 
-	if( !pInfo->pcView->m_bCurSrchKeyMark || !CTypeSupport(pInfo->pcView,COLORIDX_SEARCH).IsDisp() ){
-		return _COLORIDX_NOCHANGE;
+	const CEditView* pcView = &CEditWnd::Instance()->GetActiveView();
+	if( !pcView->m_bCurSrchKeyMark || !CTypeSupport(pcView,COLORIDX_SEARCH).IsDisp() ){
+		return false;
 	}
 
 	// -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 	//        検索ヒットフラグ設定 -> bSearchStringMode            //
 	// -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 	// 2002.02.08 hor 正規表現の検索文字列マークを少し高速化
-	if(!pInfo->pcView->m_sCurSearchOption.bRegularExp || (m_bSearchFlg && m_nSearchStart < pInfo->nPosInLogic)){
-		m_bSearchFlg = pInfo->pcView->IsSearchString(
-			pcDocLine->GetPtr(),
-			pcDocLine->GetLengthWithoutEOL(),
-			pInfo->nPosInLogic,
+	if(!pcView->m_sCurSearchOption.bRegularExp || (m_bSearchFlg && m_nSearchStart < nPos)){
+		m_bSearchFlg = pcView->IsSearchString(
+			cStr,
+			CLogicInt(nPos),
 			&m_nSearchStart,
 			&m_nSearchEnd
 		);
 	}
 	//マッチ文字列検出
-	if( m_bSearchFlg && m_nSearchStart==pInfo->nPosInLogic){
-		return COLORIDX_SEARCH;
+	if( m_bSearchFlg && m_nSearchStart==nPos){
+		return true;
 	}
-	return _COLORIDX_NOCHANGE;
+	return false;
 }
 
-bool CColor_Found::EndColor(SColorStrategyInfo* pInfo)
+bool CColor_Found::EndColor(const CStringRef& cStr, int nPos)
 {
 	const CEditDoc* pcDoc = CEditDoc::GetInstance(0);
 	const STypeConfig* TypeDataPtr = &pcDoc->m_cDocType.GetDocumentAttribute();
 
 	//マッチ文字列終了検出
-	if( m_nSearchEnd <= pInfo->nPosInLogic ){ //+ == では行頭文字の場合、m_nSearchEndも０であるために文字色の解除ができないバグを修正 2003.05.03 かろと
+	if( m_nSearchEnd <= nPos ){ //+ == では行頭文字の場合、m_nSearchEndも０であるために文字色の解除ができないバグを修正 2003.05.03 かろと
 		// -- -- マッチ文字列を描画 -- -- //
 
 		return true;

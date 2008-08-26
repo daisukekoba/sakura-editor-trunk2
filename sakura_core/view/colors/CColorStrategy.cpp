@@ -14,6 +14,15 @@
 #include "CColor_Eol.h"
 #include "doc/CLayout.h"
 
+
+
+
+bool _IsPosKeywordHead(const CStringRef& cStr, int nPos)
+{
+	return (nPos==0 || !IS_KEYWORD_CHAR(cStr.At(nPos-1)));
+}
+
+
 CLogicInt SColorStrategyInfo::GetPosInLayout() const
 {
 	return nPosInLogic - pDispPos->GetLayoutRef()->GetLogicOffset();
@@ -29,30 +38,88 @@ const CLayout* SColorStrategyInfo::GetLayout() const
 	return pDispPos->GetLayoutRef();
 }
 
+void SColorStrategyInfo::DoChangeColor(const CStringRef& cLineStr)
+{
+	CColorStrategyPool* pool = CColorStrategyPool::Instance();
+	CColorStrategy* pcFound = pool->GetFoundStrategy();
+
+	//検索色終了
+	if(this->pStrategyFound){
+		if(this->pStrategyFound->EndColor(cLineStr,this->GetPosInLogic())){
+			this->pStrategyFound = NULL;
+			this->ChangeColor(this->GetCurrentColor());
+		}
+	}
+
+	//検索色開始
+	if(!this->pStrategyFound){
+		if(pcFound->BeginColor(cLineStr,this->GetPosInLogic())){
+			this->pStrategyFound = pcFound;
+			this->ChangeColor(this->GetCurrentColor());
+		}
+	}
+
+	//色終了
+	if(this->pStrategy){
+		if(this->pStrategy->EndColor(cLineStr,this->GetPosInLogic())){
+			this->pStrategy = NULL;
+			this->ChangeColor(this->GetCurrentColor());
+		}
+	}
+
+	//色開始
+	if(!this->pStrategy){
+		for(int i=0;i<pool->GetStrategyCount();i++){
+			if(pool->GetStrategy(i)->BeginColor(cLineStr,this->GetPosInLogic())){
+				this->pStrategy = pool->GetStrategy(i);
+				this->ChangeColor(this->GetCurrentColor());
+				break;
+			}
+		}
+	}
+}
+
+EColorIndexType SColorStrategyInfo::GetCurrentColor() const
+{
+	if(pStrategyFound){
+		return pStrategyFound->GetStrategyColor();
+	}
+	else{
+		return pStrategy->GetStrategyColorSafe();
+	}
+}
 
 
+
+// -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
+//                          プール                             //
+// -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 
 CColorStrategyPool::CColorStrategyPool()
 {
-	m_vStrategies.push_back(new CColor_Found);			// マッチ文字列
-	m_vStrategies.push_back(new CColor_Eol);			// 行末
-	m_vStrategies.push_back(new CColor_RegexKeyword);	// 正規表現キーワード
-	m_vStrategies.push_back(new CColor_LineComment);	// 行コメント
+	m_pcFoundStrategy = new CColor_Found;
+//	m_vStrategies.push_back(new CColor_Found);				// マッチ文字列
+	m_vStrategies.push_back(new CColor_Eol);				// 行末
+	m_vStrategies.push_back(new CColor_RegexKeyword);		// 正規表現キーワード
+	m_vStrategies.push_back(new CColor_LineComment);		// 行コメント
 	m_vStrategies.push_back(new CColor_BlockComment(0));	// ブロックコメント
 	m_vStrategies.push_back(new CColor_BlockComment(1));	// ブロックコメント2
-	m_vStrategies.push_back(new CColor_SingleQuote);	// シングルクォーテーション文字列
-	m_vStrategies.push_back(new CColor_DoubleQuote);	// ダブルクォーテーション文字列
-	m_vStrategies.push_back(new CColor_Url);			// URL
-	m_vStrategies.push_back(new CColor_Numeric);		// 半角数字
-	m_vStrategies.push_back(new CColor_KeywordSet);		// キーワードセット
-	m_vStrategies.push_back(new CColor_Tab);			// タブ
-	m_vStrategies.push_back(new CColor_ZenSpace);		// 全角スペース
-	m_vStrategies.push_back(new CColor_HanSpace);		// 半角空白（半角スペース）
-	m_vStrategies.push_back(new CColor_CtrlCode);		// コントロールコード
+	m_vStrategies.push_back(new CColor_SingleQuote);		// シングルクォーテーション文字列
+	m_vStrategies.push_back(new CColor_DoubleQuote);		// ダブルクォーテーション文字列
+	m_vStrategies.push_back(new CColor_Url);				// URL
+	m_vStrategies.push_back(new CColor_Numeric);			// 半角数字
+	for(int i=0;i<MAX_KEYWORDSET_PER_TYPE;i++){
+		m_vStrategies.push_back(new CColor_KeywordSet(i));	// キーワードセット
+	}
+	m_vStrategies.push_back(new CColor_Tab);				// タブ
+	m_vStrategies.push_back(new CColor_ZenSpace);			// 全角スペース
+	m_vStrategies.push_back(new CColor_HanSpace);			// 半角空白（半角スペース）
+	m_vStrategies.push_back(new CColor_CtrlCode);			// コントロールコード
 }
 
 CColorStrategyPool::~CColorStrategyPool()
 {
+	SAFE_DELETE(m_pcFoundStrategy);
 	for(int i=0;i<(int)m_vStrategies.size();i++){
 		delete m_vStrategies[i];
 	}

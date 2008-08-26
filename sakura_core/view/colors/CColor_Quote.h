@@ -8,8 +8,9 @@ class CColor_Quote : public CColorStrategy{
 public:
 	CColor_Quote(wchar_t cQuote) : m_cQuote(cQuote), m_bLastEscape(false), m_bDone(false) { }
 	virtual EColorIndexType GetStrategyColor() const = 0;
-	virtual EColorIndexType BeginColor(SColorStrategyInfo* pInfo);
-	virtual bool EndColor(SColorStrategyInfo* pInfo);
+	virtual void InitStrategyStatus(){} //#####‚ ‚¦‚Ä‰½‚à‚µ‚È‚¢
+	virtual bool BeginColor(const CStringRef& cStr, int nPos);
+	virtual bool EndColor(const CStringRef& cStr, int nPos);
 private:
 	wchar_t		m_cQuote;
 	bool		m_bLastEscape;

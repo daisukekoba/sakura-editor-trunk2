@@ -409,7 +409,7 @@ public:
 	};
 	BOOL KeyWordHelpSearchDict( LID_SKH nID, POINT* po, RECT* rc );	// 2006.04.10 fon
 
-	bool IsSearchString( const wchar_t*, CLogicInt, CLogicInt, CLogicInt*, CLogicInt* );	/* 現在位置が検索文字列に該当するか */	//2002.02.08 hor 引数追加
+	bool IsSearchString( const CStringRef& cStr, CLogicInt, CLogicInt*, CLogicInt* ) const;	/* 現在位置が検索文字列に該当するか */	//2002.02.08 hor 引数追加
 
 	void GetCurrentTextForSearch( CNativeW& );			/* 現在カーソル位置単語または選択範囲より検索等のキーを取得 */
 	void GetCurrentTextForSearchDlg( CNativeW& );		/* 現在カーソル位置単語または選択範囲より検索等のキーを取得（ダイアログ用） 2006.08.23 ryoji */
@@ -611,7 +611,7 @@ public:
 	DWORD			m_dwTripleClickCheck;	//!< トリプルクリックチェック用時刻	//2007.10.02 nasukoji
 
 	//検索
-	CBregexp			m_CurRegexp;				/*!< コンパイルデータ */
+	mutable CBregexp	m_CurRegexp;				/*!< コンパイルデータ */
 	bool				m_bCurSrchKeyMark;			/* 検索文字列のマーク */
 	wchar_t				m_szCurSrchKey[_MAX_PATH];	/* 検索文字列 */
 	SSearchOption		m_sCurSearchOption;			// 検索／置換  オプション

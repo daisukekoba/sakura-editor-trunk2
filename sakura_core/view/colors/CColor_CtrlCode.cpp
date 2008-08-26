@@ -10,25 +10,25 @@
 //                        制御コード                           //
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 
-EColorIndexType CColor_CtrlCode::BeginColor(SColorStrategyInfo* pInfo)
+bool CColor_CtrlCode::BeginColor(const CStringRef& cStr, int nPos)
 {
-	if(!pInfo->pLineOfLayout)return _COLORIDX_NOCHANGE;
+	if(!cStr.IsValid())return false;
 
 	const CEditDoc* pcDoc = CEditDoc::GetInstance(0);
 	const STypeConfig* TypeDataPtr = &pcDoc->m_cDocType.GetDocumentAttribute();
 
 	if(TypeDataPtr->m_ColorInfoArr[COLORIDX_CTRLCODE].m_bDisp	/* コントロールコードを色分け */
-		&& WCODE::IsControlCode(pInfo->pLineOfLayout[pInfo->GetPosInLayout()]))
+		&& WCODE::IsControlCode(cStr.At(nPos)))
 	{
-		return COLORIDX_CTRLCODE;
+		return true;
 	}
 
-	return _COLORIDX_NOCHANGE;
+	return false;
 }
 
-bool CColor_CtrlCode::EndColor(SColorStrategyInfo* pInfo)
+bool CColor_CtrlCode::EndColor(const CStringRef& cStr, int nPos)
 {
-	if( !WCODE::IsControlCode(pInfo->pLineOfLayout[pInfo->GetPosInLayout()]) ){
+	if( !WCODE::IsControlCode(cStr.At(nPos)) ){
 		return true;
 	}
 	return false;

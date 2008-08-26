@@ -5,34 +5,34 @@
 #include "doc/CLayout.h"
 #include "types/CTypeSupport.h"
 
-static int IsNumber( const wchar_t*, int, int );/* 数値ならその長さを返す */	//@@@ 2001.02.17 by MIK
+static int IsNumber( const CStringRef& cStr, int offset );/* 数値ならその長さを返す */	//@@@ 2001.02.17 by MIK
 
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 //                         半角数値                            //
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 
-EColorIndexType CColor_Numeric::BeginColor(SColorStrategyInfo* pInfo)
+bool CColor_Numeric::BeginColor(const CStringRef& cStr, int nPos)
 {
-	if(!pInfo->pLineOfLayout)return _COLORIDX_NOCHANGE;
+	if(!cStr.IsValid())return false;
 
 	const CEditDoc* pcDoc = CEditDoc::GetInstance(0);
 	const STypeConfig* TypeDataPtr = &pcDoc->m_cDocType.GetDocumentAttribute();
 	int	nnn;
 	
-	if( pInfo->IsPosKeywordHead() && TypeDataPtr->m_ColorInfoArr[COLORIDX_DIGIT].m_bDisp
-		&& (nnn = IsNumber( pInfo->pLineOfLayout, pInfo->nPosInLogic, pInfo->nLineLenOfLayoutWithNexts )) > 0 )		/* 半角数字を表示する */
+	if( _IsPosKeywordHead(cStr,nPos) && TypeDataPtr->m_ColorInfoArr[COLORIDX_DIGIT].m_bDisp
+		&& (nnn = IsNumber(cStr, nPos)) > 0 )		/* 半角数字を表示する */
 	{
 		/* キーワード文字列の終端をセットする */
-		pInfo->nCOMMENTEND = pInfo->nPosInLogic + nnn;
-		return COLORIDX_DIGIT;	/* 半角数値である */ // 2002/03/13 novice
+		this->m_nCOMMENTEND = nPos + nnn;
+		return true;	/* 半角数値である */ // 2002/03/13 novice
 	}
-	return _COLORIDX_NOCHANGE;
+	return false;
 }
 
 
-bool CColor_Numeric::EndColor(SColorStrategyInfo* pInfo)
+bool CColor_Numeric::EndColor(const CStringRef& cStr, int nPos)
 {
-	if( pInfo->nPosInLogic == pInfo->nCOMMENTEND ){
+	if( nPos == this->m_nCOMMENTEND ){
 		return true;
 	}
 	return false;
@@ -69,7 +69,7 @@ bool CColor_Numeric::EndColor(SColorStrategyInfo* pInfo)
  *   10進数, 16進数, LF接尾語, 浮動小数点数, 負符号
  *   IPアドレスのドット連結(本当は数値じゃないんだよね)
  */
-static int IsNumber(const wchar_t *buf, int offset, int length)
+static int IsNumber(const CStringRef& cStr,/*const wchar_t *buf,*/ int offset/*, int length*/)
 {
 	register const wchar_t* p;
 	register const wchar_t* q;
@@ -77,8 +77,8 @@ static int IsNumber(const wchar_t *buf, int offset, int length)
 	register int d = 0;
 	register int f = 0;
 
-	p = &buf[offset];
-	q = &buf[length];
+	p = cStr.GetPtr() + offset;
+	q = cStr.GetPtr() + cStr.GetLength();
 
 	if( *p == L'0' )  /* 10進数,Cの16進数 */
 	{

@@ -6,32 +6,35 @@
 //                        行コメント                           //
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 
-EColorIndexType CColor_LineComment::BeginColor(SColorStrategyInfo* pInfo)
+bool CColor_LineComment::BeginColor(const CStringRef& cStr, int nPos)
 {
-	if(!pInfo->pLineOfLayout)return _COLORIDX_NOCHANGE;
+	if(!cStr.IsValid())return false;
 
 	const CEditDoc* pcDoc = CEditDoc::GetInstance(0);
 	const STypeConfig* TypeDataPtr = &pcDoc->m_cDocType.GetDocumentAttribute();
 
 	// 行コメント
 	if( TypeDataPtr->m_ColorInfoArr[COLORIDX_COMMENT].m_bDisp &&
-		TypeDataPtr->m_cLineComment.Match( pInfo->GetPosInLayout(), pInfo->nLineLenOfLayoutWithNexts, pInfo->pLineOfLayout )	//@@@ 2002.09.22 YAZAKI
+		TypeDataPtr->m_cLineComment.Match( nPos, cStr.GetLength(), cStr.GetPtr() )	//@@@ 2002.09.22 YAZAKI
 	){
-		return COLORIDX_COMMENT;
+		return true;
 	}
-	return _COLORIDX_NOCHANGE;
+	return false;
 }
 
-bool CColor_LineComment::EndColor(SColorStrategyInfo* pInfo)
+bool CColor_LineComment::EndColor(const CStringRef& cStr, int nPos)
 {
-	const CLayout*	pcLayout2;
-	pcLayout2 = CEditDoc::GetInstance(0)->m_cLayoutMgr.SearchLineByLayoutY( pInfo->pDispPos->GetLayoutLineRef() );
-
-	if( pInfo->nPosInLogic >= pInfo->pDispPos->GetLayoutRef()->GetDocLineRef()->GetLengthWithoutEOL() ){
+	//文字列終端
+	if( nPos >= cStr.GetLength() ){
 		return true;
 	}
 
-	return false; //何もしない
+	//改行
+	if( WCODE::IsLineDelimiter(cStr.At(nPos)) ){
+		return true;
+	}
+
+	return false;
 }
 
 
@@ -41,45 +44,41 @@ bool CColor_LineComment::EndColor(SColorStrategyInfo* pInfo)
 //                    ブロックコメント１                       //
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 
-EColorIndexType CColor_BlockComment::BeginColor(SColorStrategyInfo* pInfo)
+bool CColor_BlockComment::BeginColor(const CStringRef& cStr, int nPos)
 {
-	if(!pInfo->pLineOfLayout)return _COLORIDX_NOCHANGE;
+	if(!cStr.IsValid())return false;
 
 	const CEditDoc* pcDoc = CEditDoc::GetInstance(0);
 	const STypeConfig* TypeDataPtr = &pcDoc->m_cDocType.GetDocumentAttribute();
-	const CDocLine* pcDocLine = pInfo->GetDocLine();
 
 	// ブロックコメント
 	if( TypeDataPtr->m_ColorInfoArr[COLORIDX_COMMENT].m_bDisp &&
-		TypeDataPtr->m_cBlockComments[m_nType].Match_CommentFrom( pInfo->nPosInLogic, pcDocLine->GetLengthWithoutEOL(), pcDocLine->GetPtr() )	//@@@ 2002.09.22 YAZAKI
+		TypeDataPtr->m_cBlockComments[m_nType].Match_CommentFrom( nPos, cStr )	//@@@ 2002.09.22 YAZAKI
 	){
 		/* この物理行にブロックコメントの終端があるか */	//@@@ 2002.09.22 YAZAKI
-		pInfo->nCOMMENTEND = TypeDataPtr->m_cBlockComments[m_nType].Match_CommentTo(
-			pInfo->nPosInLogic + (int)wcslen( TypeDataPtr->m_cBlockComments[m_nType].getBlockCommentFrom() ),
-			pcDocLine->GetLengthWithoutEOL(),
-			pcDocLine->GetPtr()
+		this->m_nCOMMENTEND = TypeDataPtr->m_cBlockComments[m_nType].Match_CommentTo(
+			nPos + wcslen( TypeDataPtr->m_cBlockComments[m_nType].getBlockCommentFrom() ), //$$note:高速化：毎回wcslen呼ばなくても…
+			cStr
 		);
 
-		return this->GetStrategyColor();
+		return true;
 	}
-	return _COLORIDX_NOCHANGE;
+	return false;
 }
 
-bool CColor_BlockComment::EndColor(SColorStrategyInfo* pInfo)
+bool CColor_BlockComment::EndColor(const CStringRef& cStr, int nPos)
 {
 	const CEditDoc* pcDoc = CEditDoc::GetInstance(0);
 	const STypeConfig* TypeDataPtr = &pcDoc->m_cDocType.GetDocumentAttribute();
-	const CDocLine* pcDocLine = pInfo->GetDocLine();
 
-	if( 0 == pInfo->nCOMMENTEND ){
+	if( 0 == this->m_nCOMMENTEND ){
 		/* この物理行にブロックコメントの終端があるか */
-		pInfo->nCOMMENTEND = TypeDataPtr->m_cBlockComments[m_nType].Match_CommentTo(
+		this->m_nCOMMENTEND = TypeDataPtr->m_cBlockComments[m_nType].Match_CommentTo(
 			0,
-			pcDocLine->GetLengthWithoutEOL(),
-			pcDocLine->GetPtr()
+			cStr
 		);
 	}
-	else if( pInfo->nPosInLogic >= pInfo->nCOMMENTEND ){
+	else if( nPos >= this->m_nCOMMENTEND ){
 		return true;
 	}
 	return false;

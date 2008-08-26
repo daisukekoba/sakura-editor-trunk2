@@ -8,7 +8,7 @@
 #define _DispHanSpace _DispHanSpaceOld
 #endif
 
-void _DispHanSpace( CGraphics& gr, DispPos* pDispPos, bool bSearchStringMode, CEditView* pcView );
+void _DispHanSpace( CGraphics& gr, DispPos* pDispPos, CEditView* pcView );
 
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 //                     CFigure_HanSpace                        //
@@ -32,7 +32,7 @@ CLayoutInt CFigure_HanSpace::GetLayoutLength(const wchar_t* pText, CLayoutInt nS
 
 bool CFigure_HanSpace::DrawImp(SColorStrategyInfo* pInfo)
 {
-	_DispHanSpace(pInfo->gr,pInfo->pDispPos,pInfo->bSearchStringMode,pInfo->pcView);
+	_DispHanSpace(pInfo->gr,pInfo->pDispPos,pInfo->pcView);
 	return true;
 }
 
@@ -42,7 +42,7 @@ bool CFigure_HanSpace::DrawImp(SColorStrategyInfo* pInfo)
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 
 //! 新しい形式の半角スペース描画
-void _DispHanSpaceNew( CGraphics& gr, DispPos* pDispPos, bool bSearchStringMode, CEditView* pcView )
+void _DispHanSpaceNew( CGraphics& gr, DispPos* pDispPos, CEditView* pcView )
 {
 	RECT rc;
 	if(pcView->GetTextArea().GenerateClipRect(&rc,*pDispPos,1))
@@ -71,14 +71,14 @@ void _DispHanSpaceNew( CGraphics& gr, DispPos* pDispPos, bool bSearchStringMode,
 }
 
 //! 古い形式の半角スペース描画
-void _DispHanSpaceOld( CGraphics& gr, DispPos* pDispPos, bool bSearchStringMode, CEditView* pcView )
+void _DispHanSpaceOld( CGraphics& gr, DispPos* pDispPos, CEditView* pcView )
 {
 	//クリッピング矩形を計算。画面外なら描画しない
 	CMyRect rcClip;
 	if(pcView->GetTextArea().GenerateClipRect(&rcClip,*pDispPos,1))
 	{
 		// 色決定
-		CTypeSupport cSupport(pcView,pcView->GetTextDrawer()._GetColorIdx(COLORIDX_SPACE,bSearchStringMode));
+		CTypeSupport cSupport(pcView,pcView->GetTextDrawer()._GetColorIdx(COLORIDX_SPACE));
 		cSupport.SetGraphicsState_WhileThisObj(gr);
 		
 		//小文字"o"の下半分を出力

@@ -103,7 +103,7 @@ public:
 	//! 行検索開始
 	BOOL RegexKeyLineStart( void );
 	//! 行検索
-	BOOL RegexIsKeyword( const wchar_t *pLine, int nPos, int nLineLen, int *nMatchLen, int *nMatchColor );
+	BOOL RegexIsKeyword( const CStringRef& cStr, int nPos, int *nMatchLen, int *nMatchColor );
 	//! タイプ設定
 	BOOL RegexKeySetTypes( STypeConfig *pTypesPtr );
 	//! 書式(囲み)チェック
