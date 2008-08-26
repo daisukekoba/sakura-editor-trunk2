@@ -126,17 +126,17 @@ BOOL CRegexKeyword::RegexKeySetTypes( STypeConfig *pTypesPtr )
 	if( pTypesPtr == NULL ) 
 	{
 		m_pTypes = NULL;
-		m_bUseRegexKeyword = FALSE;
+		m_bUseRegexKeyword = false;
 		return FALSE;
 	}
 
-	if( pTypesPtr->m_bUseRegexKeyword == FALSE )
+	if( !pTypesPtr->m_bUseRegexKeyword )
 	{
 		//OFFになったのにまだONならOFFにする。
 		if( m_bUseRegexKeyword )
 		{
 			m_pTypes = NULL;
-			m_bUseRegexKeyword = FALSE;
+			m_bUseRegexKeyword = false;
 		}
 		return FALSE;
 	}
@@ -199,11 +199,11 @@ BOOL CRegexKeyword::RegexKeyCompile( void )
 	m_nTypeIndex = m_pTypes->m_nIdx;
 	m_nCompiledMagicNumber = m_pTypes->m_nRegexKeyMagicNumber - 1;	//Not Compiled.
 	m_bUseRegexKeyword  = m_pTypes->m_bUseRegexKeyword;
-	if( m_bUseRegexKeyword == 0 ) return FALSE;
+	if( !m_bUseRegexKeyword ) return FALSE;
 
 	if( ! IsAvailable() )
 	{
-		m_bUseRegexKeyword = 0;
+		m_bUseRegexKeyword = false;
 		return FALSE;
 	}
 
@@ -294,9 +294,7 @@ BOOL CRegexKeyword::RegexKeyLineStart( void )
 	MYDBGMSG("RegexKeyLineStart")
 
 	//動作に必要なチェックをする。
-	if( ( m_bUseRegexKeyword == FALSE )
-	 || ( ! IsAvailable() )
-	 || ( m_pTypes == NULL ) )
+	if( !m_bUseRegexKeyword || !IsAvailable() || m_pTypes==NULL )
 	{
 		return FALSE;
 	}
@@ -345,10 +343,9 @@ BOOL CRegexKeyword::RegexIsKeyword( const wchar_t *pLine, int nPos, int nLineLen
 	MYDBGMSG("RegexIsKeyword")
 
 	//動作に必要なチェックをする。
-	if( ( m_bUseRegexKeyword == FALSE )
-	 || ( ! IsAvailable() )
+	if( !m_bUseRegexKeyword || !IsAvailable()
 #ifdef USE_PARENT
-	 || ( m_pTypes == NULL )
+	 || m_pTypes == NULL
 #endif
 	 /* || ( pLine == NULL ) */ )
 	{

@@ -138,10 +138,10 @@ void CEditView::DrawBracketPair( bool bDraw )
 					if( IsBracket( pLine, OutputX, CLogicInt(1) ) ){
 						// 03/10/24 ai Ü‚è•Ô‚µs‚ÌColorIndex‚ª³‚µ‚­æ“¾‚Å‚«‚È‚¢–â‘è‚É‘Î‰
 						if( i == 0 ){
-							nColorIndex = GetColorIndex( gr, pcLayout, m_ptBracketCaretPos_PHY.x );
+							nColorIndex = GetColorIndex( pcLayout, m_ptBracketCaretPos_PHY.x );
 						}
 						else{
-							nColorIndex = GetColorIndex( gr, pcLayout, m_ptBracketPairPos_PHY.x );
+							nColorIndex = GetColorIndex( pcLayout, m_ptBracketPairPos_PHY.x );
 						}
 					}
 					else{

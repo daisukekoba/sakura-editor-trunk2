@@ -8,6 +8,9 @@
 
 EColorIndexType CColor_Tab::BeginColor(SColorStrategyInfo* pInfo)
 {
+#ifdef NEW_ZENSPACE
+	return _COLORIDX_NOCHANGE;
+#endif
 	if(!pInfo->pLineOfLayout)return _COLORIDX_NOCHANGE;
 
 	const CEditDoc* pcDoc = CEditDoc::GetInstance(0);

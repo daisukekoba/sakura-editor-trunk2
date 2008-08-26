@@ -30,8 +30,8 @@ void CType_Cpp::InitTypeConfigImp(STypeConfig* pType)
 
 	//設定
 	pType->m_cLineComment.CopyTo( 0, L"//", -1 );							/* 行コメントデリミタ */
-	pType->m_cBlockComment.SetBlockCommentRule( 0, L"/*", L"*/" );			/* ブロックコメントデリミタ */
-	pType->m_cBlockComment.SetBlockCommentRule( 1, L"#if 0", L"#endif" );	/* ブロックコメントデリミタ2 */	//Jul. 11, 2001 JEPRO
+	pType->m_cBlockComments[0].SetBlockCommentRule( L"/*", L"*/" );			/* ブロックコメントデリミタ */
+	pType->m_cBlockComments[1].SetBlockCommentRule( L"#if 0", L"#endif" );	/* ブロックコメントデリミタ2 */	//Jul. 11, 2001 JEPRO
 	pType->m_nKeyWordSetIdx[0] = 0;											/* キーワードセット */
 	pType->m_eDefaultOutline = OUTLINE_CPP;									/* アウトライン解析方法 */
 	pType->m_eSmartIndent = SMARTINDENT_CPP;								/* スマートインデント種別 */

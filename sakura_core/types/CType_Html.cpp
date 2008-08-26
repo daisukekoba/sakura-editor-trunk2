@@ -14,7 +14,7 @@ void CType_Html::InitTypeConfigImp(STypeConfig* pType)
 	_tcscpy( pType->m_szTypeExts, _T("html,htm,shtml,plg") );
 
 	//設定
-	pType->m_cBlockComment.SetBlockCommentRule( 0, L"<!--", L"-->" );	/* ブロックコメントデリミタ */
+	pType->m_cBlockComments[0].SetBlockCommentRule( L"<!--", L"-->" );	/* ブロックコメントデリミタ */
 	pType->m_nStringType = 0;											/* 文字列区切り記号エスケープ方法  0=[\"][\'] 1=[""][''] */
 	pType->m_nKeyWordSetIdx[0] = 1;										/* キーワードセット */
 	pType->m_ColorInfoArr[COLORIDX_SSTRING].m_bDisp = false;			//シングルクォートの色分けOFF

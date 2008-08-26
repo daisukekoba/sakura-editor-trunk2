@@ -48,6 +48,7 @@ bool CFigure_Eol::DrawImp(SColorStrategyInfo* pInfo)
 
 	CEditView* pcView = &CEditWnd::Instance()->GetActiveView();
 
+	/*
 	// NULL == pLineの場合
 	if(!pInfo->pLineOfLayout){
 		if(pInfo->nPosInLogic==0){
@@ -59,6 +60,7 @@ bool CFigure_Eol::DrawImp(SColorStrategyInfo* pInfo)
 			return false;
 		}
 	}
+	*/
 
 	//コンフィグ
 	CTypeSupport		cTextType	(pcView,COLORIDX_TEXT);
@@ -69,10 +71,12 @@ bool CFigure_Eol::DrawImp(SColorStrategyInfo* pInfo)
 	const CLayout*	pcLayout2 = CEditDoc::GetInstance(0)->m_cLayoutMgr.SearchLineByLayoutY( pInfo->pDispPos->GetLayoutLineRef() );
 	CEol cEol = pcLayout2->GetLayoutEol();
 
+	/*
 	// ちょうど行末なら、以下へ進む
 	if( pInfo->nPosInLogic != pInfo->nLineLenOfLayoutWithNexts - cEol.GetLen() ){
 		return false;
 	}
+	*/
 
 	// 行末記号を描画
 	{
@@ -110,15 +114,7 @@ bool CFigure_Eol::DrawImp(SColorStrategyInfo* pInfo)
 		CLayoutInt(-1)
 	);
 
-	// 反転描画
-	if( pInfo->pcView->GetSelectionInfo().IsTextSelected() ){
-		pInfo->pcView->DispTextSelected(
-			pInfo->gr,
-			pInfo->pDispPos->GetLayoutLineRef(),
-			CMyPoint(pInfo->sDispPosBegin.GetDrawPos().x, pInfo->pDispPos->GetDrawPos().y),
-			pInfo->pDispPos->GetDrawCol()
-		);
-	}
+
 
 	return true;
 }
@@ -232,6 +228,7 @@ void _DispWrap(CGraphics& gr, DispPos* pDispPos, const CEditView* pcView)
 			pcView->GetTextMetrics().GetDxArray_AllHankaku()
 		);
 	}
+	pDispPos->ForwardDrawCol(1);
 }
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 //                       EOF描画実装                           //

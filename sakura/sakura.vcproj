@@ -19,7 +19,6 @@
 			OutputDirectory="$(ConfigurationName)"
 			IntermediateDirectory="$(ConfigurationName)"
 			ConfigurationType="1"
-			InheritedPropertySheets="$(VCInstallDir)VCProjectDefaults\UpgradeFromVC60.vsprops"
 			UseOfMFC="0"
 			ATLMinimizesCRunTimeLibraryUsage="false"
 			CharacterSet="2"
@@ -120,7 +119,6 @@
 			OutputDirectory="$(ConfigurationName)"
 			IntermediateDirectory="$(ConfigurationName)"
 			ConfigurationType="1"
-			InheritedPropertySheets="$(VCInstallDir)VCProjectDefaults\UpgradeFromVC60.vsprops"
 			UseOfMFC="0"
 			ATLMinimizesCRunTimeLibraryUsage="false"
 			CharacterSet="2"
@@ -222,7 +220,6 @@
 			OutputDirectory="$(ConfigurationName)"
 			IntermediateDirectory="$(ConfigurationName)"
 			ConfigurationType="1"
-			InheritedPropertySheets="$(VCInstallDir)VCProjectDefaults\UpgradeFromVC60.vsprops"
 			UseOfMFC="0"
 			ATLMinimizesCRunTimeLibraryUsage="false"
 			CharacterSet="1"
@@ -256,6 +253,7 @@
 				PreprocessorDefinitions="WIN32;_DEBUG;_WINDOWS;NOMINMAX;SAKURA_NO_DLL"
 				MinimalRebuild="true"
 				BasicRuntimeChecks="3"
+				SmallerTypeCheck="true"
 				RuntimeLibrary="1"
 				RuntimeTypeInfo="true"
 				UsePrecompiledHeader="2"
@@ -324,10 +322,10 @@
 			OutputDirectory="$(ConfigurationName)"
 			IntermediateDirectory="$(ConfigurationName)"
 			ConfigurationType="1"
-			InheritedPropertySheets="$(VCInstallDir)VCProjectDefaults\UpgradeFromVC60.vsprops"
 			UseOfMFC="0"
 			ATLMinimizesCRunTimeLibraryUsage="false"
 			CharacterSet="1"
+			WholeProgramOptimization="1"
 			>
 			<Tool
 				Name="VCPreBuildEventTool"
@@ -359,7 +357,7 @@
 				PreprocessorDefinitions="WIN32;NDEBUG;_WINDOWS;NOMINMAX;SAKURA_NO_DLL"
 				StringPooling="true"
 				RuntimeLibrary="0"
-				EnableFunctionLevelLinking="true"
+				EnableFunctionLevelLinking="false"
 				RuntimeTypeInfo="true"
 				UsePrecompiledHeader="2"
 				PrecompiledHeaderThrough="stdafx.h"
@@ -390,6 +388,10 @@
 				ManifestFile="$(IntDir)\$(TargetFileName).manifest"
 				ProgramDatabaseFile="$(TargetDir)/sakura.pdb"
 				SubSystem="2"
+				LargeAddressAware="2"
+				OptimizeReferences="2"
+				EnableCOMDATFolding="2"
+				OptimizeForWindows98="1"
 				TargetMachine="1"
 			/>
 			<Tool
@@ -480,7 +482,7 @@
 				>
 			</File>
 			<File
-				RelativePath="..\sakura_core\sakura_rc.hm"
+				RelativePath="..\sakura_core\sakura_rc.h"
 				>
 			</File>
 			<File
@@ -576,10 +578,6 @@
 			Name="Resource Files"
 			Filter="ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe"
 			>
-			<File
-				RelativePath="..\resource\cursor1.cur"
-				>
-			</File>
 			<File
 				RelativePath="..\resource\cursor_copy.cur"
 				>
@@ -1441,6 +1439,94 @@
 				>
 			</File>
 			<File
+				RelativePath="..\sakura_core\CPrint.cpp"
+				>
+				<FileConfiguration
+					Name="Release_Ansi|Win32"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+						AdditionalIncludeDirectories=""
+						PreprocessorDefinitions=""
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Debug_Ansi|Win32"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+						AdditionalIncludeDirectories=""
+						PreprocessorDefinitions=""
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Debug_Unicode|Win32"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+						AdditionalIncludeDirectories=""
+						PreprocessorDefinitions=""
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Release_Unicode|Win32"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+						AdditionalIncludeDirectories=""
+						PreprocessorDefinitions=""
+					/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath="..\sakura_core\CPrint.h"
+				>
+			</File>
+			<File
+				RelativePath="..\sakura_core\CPrintPreview.cpp"
+				>
+				<FileConfiguration
+					Name="Release_Ansi|Win32"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+						AdditionalIncludeDirectories=""
+						PreprocessorDefinitions=""
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Debug_Ansi|Win32"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+						AdditionalIncludeDirectories=""
+						PreprocessorDefinitions=""
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Debug_Unicode|Win32"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+						AdditionalIncludeDirectories=""
+						PreprocessorDefinitions=""
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Release_Unicode|Win32"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+						AdditionalIncludeDirectories=""
+						PreprocessorDefinitions=""
+					/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath="..\sakura_core\CPrintPreview.h"
+				>
+			</File>
+			<File
 				RelativePath="..\sakura_core\CProfile.cpp"
 				>
 				<FileConfiguration
@@ -1753,7 +1839,7 @@
 				>
 			</File>
 			<File
-				RelativePath="..\sakura_core\sakura_rc.h"
+				RelativePath="..\sakura_core\FileInfo.h"
 				>
 			</File>
 			<Filter
@@ -2188,6 +2274,46 @@
 				Name="env"
 				>
 				<File
+					RelativePath="..\sakura_core\env\CAppNodeManager.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\sakura_core\env\CAppNodeManager.h"
+					>
+				</File>
+				<File
+					RelativePath="..\sakura_core\env\CDocTypeManager.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\sakura_core\env\CDocTypeManager.h"
+					>
+				</File>
+				<File
+					RelativePath="..\sakura_core\env\CFileNameManager.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\sakura_core\env\CFileNameManager.h"
+					>
+				</File>
+				<File
+					RelativePath="..\sakura_core\env\CFormatManager.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\sakura_core\env\CFormatManager.h"
+					>
+				</File>
+				<File
+					RelativePath="..\sakura_core\env\CHelpManager.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\sakura_core\env\CHelpManager.h"
+					>
+				</File>
+				<File
 					RelativePath="..\sakura_core\env\CommonSetting.cpp"
 					>
 				</File>
@@ -2198,14 +2324,94 @@
 				<File
 					RelativePath="..\sakura_core\env\CSakuraEnvironment.cpp"
 					>
+					<FileConfiguration
+						Name="Release_Ansi|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							ObjectFile="$(IntDir)\$(InputName)1.obj"
+							XMLDocumentationFileName="$(IntDir)\$(InputName)1.xdc"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Debug_Ansi|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							ObjectFile="$(IntDir)\$(InputName)1.obj"
+							XMLDocumentationFileName="$(IntDir)\$(InputName)1.xdc"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Debug_Unicode|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							ObjectFile="$(IntDir)\$(InputName)1.obj"
+							XMLDocumentationFileName="$(IntDir)\$(InputName)1.xdc"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Release_Unicode|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							ObjectFile="$(IntDir)\$(InputName)1.obj"
+							XMLDocumentationFileName="$(IntDir)\$(InputName)1.xdc"
+						/>
+					</FileConfiguration>
 				</File>
 				<File
 					RelativePath="..\sakura_core\env\CSakuraEnvironment.h"
 					>
 				</File>
 				<File
+					RelativePath="..\sakura_core\env\CSearchKeywordManager.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\sakura_core\env\CSearchKeywordManager.h"
+					>
+				</File>
+				<File
 					RelativePath="..\sakura_core\env\CShareData.cpp"
 					>
+					<FileConfiguration
+						Name="Release_Ansi|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							ObjectFile="$(IntDir)\$(InputName)1.obj"
+							XMLDocumentationFileName="$(IntDir)\$(InputName)1.xdc"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Debug_Ansi|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							ObjectFile="$(IntDir)\$(InputName)1.obj"
+							XMLDocumentationFileName="$(IntDir)\$(InputName)1.xdc"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Debug_Unicode|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							ObjectFile="$(IntDir)\$(InputName)1.obj"
+							XMLDocumentationFileName="$(IntDir)\$(InputName)1.xdc"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Release_Unicode|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							ObjectFile="$(IntDir)\$(InputName)1.obj"
+							XMLDocumentationFileName="$(IntDir)\$(InputName)1.xdc"
+						/>
+					</FileConfiguration>
 				</File>
 				<File
 					RelativePath="..\sakura_core\env\CShareData.h"
@@ -2220,6 +2426,14 @@
 					>
 				</File>
 				<File
+					RelativePath="..\sakura_core\env\CTagJumpManager.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\sakura_core\env\CTagJumpManager.h"
+					>
+				</File>
+				<File
 					RelativePath="..\sakura_core\env\DLLSHAREDATA.cpp"
 					>
 				</File>
@@ -2227,66 +2441,6 @@
 					RelativePath="..\sakura_core\env\DLLSHAREDATA.h"
 					>
 				</File>
-				<Filter
-					Name="_new"
-					>
-					<File
-						RelativePath="..\sakura_core\env\CAppNodeManager.cpp"
-						>
-					</File>
-					<File
-						RelativePath="..\sakura_core\env\CAppNodeManager.h"
-						>
-					</File>
-					<File
-						RelativePath="..\sakura_core\env\CDocTypeManager.cpp"
-						>
-					</File>
-					<File
-						RelativePath="..\sakura_core\env\CDocTypeManager.h"
-						>
-					</File>
-					<File
-						RelativePath="..\sakura_core\env\CFileNameManager.cpp"
-						>
-					</File>
-					<File
-						RelativePath="..\sakura_core\env\CFileNameManager.h"
-						>
-					</File>
-					<File
-						RelativePath="..\sakura_core\env\CFormatManager.cpp"
-						>
-					</File>
-					<File
-						RelativePath="..\sakura_core\env\CFormatManager.h"
-						>
-					</File>
-					<File
-						RelativePath="..\sakura_core\env\CHelpManager.cpp"
-						>
-					</File>
-					<File
-						RelativePath="..\sakura_core\env\CHelpManager.h"
-						>
-					</File>
-					<File
-						RelativePath="..\sakura_core\env\CSearchKeywordManager.cpp"
-						>
-					</File>
-					<File
-						RelativePath="..\sakura_core\env\CSearchKeywordManager.h"
-						>
-					</File>
-					<File
-						RelativePath="..\sakura_core\env\CTagJumpManager.cpp"
-						>
-					</File>
-					<File
-						RelativePath="..\sakura_core\env\CTagJumpManager.h"
-						>
-					</File>
-				</Filter>
 			</Filter>
 			<Filter
 				Name="util"
@@ -2916,58 +3070,6 @@
 					>
 				</File>
 				<Filter
-					Name="figures"
-					>
-					<File
-						RelativePath="..\sakura_core\view\figures\CFigure_Eol.cpp"
-						>
-					</File>
-					<File
-						RelativePath="..\sakura_core\view\figures\CFigure_Eol.h"
-						>
-					</File>
-					<File
-						RelativePath="..\sakura_core\view\figures\CFigure_HanSpace.cpp"
-						>
-					</File>
-					<File
-						RelativePath="..\sakura_core\view\figures\CFigure_HanSpace.h"
-						>
-					</File>
-					<File
-						RelativePath="..\sakura_core\view\figures\CFigure_Tab.cpp"
-						>
-					</File>
-					<File
-						RelativePath="..\sakura_core\view\figures\CFigure_Tab.h"
-						>
-					</File>
-					<File
-						RelativePath="..\sakura_core\view\figures\CFigure_ZenSpace.cpp"
-						>
-					</File>
-					<File
-						RelativePath="..\sakura_core\view\figures\CFigure_ZenSpace.h"
-						>
-					</File>
-					<File
-						RelativePath="..\sakura_core\view\figures\CFigureManager.cpp"
-						>
-					</File>
-					<File
-						RelativePath="..\sakura_core\view\figures\CFigureManager.h"
-						>
-					</File>
-					<File
-						RelativePath="..\sakura_core\view\figures\CFigureStrategy.cpp"
-						>
-					</File>
-					<File
-						RelativePath="..\sakura_core\view\figures\CFigureStrategy.h"
-						>
-					</File>
-				</Filter>
-				<Filter
 					Name="colors"
 					>
 					<File
@@ -3056,6 +3158,58 @@
 					</File>
 					<File
 						RelativePath="..\sakura_core\view\colors\CColorStrategy.h"
+						>
+					</File>
+				</Filter>
+				<Filter
+					Name="figures"
+					>
+					<File
+						RelativePath="..\sakura_core\view\figures\CFigure_Eol.cpp"
+						>
+					</File>
+					<File
+						RelativePath="..\sakura_core\view\figures\CFigure_Eol.h"
+						>
+					</File>
+					<File
+						RelativePath="..\sakura_core\view\figures\CFigure_HanSpace.cpp"
+						>
+					</File>
+					<File
+						RelativePath="..\sakura_core\view\figures\CFigure_HanSpace.h"
+						>
+					</File>
+					<File
+						RelativePath="..\sakura_core\view\figures\CFigure_Tab.cpp"
+						>
+					</File>
+					<File
+						RelativePath="..\sakura_core\view\figures\CFigure_Tab.h"
+						>
+					</File>
+					<File
+						RelativePath="..\sakura_core\view\figures\CFigure_ZenSpace.cpp"
+						>
+					</File>
+					<File
+						RelativePath="..\sakura_core\view\figures\CFigure_ZenSpace.h"
+						>
+					</File>
+					<File
+						RelativePath="..\sakura_core\view\figures\CFigureManager.cpp"
+						>
+					</File>
+					<File
+						RelativePath="..\sakura_core\view\figures\CFigureManager.h"
+						>
+					</File>
+					<File
+						RelativePath="..\sakura_core\view\figures\CFigureStrategy.cpp"
+						>
+					</File>
+					<File
+						RelativePath="..\sakura_core\view\figures\CFigureStrategy.h"
 						>
 					</File>
 				</Filter>
@@ -3245,10 +3399,6 @@
 				</File>
 				<File
 					RelativePath="..\sakura_core\recent\CRecentTagjumpKeyword.h"
-					>
-				</File>
-				<File
-					RelativePath="..\sakura_core\recent\SShare_History.h"
 					>
 				</File>
 			</Filter>
@@ -3788,6 +3938,14 @@
 					>
 				</File>
 				<File
+					RelativePath="..\sakura_core\dlg\CDlgPrintPage.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\sakura_core\dlg\CDlgPrintPage.h"
+					>
+				</File>
+				<File
 					RelativePath="..\sakura_core\dlg\CDlgPrintSetting.cpp"
 					>
 				</File>
@@ -4013,42 +4171,6 @@
 				</File>
 			</Filter>
 			<Filter
-				Name="func"
-				>
-				<File
-					RelativePath="..\sakura_core\func\CFuncKeyWnd.cpp"
-					>
-				</File>
-				<File
-					RelativePath="..\sakura_core\func\CFuncKeyWnd.h"
-					>
-				</File>
-				<File
-					RelativePath="..\sakura_core\func\CFuncLookup.cpp"
-					>
-				</File>
-				<File
-					RelativePath="..\sakura_core\func\CFuncLookup.h"
-					>
-				</File>
-				<File
-					RelativePath="..\sakura_core\func\CKeyBind.cpp"
-					>
-				</File>
-				<File
-					RelativePath="..\sakura_core\func\CKeyBind.h"
-					>
-				</File>
-				<File
-					RelativePath="..\sakura_core\func\Funccode.cpp"
-					>
-				</File>
-				<File
-					RelativePath="..\sakura_core\func\Funccode.h"
-					>
-				</File>
-			</Filter>
-			<Filter
 				Name="_main"
 				>
 				<File
@@ -4101,6 +4223,58 @@
 				</File>
 				<File
 					RelativePath="..\sakura_core\CCommandLine.h"
+					>
+				</File>
+				<File
+					RelativePath="..\sakura_core\CControlProcess.cpp"
+					>
+					<FileConfiguration
+						Name="Release_Ansi|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							AdditionalIncludeDirectories=""
+							PreprocessorDefinitions=""
+						/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Debug_Ansi|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							AdditionalIncludeDirectories=""
+							PreprocessorDefinitions=""
+						/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Debug_Unicode|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							AdditionalIncludeDirectories=""
+							PreprocessorDefinitions=""
+						/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Release_Unicode|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							AdditionalIncludeDirectories=""
+							PreprocessorDefinitions=""
+						/>
+					</FileConfiguration>
+				</File>
+				<File
+					RelativePath="..\sakura_core\CControlProcess.h"
+					>
+				</File>
+				<File
+					RelativePath="..\sakura_core\CControlTray.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\sakura_core\CControlTray.h"
 					>
 				</File>
 				<File
@@ -4284,6 +4458,10 @@
 					>
 				</File>
 				<File
+					RelativePath="..\sakura_core\mymessage.h"
+					>
+				</File>
+				<File
 					RelativePath="..\sakura_core\WinMain.cpp"
 					>
 					<FileConfiguration
@@ -4323,62 +4501,6 @@
 						/>
 					</FileConfiguration>
 				</File>
-				<Filter
-					Name="_ctrl"
-					>
-					<File
-						RelativePath="..\sakura_core\CControlProcess.cpp"
-						>
-						<FileConfiguration
-							Name="Release_Ansi|Win32"
-							>
-							<Tool
-								Name="VCCLCompilerTool"
-								AdditionalIncludeDirectories=""
-								PreprocessorDefinitions=""
-							/>
-						</FileConfiguration>
-						<FileConfiguration
-							Name="Debug_Ansi|Win32"
-							>
-							<Tool
-								Name="VCCLCompilerTool"
-								AdditionalIncludeDirectories=""
-								PreprocessorDefinitions=""
-							/>
-						</FileConfiguration>
-						<FileConfiguration
-							Name="Debug_Unicode|Win32"
-							>
-							<Tool
-								Name="VCCLCompilerTool"
-								AdditionalIncludeDirectories=""
-								PreprocessorDefinitions=""
-							/>
-						</FileConfiguration>
-						<FileConfiguration
-							Name="Release_Unicode|Win32"
-							>
-							<Tool
-								Name="VCCLCompilerTool"
-								AdditionalIncludeDirectories=""
-								PreprocessorDefinitions=""
-							/>
-						</FileConfiguration>
-					</File>
-					<File
-						RelativePath="..\sakura_core\CControlProcess.h"
-						>
-					</File>
-					<File
-						RelativePath="..\sakura_core\CControlTray.cpp"
-						>
-					</File>
-					<File
-						RelativePath="..\sakura_core\CControlTray.h"
-						>
-					</File>
-				</Filter>
 			</Filter>
 			<Filter
 				Name="_os"
@@ -4445,106 +4567,6 @@
 				</File>
 			</Filter>
 			<Filter
-				Name="_print"
-				>
-				<File
-					RelativePath="..\sakura_core\dlg\CDlgPrintPage.cpp"
-					>
-				</File>
-				<File
-					RelativePath="..\sakura_core\dlg\CDlgPrintPage.h"
-					>
-				</File>
-				<File
-					RelativePath="..\sakura_core\CPrint.cpp"
-					>
-					<FileConfiguration
-						Name="Release_Ansi|Win32"
-						>
-						<Tool
-							Name="VCCLCompilerTool"
-							AdditionalIncludeDirectories=""
-							PreprocessorDefinitions=""
-						/>
-					</FileConfiguration>
-					<FileConfiguration
-						Name="Debug_Ansi|Win32"
-						>
-						<Tool
-							Name="VCCLCompilerTool"
-							AdditionalIncludeDirectories=""
-							PreprocessorDefinitions=""
-						/>
-					</FileConfiguration>
-					<FileConfiguration
-						Name="Debug_Unicode|Win32"
-						>
-						<Tool
-							Name="VCCLCompilerTool"
-							AdditionalIncludeDirectories=""
-							PreprocessorDefinitions=""
-						/>
-					</FileConfiguration>
-					<FileConfiguration
-						Name="Release_Unicode|Win32"
-						>
-						<Tool
-							Name="VCCLCompilerTool"
-							AdditionalIncludeDirectories=""
-							PreprocessorDefinitions=""
-						/>
-					</FileConfiguration>
-				</File>
-				<File
-					RelativePath="..\sakura_core\CPrint.h"
-					>
-				</File>
-				<File
-					RelativePath="..\sakura_core\CPrintPreview.cpp"
-					>
-					<FileConfiguration
-						Name="Release_Ansi|Win32"
-						>
-						<Tool
-							Name="VCCLCompilerTool"
-							AdditionalIncludeDirectories=""
-							PreprocessorDefinitions=""
-						/>
-					</FileConfiguration>
-					<FileConfiguration
-						Name="Debug_Ansi|Win32"
-						>
-						<Tool
-							Name="VCCLCompilerTool"
-							AdditionalIncludeDirectories=""
-							PreprocessorDefinitions=""
-						/>
-					</FileConfiguration>
-					<FileConfiguration
-						Name="Debug_Unicode|Win32"
-						>
-						<Tool
-							Name="VCCLCompilerTool"
-							AdditionalIncludeDirectories=""
-							PreprocessorDefinitions=""
-						/>
-					</FileConfiguration>
-					<FileConfiguration
-						Name="Release_Unicode|Win32"
-						>
-						<Tool
-							Name="VCCLCompilerTool"
-							AdditionalIncludeDirectories=""
-							PreprocessorDefinitions=""
-						/>
-					</FileConfiguration>
-				</File>
-				<File
-					RelativePath="..\sakura_core\CPrintPreview.h"
-					>
-				</File>
-			</Filter>
-			<Filter
 				Name="outline"
 				>
 				<File
@@ -4558,6 +4580,42 @@
 				<File
 					RelativePath="..\sakura_core\outline\CFuncInfo.cpp"
 					>
+					<FileConfiguration
+						Name="Release_Ansi|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							ObjectFile="$(IntDir)\$(InputName)1.obj"
+							XMLDocumentationFileName="$(IntDir)\$(InputName)1.xdc"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Debug_Ansi|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							ObjectFile="$(IntDir)\$(InputName)1.obj"
+							XMLDocumentationFileName="$(IntDir)\$(InputName)1.xdc"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Debug_Unicode|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							ObjectFile="$(IntDir)\$(InputName)1.obj"
+							XMLDocumentationFileName="$(IntDir)\$(InputName)1.xdc"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Release_Unicode|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							ObjectFile="$(IntDir)\$(InputName)1.obj"
+							XMLDocumentationFileName="$(IntDir)\$(InputName)1.xdc"
+						/>
+					</FileConfiguration>
 				</File>
 				<File
 					RelativePath="..\sakura_core\outline\CFuncInfo.h"
@@ -4566,9 +4624,189 @@
 				<File
 					RelativePath="..\sakura_core\outline\CFuncInfoArr.cpp"
 					>
+					<FileConfiguration
+						Name="Release_Ansi|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							ObjectFile="$(IntDir)\$(InputName)1.obj"
+							XMLDocumentationFileName="$(IntDir)\$(InputName)1.xdc"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Debug_Ansi|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							ObjectFile="$(IntDir)\$(InputName)1.obj"
+							XMLDocumentationFileName="$(IntDir)\$(InputName)1.xdc"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Debug_Unicode|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							ObjectFile="$(IntDir)\$(InputName)1.obj"
+							XMLDocumentationFileName="$(IntDir)\$(InputName)1.xdc"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Release_Unicode|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							ObjectFile="$(IntDir)\$(InputName)1.obj"
+							XMLDocumentationFileName="$(IntDir)\$(InputName)1.xdc"
+						/>
+					</FileConfiguration>
 				</File>
 				<File
 					RelativePath="..\sakura_core\outline\CFuncInfoArr.h"
+					>
+				</File>
+			</Filter>
+			<Filter
+				Name="func"
+				>
+				<File
+					RelativePath="..\sakura_core\func\CFuncKeyWnd.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\sakura_core\func\CFuncKeyWnd.h"
+					>
+				</File>
+				<File
+					RelativePath="..\sakura_core\func\CFuncLookup.cpp"
+					>
+					<FileConfiguration
+						Name="Release_Ansi|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							ObjectFile="$(IntDir)\$(InputName)1.obj"
+							XMLDocumentationFileName="$(IntDir)\$(InputName)1.xdc"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Debug_Ansi|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							ObjectFile="$(IntDir)\$(InputName)1.obj"
+							XMLDocumentationFileName="$(IntDir)\$(InputName)1.xdc"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Debug_Unicode|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							ObjectFile="$(IntDir)\$(InputName)1.obj"
+							XMLDocumentationFileName="$(IntDir)\$(InputName)1.xdc"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Release_Unicode|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							ObjectFile="$(IntDir)\$(InputName)1.obj"
+							XMLDocumentationFileName="$(IntDir)\$(InputName)1.xdc"
+						/>
+					</FileConfiguration>
+				</File>
+				<File
+					RelativePath="..\sakura_core\func\CFuncLookup.h"
+					>
+				</File>
+				<File
+					RelativePath="..\sakura_core\func\CKeyBind.cpp"
+					>
+					<FileConfiguration
+						Name="Release_Ansi|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							ObjectFile="$(IntDir)\$(InputName)1.obj"
+							XMLDocumentationFileName="$(IntDir)\$(InputName)1.xdc"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Debug_Ansi|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							ObjectFile="$(IntDir)\$(InputName)1.obj"
+							XMLDocumentationFileName="$(IntDir)\$(InputName)1.xdc"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Debug_Unicode|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							ObjectFile="$(IntDir)\$(InputName)1.obj"
+							XMLDocumentationFileName="$(IntDir)\$(InputName)1.xdc"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Release_Unicode|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							ObjectFile="$(IntDir)\$(InputName)1.obj"
+							XMLDocumentationFileName="$(IntDir)\$(InputName)1.xdc"
+						/>
+					</FileConfiguration>
+				</File>
+				<File
+					RelativePath="..\sakura_core\func\CKeyBind.h"
+					>
+				</File>
+				<File
+					RelativePath="..\sakura_core\func\Funccode.cpp"
+					>
+					<FileConfiguration
+						Name="Release_Ansi|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							ObjectFile="$(IntDir)\$(InputName)1.obj"
+							XMLDocumentationFileName="$(IntDir)\$(InputName)1.xdc"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Debug_Ansi|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							ObjectFile="$(IntDir)\$(InputName)1.obj"
+							XMLDocumentationFileName="$(IntDir)\$(InputName)1.xdc"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Debug_Unicode|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							ObjectFile="$(IntDir)\$(InputName)1.obj"
+							XMLDocumentationFileName="$(IntDir)\$(InputName)1.xdc"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Release_Unicode|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							ObjectFile="$(IntDir)\$(InputName)1.obj"
+							XMLDocumentationFileName="$(IntDir)\$(InputName)1.xdc"
+						/>
+					</FileConfiguration>
+				</File>
+				<File
+					RelativePath="..\sakura_core\func\Funccode.h"
 					>
 				</File>
 			</Filter>

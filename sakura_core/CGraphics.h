@@ -102,6 +102,7 @@ public:
 	void PopPen();
 	void SetPen(COLORREF color);
 	void ClearPen();
+	COLORREF GetPenColor() const;
 
 	//ƒuƒ‰ƒV
 public:
@@ -113,12 +114,13 @@ public:
 	void ClearBrush();
 
 	void SetBrushColor(COLORREF color);
-	HBRUSH GetCurrentBrush() const{ return m_vBrushes.size()?m_vBrushes[0]:NULL; }
+	HBRUSH GetCurrentBrush() const{ return m_vBrushes.size()?m_vBrushes.back():NULL; }
 
 	//•`‰æ
 public:
-	void DrawLine(int x1, int y1, int x2, int y2);	//’¼ü
-	void FillMyRect(const RECT& rc);				//‹éŒ`“h‚è’×‚µ
+	void DrawLine(int x1, int y1, int x2, int y2);		//’¼ü
+	void DrawDotLine(int x1, int y1, int x2, int y2);	//“_ü
+	void FillMyRect(const RECT& rc);					//‹éŒ`“h‚è’×‚µ
 
 private:
 	//Œ^

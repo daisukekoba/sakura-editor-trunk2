@@ -823,9 +823,9 @@ int CPropTypes::GetData_Regex( HWND hwndDlg )
 
 	//使用する・使用しない
 	if( IsDlgButtonChecked( hwndDlg, IDC_CHECK_REGEX ) )
-		m_Types.m_bUseRegexKeyword = TRUE;
+		m_Types.m_bUseRegexKeyword = true;
 	else
-		m_Types.m_bUseRegexKeyword = FALSE;
+		m_Types.m_bUseRegexKeyword = false;
 
 	//リストに登録されている情報を配列に取り込む
 	hwndList = GetDlgItem( hwndDlg, IDC_LIST_REGEX );

@@ -312,6 +312,21 @@ void CGraphics::ClearPen()
 	m_vPens.clear();
 }
 
+//$$note: 高速化
+COLORREF CGraphics::GetPenColor() const
+{
+	if(m_vPens.size()){
+		LOGPEN logpen;
+		if(GetObject(m_vPens.back(), sizeof(logpen), &logpen)){
+			return logpen.lopnColor;
+		}
+	}
+	else{
+		return 0;
+	}
+	return 0;
+}
+
 
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 //                          ブラシ                             //
@@ -322,7 +337,7 @@ void CGraphics::_InitBrushColor()
 	if(m_vBrushes.empty()){
 		//元のブラシを取得
 		HBRUSH hbrOrg = (HBRUSH)::SelectObject(m_hdc,::GetStockObject(NULL_BRUSH));
-		::SelectObject(m_hdc,hbrOrg);
+		::SelectObject(m_hdc,hbrOrg); //元に戻す
 		//保存
 		m_vBrushes.push_back(hbrOrg);
 	}
@@ -332,7 +347,7 @@ void CGraphics::PushBrushColor(COLORREF color)
 {
 	//####ここで効率化できる
 
-	_InitClipping();
+	_InitBrushColor();
 	//新しく作成→HDCに設定→スタックに保存
 	HBRUSH hbrNew = (color!=(COLORREF)-1)?CreateSolidBrush(color):(HBRUSH)GetStockObject(NULL_BRUSH);
 	::SelectObject(m_hdc,hbrNew);
@@ -379,6 +394,32 @@ void CGraphics::DrawLine(int x1, int y1, int x2, int y2)
 {
 	::MoveToEx(m_hdc,x1,y1,NULL);
 	::LineTo(m_hdc,x2,y2);
+}
+
+//$$note:高速化
+void CGraphics::DrawDotLine(int x1, int y1, int x2, int y2)
+{
+	COLORREF c = GetPenColor();
+	int my = t_unit(y2 - y1) * 2;
+	int mx = t_unit(x2 - x1) * 2;
+	if(!mx && !my)return;
+	int x = x1;
+	int y = y1;
+	if(!mx && !my)return;
+	while(1){
+		//点描画
+		ApiWrap::SetPixelSurely(m_hdc,x,y,c);
+		
+		//進める
+		x+=mx;
+		y+=my;
+
+		//条件判定
+		if(mx>0 && x>=x2)break;
+		if(mx<0 && x<=x2)break;
+		if(my>0 && y>=y2)break;
+		if(my<0 && y<=y2)break;
+	}
 }
 
 //矩形塗り潰し

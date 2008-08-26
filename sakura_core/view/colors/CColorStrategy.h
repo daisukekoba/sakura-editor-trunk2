@@ -80,7 +80,7 @@ SAKURA_CORE_API enum EColorIndexType {
 //正規表現キーワードのEColorIndexType値を作る関数
 inline EColorIndexType MakeColorIndexType_RegularExpression(int nRegExpIndex)
 {
-	return (EColorIndexType)(1000 + nRegExpIndex);
+	return (EColorIndexType)(COLORIDX_REGEX_FIRST + nRegExpIndex);
 }
 
 // カラー名＜＞インデックス番号の変換	//@@@ 2002.04.30
@@ -105,22 +105,22 @@ struct SColorStrategyInfo{
 	CGraphics	gr;	//(SColorInfoでは未使用)
 
 	//スキャン位置
-	LPCWSTR		pLineOfLayout;
-	CLogicInt	nLineLenOfLayoutWithNexts;
-	CLogicInt	nPosInLogic;
+	LPCWSTR			pLineOfLayout; //###############そのうち消すかも
+	CLogicInt		nLineLenOfLayoutWithNexts;
+	CLogicInt		nPosInLogic;
 
 	//描画位置
-	DispPos*	pDispPos;
-	DispPos		sDispPosBegin;
+	DispPos*		pDispPos;
+	DispPos			sDispPosBegin;
 
 	//色変え
-	CColorStrategy*	pStrategy;
-	EColorIndexType	nCOMMENTMODE;
-	int				nCOMMENTEND;
-	EColorIndexType			nColorIndex;	//(SColorStrategyInfoでは未使用)
+	CColorStrategy*		pStrategy;
+	EColorIndexType		nCOMMENTMODE;
+	int					nCOMMENTEND; //###############そのうち消すかも
+	EColorIndexType		nColorIndex;	//(SColorStrategyInfoでは未使用)
 
 	//検索フラグ (SColorInfoでは未使用)
-	bool			bSearchStringMode;
+	bool				bSearchStringMode;
 
 	//! 色の切り替え
 	void ChangeColor(EColorIndexType eNewColor)
@@ -144,11 +144,15 @@ struct SColorStrategyInfo{
 		return nPosInLogic;
 	}
 	CLogicInt GetPosInLayout() const;
+	const CDocLine* GetDocLine() const;
+	const CLayout* GetLayout() const;
 };
 
 class CColorStrategy{
 public:
 	virtual ~CColorStrategy(){}
+	//! 色定義
+	virtual EColorIndexType GetStrategyColor() const = 0;
 	//! 色切り替え開始を検出したら、その直前までの描画を行い、さらに色設定を行う。
 	virtual EColorIndexType BeginColor(SColorStrategyInfo* pInfo) = 0;
 	virtual bool EndColor(SColorStrategyInfo* pInfo) = 0;
@@ -168,6 +172,7 @@ public:
 	//取得
 	CColorStrategy*	GetStrategy(int nIndex) const{ return m_vStrategies[nIndex]; }
 	int				GetStrategyCount() const{ return (int)m_vStrategies.size(); }
+	CColorStrategy*	GetStrategyByColor(EColorIndexType eColor) const;
 
 	//イベント
 	void NotifyOnStartScanLogic()

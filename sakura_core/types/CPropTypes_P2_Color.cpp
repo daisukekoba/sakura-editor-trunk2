@@ -693,11 +693,11 @@ void CPropTypes::SetData_Color( HWND hwndDlg )
 	::SendMessage( ::GetDlgItem( hwndDlg, IDC_EDIT_BLOCKCOMMENT_TO2 )	, EM_LIMITTEXT, (WPARAM)( BLOCKCOMMENT_BUFFERSIZE - 1 ), 0 );
 //#endif
 
-	::DlgItem_SetText( hwndDlg, IDC_EDIT_BLOCKCOMMENT_FROM	, m_Types.m_cBlockComment.getBlockCommentFrom(0) );	/* ブロックコメントデリミタ(From) */
-	::DlgItem_SetText( hwndDlg, IDC_EDIT_BLOCKCOMMENT_TO		, m_Types.m_cBlockComment.getBlockCommentTo(0) );	/* ブロックコメントデリミタ(To) */
+	::DlgItem_SetText( hwndDlg, IDC_EDIT_BLOCKCOMMENT_FROM	, m_Types.m_cBlockComments[0].getBlockCommentFrom() );	/* ブロックコメントデリミタ(From) */
+	::DlgItem_SetText( hwndDlg, IDC_EDIT_BLOCKCOMMENT_TO		, m_Types.m_cBlockComments[0].getBlockCommentTo() );	/* ブロックコメントデリミタ(To) */
 //#ifdef COMPILE_BLOCK_COMMENT2	//@@@ 2001.03.10 by MIK
-	::DlgItem_SetText( hwndDlg, IDC_EDIT_BLOCKCOMMENT_FROM2	, m_Types.m_cBlockComment.getBlockCommentFrom(1) );	/* ブロックコメントデリミタ2(From) */
-	::DlgItem_SetText( hwndDlg, IDC_EDIT_BLOCKCOMMENT_TO2	, m_Types.m_cBlockComment.getBlockCommentTo(1) );	/* ブロックコメントデリミタ2(To) */
+	::DlgItem_SetText( hwndDlg, IDC_EDIT_BLOCKCOMMENT_FROM2	, m_Types.m_cBlockComments[1].getBlockCommentFrom() );	/* ブロックコメントデリミタ2(From) */
+	::DlgItem_SetText( hwndDlg, IDC_EDIT_BLOCKCOMMENT_TO2	, m_Types.m_cBlockComments[1].getBlockCommentTo() );	/* ブロックコメントデリミタ2(To) */
 //#endif
 
 	/* 行コメントデリミタ @@@ 2002.09.22 YAZAKI*/
@@ -887,11 +887,11 @@ int CPropTypes::GetData_Color( HWND hwndDlg )
 
 	::DlgItem_GetText( hwndDlg, IDC_EDIT_BLOCKCOMMENT_FROM	, szFromBuffer	, BLOCKCOMMENT_BUFFERSIZE );	/* ブロックコメントデリミタ(From) */
 	::DlgItem_GetText( hwndDlg, IDC_EDIT_BLOCKCOMMENT_TO		, szToBuffer	, BLOCKCOMMENT_BUFFERSIZE );	/* ブロックコメントデリミタ(To) */
-	m_Types.m_cBlockComment.SetBlockCommentRule( 0, szFromBuffer, szToBuffer );
+	m_Types.m_cBlockComments[0].SetBlockCommentRule( szFromBuffer, szToBuffer );
 
 	::DlgItem_GetText( hwndDlg, IDC_EDIT_BLOCKCOMMENT_FROM2	, szFromBuffer	, BLOCKCOMMENT_BUFFERSIZE );	/* ブロックコメントデリミタ(From) */
 	::DlgItem_GetText( hwndDlg, IDC_EDIT_BLOCKCOMMENT_TO2	, szToBuffer	, BLOCKCOMMENT_BUFFERSIZE );	/* ブロックコメントデリミタ(To) */
-	m_Types.m_cBlockComment.SetBlockCommentRule( 1, szFromBuffer, szToBuffer );
+	m_Types.m_cBlockComments[1].SetBlockCommentRule( szFromBuffer, szToBuffer );
 
 	/* 文字列区切り記号エスケープ方法  0=[\"][\'] 1=[""][''] */
 	if( ::IsDlgButtonChecked( hwndDlg, IDC_RADIO_ESCAPETYPE_1 ) ){
@@ -1022,7 +1022,7 @@ void CPropTypes::_DrawColorButton( DRAWITEMSTRUCT* pDis, COLORREF cColor )
 
 	/* ボタンの表面の色で塗りつぶす */
 	gr.SetBrushColor( cBtnFace );
-	::FillRect( pDis->hDC, &(pDis->rcItem), gr.GetCurrentBrush() );
+	gr.FillMyRect( pDis->rcItem );
 
 	/* 枠の描画 */
 	rcFocus = rc = pDis->rcItem;
@@ -1241,15 +1241,15 @@ void CPropTypes::DrawColorListItem( DRAWITEMSTRUCT* pDis )
 
 	/* アイテム矩形塗りつぶし */
 	gr.SetBrushColor( ::GetSysColor( COLOR_WINDOW ) );
-	::FillRect( pDis->hDC, &pDis->rcItem, gr.GetCurrentBrush() );
+	gr.FillMyRect( pDis->rcItem );
 	
 	/* アイテムが選択されている */
 	if( pDis->itemState & ODS_SELECTED ){
 		gr.SetBrushColor( ::GetSysColor( COLOR_HIGHLIGHT ) );
-		::SetTextColor( gr, ::GetSysColor( COLOR_HIGHLIGHTTEXT ) );
+		gr.SetTextForeColor( ::GetSysColor( COLOR_HIGHLIGHTTEXT ) );
 	}else{
 		gr.SetBrushColor( ::GetSysColor( COLOR_WINDOW ) );
-		::SetTextColor( gr, ::GetSysColor( COLOR_WINDOWTEXT ) );
+		gr.SetTextForeColor( ::GetSysColor( COLOR_WINDOWTEXT ) );
 	}
 
 	rc1.left+= (2 + 16);
@@ -1257,7 +1257,7 @@ void CPropTypes::DrawColorListItem( DRAWITEMSTRUCT* pDis )
 	rc1.right -= ( 2 + 27 );
 	rc1.bottom -= 2;
 	/* 選択ハイライト矩形 */
-	::FillRect( gr, &rc1, gr.GetCurrentBrush() );
+	gr.FillMyRect(rc1);
 	/* テキスト */
 	::SetBkMode( gr, TRANSPARENT );
 	::TextOut( gr, rc1.left, rc1.top, pColorInfo->m_szName, _tcslen( pColorInfo->m_szName ) );

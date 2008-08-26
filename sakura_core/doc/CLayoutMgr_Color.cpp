@@ -21,14 +21,14 @@ bool CLayoutMgr::_CheckColorMODE(
 			nCOMMENTMODE = COLORIDX_COMMENT;
 		}
 		// ブロックコメント1	// 2002/03/13 novice
-		else if( m_sTypeConfig.m_ColorInfoArr[COLORIDX_COMMENT].m_bDisp && m_sTypeConfig.m_cBlockComment.Match_CommentFrom( 0, nPos, nLineLen, pLine ) ){
+		else if( m_sTypeConfig.m_ColorInfoArr[COLORIDX_COMMENT].m_bDisp && m_sTypeConfig.m_cBlockComments[0].Match_CommentFrom( nPos, nLineLen, pLine ) ){
 			nCOMMENTMODE = COLORIDX_BLOCK1;
-			nCOMMENTEND = m_sTypeConfig.m_cBlockComment.Match_CommentTo( 0, nPos + m_sTypeConfig.m_cBlockComment.getBlockFromLen(0), nLineLen, pLine );	/* この物理行にブロックコメントの終端があるか */
+			nCOMMENTEND = m_sTypeConfig.m_cBlockComments[0].Match_CommentTo( nPos + m_sTypeConfig.m_cBlockComments[0].getBlockFromLen(), nLineLen, pLine );	/* この物理行にブロックコメントの終端があるか */
 		}
 		// ブロックコメント2	// 2002/03/13 novice
-		else if( m_sTypeConfig.m_ColorInfoArr[COLORIDX_COMMENT].m_bDisp &&  m_sTypeConfig.m_cBlockComment.Match_CommentFrom( 1, nPos, nLineLen, pLine ) ){
+		else if( m_sTypeConfig.m_ColorInfoArr[COLORIDX_COMMENT].m_bDisp &&  m_sTypeConfig.m_cBlockComments[1].Match_CommentFrom( nPos, nLineLen, pLine ) ){
 			nCOMMENTMODE = COLORIDX_BLOCK2;
-			nCOMMENTEND = m_sTypeConfig.m_cBlockComment.Match_CommentTo( 1, nPos + m_sTypeConfig.m_cBlockComment.getBlockFromLen(1), nLineLen, pLine );	/* この物理行にブロックコメントの終端があるか */
+			nCOMMENTEND = m_sTypeConfig.m_cBlockComments[1].Match_CommentTo( nPos + m_sTypeConfig.m_cBlockComments[1].getBlockFromLen(), nLineLen, pLine );	/* この物理行にブロックコメントの終端があるか */
 		}
 		// シングルクォーテーション文字列
 		else if( m_sTypeConfig.m_ColorInfoArr[COLORIDX_SSTRING].m_bDisp && pLine[nPos] == L'\'' ){
@@ -46,7 +46,7 @@ bool CLayoutMgr::_CheckColorMODE(
 	case COLORIDX_BLOCK1:	/* ブロックコメント1である */ // 2002/03/13 novice
 		if( 0 == nCOMMENTEND ){
 			/* この物理行にブロックコメントの終端があるか */
-			nCOMMENTEND = m_sTypeConfig.m_cBlockComment.Match_CommentTo( 0, nPos, nLineLen, pLine );
+			nCOMMENTEND = m_sTypeConfig.m_cBlockComments[0].Match_CommentTo( nPos, nLineLen, pLine );
 		}
 		else if( nPos == nCOMMENTEND ){
 			nCOMMENTMODE = COLORIDX_TEXT; // 2002/03/13 novice
@@ -56,7 +56,7 @@ bool CLayoutMgr::_CheckColorMODE(
 	case COLORIDX_BLOCK2:	/* ブロックコメント2である */ // 2002/03/13 novice
 		if( 0 == nCOMMENTEND ){
 			/* この物理行にブロックコメントの終端があるか */
-			nCOMMENTEND = m_sTypeConfig.m_cBlockComment.Match_CommentTo( 1, nPos, nLineLen, pLine );
+			nCOMMENTEND = m_sTypeConfig.m_cBlockComments[1].Match_CommentTo( nPos, nLineLen, pLine );
 		}
 		else if( nPos == nCOMMENTEND ){
 			nCOMMENTMODE = COLORIDX_TEXT; // 2002/03/13 novice

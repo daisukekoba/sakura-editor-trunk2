@@ -151,12 +151,12 @@ void _DefaultConfig(STypeConfig* pType)
 	pType->m_bTabArrow = false;				/* タブ矢印表示 */	// 2001.12.03 hor
 	pType->m_bInsSpace = FALSE;				/* スペースの挿入 */	// 2001.12.03 hor
 	
-	//@@@ 2002.09.22 YAZAKI 以下、m_cLineCommentとm_cBlockCommentを使うように修正
+	//@@@ 2002.09.22 YAZAKI 以下、m_cLineCommentとm_cBlockCommentsを使うように修正
 	pType->m_cLineComment.CopyTo(0, L"", -1);	/* 行コメントデリミタ */
 	pType->m_cLineComment.CopyTo(1, L"", -1);	/* 行コメントデリミタ2 */
 	pType->m_cLineComment.CopyTo(2, L"", -1);	/* 行コメントデリミタ3 */	//Jun. 01, 2001 JEPRO 追加
-	pType->m_cBlockComment.SetBlockCommentRule(0, L"", L"");	/* ブロックコメントデリミタ */
-	pType->m_cBlockComment.SetBlockCommentRule(1, L"", L"");	/* ブロックコメントデリミタ2 */
+	pType->m_cBlockComments[0].SetBlockCommentRule(L"", L"");	/* ブロックコメントデリミタ */
+	pType->m_cBlockComments[1].SetBlockCommentRule(L"", L"");	/* ブロックコメントデリミタ2 */
 
 	pType->m_nStringType = 0;					/* 文字列区切り記号エスケープ方法 0=[\"][\'] 1=[""][''] */
 	wcscpy( pType->m_szIndentChars, L"" );		/* その他のインデント対象文字 */
@@ -213,7 +213,7 @@ void _DefaultConfig(STypeConfig* pType)
 		pType->m_RegexKeywordArr[i].m_szKeyword[0] = L'\0';
 		pType->m_RegexKeywordArr[i].m_nColorIndex = COLORIDX_REGEX1;
 	}
-	pType->m_bUseRegexKeyword = FALSE;
+	pType->m_bUseRegexKeyword = false;
 //		pType->m_nRegexKeyMagicNumber = 1;
 //@@@ 2001.11.17 add end MIK
 

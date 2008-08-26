@@ -19,6 +19,15 @@ CLogicInt SColorStrategyInfo::GetPosInLayout() const
 	return nPosInLogic - pDispPos->GetLayoutRef()->GetLogicOffset();
 }
 
+const CDocLine* SColorStrategyInfo::GetDocLine() const
+{
+	return pDispPos->GetLayoutRef()->GetDocLineRef();
+}
+
+const CLayout* SColorStrategyInfo::GetLayout() const
+{
+	return pDispPos->GetLayoutRef();
+}
 
 
 
@@ -29,8 +38,8 @@ CColorStrategyPool::CColorStrategyPool()
 	m_vStrategies.push_back(new CColor_Eol);			// 行末
 	m_vStrategies.push_back(new CColor_RegexKeyword);	// 正規表現キーワード
 	m_vStrategies.push_back(new CColor_LineComment);	// 行コメント
-	m_vStrategies.push_back(new CColor_BlockComment);	// ブロックコメント
-	m_vStrategies.push_back(new CColor_BlockComment2);	// ブロックコメント2
+	m_vStrategies.push_back(new CColor_BlockComment(0));	// ブロックコメント
+	m_vStrategies.push_back(new CColor_BlockComment(1));	// ブロックコメント2
 	m_vStrategies.push_back(new CColor_SingleQuote);	// シングルクォーテーション文字列
 	m_vStrategies.push_back(new CColor_DoubleQuote);	// ダブルクォーテーション文字列
 	m_vStrategies.push_back(new CColor_Url);			// URL
@@ -50,6 +59,15 @@ CColorStrategyPool::~CColorStrategyPool()
 	m_vStrategies.clear();
 }
 
+CColorStrategy*	CColorStrategyPool::GetStrategyByColor(EColorIndexType eColor) const
+{
+	for(int i=0;i<(int)m_vStrategies.size();i++){
+		if(m_vStrategies[i]->GetStrategyColor()==eColor){
+			return m_vStrategies[i];
+		}
+	}
+	return NULL;
+}
 
 
 

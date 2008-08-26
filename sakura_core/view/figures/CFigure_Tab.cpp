@@ -48,9 +48,6 @@ void _DispTab( CGraphics& gr, DispPos* pDispPos, const CEditView* pcView )
 {
 	DispPos& sPos=*pDispPos;
 
-	//定数
-	static const wchar_t* pszSPACES = L"        ";
-
 	//必要なインターフェース
 	const CTextMetrics* pMetrics=&pcView->GetTextMetrics();
 	const CTextArea* pArea=&pcView->GetTextArea();
@@ -58,7 +55,6 @@ void _DispTab( CGraphics& gr, DispPos* pDispPos, const CEditView* pcView )
 
 	int nLineHeight = pMetrics->GetHankakuDy();
 	int nCharWidth = pMetrics->GetHankakuDx();
-
 
 	CTypeSupport cTabType(pcView,COLORIDX_TAB);
 
@@ -76,30 +72,14 @@ void _DispTab( CGraphics& gr, DispPos* pDispPos, const CEditView* pcView )
 	rcClip2.bottom = sPos.GetDrawPos().y + nLineHeight;
 
 	if( pArea->IsRectIntersected(rcClip2) ){
-		//$$note: Strategyを使うともっと美しくなります by kobake
-
-		//描画データ決定
-		const wchar_t* pData = NULL;
-		if( cTabType.IsDisp() ){
-			if(TypeDataPtr->m_bTabArrow){
-				pData = pszSPACES;
-			}
-			else{
-				pData = TypeDataPtr->m_szTabViewString;
-			}
-		}
-		else{
-			pData = pszSPACES;
-		}
-
-		//タブテキスト (または背景のみ)
+		//背景
 		::ExtTextOutW_AnyBuild(
 			gr,
 			sPos.GetDrawPos().x,
 			sPos.GetDrawPos().y,
 			ExtTextOutOption(),
 			&rcClip2,
-			TypeDataPtr->m_szTabViewString,
+			L"        ",
 			tabDispWidth <= 8 ? tabDispWidth : 8, // Sep. 22, 2002 genta
 			pMetrics->GetDxArray_AllHankaku()
 		);
@@ -113,7 +93,7 @@ void _DispTab( CGraphics& gr, DispPos* pDispPos, const CEditView* pcView )
 				pMetrics->GetHankakuWidth(),
 				pMetrics->GetHankakuHeight(),
 				cTabType.IsFatFont(),
-				cTabType.GetTextColor()
+				::GetTextColor(gr)//cTabType.GetTextColor()
 			);
 		}
 	}
@@ -121,6 +101,8 @@ void _DispTab( CGraphics& gr, DispPos* pDispPos, const CEditView* pcView )
 	//Xを進める
 	sPos.ForwardDrawCol(tabDispWidth);
 }
+
+
 
 /*
 	タブ矢印描画関数
@@ -150,8 +132,8 @@ void _DrawTabArrow(
 
 	for(int i = 0; i < (bBold?2:1); i++){
 		int y = sy + i;
-		gr.DrawLine(sx - nWidth,	y,	sx,					y				);	//「─」左端から右端
-		gr.DrawLine(sx,				y,	sx - nHeight / 4,	y + nHeight / 4	);	//「／」右端から斜め左下
-		gr.DrawLine(sx,				y,	sx - nHeight / 4,	y - nHeight / 4	);	//「＼」右端から斜め左上
+		gr.DrawDotLine(sx - nWidth,	y,	sx,					y				);	//「─」左端から右端
+		gr.DrawDotLine(sx,				y,	sx - nHeight / 4,	y + nHeight / 4	);	//「／」右端から斜め左下
+		gr.DrawDotLine(sx,				y,	sx - nHeight / 4,	y - nHeight / 4	);	//「＼」右端から斜め左上
 	}
 }

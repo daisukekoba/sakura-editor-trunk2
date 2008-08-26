@@ -1110,13 +1110,13 @@ void CShareData_IO::ShareData_IO_Types( CDataProfile& cProfile )
 			buffer[0][0] = buffer[1][0] = L'\0';
 			bRet1 = cProfile.IOProfileData( pszSecName, LTEXT("szBlockCommentFrom"), MakeStringBufferW(buffer[0]) );			
 			bRet2 = cProfile.IOProfileData( pszSecName, LTEXT("szBlockCommentTo"), MakeStringBufferW(buffer[1]) );
-			if( bRet1 && bRet2 ) types.m_cBlockComment.SetBlockCommentRule( 0, buffer[0], buffer[1] );
+			if( bRet1 && bRet2 ) types.m_cBlockComments[0].SetBlockCommentRule( buffer[0], buffer[1] );
 
 			//@@@ 2001.03.10 by MIK
 			buffer[0][0] = buffer[1][0] = L'\0';
 			bRet1 = cProfile.IOProfileData( pszSecName, LTEXT("szBlockCommentFrom2"), MakeStringBufferW(buffer[0]) );
 			bRet2 = cProfile.IOProfileData( pszSecName, LTEXT("szBlockCommentTo2")	, MakeStringBufferW(buffer[1]) );
-			if( bRet1 && bRet2 ) types.m_cBlockComment.SetBlockCommentRule( 1, buffer[0], buffer[1] );
+			if( bRet1 && bRet2 ) types.m_cBlockComments[1].SetBlockCommentRule( buffer[0], buffer[1] );
 			
 			//	Line Comment
 			wchar_t lbuf[ COMMENT_DELIMITER_BUFFERSIZE ];
@@ -1140,15 +1140,15 @@ void CShareData_IO::ShareData_IO_Types( CDataProfile& cProfile )
 		else { // write
 			//	Block Comment
 			cProfile.IOProfileData( pszSecName, LTEXT("szBlockCommentFrom")	,
-				MakeStringBufferW0(const_cast<wchar_t*>(types.m_cBlockComment.getBlockCommentFrom(0))) );
+				MakeStringBufferW0(const_cast<wchar_t*>(types.m_cBlockComments[0].getBlockCommentFrom())) );
 			cProfile.IOProfileData( pszSecName, LTEXT("szBlockCommentTo")	,
-				MakeStringBufferW0(const_cast<wchar_t*>(types.m_cBlockComment.getBlockCommentTo(0))) );
+				MakeStringBufferW0(const_cast<wchar_t*>(types.m_cBlockComments[0].getBlockCommentTo())) );
 
 			//@@@ 2001.03.10 by MIK
 			cProfile.IOProfileData( pszSecName, LTEXT("szBlockCommentFrom2"),
-				MakeStringBufferW0(const_cast<wchar_t*>(types.m_cBlockComment.getBlockCommentFrom(1))) );
+				MakeStringBufferW0(const_cast<wchar_t*>(types.m_cBlockComments[1].getBlockCommentFrom())) );
 			cProfile.IOProfileData( pszSecName, LTEXT("szBlockCommentTo2")	,
-				MakeStringBufferW0(const_cast<wchar_t*>(types.m_cBlockComment.getBlockCommentTo(1))) );
+				MakeStringBufferW0(const_cast<wchar_t*>(types.m_cBlockComments[1].getBlockCommentTo())) );
 
 			//	Line Comment
 			cProfile.IOProfileData( pszSecName, LTEXT("szLineComment")		,

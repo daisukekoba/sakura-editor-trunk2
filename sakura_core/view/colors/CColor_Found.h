@@ -4,6 +4,7 @@
 
 class CColor_Found : public CColorStrategy{
 public:
+	virtual EColorIndexType GetStrategyColor() const{ return COLORIDX_SEARCH; }
 	//êFë÷Ç¶
 	virtual EColorIndexType BeginColor(SColorStrategyInfo* pInfo);
 	virtual bool EndColor(SColorStrategyInfo* pInfo);

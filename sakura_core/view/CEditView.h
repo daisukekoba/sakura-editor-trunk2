@@ -217,7 +217,7 @@ protected:
 
 	//色分け
 public:
-	EColorIndexType GetColorIndex( HDC, const CLayout*, int );				/* 指定位置のColorIndexの取得 02/12/13 ai */
+	EColorIndexType GetColorIndex( const CLayout*, int );				/* 指定位置のColorIndexの取得 02/12/13 ai */
 	void SetCurrentColor( CGraphics& gr, EColorIndexType );							/* 現在の色を指定 */
 
 	//画面バッファ

@@ -49,19 +49,19 @@ const int LINEREADBUFSIZE	= 10240;	//!< ƒtƒ@ƒCƒ‹‚©‚ç1s•ªƒf[ƒ^‚ð“Ç‚Ýž‚Þ‚Æ‚«‚Ìƒ
 #define	GSTR_MUTEX_SAKURA_OLD				_T("MutexSakuraEditor")
 
 //ƒRƒ“ƒgƒ[ƒ‹ƒvƒƒZƒX
-#define	GSTR_MUTEX_SAKURA_CP				(_T("MutexSakuraEditorCP")				_T(_CODE_SUFFIX_) _T(_DEBUG_SUFFIX_) _T(STR_SHAREDATA_VERSION))
+#define	GSTR_MUTEX_SAKURA_CP				(_T("MutexSakuraEditorCP")				_T(_CODE_SUFFIX_) _T(_DEBUG_SUFFIX_)	_T(STR_SHAREDATA_VERSION))
 
 //ƒm[ƒ}ƒ‹ƒvƒƒZƒX‰Šú‰»“¯Šú
-#define	GSTR_MUTEX_SAKURA_INIT				(_T("MutexSakuraEditorInit")			_T(_CODE_SUFFIX_) _T(_DEBUG_SUFFIX_))
+#define	GSTR_MUTEX_SAKURA_INIT				(_T("MutexSakuraEditorInit")			_T(_CODE_SUFFIX_) _T(_DEBUG_SUFFIX_)	_T(STR_SHAREDATA_VERSION))
 
 //ƒm[ƒh‘€ì“¯Šú
-#define	GSTR_MUTEX_SAKURA_EDITARR			(_T("MutexSakuraEditorEditArr")			_T(_CODE_SUFFIX_) _T(_DEBUG_SUFFIX_))
+#define	GSTR_MUTEX_SAKURA_EDITARR			(_T("MutexSakuraEditorEditArr")			_T(_CODE_SUFFIX_) _T(_DEBUG_SUFFIX_)	_T(STR_SHAREDATA_VERSION))
 
 
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 //                         ƒCƒxƒ“ƒg                            //
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
-#define	GSTR_EVENT_SAKURA_CP_INITIALIZED	(_T("EventSakuraEditorCPInitialized")	_T(_CODE_SUFFIX_) _T(_DEBUG_SUFFIX_))
+#define	GSTR_EVENT_SAKURA_CP_INITIALIZED	(_T("EventSakuraEditorCPInitialized")	_T(_CODE_SUFFIX_) _T(_DEBUG_SUFFIX_)	_T(STR_SHAREDATA_VERSION))
 
 
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
@@ -69,13 +69,13 @@ const int LINEREADBUFSIZE	= 10240;	//!< ƒtƒ@ƒCƒ‹‚©‚ç1s•ªƒf[ƒ^‚ð“Ç‚Ýž‚Þ‚Æ‚«‚Ìƒ
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //
 
 //ƒRƒ“ƒgƒ[ƒ‹ƒgƒŒƒC
-#define	GSTR_CEDITAPP		(_T("CControlTray") _T(_CODE_SUFFIX_) _T(_DEBUG_SUFFIX_))
+#define	GSTR_CEDITAPP		(_T("CControlTray") _T(_CODE_SUFFIX_) _T(_DEBUG_SUFFIX_)		_T(STR_SHAREDATA_VERSION))
 
 //ƒƒCƒ“ƒEƒBƒ“ƒhƒE
-#define	GSTR_EDITWINDOWNAME	(_T("TextEditorWindow") _T(_CODE_SUFFIX_) _T(_DEBUG_SUFFIX_))
+#define	GSTR_EDITWINDOWNAME	(_T("TextEditorWindow") _T(_CODE_SUFFIX_) _T(_DEBUG_SUFFIX_)	_T(STR_SHAREDATA_VERSION))
 
 //ƒrƒ…[
-#define	GSTR_VIEWNAME		_T("EditorClient")
+#define	GSTR_VIEWNAME		(_T("EditorClient")												_T(STR_SHAREDATA_VERSION))
 
 
 // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- //

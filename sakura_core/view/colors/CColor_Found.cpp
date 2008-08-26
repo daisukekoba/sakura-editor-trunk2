@@ -16,6 +16,7 @@ EColorIndexType CColor_Found::BeginColor(SColorStrategyInfo* pInfo)
 
 	const CEditDoc* pcDoc = CEditDoc::GetInstance(0);
 	const STypeConfig* TypeDataPtr = &pcDoc->m_cDocType.GetDocumentAttribute();
+	const CDocLine* pcDocLine = pInfo->GetDocLine();
 
 	if( !pInfo->pcView->m_bCurSrchKeyMark || !CTypeSupport(pInfo->pcView,COLORIDX_SEARCH).IsDisp() ){
 		return _COLORIDX_NOCHANGE;
@@ -27,8 +28,8 @@ EColorIndexType CColor_Found::BeginColor(SColorStrategyInfo* pInfo)
 	// 2002.02.08 hor 正規表現の検索文字列マークを少し高速化
 	if(!pInfo->pcView->m_sCurSearchOption.bRegularExp || (m_bSearchFlg && m_nSearchStart < pInfo->nPosInLogic)){
 		m_bSearchFlg = pInfo->pcView->IsSearchString(
-			pInfo->pLineOfLayout,
-			pInfo->nLineLenOfLayoutWithNexts,
+			pcDocLine->GetPtr(),
+			pcDocLine->GetLengthWithoutEOL(),
 			pInfo->nPosInLogic,
 			&m_nSearchStart,
 			&m_nSearchEnd

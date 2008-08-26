@@ -98,7 +98,7 @@ struct ARRHEAD {
 
 	Version 37:
 	STypeConfigのLineComment関連をm_cLineCommentに変更．  @@@ 2002.09.23 YAZAKI
-	STypeConfigのBlockComment関連をm_cBlockCommentに変更．@@@ 2002.09.23 YAZAKI
+	STypeConfigのBlockComment関連をm_cBlockCommentsに変更．@@@ 2002.09.23 YAZAKI
 
 	Version 38:
 	STypeConfigにm_bIndentLayoutを追加. @@@ 2002.09.29 YAZAKI
