@@ -14,6 +14,8 @@
 	This source code is designed for sakura editor.
 	Please contact the copyright holder to use this code for other purpose.
 */
+/* LMP (Lucien Murray-Pitts) : 2011-02-26 Added Basic English Translation Resources */
+
 #include "stdafx.h"
 #include "sakura_rc.h"
 #include "CDlgProperty.h"
@@ -93,92 +95,123 @@ void CDlgProperty::SetData( void )
 	/* 共有データ構造体のアドレスを返す */
 	m_pShareData = CShareData::getInstance()->GetShareData();
 
+	// LMP: Added
+	char _pszLabel[257];
+
+
 	//	Aug. 16, 2000 genta	全角化
-	cmemProp.AppendSz( "ファイル名  " );
+	::LoadString( GetModuleHandle(NULL), STR_ERR_DLGFLPROP1, _pszLabel, 255 );  // LMP: Added
+	cmemProp.AppendSz( _pszLabel ) ; //"ファイル名  " );
 	cmemProp.AppendSz( pCEditDoc->GetFilePath() );
 	cmemProp.AppendSz( "\r\n" );
 
-	cmemProp.AppendSz( "設定のタイプ  " );
+	::LoadString( GetModuleHandle(NULL), STR_ERR_DLGFLPROP2, _pszLabel, 255 );  // LMP: Added
+	cmemProp.AppendSz( _pszLabel ) ; //"設定のタイプ  " );
 	cmemProp.AppendSz( pCEditDoc->GetDocumentAttribute().m_szTypeName );
 	cmemProp.AppendSz( "\r\n" );
 
-	cmemProp.AppendSz( "文字コード  " );
+	::LoadString( GetModuleHandle(NULL), STR_ERR_DLGFLPROP3, _pszLabel, 255 );  // LMP: Added
+	cmemProp.AppendSz( _pszLabel ) ; //"文字コード  " );
 	cmemProp.AppendSz( gm_pszCodeNameArr_1[pCEditDoc->m_nCharCode] );
 	cmemProp.AppendSz( "\r\n" );
 
-	wsprintf( szWork, "行数  %d行\r\n", pCEditDoc->m_cDocLineMgr.GetLineCount() );
+	::LoadString( GetModuleHandle(NULL), STR_ERR_DLGFLPROP4, _pszLabel, 255 );  // LMP: Added
+	wsprintf( szWork, _pszLabel /*"行数  %d行\r\n"*/, pCEditDoc->m_cDocLineMgr.GetLineCount() );
 	cmemProp.AppendSz( szWork );
 
-	wsprintf( szWork, "レイアウト行数  %d行\r\n", pCEditDoc->m_cLayoutMgr.GetLineCount() );
+	::LoadString( GetModuleHandle(NULL), STR_ERR_DLGFLPROP5, _pszLabel, 255 );  // LMP: Added
+	wsprintf( szWork, _pszLabel/*"レイアウト行数  %d行\r\n"*/, pCEditDoc->m_cLayoutMgr.GetLineCount() );
 	cmemProp.AppendSz( szWork );
 
 	if( pCEditDoc->m_bReadOnly ){
-		cmemProp.AppendSz( "読み取り専用モードで開いています。\r\n" );	// 2009.04.11 ryoji 「上書き禁止モード」→「読み取り専用モード」
+		::LoadString( GetModuleHandle(NULL), STR_ERR_DLGFLPROP6, _pszLabel, 255 );  // LMP: Added
+		cmemProp.AppendSz( _pszLabel /*"読み取り専用モードで開いています。\r\n"*/ );	// 2009.04.11 ryoji 「上書き禁止モード」→「読み取り専用モード」
 	}
 	if( pCEditDoc->IsModified() ){
-		cmemProp.AppendSz( "変更されています。\r\n" );
+		::LoadString( GetModuleHandle(NULL), STR_ERR_DLGFLPROP7, _pszLabel, 255 );  // LMP: Added
+		cmemProp.AppendSz( _pszLabel );//"変更されています。\r\n" );
 	}else{
-		cmemProp.AppendSz( "変更されていません。\r\n" );
+		::LoadString( GetModuleHandle(NULL), STR_ERR_DLGFLPROP8, _pszLabel, 255 );  // LMP: Added
+		cmemProp.AppendSz( _pszLabel ); //"変更されていません。\r\n" );
 	}
 
-	wsprintf( szWork, "\r\nコマンド実行回数    %d回\r\n", pCEditDoc->m_nCommandExecNum );
+	::LoadString( GetModuleHandle(NULL), STR_ERR_DLGFLPROP9 , _pszLabel, 255 );  // LMP: Added
+	wsprintf( szWork, _pszLabel /*"\r\nコマンド実行回数    %d回\r\n"*/, pCEditDoc->m_nCommandExecNum );
 	cmemProp.AppendSz( szWork );
 
-	wsprintf( szWork, "--ファイル情報-----------------\r\n", pCEditDoc->m_cDocLineMgr.GetLineCount() );
+	::LoadString( GetModuleHandle(NULL), STR_ERR_DLGFLPROP10, _pszLabel, 255 );  // LMP: Added
+	wsprintf( szWork, _pszLabel /*"--ファイル情報-----------------\r\n"*/, pCEditDoc->m_cDocLineMgr.GetLineCount() );
 	cmemProp.AppendSz( szWork );
 
 	if( INVALID_HANDLE_VALUE != ( nFind = ::FindFirstFile( pCEditDoc->GetFilePath(), (WIN32_FIND_DATA*)&wfd ) ) ){
 		if( pCEditDoc->m_hLockedFile ){
 			if( m_pShareData->m_Common.m_nFileShareMode == OF_SHARE_DENY_WRITE ){
-				wsprintf( szWork, "あなたはこのファイルを、他プロセスからの上書き禁止モードでロックしています。\r\n" );
+				::LoadString( GetModuleHandle(NULL), STR_ERR_DLGFLPROP11, _pszLabel, 255 );  // LMP: Added
+				wsprintf( szWork, _pszLabel ); //"あなたはこのファイルを、他プロセスからの上書き禁止モードでロックしています。\r\n" );
 			}else
 			if( m_pShareData->m_Common.m_nFileShareMode == OF_SHARE_EXCLUSIVE ){
-				wsprintf( szWork, "あなたはこのファイルを、他プロセスからの読み書き禁止モードでロックしています。\r\n" );
+				::LoadString( GetModuleHandle(NULL), STR_ERR_DLGFLPROP12, _pszLabel, 255 );  // LMP: Added
+				wsprintf( szWork, _pszLabel ); //"あなたはこのファイルを、他プロセスからの読み書き禁止モードでロックしています。\r\n" );
 			}else{
-				wsprintf( szWork, "あなたはこのファイルをロックしています。\r\n" );
+				::LoadString( GetModuleHandle(NULL), STR_ERR_DLGFLPROP13, _pszLabel, 255 );  // LMP: Added
+				wsprintf( szWork, _pszLabel ); //"あなたはこのファイルをロックしています。\r\n" );
 			}
 			cmemProp.AppendSz( szWork );
 		}else{
-			wsprintf( szWork, "あなたはこのファイルをロックしていません。\r\n" );
+			::LoadString( GetModuleHandle(NULL), STR_ERR_DLGFLPROP14, _pszLabel, 255 );  // LMP: Added
+			wsprintf( szWork, _pszLabel ); //"あなたはこのファイルをロックしていません。\r\n" );
 			cmemProp.AppendSz( szWork );
 		}
 
-		wsprintf( szWork, "ファイル属性  ", pCEditDoc->m_cDocLineMgr.GetLineCount() );
+		::LoadString( GetModuleHandle(NULL), STR_ERR_DLGFLPROP15, _pszLabel, 255 );  // LMP: Added
+		wsprintf( szWork, _pszLabel /* "ファイル属性  " */, pCEditDoc->m_cDocLineMgr.GetLineCount() );
 		cmemProp.AppendSz( szWork );
 		if( wfd.dwFileAttributes & FILE_ATTRIBUTE_ARCHIVE ){
-			cmemProp.AppendSz( "/アーカイブ" );
+			::LoadString( GetModuleHandle(NULL), STR_ERR_DLGFLPROP16, _pszLabel, 255 );  // LMP: Added
+			cmemProp.AppendSz( _pszLabel ); //"/アーカイブ" );
 		}
 		if( wfd.dwFileAttributes & FILE_ATTRIBUTE_COMPRESSED ){
-			cmemProp.AppendSz( "/圧縮" );
+			::LoadString( GetModuleHandle(NULL), STR_ERR_DLGFLPROP17, _pszLabel, 255 );  // LMP: Added
+			cmemProp.AppendSz( _pszLabel ); //"/圧縮" );
 		}
 		if( wfd.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY ){
-			cmemProp.AppendSz( "/フォルダ" );
+			::LoadString( GetModuleHandle(NULL), STR_ERR_DLGFLPROP18, _pszLabel, 255 );  // LMP: Added
+			cmemProp.AppendSz( _pszLabel ); //"/フォルダ" );
 		}
 		if( wfd.dwFileAttributes & FILE_ATTRIBUTE_HIDDEN ){
-			cmemProp.AppendSz( "/隠し" );
+			::LoadString( GetModuleHandle(NULL), STR_ERR_DLGFLPROP19, _pszLabel, 255 );  // LMP: Added
+			cmemProp.AppendSz( _pszLabel ); //"/隠し" );
 		}
 		if( wfd.dwFileAttributes & FILE_ATTRIBUTE_NORMAL ){
-			cmemProp.AppendSz( "/ノーマル" );
+			::LoadString( GetModuleHandle(NULL), STR_ERR_DLGFLPROP20, _pszLabel, 255 );  // LMP: Added
+			cmemProp.AppendSz( _pszLabel ); //"/ノーマル" );
 		}
 		if( wfd.dwFileAttributes & FILE_ATTRIBUTE_OFFLINE ){
-			cmemProp.AppendSz( "/オフライン" );
+			::LoadString( GetModuleHandle(NULL), STR_ERR_DLGFLPROP21, _pszLabel, 255 );  // LMP: Added
+			cmemProp.AppendSz( _pszLabel ); //"/オフライン" );
 		}
 		if( wfd.dwFileAttributes & FILE_ATTRIBUTE_READONLY ){
-			cmemProp.AppendSz( "/読み取り専用" );
+			::LoadString( GetModuleHandle(NULL), STR_ERR_DLGFLPROP22, _pszLabel, 255 );  // LMP: Added
+			cmemProp.AppendSz( _pszLabel ); //"/読み取り専用" );
 		}
 		if( wfd.dwFileAttributes & FILE_ATTRIBUTE_SYSTEM ){
-			cmemProp.AppendSz( "/システム" );
+			::LoadString( GetModuleHandle(NULL), STR_ERR_DLGFLPROP23, _pszLabel, 255 );  // LMP: Added
+			cmemProp.AppendSz( _pszLabel ); //"/システム" );
 		}
 		if( wfd.dwFileAttributes & FILE_ATTRIBUTE_TEMPORARY ){
-			cmemProp.AppendSz( "/テンポラリ" );
+			::LoadString( GetModuleHandle(NULL), STR_ERR_DLGFLPROP24, _pszLabel, 255 );  // LMP: Added
+			cmemProp.AppendSz( _pszLabel ); //"/テンポラリ" );
 		}
 		cmemProp.AppendSz( "\r\n" );
 
 
-		cmemProp.AppendSz( "作成日時  " );
+		::LoadString( GetModuleHandle(NULL), STR_ERR_DLGFLPROP25, _pszLabel, 255 );  // LMP: Added
+		cmemProp.AppendSz( _pszLabel ); //"作成日時  " );
 		::FileTimeToLocalFileTime( &wfd.ftCreationTime, &wfd.ftCreationTime );
 		::FileTimeToSystemTime( &wfd.ftCreationTime, &systimeL );
-		wsprintf( szWork, "%d年%d月%d日 %02d:%02d:%02d",
+
+		::LoadString( GetModuleHandle(NULL), STR_ERR_DLGFLPROP26, _pszLabel, 255 );  // LMP: Added
+		wsprintf( szWork, _pszLabel, // "%d年%d月%d日 %02d:%02d:%02d",
 			systimeL.wYear,
 			systimeL.wMonth,
 			systimeL.wDay,
@@ -189,10 +222,14 @@ void CDlgProperty::SetData( void )
 		cmemProp.AppendSz( szWork );
 		cmemProp.AppendSz( "\r\n" );
 
-		cmemProp.AppendSz( "更新日時  " );
+
+		::LoadString( GetModuleHandle(NULL), STR_ERR_DLGFLPROP27, _pszLabel, 255 );  // LMP: Added
+		cmemProp.AppendSz( _pszLabel ); //"更新日時  " );
 		::FileTimeToLocalFileTime( &wfd.ftLastWriteTime, &wfd.ftLastWriteTime );
 		::FileTimeToSystemTime( &wfd.ftLastWriteTime, &systimeL );
-		wsprintf( szWork, "%d年%d月%d日 %02d:%02d:%02d",
+
+		::LoadString( GetModuleHandle(NULL), STR_ERR_DLGFLPROP26 /*STR_ERR_DLGFLPROP28*/, _pszLabel, 255 );  // LMP: Added
+		wsprintf( szWork, _pszLabel, //"%d年%d月%d日 %02d:%02d:%02d",
 			systimeL.wYear,
 			systimeL.wMonth,
 			systimeL.wDay,
@@ -204,10 +241,13 @@ void CDlgProperty::SetData( void )
 		cmemProp.AppendSz( "\r\n" );
 
 
-		cmemProp.AppendSz( "アクセス日  " );
+		::LoadString( GetModuleHandle(NULL), STR_ERR_DLGFLPROP29, _pszLabel, 255 );  // LMP: Added
+		cmemProp.AppendSz( _pszLabel ); //"アクセス日  " );
 		::FileTimeToLocalFileTime( &wfd.ftLastAccessTime, &wfd.ftLastAccessTime );
 		::FileTimeToSystemTime( &wfd.ftLastAccessTime, &systimeL );
-		wsprintf( szWork, "%d年%d月%d日",
+
+		::LoadString( GetModuleHandle(NULL), STR_ERR_DLGFLPROP30, _pszLabel, 255 );  // LMP: Added
+		wsprintf( szWork, _pszLabel, //"%d年%d月%d日",
 			systimeL.wYear,
 			systimeL.wMonth,
 			systimeL.wDay
@@ -215,10 +255,12 @@ void CDlgProperty::SetData( void )
 		cmemProp.AppendSz( szWork );
 		cmemProp.AppendSz( "\r\n" );
 
-		wsprintf( szWork, "MS-DOSファイル名  %s\r\n", wfd.cAlternateFileName );
+		::LoadString( GetModuleHandle(NULL), STR_ERR_DLGFLPROP31, _pszLabel, 255 );  // LMP: Added
+		wsprintf( szWork, _pszLabel /*"MS-DOSファイル名  %s\r\n"*/, wfd.cAlternateFileName );
 		cmemProp.AppendSz( szWork );
 
-		wsprintf( szWork, "ファイルサイズ  %d バイト\r\n", wfd.nFileSizeLow );
+		::LoadString( GetModuleHandle(NULL), STR_ERR_DLGFLPROP32, _pszLabel, 255 );  // LMP: Added
+		wsprintf( szWork, _pszLabel /*"ファイルサイズ  %d バイト\r\n"*/, wfd.nFileSizeLow );
 		cmemProp.AppendSz( szWork );
 
 		::FindClose( nFind );

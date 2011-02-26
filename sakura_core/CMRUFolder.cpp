@@ -13,6 +13,7 @@
 	This source code is designed for sakura editor.
 	Please contact the copyright holder to use this code for other purpose.
 */
+/* LMP (Lucien Murray-Pitts) : 2011-02-26 Added Basic English Translation Resources */
 
 #include "stdafx.h"
 #include "CShareData.h"
@@ -65,7 +66,7 @@ HMENU CMRUFolder::CreateMenu( CMenuDrawer* pCMenuDrawer )
 		//	j >= 10 + 26 の時の考慮を省いた(に近い)がフォルダの履歴MAXを36個にしてあるので事実上OKでしょう
 		wsprintf( szMemu, "&%c %s%s", 
 			(i < 10) ? ('0' + i) : ('A' + i - 10), 
-			(FALSE == m_pShareData->m_Common.m_bMenuIcon && bFavorite) ? "★ " : "",
+			(FALSE == m_pShareData->m_Common.m_bMenuIcon && bFavorite) ? "★ " : "",	// LMP: FIXME?
 			szFolder2 );
 
 		//	メニューに追加

@@ -14,6 +14,7 @@
 	This source code is designed for sakura editor.
 	Please contact the copyright holder to use this code for other purpose.
 */
+/* LMP (Lucien Murray-Pitts) : 2011-02-26 Added Basic English Translation Resources */
 
 #include "stdafx.h"
 #include "sakura_rc.h"
@@ -131,6 +132,11 @@ void CDlgCompare::SetData( void )
 //	//	Oct. 15, 2001 genta ファイル名判定の stricmpをbccでも期待通り動かすため
 //	setlocale ( LC_ALL, "C" );
 
+	// LMP: Added
+	char _pszLabel[257];
+	::LoadString( m_hInstance, STR_ERR_DLGCMP1, _pszLabel, 255 );
+
+
 	/* 現在開いている編集窓のリストをメニューにする */
 	nRowNum = CShareData::getInstance()->GetOpenedWindowArr( &pEditNodeArr, TRUE );
 	if( nRowNum > 0 ){
@@ -144,8 +150,10 @@ void CDlgCompare::SetData( void )
 			if (pEditNodeArr[i].m_hWnd == pCEditDoc->m_hwndParent){
 				continue;
 			}
+
+
 			wsprintf( szMenu, "%s %s",
-				(0 < lstrlen(pfi->m_szPath))?pfi->m_szPath:"(無題)",
+				(0 < lstrlen(pfi->m_szPath))?pfi->m_szPath:_pszLabel,//"(無題)",
 				pfi->m_bIsModified ? "*":" "
 			);
 			// gm_pszCodeNameArr_3 からコピーするように変更
@@ -183,7 +191,7 @@ void CDlgCompare::SetData( void )
 	::SendMessage( hwndList, LB_SETCURSEL, (WPARAM)0, 0 );
 	char	szWork[512];
 	wsprintf( szWork, "%s %s",
-		(0 < lstrlen( m_pszPath )?m_pszPath:"(無題)" ),
+		(0 < lstrlen( m_pszPath )?m_pszPath:_pszLabel),//"(無題)" ),
 		m_bIsModified?"*":""
 	);
 	::SetDlgItemText( m_hWnd, IDC_STATIC_COMPARESRC, szWork );

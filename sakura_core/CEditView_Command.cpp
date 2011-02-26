@@ -21,6 +21,7 @@
 	This source code is designed for sakura editor.
 	Please contact the copyright holders to use this code for other purpose.
 */
+/* LMP (Lucien Murray-Pitts) : 2011-02-26 Added Basic English Translation Resources */
 
 #include "stdafx.h"
 #include <stdlib.h>
@@ -185,8 +186,14 @@ BOOL CEditView::HandleCommand(
 		//@@@ 2002.2.2 YAZAKI マクロをCSMacroMgrに統一（インターフェースの変更）
 		if( !m_pcEditDoc->m_pcSMacroMgr->Exec( nCommand - F_USERMACRO_0, m_hInstance, this,
 			nCommandFrom & FA_NONRECORD )){
+
+			// LMP: Added
+			char _pszLabel[257];
+			::LoadString( m_hInstance, STR_ERR_MACRO1, _pszLabel, 255 );
+
 			::MYMESSAGEBOX( m_hwndParent,	MB_OK | MB_ICONINFORMATION, GSTR_APPNAME,
-				"マクロ %d (%s) の実行に失敗しました。", nCommand - F_USERMACRO_0,
+				_pszLabel, //"マクロ %d (%s) の実行に失敗しました。",
+				nCommand - F_USERMACRO_0,
 				m_pcEditDoc->m_pcSMacroMgr->GetFile( nCommand - F_USERMACRO_0 )
 			);
 		}
@@ -3341,10 +3348,18 @@ end_of_func:;
 		}
 	}
 	if(bFound){
+		// LMP: Added
+		char _pszLabel[257];
+		::LoadString( m_hInstance, STR_ERR_SRPREV1, _pszLabel, 255 );
+
 		if((nLineNumOld < nLineNum)||(nLineNumOld == nLineNum && nIdxOld < nIdx))
-			SendStatusMessage("▲末尾から再検索しました");
+			SendStatusMessage( _pszLabel); //"▲末尾から再検索しました");
 	}else{
-		SendStatusMessage("△見つかりませんでした");
+		// LMP: Added
+		char _pszLabel[257];
+		::LoadString( m_hInstance, STR_ERR_SRPREV2, _pszLabel, 255 );
+
+		SendStatusMessage( _pszLabel);//"△見つかりませんでした");
 //	if( FALSE == bFound ){
 // To Here 2002.01.26 hor
 		::MessageBeep( MB_ICONHAND );
@@ -3354,9 +3369,15 @@ end_of_func:;
 			if( NULL == hwndParent ){
 				hwndParent = m_hWnd;
 			}
+
+			// LMP: Added
+			char _pszLabel[257];
+			::LoadString( m_hInstance, STR_ERR_SRPREV3, _pszLabel, 255 );
+
 			::MYMESSAGEBOX( hwndParent,	MB_OK | MB_ICONINFORMATION, GSTR_APPNAME,
 //				"↑ 前方に、文字列 '%s' が見つかりません。",
-				"前方(↑) に文字列 '%s' が１つも見つかりません。",	//Jan. 25, 2001 jepro メッセージを若干変更
+				_pszLabel,
+				//"前方(↑) に文字列 '%s' が１つも見つかりません。",	//Jan. 25, 2001 jepro メッセージを若干変更
 				m_szCurSrchKey
 			);
 		}
@@ -3602,12 +3623,21 @@ end_of_func:;
 	}
 
 	if(bFound){
+		// LMP: Added
+		char _pszLabel[257];
+		::LoadString( m_hInstance, STR_ERR_SRNEXT1, _pszLabel, 255 );
+
 		if((nLineNumOld > nLineNum)||(nLineNumOld == nLineNum && nIdxOld > nIdx))
-			SendStatusMessage("▼先頭から再検索しました");
+			SendStatusMessage(_pszLabel);//"▼先頭から再検索しました");
 	}else{
 		ShowEditCaret();	// 2002/04/18 YAZAKI
 		DrawCaretPosInfo();	// 2002/04/18 YAZAKI
-		SendStatusMessage("▽見つかりませんでした");
+
+		// LMP: Added
+		char _pszLabel[257];
+		::LoadString( m_hInstance, STR_ERR_SRNEXT2, _pszLabel, 255 );
+
+		SendStatusMessage(_pszLabel);//"▽見つかりませんでした");
 // To Here 2002.01.26 hor
 		::MessageBeep( MB_ICONHAND );
 		if( bRedraw	&&
@@ -3617,8 +3647,13 @@ end_of_func:;
 				hwndParent = m_hWnd;
 			}
 			if( NULL == pszNotFoundMessage ){
+				// LMP: Added
+				char _pszLabel[257];
+				::LoadString( m_hInstance, STR_ERR_SRNEXT3, _pszLabel, 255 );
+
 				::MYMESSAGEBOX( hwndParent,	MB_OK | MB_ICONINFORMATION, GSTR_APPNAME,
-					"後方(↓) に文字列 '%s' が１つも見つかりません。",	//Jan. 25, 2001 jepro メッセージを若干変更
+					_pszLabel,
+					//"後方(↓) に文字列 '%s' が１つも見つかりません。",	//Jan. 25, 2001 jepro メッセージを若干変更
 					m_szCurSrchKey
 				);
 			}else{
@@ -4897,13 +4932,18 @@ void CEditView::Command_EXTHELP1( void )
 retry:;
 	if( CShareData::getInstance()->ExtWinHelpIsSet( m_pcEditDoc->GetDocumentType() ) == false){
 //	if( 0 == strlen( m_pShareData->m_Common.m_szExtHelp1 ) ){
+
+		// LMP: Added
+		char _pszLabel[257];
+		::LoadString( m_hInstance, STR_ERR_CEDITVIEW_CMD01, _pszLabel, 255 );
+
 		::MessageBeep( MB_ICONHAND );
 //From Here Sept. 15, 2000 JEPRO
 //		[Esc]キーと[x]ボタンでも中止できるように変更
 //		if( IDYES == ::MYMESSAGEBOX( NULL, MB_YESNO | MB_ICONEXCLAMATION | MB_APPLMODAL | MB_TOPMOST, GSTR_APPNAME,
 		if( IDYES == ::MYMESSAGEBOX( NULL, MB_YESNOCANCEL | MB_ICONEXCLAMATION | MB_APPLMODAL | MB_TOPMOST, GSTR_APPNAME,
 //To Here Sept. 15, 2000
-			"外部ヘルプ１が設定されていません。\n今すぐ設定しますか?"
+			_pszLabel // "外部ヘルプ１が設定されていません。\n今すぐ設定しますか?"
 		) ){
 			/* 共通設定 プロパティシート */
 			if( !m_pcEditDoc->OpenPropertySheet( ID_PAGENUM_HELPER/*, IDC_EDIT_EXTHELP1*/ ) ){
@@ -4954,13 +4994,17 @@ void CEditView::Command_EXTHTMLHELP( const char* helpfile, const char* kwd )
 	const char *filename = NULL;
 	if ( helpfile == NULL || helpfile[0] == '\0' ){
 		while( !CShareData::getInstance()->ExtHTMLHelpIsSet( m_pcEditDoc->GetDocumentType()) ){
+			// LMP: Added
+			char _pszLabel[257];
+			::LoadString( m_hInstance, STR_ERR_CEDITVIEW_CMD02, _pszLabel, 255 );
+
 			::MessageBeep( MB_ICONHAND );
 	//	From Here Sept. 15, 2000 JEPRO
 	//		[Esc]キーと[x]ボタンでも中止できるように変更
 	//		if( IDYES == ::MYMESSAGEBOX( NULL, MB_YESNO | MB_ICONEXCLAMATION | MB_APPLMODAL | MB_TOPMOST, GSTR_APPNAME,
 			if( IDYES != ::MYMESSAGEBOX( NULL, MB_YESNOCANCEL | MB_ICONEXCLAMATION | MB_APPLMODAL | MB_TOPMOST, GSTR_APPNAME,
 	//	To Here Sept. 15, 2000
-				"外部HTMLヘルプが設定されていません。\n今すぐ設定しますか?"
+				_pszLabel // "外部HTMLヘルプが設定されていません。\n今すぐ設定しますか?"
 			) ){
 				return;
 			}
@@ -5577,7 +5621,12 @@ void CEditView::Command_UNINDENT( char cChar )
 	if( !IsTextSelected() ){	/* テキストが選択されているか */
 		/* １バイト文字入力 */
 		Command_CHAR( cChar );	//	2003.10.09 zenryaku警告を出すが，動作は以前のままにする 
-		SendStatusMessage("★逆インデントは選択時のみ");
+
+		// LMP: Added
+		char _pszLabel[257];
+		::LoadString( m_hInstance, STR_ERR_UNINDENT1, _pszLabel, 255 );
+
+		SendStatusMessage(_pszLabel);//"★逆インデントは選択時のみ");
 		return;
 	}
 
@@ -5931,7 +5980,11 @@ can_not_tagjump_end:;
 //	::MYMESSAGEBOX( m_hWnd, MB_OK | MB_ICONSTOP, GSTR_APPNAME,
 //		"タグジャンプできません。\n[%s]", szJumpToFile
 //	);
-	SendStatusMessage("タグジャンプできません");	//@@@ 2003.04.13
+	// LMP: Added
+	char _pszLabel[257];
+	::LoadString( m_hInstance, STR_ERR_TAGJMP1, _pszLabel, 255 );
+
+	SendStatusMessage(_pszLabel);//"タグジャンプできません");	//@@@ 2003.04.13
 	return false;
 }
 
@@ -5946,7 +5999,11 @@ void CEditView::Command_TAGJUMPBACK( void )
 
 	/* タグジャンプ情報の参照 */
 	if( !CShareData::getInstance()->PopTagJump(&tagJump) || !CShareData::IsEditWnd(tagJump.hwndReferer) ){
-		SendStatusMessage("タグジャンプバックできません");
+		// LMP: Added
+		char _pszLabel[257];
+		::LoadString( m_hInstance, STR_ERR_TAGJMPBK1, _pszLabel, 255 );
+
+		SendStatusMessage(_pszLabel);//"タグジャンプバックできません");
 		// 2004.07.10 Moca m_TagJumpNumを0にしなくてもいいと思う
 		// m_pShareData->m_TagJumpNum = 0;
 		return;
@@ -6329,8 +6386,12 @@ bool CEditView::Command_TagsMake( void )
 	//ctags.exeの存在チェック
 	if( -1 == ::GetFileAttributes( cmdline ) )
 	{
+		// LMP: Added
+		char _pszLabel[257];
+		::LoadString( m_hInstance, STR_ERR_CEDITVIEW_CMD03, _pszLabel, 255 );
+
 		::MYMESSAGEBOX( m_hWnd,	MB_OK | MB_ICONEXCLAMATION, GSTR_APPNAME,
-			_T( "タグ作成コマンド実行は失敗しました。\n\nCTAGS.EXE が見つかりません。" ) );
+			_pszLabel ) ; // _T( "タグ作成コマンド実行は失敗しました。\n\nCTAGS.EXE が見つかりません。" ) );
 		return false;
 	}
 
@@ -6414,8 +6475,12 @@ bool CEditView::Command_TagsMake( void )
 	if( CreateProcess( NULL, cmdline, NULL, NULL, TRUE,
 			CREATE_NEW_CONSOLE, NULL, cDlgTagsMake.m_szPath, &sui, &pi ) == FALSE )
 	{
+		// LMP: Added
+		char _pszLabel[257];
+		::LoadString( m_hInstance, STR_ERR_CEDITVIEW_CMD04, _pszLabel, 255 );
+
 		::MYMESSAGEBOX( m_hWnd,	MB_OK | MB_ICONEXCLAMATION, GSTR_APPNAME,
-			"タグ作成コマンド実行は失敗しました。\n\n%s", cmdline );
+			_pszLabel, /*"タグ作成コマンド実行は失敗しました。\n\n%s",*/ cmdline );
 		goto finish;
 	}
 
@@ -6430,7 +6495,12 @@ bool CEditView::Command_TagsMake( void )
 		HWND	hwndMsg;
 		hwndCancel = cDlgCancel.DoModeless( m_hInstance, m_hwndParent, IDD_EXECRUNNING );
 		hwndMsg = ::GetDlgItem( hwndCancel, IDC_STATIC_CMD );
-		::SendMessage( hwndMsg, WM_SETTEXT, 0, (LPARAM)"タグファイルを作成中です。" );
+
+		// LMP: Added
+		char _pszLabel[257];
+		::LoadString( m_hInstance, STR_ERR_CEDITVIEW_CMD05, _pszLabel, 255 );
+
+		::SendMessage( hwndMsg, WM_SETTEXT, 0, (LPARAM)_pszLabel ) ; // "タグファイルを作成中です。" );
 
 		//実行結果の取り込み
 		do {
@@ -6488,8 +6558,13 @@ bool CEditView::Command_TagsMake( void )
 						cDlgCancel.CloseDialog( TRUE );
 
 						work[ read_cnt ] = '\0';	// Nov. 15, 2003 genta 表示用に0終端する
+
+
+						// LMP: Added
+						::LoadString( m_hInstance, STR_ERR_CEDITVIEW_CMD06, _pszLabel, 255 );
+
 						::MYMESSAGEBOX( m_hWnd,	MB_OK | MB_ICONEXCLAMATION, GSTR_APPNAME,
-						"タグ作成コマンド実行は失敗しました。\n\n%s", work ); // 2003.11.09 じゅうじ
+						_pszLabel, work ) ; // "タグ作成コマンド実行は失敗しました。\n\n%s", work ); // 2003.11.09 じゅうじ
 
 						return true;
 					}
@@ -6510,8 +6585,12 @@ finish:
 
 	cDlgCancel.CloseDialog( TRUE );
 
+	// LMP: Added
+	char _pszLabel[257];
+	::LoadString( m_hInstance, STR_ERR_CEDITVIEW_CMD07, _pszLabel, 255 );
+
 	::MYMESSAGEBOX( m_hWnd,	MB_OK | MB_ICONINFORMATION, GSTR_APPNAME,
-		"タグファイルの作成が終了しました。" );
+		_pszLabel ) ; // "タグファイルの作成が終了しました。" );
 
 	return true;
 }
@@ -6600,9 +6679,14 @@ BOOL CEditView::Command_OPEN_HHPP( BOOL bCheckOnly, BOOL bBeepWhenMiss )
 	// 2003.06.28 Moca ヘッダ・ソースのコードを統合＆削除
 	static const char* source_ext[] = { "c", "cpp", "cxx", "cc", "cp", "c++" };
 	static const char* header_ext[] = { "h", "hpp", "hxx", "hh", "hp", "h++" };
+
+	// LMP: Added
+	static char _pszLabel[257];
+	::LoadString( m_hInstance, STR_ERR_CEDITVIEW_CMD08, _pszLabel, 255 );
+
 	return OPEN_ExtFromtoExt( bCheckOnly, bBeepWhenMiss, source_ext, header_ext,
 		sizeof(source_ext) / sizeof(source_ext[0]), sizeof(header_ext) / sizeof(header_ext[0]),
-		"C/C++ヘッダファイルのオープンに失敗しました。" );
+		_pszLabel ) ; // "C/C++ヘッダファイルのオープンに失敗しました。" );
 }
 
 
@@ -6615,9 +6699,14 @@ BOOL CEditView::Command_OPEN_CCPP( BOOL bCheckOnly, BOOL bBeepWhenMiss )
 	// 2003.06.28 Moca ヘッダ・ソースのコードを統合＆削除
 	static const char* source_ext[] = { "c", "cpp", "cxx", "cc", "cp", "c++" };
 	static const char* header_ext[] = { "h", "hpp", "hxx", "hh", "hp", "h++" };
+
+	// LMP: Added
+	static char _pszLabel[257];
+	::LoadString( m_hInstance, STR_ERR_CEDITVIEW_CMD09, _pszLabel, 255 );
+
 	return OPEN_ExtFromtoExt( bCheckOnly, bBeepWhenMiss, header_ext, source_ext,
 		sizeof(header_ext) / sizeof(header_ext[0]), sizeof(source_ext) / sizeof(source_ext[0]),
-		"C/C++ソースファイルのオープンに失敗しました。");
+		_pszLabel ) ; // "C/C++ソースファイルのオープンに失敗しました。");
 }
 
 
@@ -7284,7 +7373,11 @@ void CEditView::Command_REPLACE( HWND hwndParent )
 
 	// From Here 2001.12.03 hor
 	if( nPaste && !m_pcEditDoc->IsEnablePaste()){
-		::MYMESSAGEBOX( hwndParent, MB_OK , GSTR_APPNAME,"クリップボードに有効なデータがありません！");
+		// LMP: Added
+		char _pszLabel[257];
+		::LoadString( m_hInstance, STR_ERR_CEDITVIEW_CMD10, _pszLabel, 255 );
+
+		::MYMESSAGEBOX( hwndParent, MB_OK , GSTR_APPNAME, _pszLabel ) ; // "クリップボードに有効なデータがありません！");
 		::CheckDlgButton( m_pcEditDoc->m_cDlgReplace.m_hWnd, IDC_CHK_PASTE, FALSE );
 		::EnableWindow( ::GetDlgItem( m_pcEditDoc->m_cDlgReplace.m_hWnd, IDC_COMBO_TEXT2 ), TRUE );
 		return;	//	失敗return;
@@ -7434,7 +7527,12 @@ void CEditView::Command_REPLACE( HWND hwndParent )
 		Redraw();
 		/* 次を検索 */
 	//	HandleCommand( F_SEARCH_NEXT, TRUE, (LPARAM)m_hWnd, (LPARAM)"最後まで置換しました。", 0, 0 );
-		Command_SEARCH_NEXT( true, TRUE, hwndParent, "最後まで置換しました。" );
+
+		// LMP: Added
+		char _pszLabel[257];
+		::LoadString( m_hInstance, STR_ERR_CEDITVIEW_CMD11, _pszLabel, 255 );
+
+		Command_SEARCH_NEXT( true, TRUE, hwndParent, _pszLabel ) ; // "最後まで置換しました。" );
 	}
 }
 
@@ -7483,7 +7581,11 @@ void CEditView::Command_REPLACE_ALL()
 
 	// From Here 2001.12.03 hor
 	if( nPaste && !m_pcEditDoc->IsEnablePaste() ){
-		::MYMESSAGEBOX( m_hWnd, MB_OK , GSTR_APPNAME,"クリップボードに有効なデータがありません！");
+		// LMP: Added
+		char _pszLabel[257];
+		::LoadString( m_hInstance, STR_ERR_CEDITVIEW_CMD12, _pszLabel, 255 );
+
+		::MYMESSAGEBOX( m_hWnd, MB_OK , GSTR_APPNAME,_pszLabel ) ; // "クリップボードに有効なデータがありません！");
 		::CheckDlgButton( m_hWnd, IDC_CHK_PASTE, FALSE );
 		::EnableWindow( ::GetDlgItem( m_hWnd, IDC_COMBO_TEXT2 ), TRUE );
 		return;	// TRUE;
@@ -7641,7 +7743,7 @@ void CEditView::Command_REPLACE_ALL()
 			szREPLACEKEY = cmemClip.GetPtr( &nREPLACEKEY );
 		}
 	}
-
+	
 	// 取得にステップがかかりそうな変数などを、一時変数化する。
 	// とはいえ、これらの操作をすることによって得をするクロック数は合わせても 1 ループで数十だと思います。
 	// 数百クロック毎ループのオーダーから考えてもそんなに得はしないように思いますけど・・・。
@@ -8143,16 +8245,24 @@ void CEditView::Command_BASE64DECODE( void )
 		return;
 	}
 	if(HFILE_ERROR == (hFile = _lcreat( szPath, 0 ) ) ){
+		// LMP: Added
+		char _pszLabel[257];
+		::LoadString( m_hInstance, STR_ERR_CEDITVIEW_CMD13, _pszLabel, 255 );
+
 		::MessageBeep( MB_ICONHAND );
 		::MYMESSAGEBOX( m_hWnd, MB_OK | MB_ICONSTOP, GSTR_APPNAME,
-			"ファイルの作成に失敗しました。\n\n%s", szPath
+			_pszLabel, szPath // "ファイルの作成に失敗しました。\n\n%s", szPath
 		);
 		return;
 	}
 	if( HFILE_ERROR == _lwrite( hFile, cmemBuf.GetPtr(), cmemBuf.GetLength() ) ){
+		// LMP: Added
+		char _pszLabel[257];
+		::LoadString( m_hInstance, STR_ERR_CEDITVIEW_CMD14, _pszLabel, 255 );
+
 		::MessageBeep( MB_ICONHAND );
 		::MYMESSAGEBOX( m_hWnd, MB_OK | MB_ICONSTOP, GSTR_APPNAME,
-			"ファイルの書き込みに失敗しました。\n\n%s", szPath
+			_pszLabel, szPath // "ファイルの書き込みに失敗しました。\n\n%s", szPath
 		);
 	}
 	_lclose( hFile );
@@ -8189,16 +8299,24 @@ void CEditView::Command_UUDECODE( void )
 		return;
 	}
 	if(HFILE_ERROR == (hFile = _lcreat( szPath, 0 ) ) ){
+		// LMP: Added
+		char _pszLabel[257];
+		::LoadString( m_hInstance, STR_ERR_CEDITVIEW_CMD15, _pszLabel, 255 );
+
 		::MessageBeep( MB_ICONHAND );
 		::MYMESSAGEBOX( m_hWnd, MB_OK | MB_ICONSTOP, GSTR_APPNAME,
-			"ファイルの作成に失敗しました。\n\n%s", szPath
+			_pszLabel, szPath // "ファイルの作成に失敗しました。\n\n%s", szPath
 		);
 		return;
 	}
 	if( HFILE_ERROR == _lwrite( hFile, cmemBuf.GetPtr(), cmemBuf.GetLength() ) ){
+		// LMP: Added
+		char _pszLabel[257];
+		::LoadString( m_hInstance, STR_ERR_CEDITVIEW_CMD16, _pszLabel, 255 );
+
 		::MessageBeep( MB_ICONHAND );
 		::MYMESSAGEBOX( m_hWnd, MB_OK | MB_ICONSTOP, GSTR_APPNAME,
-			"ファイルの書き込みに失敗しました。\n\n%s", szPath
+			_pszLabel, szPath // "ファイルの書き込みに失敗しました。\n\n%s", szPath
 		);
 	}
 	_lclose( hFile );
@@ -8235,19 +8353,29 @@ void CEditView::Command_PLSQL_COMPILE_ON_SQLPLUS( void )
 
 	hwndSQLPLUS = ::FindWindow( "SqlplusWClass", "Oracle SQL*Plus" );
 	if( NULL == hwndSQLPLUS ){
+		// LMP: Added
+		char _pszLabel[257];
+		::LoadString( m_hInstance, STR_ERR_CEDITVIEW_CMD17, _pszLabel, 255 );
+
 		::MYMESSAGEBOX( m_hWnd, MB_OK | MB_ICONSTOP, GSTR_APPNAME,
-			"Oracle SQL*Plusで実行します。\n\n\nOracle SQL*Plusが起動されていません。\n"
+			_pszLabel // "Oracle SQL*Plusで実行します。\n\n\nOracle SQL*Plusが起動されていません。\n"
 		);
 		return;
 	}
 	/* テキストが変更されている場合 */
 	if( m_pcEditDoc->IsModified() ){
+		// LMP: Added
+		char _pszLabel[257];
+		char _pszLabel2[257];
+		::LoadString( m_hInstance, STR_ERR_CEDITVIEW_CMD18, _pszLabel, 255 );
+		::LoadString( m_hInstance, STR_ERR_CEDITVIEW_CMD19, _pszLabel2, 255 );
+
 		nRet = ::MYMESSAGEBOX(
 			m_hWnd,
 			MB_YESNOCANCEL | MB_ICONEXCLAMATION,
 			GSTR_APPNAME,
-			"%s\nは変更されています。 Oracle SQL*Plusで実行する前に保存しますか？",
-			m_pcEditDoc->IsFilePathAvailable() ? m_pcEditDoc->GetFilePath() : "(無題)"
+			_pszLabel, // "%s\nは変更されています。 Oracle SQL*Plusで実行する前に保存しますか？",
+			m_pcEditDoc->IsFilePathAvailable() ? m_pcEditDoc->GetFilePath() : _pszLabel2 // "(無題)"
 		);
 		switch( nRet ){
 		case IDYES:
@@ -8292,15 +8420,23 @@ void CEditView::Command_PLSQL_COMPILE_ON_SQLPLUS( void )
 			&dwResult
 		);
 		if( !bResult ){
+			// LMP: Added
+			char _pszLabel[257];
+			::LoadString( m_hInstance, STR_ERR_CEDITVIEW_CMD20, _pszLabel, 255 );
+
 			::MYMESSAGEBOX( m_hWnd, MB_OK | MB_TOPMOST | MB_ICONSTOP, GSTR_APPNAME,
-				"Oracle SQL*Plusからの反応がありません。\nしばらく待ってから再び実行してください。"
+				_pszLabel // "Oracle SQL*Plusからの反応がありません。\nしばらく待ってから再び実行してください。"
 			);
 		}
 	}else{
+		// LMP: Added
+		char _pszLabel[257];
+		::LoadString( m_hInstance, STR_ERR_CEDITVIEW_CMD21, _pszLabel, 255 );
+
 		::MessageBeep( MB_ICONHAND );
 		::MYMESSAGEBOX( m_hWnd,
 			 MB_OK | MB_ICONSTOP, GSTR_APPNAME,
-			"SQLをファイルに保存しないとOracle SQL*Plusで実行できません。\n"
+			_pszLabel // "SQLをファイルに保存しないとOracle SQL*Plusで実行できません。\n"
 		);
 		return;
 	}
@@ -8316,8 +8452,13 @@ void CEditView::Command_ACTIVATE_SQLPLUS( void )
 	HWND		hwndSQLPLUS;
 	hwndSQLPLUS = ::FindWindow( "SqlplusWClass", "Oracle SQL*Plus" );
 	if( NULL == hwndSQLPLUS ){
+		// LMP: Added
+		char _pszLabel[257];
+		::LoadString( m_hInstance, STR_SQLERR_NOTRUN, _pszLabel, 255 );
+
 		::MYMESSAGEBOX( m_hWnd, MB_OK | MB_ICONSTOP, GSTR_APPNAME,
-			"Oracle SQL*Plusをアクティブ表示します。\n\n\nOracle SQL*Plusが起動されていません。\n"
+//			"Oracle SQL*Plusをアクティブ表示します。\n\n\nOracle SQL*Plusが起動されていません。\n"
+			_pszLabel
 		);
 		return;
 	}
@@ -8650,8 +8791,13 @@ void CEditView::Command_COMPARE( void )
 			break;
 		}
 		if( nLineLenDes > sizeof( m_pShareData->m_szWork ) ){
+			// LMP: Added
+			char _pszLabel[257];
+			::LoadString( m_hInstance, STR_ERR_CMPERR, _pszLabel, 255 );
+
 			::MYMESSAGEBOX( m_hWnd, MB_OK | MB_ICONSTOP | MB_TOPMOST, GSTR_APPNAME,
-				"比較先のファイル\n%s\n%dバイトを超える行があります。\n比較できません。", szPath, sizeof( m_pShareData->m_szWork )
+				_pszLabel, // "比較先のファイル\n%s\n%dバイトを超える行があります。\n比較できません。",
+				szPath, sizeof( m_pShareData->m_szWork )
 			);
 			return;
 		}
@@ -8712,14 +8858,22 @@ end_of_compare:;
 
 	//	2002/05/11 YAZAKI 親ウィンドウをうまく設定してみる。
 	if( FALSE == bDefferent ){
+		// LMP: Added
+		char _pszLabel[257];
+		::LoadString( m_hInstance, STR_ERR_CEDITVIEW_CMD22, _pszLabel, 255 );
+
 		//::MYMESSAGEBOX( hwndCompareWnd, MB_OK | MB_ICONINFORMATION | MB_TOPMOST, GSTR_APPNAME,
 		::MYMESSAGEBOX( hwndMsgBox, MB_OK | MB_ICONINFORMATION | MB_TOPMOST, GSTR_APPNAME,
-			"異なる箇所は見つかりませんでした。"
+			_pszLabel // "異なる箇所は見つかりませんでした。"
 		);
 	}else{
+		// LMP: Added
+		char _pszLabel[257];
+		::LoadString( m_hInstance, STR_ERR_CEDITVIEW_CMD23, _pszLabel, 255 );
+
 		//::MYMESSAGEBOX( hwndCompareWnd, MB_OK | MB_ICONINFORMATION | MB_TOPMOST, GSTR_APPNAME,
 		::MYMESSAGEBOX( hwndMsgBox, MB_OK | MB_ICONINFORMATION | MB_TOPMOST, GSTR_APPNAME,
-			"異なる箇所が見つかりました。"
+			_pszLabel // "異なる箇所が見つかりました。"
 		);
 		/* カーソルを移動させる
 			比較相手は、別プロセスなのでメッセージを飛ばす。
@@ -8919,8 +9073,12 @@ void CEditView::Command_RECKEYMACRO( void )
 		// 2003.06.23 Moca 記録用キーマクロのフルパスをCShareData経由で取得
 		nRet = CShareData::getInstance()->GetMacroFilename( -1, szInitDir, MAX_PATH ); 
 		if( nRet <= 0 ){
+			// LMP: Added
+			char _pszLabel[257];
+			::LoadString( m_hInstance, STR_ERR_CEDITVIEW_CMD24, _pszLabel, 255 );
+
 			::MYMESSAGEBOX(	m_hWnd, MB_OK | MB_ICONSTOP, GSTR_APPNAME,
-				"マクロファイルを作成できませんでした。\nファイル名の取得エラー nRet=%d", nRet
+				_pszLabel, nRet // "マクロファイルを作成できませんでした。\nファイル名の取得エラー nRet=%d", nRet
 			);
 			return;
 		}else{
@@ -8929,8 +9087,12 @@ void CEditView::Command_RECKEYMACRO( void )
 		//@@@ 2002.2.2 YAZAKI マクロをCSMacroMgrに統一
 //		if ( FALSE == m_pcEditDoc->m_CKeyMacroMgr.SaveKeyMacro( m_hInstance, m_pShareData->m_szKeyMacroFileName ) ){
 		if ( FALSE == m_pcEditDoc->m_pcSMacroMgr->Save( STAND_KEYMACRO, m_hInstance, m_pShareData->m_szKeyMacroFileName ) ){
+			// LMP: Added
+			char _pszLabel[257];
+			::LoadString( m_hInstance, STR_ERR_CEDITVIEW_CMD25, _pszLabel, 255 );
+
 			::MYMESSAGEBOX(	m_hWnd, MB_OK | MB_ICONSTOP, GSTR_APPNAME,
-				"マクロファイルを作成できませんでした。\n\n%s", m_pShareData->m_szKeyMacroFileName
+				_pszLabel /*"マクロファイルを作成できませんでした。\n\n%s"*/, m_pShareData->m_szKeyMacroFileName
 			);
 		}
 	}else{
@@ -8963,9 +9125,13 @@ void CEditView::Command_SAVEKEYMACRO( void )
 
 	//	Jun. 16, 2002 genta
 	if( !m_pcEditDoc->m_pcSMacroMgr->IsSaveOk() ){
+		// LMP: Added
+		char _pszLabel[257];
+		::LoadString( m_hInstance, STR_ERR_CEDITVIEW_CMD26, _pszLabel, 255 );
+
 		//	保存不可
 		::MYMESSAGEBOX(	m_hWnd, MB_OK | MB_ICONSTOP, GSTR_APPNAME,
-			"保存可能なマクロがありません．キーボードマクロ以外は保存できません．" );
+			_pszLabel ) ; // "保存可能なマクロがありません．キーボードマクロ以外は保存できません．" );
 	}
 
 	CDlgOpenFile	cDlgOpenFile;
@@ -8999,8 +9165,12 @@ void CEditView::Command_SAVEKEYMACRO( void )
 	//@@@ 2002.1.24 YAZAKI
 //	if ( FALSE == m_pcEditDoc->m_CKeyMacroMgr.SaveKeyMacro( m_hInstance, szPath ) ){
 	if ( FALSE == m_pcEditDoc->m_pcSMacroMgr->Save( STAND_KEYMACRO, m_hInstance, szPath ) ){
+		// LMP: Added
+		char _pszLabel[257];
+		::LoadString( m_hInstance, STR_ERR_CEDITVIEW_CMD27, _pszLabel, 255 );
+
 		::MYMESSAGEBOX(	m_hWnd, MB_OK | MB_ICONSTOP, GSTR_APPNAME,
-			"マクロファイルを作成できませんでした。\n\n%s", szPath
+			_pszLabel, szPath // "マクロファイルを作成できませんでした。\n\n%s", szPath
 		);
 	}
 //	m_pShareData->m_CKeyMacroMgr.SaveKeyMacro( m_hInstance, m_hWnd, szPath );
@@ -9027,8 +9197,12 @@ void CEditView::Command_EXECKEYMACRO( void )
 		//@@@ 2002.2.2 YAZAKI マクロをCSMacroMgrに統一
 //		if ( FALSE == m_pcEditDoc->m_CKeyMacroMgr.LoadKeyMacro( m_hInstance, m_pShareData->m_szKeyMacroFileName ) ){
 		if ( FALSE == m_pcEditDoc->m_pcSMacroMgr->Load( STAND_KEYMACRO, m_hInstance, m_pShareData->m_szKeyMacroFileName, NULL ) ){
+			// LMP: Added
+			char _pszLabel[257];
+			::LoadString( m_hInstance, STR_ERR_CEDITVIEW_CMD28, _pszLabel, 255 );
+
 			::MYMESSAGEBOX(	m_hWnd, MB_OK | MB_ICONSTOP, GSTR_APPNAME,
-				"ファイルを開けませんでした。\n\n%s", m_pShareData->m_szKeyMacroFileName
+				_pszLabel /*"ファイルを開けませんでした。\n\n%s"*/, m_pShareData->m_szKeyMacroFileName
 			);
 		}
 		else {
@@ -9150,8 +9324,14 @@ void CEditView::Command_EXECEXTMACRO( const char* pszPath, const char* pszType )
 		pszType
 	);
 	if ( !bLoadResult ){
+		// LMP: Added
+		char _pszLabel[257];
+		::LoadString( m_hInstance, STR_ERR_MACROERR1, _pszLabel, 255 );
+
+
 		::MYMESSAGEBOX(	m_hWnd, MB_OK | MB_ICONSTOP, GSTR_APPNAME,
-			"マクロの読み込みに失敗しました。\n\n%s", pszPath
+			_pszLabel,//"マクロの読み込みに失敗しました。\n\n%s",
+			pszPath
 		);
 	}
 	else {
@@ -9373,8 +9553,12 @@ void CEditView::Command_FILE_REOPEN( int nCharCode, int bNoConfirm )
 	if( bNoConfirm == 0 && (  -1 != _access( m_pcEditDoc->GetFilePath(), 0 ))
 	 && m_pcEditDoc->IsModified()	/* 変更フラグ */
 	){
+		// LMP: Added
+		char _pszLabel[257];
+		::LoadString( m_hInstance, STR_ERR_CEDITVIEW_CMD29, _pszLabel, 255 );
+
 		if( IDOK != MYMESSAGEBOX( m_hWnd, MB_OKCANCEL | MB_ICONQUESTION | MB_TOPMOST, GSTR_APPNAME,
-			"%s\n\nこのファイルは変更されています。\n再ロードを行うと変更が失われますが、よろしいですか?",
+			_pszLabel, // "%s\n\nこのファイルは変更されています。\n再ロードを行うと変更が失われますが、よろしいですか?",
 			m_pcEditDoc->GetFilePath()
 		) ){
 			return;

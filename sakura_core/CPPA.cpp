@@ -31,6 +31,7 @@
 		3. This notice may not be removed or altered from any source
 		   distribution.
 */
+/* LMP (Lucien Murray-Pitts) : 2011-02-26 Added Basic English Translation Resources */
 
 #include "stdafx.h"
 #include "CPPA.h"
@@ -81,7 +82,13 @@ void CPPA::Execute(CEditView* pcEditView, int flags )
 {
 	//PPAの多重起動禁止 2008.10.22 syat
 	if ( CPPA::m_bIsRunning ) {
-		::MessageBox( pcEditView->m_hWnd, "PPA実行中に新たにPPAマクロを呼び出すことはできません", "PPA実行エラー", MB_OK );
+		// LMP: Added
+		char _pszLabel[257];
+		char _pszLabel2[257];
+		::LoadString( GetModuleHandle(NULL), STR_ERR_DLGPPA1, _pszLabel, 255 );  // LMP: Added
+		::LoadString( GetModuleHandle(NULL), STR_ERR_DLGPPA7, _pszLabel2, 255 );  // LMP: Added
+
+		::MessageBox( pcEditView->m_hWnd, _pszLabel, _pszLabel2 /*"PPA実行中に新たにPPAマクロを呼び出すことはできません", "PPA実行エラー"*/, MB_OK );
 		m_fnAbort();
 		CPPA::m_bIsRunning = false;
 		return;
@@ -357,6 +364,12 @@ void __stdcall CPPA::stdError( int Err_CD, const char* Err_Mes )
 
 	char szMes[2048]; // 2048あれば足りるかと
 	const char* pszErr;
+
+	// LMP: Added
+	char _pszLabel[257];
+	char _pszLabel2[257];
+
+
 	pszErr = szMes;
 	if( 0 < Err_CD ){
 		int i, FuncID;
@@ -369,36 +382,44 @@ void __stdcall CPPA::stdError( int Err_CD, const char* Err_Mes )
 		if( CSMacroMgr::m_MacroFuncInfoNotCommandArr[i].m_nFuncID != -1 ){
 			char szFuncDec[1024];
 			GetDeclarations( CSMacroMgr::m_MacroFuncInfoNotCommandArr[i], szFuncDec );
-			wsprintf( szMes, "関数の実行エラー\n%s", szFuncDec );
+
+			::LoadString( GetModuleHandle(NULL), STR_ERR_DLGPPA2, _pszLabel, 255 );  // LMP: Added
+			wsprintf( szMes, _pszLabel /*"関数の実行エラー\n%s"*/, szFuncDec );
 		}else{
-			wsprintf( szMes, "不明な関数の実行エラー(バグです)\nFunc_ID=%d", FuncID );
+			::LoadString( GetModuleHandle(NULL), STR_ERR_DLGPPA3, _pszLabel, 255 );  // LMP: Added
+			wsprintf( szMes, _pszLabel /*"不明な関数の実行エラー(バグです)\nFunc_ID=%d"*/, FuncID );
 		}
 	}else{
 		switch( Err_CD ){
 		case 0:
 			if( 0 == lstrlen( Err_Mes ) ){
-				pszErr = "詳細不明のエラー";
+				::LoadString( GetModuleHandle(NULL), STR_ERR_DLGPPA4, _pszLabel2, 255 );  // LMP: Added
+				pszErr = _pszLabel2 ; // "詳細不明のエラー";
 			}else{
 				pszErr = Err_Mes;
 			}
 			break;
 		default:
-			wsprintf( szMes, "未定義のエラー\nError_CD=%d\n%s", Err_CD, Err_Mes );
+			::LoadString( GetModuleHandle(NULL), STR_ERR_DLGPPA5, _pszLabel, 255 );  // LMP: Added
+			wsprintf( szMes, _pszLabel /*"未定義のエラー\nError_CD=%d\n%s"*/, Err_CD, Err_Mes );
 		}
 	}
 	//	2007.07.26 genta : ネスト実行した場合にPPAが不正なポインタを渡す可能性を考慮．
 	//	実際には不正なエラーは全てPPA.DLL内部でトラップされるようだが念のため．
 	if( IsBadStringPtr( pszErr, 256 )){
-		pszErr = _T("エラー情報が不正");
+		::LoadString( GetModuleHandle(NULL), STR_ERR_DLGPPA6, _pszLabel2, 255 );  // LMP: Added
+		pszErr = _pszLabel2 ; // _T("エラー情報が不正");
 	}
+
+	::LoadString( GetModuleHandle(NULL), STR_ERR_DLGPPA7, _pszLabel, 255 );  // LMP: Added
 	if( 0 == m_CurInstance->m_cMemDebug.GetLength() ){
-		::MessageBox( m_CurInstance->m_pcEditView->m_hWnd, pszErr, "PPA実行エラー", MB_OK );
+		::MessageBox( m_CurInstance->m_pcEditView->m_hWnd, pszErr, _pszLabel /*"PPA実行エラー"*/, MB_OK );
 	}else{
 		char* p = new char [ lstrlen(pszErr) + m_CurInstance->m_cMemDebug.GetLength() + 2 ];
 		strcpy( p, pszErr );
 		strcat( p, "\n" );
 		strcat( p, m_CurInstance->m_cMemDebug.GetPtr() );
-		::MessageBox( m_CurInstance->m_pcEditView->m_hWnd, p, "PPA実行エラー", MB_OK );
+		::MessageBox( m_CurInstance->m_pcEditView->m_hWnd, p, _pszLabel /*"PPA実行エラー"*/, MB_OK );
 		delete [] p;
 	}
 }

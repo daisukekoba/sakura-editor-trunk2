@@ -11,6 +11,8 @@
 	This source code is designed for sakura editor.
 	Please contact the copyright holders to use this code for other purpose.
 */
+/* LMP (Lucien Murray-Pitts) : 2011-02-26 Added Basic English Translation Resources */
+
 #include "stdafx.h"
 #include "sakura_rc.h"
 #include "CEditView.h"
@@ -144,6 +146,8 @@ bool CEditView::ProcessCommand_isearch(
 */
 void CEditView::ISearchEnter( int mode  ,int direction)
 {
+	// LMP: Added
+	char _pszLabel[257];
 
 	if (m_nISearchMode == mode ) {
 		//再実行
@@ -174,7 +178,9 @@ void CEditView::ISearchEnter( int mode  ,int direction)
 			case 2: // 正規表現インクリメンタルサーチ
 				if (!m_CurRegexp.IsAvailable()){
 					MessageBeep(MB_ICONEXCLAMATION);
-					SendStatusMessage("BREGREP.DLLが使用できません。");
+
+					::LoadString( m_hInstance, STR_ERR_DLGEDITVWISRCH1, _pszLabel, 255 );  // LMP: Added
+					SendStatusMessage(_pszLabel);//"BREGREP.DLLが使用できません。");
 					return;
 				}
 				m_bCurSrchRegularExp = TRUE;
@@ -184,7 +190,8 @@ void CEditView::ISearchEnter( int mode  ,int direction)
 			case 3: // MIGEMOインクリメンタルサーチ
 				if (!m_CurRegexp.IsAvailable()){
 					MessageBeep(MB_ICONEXCLAMATION);
-					SendStatusMessage("BREGREP.DLLが使用できません。");
+					::LoadString( m_hInstance, STR_ERR_DLGEDITVWISRCH1, _pszLabel, 255 );  // LMP: Added
+					SendStatusMessage(_pszLabel);//"BREGREP.DLLが使用できません。");
 					return;
 				}
 				//migemo dll チェック
@@ -192,7 +199,8 @@ void CEditView::ISearchEnter( int mode  ,int direction)
 				//	可能性があるので，使用可能でなければ一応初期化を試みる
 				if ( ! m_pcmigemo->IsAvailable() && ! m_pcmigemo->Init() ){
 					MessageBeep(MB_ICONEXCLAMATION);
-					SendStatusMessage("MIGEMO.DLLが使用できません。");
+					::LoadString( m_hInstance, STR_ERR_DLGEDITVWISRCH2, _pszLabel, 255 );  // LMP: Added
+					SendStatusMessage(_pszLabel);//"MIGEMO.DLLが使用できません。");
 					return;
 				}
 				m_pcmigemo->migemo_load_all();
@@ -202,7 +210,8 @@ void CEditView::ISearchEnter( int mode  ,int direction)
 					//SendStatusMessage("[MIGEMO] I-Search: ");
 				}else{
 					MessageBeep(MB_ICONEXCLAMATION);
-					SendStatusMessage("MIGEMOは使用できません。 ");
+					::LoadString( m_hInstance, STR_ERR_DLGEDITVWISRCH2, _pszLabel, 255 );  // LMP: Added
+					SendStatusMessage(_pszLabel);//"MIGEMOは使用できません。 ");
 					return;
 				}
 				break;
@@ -423,8 +432,12 @@ void CEditView::ISearchExec(bool bNext)
 		&nColmTo, 								/* マッチレイアウト位置to */
 		&m_CurRegexp	) == 0 )
 	{
+		// LMP: Added
+		char _pszLabel[257];
+
 		/*検索結果がない*/
-		msg.AppendSz(" (見つかりません)");
+		::LoadString( m_hInstance, STR_ERR_DLGEDITVWISRCH3, _pszLabel, 255 );  // LMP: Added
+		msg.AppendSz( _pszLabel ) ; //" (見つかりません)");
 		SendStatusMessage(msg.GetPtr());
 		
 		if (bNext) 	m_bISearchWrap = true;

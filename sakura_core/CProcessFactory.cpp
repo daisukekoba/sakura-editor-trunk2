@@ -93,18 +93,25 @@ CProcess* CProcessFactory::Create( HINSTANCE hInstance, LPSTR lpCmdLine )
 */
 bool CProcessFactory::IsValidVersion()
 {
+	// LMP: Added
+	char _pszLabel[257];
+
 	/* Windowsバージョンのチェック */
 	COsVersionInfo	cOsVer;
 	if( cOsVer.GetVersion() ){
 		if( !cOsVer.OsIsEnableVersion() ){
+			::LoadString( GetModuleHandle(NULL), STR_ERR_DLGPROCFACT1, _pszLabel, 255 );  // LMP: Added
+
 			::MYMESSAGEBOX( NULL, MB_OK | MB_ICONINFORMATION, GSTR_APPNAME,
-				"このアプリケーションを実行するには、\nWindows95以上 または WindowsNT4.0以上のOSが必要です。\nアプリケーションを終了します。"
+				_pszLabel // "このアプリケーションを実行するには、\nWindows95以上 または WindowsNT4.0以上のOSが必要です。\nアプリケーションを終了します。"
 			);
 			return false;
 		}
 	}else{
+		::LoadString( GetModuleHandle(NULL), STR_ERR_DLGPROCFACT2, _pszLabel, 255 );  // LMP: Added
+
 		::MYMESSAGEBOX( NULL, MB_OK | MB_ICONINFORMATION, GSTR_APPNAME,
-			"OSのバージョンが取得できません。\nアプリケーションを終了します。"
+			_pszLabel // "OSのバージョンが取得できません。\nアプリケーションを終了します。"
 		);
 		return false;
 	}
@@ -163,6 +170,9 @@ bool CProcessFactory::IsExistControlProcess()
 */
 bool CProcessFactory::StartControlProcess()
 {
+	// LMP: Added
+	char _pszLabel[257];
+
 	MY_RUNNINGTIMER(cRunningTimer,"StartControlProcess" );
 
 	//	プロセスの起動
@@ -201,8 +211,10 @@ bool CProcessFactory::StartControlProcess()
 						0,
 						NULL
 		);
+		::LoadString( GetModuleHandle(NULL), STR_ERR_DLGPROCFACT3, _pszLabel, 255 );  // LMP: Added
+
 		::MYMESSAGEBOX( NULL, MB_OK | MB_ICONSTOP, GSTR_APPNAME,
-			_T("\'%s\'\nプロセスの起動に失敗しました。\n%s"), szEXE, (LPTSTR)pMsg );
+			_pszLabel /*_T("\'%s\'\nプロセスの起動に失敗しました。\n%s")*/, szEXE, (LPTSTR)pMsg );
 		::LocalFree( (HLOCAL)pMsg );	//	エラーメッセージバッファを解放
 		return false;
 	}
@@ -214,8 +226,10 @@ bool CProcessFactory::StartControlProcess()
 	//
 	int nResult = ::WaitForInputIdle( p.hProcess, 10000 );	//	最大10秒間待つ
 	if( 0 != nResult ){
+		::LoadString( GetModuleHandle(NULL), STR_ERR_DLGPROCFACT4, _pszLabel, 255 );  // LMP: Added
+
 		::MYMESSAGEBOX( NULL, MB_OK | MB_ICONSTOP, GSTR_APPNAME,
-			_T("\'%s\'\nコントロールプロセスの起動に失敗しました。"), szEXE );
+			_pszLabel /*_T("\'%s\'\nコントロールプロセスの起動に失敗しました。")*/, szEXE );
 		::CloseHandle( p.hThread );
 		::CloseHandle( p.hProcess );
 		return false;
@@ -263,8 +277,12 @@ bool CProcessFactory::WaitForInitializedControlProcess()
 	DWORD dwRet = ::WaitForSingleObject( hEvent, 10000 );	// 最大10秒間待つ
 	if( WAIT_TIMEOUT == dwRet ){	// コントロールプロセスの初期化が終了しない
 		::CloseHandle( hEvent );
+
+		// LMP: Added
+		char _pszLabel[257];
+		::LoadString( GetModuleHandle(NULL), STR_ERR_DLGPROCFACT5, _pszLabel, 255 );  // LMP: Added
 		::MYMESSAGEBOX( NULL, MB_OK | MB_ICONSTOP | MB_TOPMOST, GSTR_APPNAME,
-			_T("エディタまたはシステムがビジー状態です。\nしばらく待って開きなおしてください。") );
+			_pszLabel ) ; // _T("エディタまたはシステムがビジー状態です。\nしばらく待って開きなおしてください。") );
 		return false;
 	}
 	::CloseHandle( hEvent );

@@ -15,6 +15,7 @@
 	This source code is designed for sakura editor.
 	Please contact the copyright holder to use this code for other purpose.
 */
+/* LMP (Lucien Murray-Pitts) : 2011-02-26 Added Basic English Translation Resources */
 
 #include "stdafx.h"
 #include <string.h>
@@ -239,9 +240,14 @@ void CDlgDiff::SetData( void )
 					continue;
 				}
 
+				// LMP: Added
+				char _pszLabel[257];
+				::LoadString( m_hInstance, STR_ERR_DLGDIFF1, _pszLabel, 255 );
+
+
 				/* ƒtƒ@ƒCƒ‹–¼‚ðì¬‚·‚é */
 				wsprintf( szName, "%s %s",
-					( strlen( pFileInfo->m_szPath ) ) ? pFileInfo->m_szPath : "(–³‘è)",
+					( strlen( pFileInfo->m_szPath ) ) ? pFileInfo->m_szPath : _pszLabel, //"(–³‘è)",
 					pFileInfo->m_bIsModified ? "*" : " "
 				);
 

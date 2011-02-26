@@ -15,6 +15,7 @@
 	This source code is designed for sakura editor.
 	Please contact the copyright holders to use this code for other purpose.
 */
+/* LMP (Lucien Murray-Pitts) : 2011-02-26 Added Basic English Translation Resources */
 
 #include "stdafx.h"
 #include "sakura_rc.h"
@@ -306,7 +307,11 @@ INT_PTR CPropCommon::DispatchEvent_p10(
 					}else{
 						strcpy( szPath, m_Common.m_szMigemoDict );
 					}
-					if( SelectDir( hwndDlg, "検索するフォルダを選んでください", szPath, szPath ) ){
+					// LMP: Added
+					char _pszLabel[257];
+					::LoadString( m_hInstance, STR_ERR_DLGPROPCOMHELP1, _pszLabel, 255 );  // LMP: Added
+
+					if( SelectDir( hwndDlg, _pszLabel /*"検索するフォルダを選んでください"*/, szPath, szPath ) ){
 						strcpy( m_Common.m_szMigemoDict, szPath );
 						::SetDlgItemText( hwndDlg, IDC_EDIT_MIGEMO_DICT, m_Common.m_szMigemoDict );
 					}

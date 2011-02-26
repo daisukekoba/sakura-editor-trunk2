@@ -15,6 +15,7 @@
 	This source code is designed for sakura editor.
 	Please contact the copyright holders to use this code for other purpose.
 */
+/* LMP (Lucien Murray-Pitts) : 2011-02-26 Added Basic English Translation Resources */
 
 
 #include "stdafx.h"
@@ -350,7 +351,8 @@ INT_PTR CPropCommon::DispatchEvent_p5(
 				// Oct. 2, 2001 genta
 				// 2007.11.02 ryoji F_DISABLEなら未割付
 				if( nFuncCode == F_DISABLE ){
-					strcpy( pszLabel, "未割付" );
+					::LoadString( m_hInstance, STR_ERR_DLGPROPCOMKEYBIND1, pszLabel, 255 );  // LMP: Added
+					// strcpy( pszLabel, "未割付" );
 				}else{
 					m_cLookup.Funccode2Name( nFuncCode, pszLabel, 255 );
 				}
@@ -602,6 +604,11 @@ void CPropCommon::p5_Import_KeySetting( HWND hwndDlg )
 	HWND			hwndCtrl;
 	char			szInitDir[_MAX_PATH + 1];
 
+
+	// LMP: Added
+	char _pszLabel[257];
+
+
 	strcpy( szPath, "" );
 	strcpy( szInitDir, m_pShareData->m_szIMPORTFOLDER );	/* インポート用フォルダ */
 	/* ファイルオープンダイアログの初期化 */
@@ -621,8 +628,10 @@ void CPropCommon::p5_Import_KeySetting( HWND hwndDlg )
 
 	hFile = _lopen( szPath, OF_READ );
 	if( HFILE_ERROR == hFile ){
+		::LoadString( m_hInstance, STR_ERR_DLGPROPCOMKEYBIND2, _pszLabel, 255 );  // LMP: Added
+
 		::MYMESSAGEBOX(	hwndDlg, MB_OK | MB_ICONSTOP, GSTR_APPNAME,
-			"ファイルを開けませんでした。\n\n%s", szPath
+			_pszLabel /*"ファイルを開けませんでした。\n\n%s"*/, szPath
 		);
 		return;
 	}
@@ -641,8 +650,10 @@ void CPropCommon::p5_Import_KeySetting( HWND hwndDlg )
 
 			if( (fp = fopen( szPath, "r" )) == NULL )
 			{
+				::LoadString( m_hInstance, STR_ERR_DLGPROPCOMKEYBIND2, _pszLabel, 255 );  // LMP: Added
+
 				::MYMESSAGEBOX(	hwndDlg, MB_OK | MB_ICONSTOP, GSTR_APPNAME,
-					"ファイルを開けませんでした。\n\n%s", szPath
+					_pszLabel /*"ファイルを開けませんでした。\n\n%s"*/, szPath
 				);
 				return;
 			}
@@ -712,8 +723,9 @@ void CPropCommon::p5_Import_KeySetting( HWND hwndDlg )
 		}
 //@@@ 2001.11.07 add end MIK
 
+		::LoadString( m_hInstance, STR_ERR_DLGPROPCOMKEYBIND3, _pszLabel, 255 );  // LMP: Added
 		::MYMESSAGEBOX(	hwndDlg, MB_OK | MB_ICONSTOP, GSTR_APPNAME,
-			"キー設定ファイルの形式が違います。\n\n%s", szPath
+			_pszLabel /*"キー設定ファイルの形式が違います。\n\n%s"*/, szPath
 		);
 		return;
 	}
@@ -798,8 +810,12 @@ void CPropCommon::p5_Export_KeySetting( HWND hwndDlg )
 		
 		if( (fp = fopen( szPath, "w" )) == NULL )
 		{
+			// LMP: Added
+			char _pszLabel[257];
+			::LoadString( m_hInstance, STR_ERR_DLGPROPCOMKEYBIND2, _pszLabel, 255 );  // LMP: Added
+
 			::MYMESSAGEBOX(	hwndDlg, MB_OK | MB_ICONSTOP, GSTR_APPNAME,
-				"ファイルを開けませんでした。\n\n%s", szPath
+				_pszLabel /*"ファイルを開けませんでした。\n\n%s"*/, szPath
 			);
 			return;
 		}

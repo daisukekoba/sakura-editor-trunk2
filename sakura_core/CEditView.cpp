@@ -22,6 +22,7 @@
 	This source code is designed for sakura editor.
 	Please contact the copyright holders to use this code for other purpose.
 */
+/* LMP (Lucien Murray-Pitts) : 2011-02-26 Added Basic English Translation Resources */
 
 #include "stdafx.h"
 #include <stdlib.h>
@@ -280,7 +281,6 @@ CEditView::CEditView() :
 	m_hFont_HAN_UL = NULL;
 	m_hFont_HAN_FAT_UL = NULL;
 	
-
 	//	Jun. 27, 2001 genta	正規表現ライブラリの差し替え
 	//	2007.08.12 genta 初期化にShareDataの値が必要になった
 	m_CurRegexp.Init(m_pShareData->m_Common.m_szRegexpLib );
@@ -386,7 +386,7 @@ BOOL CEditView::Create(
 	m_hwndParent = hwndParent;
 	m_pcEditDoc = pcEditDoc;
 	m_nMyIndex = nMyIndex;
-	
+
 	// 2010.05.30 Moca フォントの作成をコンストラクタからCreateに移動
 	{
 		LOGFONT		lf;
@@ -521,8 +521,12 @@ BOOL CEditView::Create(
 //	nKeyBoardSpeed *= 2;
 	/* タイマー起動 */
 	if( 0 == ::SetTimer( m_hWnd, IDT_ROLLMOUSE, nKeyBoardSpeed, (TIMERPROC)EditViewTimerProc ) ){
+		// LMP: Added
+		char _pszLabel[257];
+		::LoadString( m_hInstance, STR_ERR_DLGEDITVW1, _pszLabel, 255 );  // LMP: Added
+
 		::MYMESSAGEBOX( m_hWnd, MB_OK | MB_ICONEXCLAMATION, GSTR_APPNAME,
-			"CEditView::Create()\nタイマーが起動できません。\nシステムリソースが不足しているのかもしれません。"
+			_pszLabel //"CEditView::Create()\nタイマーが起動できません。\nシステムリソースが不足しているのかもしれません。"
 		);
 	}
 
@@ -2631,7 +2635,12 @@ void CEditView::SetFont( void )
 //	::GetTextExtentPoint32( hdc, "X", 1, &sz );
 //	m_nCharHeight = sz.cy;
 //	m_nCharWidth = sz.cx;
-	::GetTextExtentPoint32( hdc, "大", 2, &sz );
+
+	// LMP: Added
+	char _pszLabel[257];
+	::LoadString( m_hInstance, STR_ERR_DLGEDITVW2, _pszLabel, 255 );  // LMP: Added
+
+	::GetTextExtentPoint32( hdc, _pszLabel /*"大"*/, 2, &sz );			// LMP: FIXME -- not sure this usage...
 	m_nCharHeight = sz.cy;
 	m_nCharWidth = sz.cx / 2;
 
@@ -3780,8 +3789,12 @@ normal_action:;
 
 		/******* この時点で必ず true == IsTextSelected() の状態になる ****:*/
 		if( !IsTextSelected() ){
+			// LMP: Added
+			char _pszLabel[257];
+			::LoadString( m_hInstance, STR_ERR_DLGEDITVW3, _pszLabel, 255 );  // LMP: Added
+
 			::MYMESSAGEBOX( m_hWnd, MB_OK | MB_ICONEXCLAMATION, GSTR_APPNAME,
-				"バグってる"
+				_pszLabel //"バグってる"
 			);
 			return;
 		}
@@ -4497,7 +4510,11 @@ BOOL CEditView::KeyWordHelpSearchDict( LID_SKH nID, POINT* po, RECT* rc )
 		) )	goto end_of_search;
 		break;
 	default:
-		::MYMESSAGEBOX( NULL, MB_OK | MB_ICONSTOP | MB_TOPMOST, _T("作者に教えて欲しいエラー"),
+		// LMP: Added
+		char _pszLabel[257];
+		::LoadString( m_hInstance, STR_ERR_DLGEDITVW4, _pszLabel, 255 );  // LMP: Added
+
+		::MYMESSAGEBOX( NULL, MB_OK | MB_ICONSTOP | MB_TOPMOST, _pszLabel, //_T("作者に教えて欲しいエラー"),
 		_T("CEditView::KeyWordHelpSearchDict\nnID=%d") );
 	}
 	/* 選択範囲のデータを取得(複数行選択の場合は先頭の行のみ) */
@@ -4572,11 +4589,19 @@ BOOL CEditView::KeySearchCore( const CMemory* pcmemCurText )
 				pszWork = pcmemRefText->GetPtr();
 				/* 有効になっている辞書を全部なめて、ヒットの都度説明の継ぎ増し */
 				if(m_pcEditDoc->GetDocumentAttribute().m_bUseKeyHelpAllSearch){	/* ヒットした次の辞書も検索 */	// 2006.04.10 fon
+
+					// LMP: Added
+					char _pszLabel[257];
+
 					/* バッファに前のデータが詰まっていたらseparator挿入 */
 					if(m_cTipWnd.m_cInfo.GetLength() != 0)
-						m_cTipWnd.m_cInfo.AppendSz( "\n--------------------\n■" );
+						::LoadString( m_hInstance, STR_ERR_DLGEDITVW5, _pszLabel, 255 );  // LMP: Added
+						// m_cTipWnd.m_cInfo.AppendSz( "\n--------------------\n■" );
 					else
-						m_cTipWnd.m_cInfo.AppendSz( "■" );	/* 先頭の場合 */
+						::LoadString( m_hInstance, STR_ERR_DLGEDITVW6, _pszLabel, 255 );  // LMP: Added
+						// m_cTipWnd.m_cInfo.AppendSz( "■" );	/* 先頭の場合 */
+					m_cTipWnd.m_cInfo.AppendSz( _pszLabel );  // Added: LMP
+
 					/* 辞書のパス挿入 */
 					m_cTipWnd.m_cInfo.AppendSz( m_pShareData->m_Types[nTypeNo].m_KeyHelpArr[i].m_szPath );
 					m_cTipWnd.m_cInfo.AppendSz( "\n" );
@@ -6650,9 +6675,15 @@ int	CEditView::CreatePopUpMenu_R( void )
 			}else{
 				dupamp( (const char*)pszWork, pszShortOut );
 			}
-			::InsertMenu( hMenu, 0, MF_BYPOSITION, IDM_COPYDICINFO, "キーワードの説明をクリップボードにコピー(&K)" );	// 2006.04.10 fon ToolTip内容を直接表示するのをやめた
+
+			// LMP: Added
+			char _pszLabel[257];
+			::LoadString( m_hInstance, STR_ERR_DLGEDITVW7, _pszLabel, 255 );  // LMP: Added
+			::InsertMenu( hMenu, 0, MF_BYPOSITION, IDM_COPYDICINFO, _pszLabel ) ; //"キーワードの説明をクリップボードにコピー(&K)" );	// 2006.04.10 fon ToolTip内容を直接表示するのをやめた
 			delete [] pszShortOut;
-			::InsertMenu( hMenu, 1, MF_BYPOSITION, IDM_JUMPDICT, "キーワード辞書を開く(&J)" );	// 2006.04.10 fon
+
+			::LoadString( m_hInstance, STR_ERR_DLGEDITVW8, _pszLabel, 255 );  // LMP: Added
+			::InsertMenu( hMenu, 1, MF_BYPOSITION, IDM_JUMPDICT, _pszLabel ) ; // "キーワード辞書を開く(&J)" );	// 2006.04.10 fon
 			::InsertMenu( hMenu, 2, MF_BYPOSITION | MF_SEPARATOR, 0, NULL );
 		}
 	}
@@ -6813,7 +6844,13 @@ void CEditView::DrawCaretPosInfo( void )
 		char	szText_1[64];
 		char	szText_3[32]; // szText_2 => szTest_3 に変更 64バイトもいらない 2002.06.05 Moca 
 		char	szText_6[16]; // szText_5 => szTest_6 に変更 64バイトもいらない 2002.06.05 Moca
-		wsprintf( szText_1, "%5d 行 %4d 桁", nPosY, nPosX );	//Oct. 30, 2000 JEPRO 千万行も要らん
+
+		// LMP: Added
+		char _pszLabel[257];
+
+		::LoadString( m_hInstance, STR_ERR_DLGEDITVW9, _pszLabel, 255 );  // LMP: Added
+
+		wsprintf( szText_1, _pszLabel /*"%5d 行 %4d 桁"*/, nPosY, nPosX );	//Oct. 30, 2000 JEPRO 千万行も要らん
 
 		nCharChars = 0;
 		if( NULL != pLine ){
@@ -6841,9 +6878,11 @@ void CEditView::DrawCaretPosInfo( void )
 		}
 
 		if( IsInsMode() /* Oct. 2, 2005 genta */ ){
-			strcpy( szText_6, "挿入" );
+			::LoadString( m_hInstance, STR_ERR_DLGEDITVW10, _pszLabel, 255 );  // LMP: Added
+			strcpy( szText_6, _pszLabel ) ; // "挿入" );
 		}else{
-			strcpy( szText_6, "上書" );
+			::LoadString( m_hInstance, STR_ERR_DLGEDITVW11, _pszLabel, 255 );  // LMP: Added
+			strcpy( szText_6, _pszLabel ) ; // "上書" );
 		}
 		::SendMessage( pCEditWnd->m_hwndStatusBar, SB_SETTEXT, 0 | SBT_NOBORDERS, (LPARAM) (LPINT)"" );
 		::SendMessage( pCEditWnd->m_hwndStatusBar, SB_SETTEXT, 1 | 0, (LPARAM) (LPINT)szText_1 );
@@ -7305,6 +7344,8 @@ DWORD CEditView::DoGrep(
 	*/
 	cmemMessage.AllocBuffer( 4000 );
 
+	// LMP: Added
+	char _pszLabel[257];
 
 
 //	int*				pnKey_CharUsedArr;
@@ -7434,7 +7475,10 @@ DWORD CEditView::DoGrep(
 	nWork = pcmGrepKey->GetLength(); // 2003.06.10 Moca あらかじめ長さを計算しておく
 
 	/* 最後にテキストを追加 */
-	cmemMessage.AppendSz( "\r\n□検索条件  " );
+	// LMP: Added
+	::LoadString( m_hInstance, STR_ERR_DLGEDITVW12, _pszLabel, 255 );  // LMP: Added
+
+	cmemMessage.AppendSz( _pszLabel ) ; // "\r\n□検索条件  " );
 	if( 0 < nWork ){
 		CMemory cmemWork2;
 		cmemWork2.SetData( pcmGrepKey );
@@ -7450,13 +7494,18 @@ DWORD CEditView::DoGrep(
 		cmemWork.Append( &cmemWork2 );
 		cmemWork.AppendSz( "\"\r\n" );
 	}else{
-		cmemWork.AppendSz( "「ファイル検索」\r\n" );
+		// LMP: Added
+		::LoadString( m_hInstance, STR_ERR_DLGEDITVW13, _pszLabel, 255 );  // LMP: Added
+		cmemWork.AppendSz( _pszLabel ) ; // "「ファイル検索」\r\n" );
 	}
 	cmemMessage += cmemWork;
 
 
 
-	cmemMessage.AppendSz( "検索対象   " );
+	// LMP: Added
+	::LoadString( m_hInstance, STR_ERR_DLGEDITVW14, _pszLabel, 255 );  // LMP: Added
+
+	cmemMessage.AppendSz( _pszLabel ) ; // "検索対象   " );
 	if( m_pcEditDoc->GetDocumentAttribute().m_nStringType == 0 ){	/* 文字列区切り記号エスケープ方法  0=[\"][\'] 1=[""][''] */
 	}else{
 	}
@@ -7466,7 +7515,10 @@ DWORD CEditView::DoGrep(
 
 
 	cmemMessage.AppendSz( "\r\n" );
-	cmemMessage.AppendSz( "フォルダ   " );
+
+	::LoadString( m_hInstance, STR_ERR_DLGEDITVW15, _pszLabel, 255 );  // LMP: Added
+	cmemMessage.AppendSz( _pszLabel ) ; //"フォルダ   " );
+
 	cmemWork.SetDataSz( szPath );
 	if( m_pcEditDoc->GetDocumentAttribute().m_nStringType == 0 ){	/* 文字列区切り記号エスケープ方法  0=[\"][\'] 1=[""][''] */
 	}else{
@@ -7475,37 +7527,45 @@ DWORD CEditView::DoGrep(
 	cmemMessage.AppendSz( "\r\n" );
 
 	if( bGrepSubFolder ){
-		pszWork = "    (サブフォルダも検索)\r\n";
+		::LoadString( m_hInstance, STR_ERR_DLGEDITVW16, _pszLabel, 255 );  // LMP: Added
+		// pszWork = "    (サブフォルダも検索)\r\n";
 	}else{
-		pszWork = "    (サブフォルダを検索しない)\r\n";
+		::LoadString( m_hInstance, STR_ERR_DLGEDITVW17, _pszLabel, 255 );  // LMP: Added
+		// pszWork = "    (サブフォルダを検索しない)\r\n";
 	}
-	cmemMessage.AppendSz( pszWork );
+	cmemMessage.AppendSz( _pszLabel ) ;// pszWork );
 
 	if( 0 < nWork ){ // 2003.06.10 Moca ファイル検索の場合は表示しない // 2004.09.26 条件誤り修正
 		if( bWordOnly ){
 		/* 単語単位で探す */
-			cmemMessage.AppendSz( "    (単語単位で探す)\r\n" );
+			::LoadString( m_hInstance, STR_ERR_DLGEDITVW18, _pszLabel, 255 );  // LMP: Added
+			cmemMessage.AppendSz( _pszLabel ) ; // "    (単語単位で探す)\r\n" );
 		}
 
 		if( bGrepLoHiCase ){
-			pszWork = "    (英大文字小文字を区別する)\r\n";
+			::LoadString( m_hInstance, STR_ERR_DLGEDITVW19, _pszLabel, 255 );  // LMP: Added
+			// pszWork = "    (英大文字小文字を区別する)\r\n";
 		}else{
-			pszWork = "    (英大文字小文字を区別しない)\r\n";
+			::LoadString( m_hInstance, STR_ERR_DLGEDITVW20, _pszLabel, 255 );  // LMP: Added
+			// pszWork = "    (英大文字小文字を区別しない)\r\n";
 		}
-		cmemMessage.AppendSz( pszWork );
+		cmemMessage.AppendSz( _pszLabel ) ; // pszWork );
 
 		if( bGrepRegularExp ){
 			//	2007.07.22 genta : 正規表現ライブラリのバージョンも出力する
-			cmemMessage.AppendSz( "    (正規表現:" );
+			::LoadString( m_hInstance, STR_ERR_DLGEDITVW21, _pszLabel, 255 );  // LMP: Added
+			cmemMessage.AppendSz( _pszLabel ) ; // "    (正規表現:" );
 			cmemMessage.AppendSz( cRegexp.GetVersion() );
 			cmemMessage.AppendSz( ")\r\n" );
 		}
 	}
 
 	if( CODE_AUTODETECT == nGrepCharSet ){
-		cmemMessage.AppendSz( "    (文字コードセットの自動判別)\r\n" );
+		::LoadString( m_hInstance, STR_ERR_DLGEDITVW22, _pszLabel, 255 );  // LMP: Added
+		cmemMessage.AppendSz( _pszLabel ) ; // "    (文字コードセットの自動判別)\r\n" );
 	}else if( 0 <= nGrepCharSet && nGrepCharSet < CODE_CODEMAX ){
-		cmemMessage.AppendSz( "    (文字コードセット：" );
+		::LoadString( m_hInstance, STR_ERR_DLGEDITVW23, _pszLabel, 255 );  // LMP: Added
+		cmemMessage.AppendSz( _pszLabel ) ; // "    (文字コードセット：" );
 		cmemMessage.AppendSz( gm_pszCodeNameArr_1[nGrepCharSet] );
 		cmemMessage.AppendSz( ")\r\n" );
 	}
@@ -7513,11 +7573,13 @@ DWORD CEditView::DoGrep(
 	if( 0 < nWork ){ // 2003.06.10 Moca ファイル検索の場合は表示しない // 2004.09.26 条件誤り修正
 		if( bGrepOutputLine ){
 		/* 該当行 */
-			pszWork = "    (一致した行を出力)\r\n";
+			::LoadString( m_hInstance, STR_ERR_DLGEDITVW24, _pszLabel, 255 );  // LMP: Added
+			// pszWork = "    (一致した行を出力)\r\n";
 		}else{
-			pszWork = "    (一致した箇所のみ出力)\r\n";
+			::LoadString( m_hInstance, STR_ERR_DLGEDITVW25, _pszLabel, 255 );  // LMP: Added
+			// pszWork = "    (一致した箇所のみ出力)\r\n";
 		}
-		cmemMessage.AppendSz( pszWork );
+		cmemMessage.AppendSz( _pszLabel ) ; // pszWork );
 	}
 
 
@@ -7549,10 +7611,12 @@ DWORD CEditView::DoGrep(
 		bGrepRegularExp, nGrepCharSet,
 		bGrepOutputLine, bWordOnly, nGrepOutputStyle, &cRegexp, 0, &nHitCount
 	) ){
-		wsprintf( szPath, "中断しました。\r\n", nHitCount );
+		::LoadString( m_hInstance, STR_ERR_DLGEDITVW26, _pszLabel, 255 );  // LMP: Added
+		wsprintf( szPath, _pszLabel /*"中断しました。\r\n"*/, nHitCount );  // LMP: FIXME : Why is nHitCount here?
 		Command_ADDTAIL( szPath, lstrlen( szPath ) );
 	}
-	wsprintf( szPath, "%d 個が検索されました。\r\n", nHitCount );
+	::LoadString( m_hInstance, STR_ERR_DLGEDITVW27, _pszLabel, 255 );  // LMP: Added
+	wsprintf( szPath, _pszLabel /*"%d 個が検索されました。\r\n"*/, nHitCount );
 	Command_ADDTAIL( szPath, lstrlen( szPath ) );
 //	Command_GOFILEEND( FALSE );
 #ifdef _DEBUG
@@ -8235,6 +8299,10 @@ int CEditView::DoGrepFile(
 
 	int	nKeyKen = lstrlen( pszKey );
 
+	// LMP: Added
+	char _pszLabel[257];
+
+
 	//	ここでは正規表現コンパイルデータの初期化は不要
 
 	pszCodeName = "";
@@ -8260,7 +8328,8 @@ int CEditView::DoGrepFile(
 			wsprintf( szWork0, "%s%s\r\n", pszFullPath, pszCodeName );
 		}else{
 		/* WZ風 */
-			wsprintf( szWork0, "■\"%s\"%s\r\n", pszFullPath, pszCodeName );
+			::LoadString( m_hInstance, STR_ERR_DLGEDITVW28, _pszLabel, 255 );  // LMP: Added
+			wsprintf( szWork0, _pszLabel /*"■\"%s\"%s\r\n"*/, pszFullPath, pszCodeName );
 		}
 		cmemMessage.AppendSz( szWork0 );
 		++(*pnHitCount);
@@ -8277,7 +8346,9 @@ int CEditView::DoGrepFile(
 	if( CODE_AUTODETECT == nGrepCharSet ){
 		pszCodeName = gm_pszCodeNameArr_3[nCharCode];
 	}
-	wsprintf( szWork0, "■\"%s\"%s\r\n", pszFullPath, pszCodeName );
+
+	::LoadString( m_hInstance, STR_ERR_DLGEDITVW28, _pszLabel, 255 );  // LMP: Added
+	wsprintf( szWork0, _pszLabel/*"■\"%s\"%s\r\n"*/, pszFullPath, pszCodeName );
 //	/* 処理中のユーザー操作を可能にする */
 	if( !::BlockingHook( pcDlgCancel->m_hWnd ) ){
 		return -1;
@@ -8506,7 +8577,8 @@ int CEditView::DoGrepFile(
 		return 0;
 	}
 	catch( CError_FileRead ){
-		wsprintf( szWork, "CEditView::DoGrepFile() ファイルの読み込み中にエラーが発生しました。\r\n");
+		::LoadString( m_hInstance, STR_ERR_DLGEDITVW29, _pszLabel, 255 );  // LMP: Added
+		wsprintf( szWork, _pszLabel ) ; // "CEditView::DoGrepFile() ファイルの読み込み中にエラーが発生しました。\r\n");
 		Command_ADDTAIL( szWork, lstrlen( szWork ) );
 	} // 例外処理終わり
 
@@ -9497,6 +9569,9 @@ STDMETHODIMP CEditView::PostMyDropFiles( LPDATAOBJECT pDataObject )
 */
 void CEditView::OnMyDropFiles( HDROP hDrop )
 {
+	// LMP: Added
+	char _pszLabel[257];
+
 	// 普通にメニュー操作ができるように入力状態をフォアグランドウィンドウにアタッチする
 	int nTid2 = ::GetWindowThreadProcessId( ::GetForegroundWindow(), NULL );
 	int nTid1 = ::GetCurrentThreadId();
@@ -9512,12 +9587,22 @@ void CEditView::OnMyDropFiles( HDROP hDrop )
 	RECT rcWork;
 	GetMonitorWorkRect( pt, &rcWork );	// モニタのワークエリア
 	HMENU hMenu = ::CreatePopupMenu();
-	::InsertMenu( hMenu, 0, MF_BYPOSITION | MF_STRING, 100, _T("パス名貼り付け(&P)") );
-	::InsertMenu( hMenu, 1, MF_BYPOSITION | MF_STRING, 101, _T("ファイル名貼り付け(&F)") );
+
+	::LoadString( m_hInstance, STR_ERR_DLGEDITVW30, _pszLabel, 255 );  // LMP: Added
+	::InsertMenu( hMenu, 0, MF_BYPOSITION | MF_STRING, 100, _pszLabel ); // _T("パス名貼り付け(&P)") );
+
+	::LoadString( m_hInstance, STR_ERR_DLGEDITVW31, _pszLabel, 255 );  // LMP: Added
+	::InsertMenu( hMenu, 1, MF_BYPOSITION | MF_STRING, 101, _pszLabel ); // _T("ファイル名貼り付け(&F)") );
+
 	::InsertMenu( hMenu, 2, MF_BYPOSITION | MF_SEPARATOR, 0, NULL);	// セパレータ
-	::InsertMenu( hMenu, 3, MF_BYPOSITION | MF_STRING, 110, _T("ファイルを開く(&O)") );
+
+	::LoadString( m_hInstance, STR_ERR_DLGEDITVW32, _pszLabel, 255 );  // LMP: Added
+	::InsertMenu( hMenu, 3, MF_BYPOSITION | MF_STRING, 110, _pszLabel ); // _T("ファイルを開く(&O)") );
+
 	::InsertMenu( hMenu, 4, MF_BYPOSITION | MF_SEPARATOR, 0, NULL);	// セパレータ
-	::InsertMenu( hMenu, 5, MF_BYPOSITION | MF_STRING, IDCANCEL, _T("キャンセル") );
+
+	::LoadString( m_hInstance, STR_ERR_DLGEDITVW33, _pszLabel, 255 );  // LMP: Added
+	::InsertMenu( hMenu, 5, MF_BYPOSITION | MF_STRING, IDCANCEL, _pszLabel ); // _T("キャンセル") );
 	int nId = ::TrackPopupMenu( hMenu, TPM_LEFTALIGN | TPM_TOPALIGN | TPM_LEFTBUTTON | TPM_RETURNCMD,
 									( pt.x > rcWork.left )? pt.x: rcWork.left,
 									( pt.y < rcWork.bottom )? pt.y: rcWork.bottom,
@@ -10127,7 +10212,11 @@ void CEditView::ExecCmd( const char* pszCmd, const int nFlgOpt )
 				( bGetStdout ? "/C " : "/K " ), pszCmd );
 		if( CreateProcess( NULL, cmdline, NULL, NULL, TRUE,
 					CREATE_NEW_CONSOLE, NULL, NULL, &sui, &pi ) == FALSE ) {
-			MessageBox( NULL, cmdline, "コマンド実行は失敗しました。", MB_OK | MB_ICONEXCLAMATION );
+
+			// LMP: Added
+			char _pszLabel[257];
+			::LoadString( m_hInstance, STR_ERR_DLGEDITVW34, _pszLabel, 255 );  // LMP: Added
+			MessageBox( NULL, cmdline, _pszLabel /*"コマンド実行は失敗しました。"*/, MB_OK | MB_ICONEXCLAMATION );
 			goto finish;
 		}
 	}
@@ -10204,8 +10293,13 @@ void CEditView::ExecCmd( const char* pszCmd, const int nFlgOpt )
 				::TerminateProcess( pi.hProcess, 0 );
 				if (FALSE==bToEditWindow) {	//	2006.12.03 maru アウトプットウィンドウにのみ出力
 					//最後にテキストを追加
-					const char* pszText = "\r\n中断しました。\r\n";
-					CShareData::getInstance()->TraceOut( "%s", pszText );
+					//const char* pszText = "\r\n中断しました。\r\n";
+
+					// LMP: Added
+					char _pszLabel[257];
+					::LoadString( m_hInstance, STR_ERR_DLGEDITVW35, _pszLabel, 255 );  // LMP: Added
+
+					CShareData::getInstance()->TraceOut( "%s", _pszLabel ) ; //pszText );
 				}
 				break;
 			}
@@ -10297,7 +10391,11 @@ void CEditView::ExecCmd( const char* pszCmd, const int nFlgOpt )
 			//	Jun. 04, 2003 genta	終了コードの取得と出力
 			DWORD result;
 			::GetExitCodeProcess( pi.hProcess, &result );
-			CShareData::getInstance()->TraceOut( "\r\n終了コード: %d\r\n", result );
+
+			// LMP: Added
+			char _pszLabel[257];
+			::LoadString( m_hInstance, STR_ERR_DLGEDITVW36, _pszLabel, 255 );  // LMP: Added
+			CShareData::getInstance()->TraceOut( _pszLabel /*"\r\n終了コード: %d\r\n"*/, result );
 
 			// 2004.09.20 naoh 終了コードが1以上の時はアウトプットをアクティブにする
 			if(result > 0) ActivateFrameWindow( m_pShareData->m_hwndDebug );

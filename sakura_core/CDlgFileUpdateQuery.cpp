@@ -29,6 +29,7 @@
 		3. This notice may not be removed or altered from any source
 		   distribution.
 */
+/* LMP (Lucien Murray-Pitts) : 2011-02-26 Added Basic English Translation Resources */
 
 #include "stdafx.h"
 #include "CDlgFileUpdateQuery.h"
@@ -36,9 +37,16 @@
 
 BOOL CDlgFileUpdateQuery::OnInitDialog( HWND hWnd, WPARAM wParam, LPARAM lParam )
 {
+	// LMP: Added
+	char _pszLabel[257];
+	if( m_bModified )
+		::LoadString( m_hInstance, STR_ERR_DLGUPQRY1, _pszLabel, 255 );  // LMP: Added
+	else
+		::LoadString( m_hInstance, STR_ERR_DLGUPQRY2, _pszLabel, 255 );  // LMP: Added
+
 	::SetDlgItemText( hWnd, IDC_UPDATEDFILENAME, m_pFilename );
-	::SetDlgItemText( hWnd, IDC_QUERYRELOADMSG, m_bModified ?
-		"再ロードを行うと変更が失われますがよろしいですか?":"再ロードしますか?" );
+	::SetDlgItemText( hWnd, IDC_QUERYRELOADMSG, _pszLabel ) ; 
+		//m_bModified ? "再ロードを行うと変更が失われますがよろしいですか?":"再ロードしますか?" );
 
 	return CDialog::OnInitDialog( hWnd, wParam, lParam );
 }

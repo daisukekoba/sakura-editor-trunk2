@@ -28,6 +28,7 @@
 		3. This notice may not be removed or altered from any source
 		   distribution.
 */
+/* LMP (Lucien Murray-Pitts) : 2011-02-26 Added Basic English Translation Resources */
 
 #include "stdafx.h"
 #include "sakura_rc.h"
@@ -90,9 +91,17 @@ BOOL CDlgWinSize::OnInitDialog( HWND hwndDlg, WPARAM wParam, LPARAM lParam )
 {
 	m_hWnd = hwndDlg;
 
-	::SendMessage( ::GetDlgItem( m_hWnd, IDC_COMBO_WINTYPE ), CB_ADDSTRING, 0, (LPARAM)_T("ïÅí ") );
-	::SendMessage( ::GetDlgItem( m_hWnd, IDC_COMBO_WINTYPE ), CB_ADDSTRING, 0, (LPARAM)_T("ç≈ëÂâª") );
-	::SendMessage( ::GetDlgItem( m_hWnd, IDC_COMBO_WINTYPE ), CB_ADDSTRING, 0, (LPARAM)_T("(ç≈è¨âª)") );
+	// LMP: Added
+	char _pszLabel[257];
+
+	::LoadString( m_hInstance, STR_ERR_DLGWINSZ1, _pszLabel, 255 );  // LMP: Added
+	::SendMessage( ::GetDlgItem( m_hWnd, IDC_COMBO_WINTYPE ), CB_ADDSTRING, 0, (LPARAM)_pszLabel ) ; //(LPARAM)_T("ïÅí ") );
+
+	::LoadString( m_hInstance, STR_ERR_DLGWINSZ2, _pszLabel, 255 );  // LMP: Added
+	::SendMessage( ::GetDlgItem( m_hWnd, IDC_COMBO_WINTYPE ), CB_ADDSTRING, 0, (LPARAM)_pszLabel ) ; //(LPARAM)_T("ç≈ëÂâª") );
+
+	::LoadString( m_hInstance, STR_ERR_DLGWINSZ3, _pszLabel, 255 );  // LMP: Added
+	::SendMessage( ::GetDlgItem( m_hWnd, IDC_COMBO_WINTYPE ), CB_ADDSTRING, 0, (LPARAM)_pszLabel ) ; //(LPARAM)_T("(ç≈è¨âª)") );
 
 	LPARAM range = (LPARAM) MAKELONG((short) 30000, (short) 0 );
 	::SendMessage( ::GetDlgItem( m_hWnd, IDC_SPIN_SX ), UDM_SETRANGE, 0, range );

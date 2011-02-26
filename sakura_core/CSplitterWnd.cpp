@@ -14,6 +14,8 @@
 	This source code is designed for sakura editor.
 	Please contact the copyright holder to use this code for other purpose.
 */
+/* LMP (Lucien Murray-Pitts) : 2011-02-26 Added Basic English Translation Resources */
+
 #include "stdafx.h"
 #include "CSplitterWnd.h"
 #include "CSplitBoxWnd.h"
@@ -82,8 +84,11 @@ HWND CSplitterWnd::Create( HINSTANCE hInstance, HWND hwndParent, void* pCEditWnd
 		m_pszClassName// Pointer to a null-terminated string or is an atom.
 	);
 	if( 0 == atWork ){
+		char _pszLabel[257];
+		::LoadString( m_hInstance, STR_ERR_CSPLITTER01, _pszLabel, 255 );  // LMP: Added
+
 		::MYMESSAGEBOX( NULL, MB_OK | MB_ICONSTOP, GSTR_APPNAME,
-			_T("SplitterWndÉNÉâÉXÇÃìoò^Ç…é∏îsÇµÇ‹ÇµÇΩÅB")
+			_pszLabel // _T("SplitterWndÉNÉâÉXÇÃìoò^Ç…é∏îsÇµÇ‹ÇµÇΩÅB")
 		);
 	}
 

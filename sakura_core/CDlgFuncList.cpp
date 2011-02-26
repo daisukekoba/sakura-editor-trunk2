@@ -20,6 +20,7 @@
 	This source code is designed for sakura editor.
 	Please contact the copyright holder to use this code for other purpose.
 */
+/* LMP (Lucien Murray-Pitts) : 2011-02-26 Added Basic English Translation Resources */
 
 #include "stdafx.h"
 #include <windows.h>
@@ -206,6 +207,11 @@ void CDlgFuncList::SetData( void/*HWND hwndDlg*/ )
 	int				nFuncLineOld;
 	int				nSelectedLine;
 	RECT			rc;
+
+	// LMP: Added
+	char _pszLabel[257];
+
+
 	hwndList = ::GetDlgItem( m_hWnd, IDC_LIST1 );
 	hwndTree = ::GetDlgItem( m_hWnd, IDC_TREE1 );
 
@@ -229,18 +235,21 @@ void CDlgFuncList::SetData( void/*HWND hwndDlg*/ )
 
 		SetTreeJava( m_hWnd, TRUE );
 
-		::SetWindowText( m_hWnd, "C++ メソッドツリー" );
+		::LoadString( m_hInstance, STR_ERR_DLGFNCLST1, _pszLabel, 255 );  // LMP: Added
+		::SetWindowText( m_hWnd, _pszLabel ) ; // "C++ メソッドツリー" );
 	}else
 	if( OUTLINE_FILE == m_nListType ){	//@@@ 2002.04.01 YAZAKI アウトライン解析にルールファイル導入
 		m_nViewType = 1;
 		SetTree();
-		::SetWindowText( m_hWnd, "ルールファイル" );
+		::LoadString( m_hInstance, STR_ERR_DLGFNCLST2, _pszLabel, 255 );  // LMP: Added
+		::SetWindowText( m_hWnd, _pszLabel ) ; //"ルールファイル" );
 	}else
 	if( OUTLINE_WZTXT == m_nListType ){ //@@@ 2003.05.20 zenryaku 階層付テキストアウトライン解析
 		m_nViewType = 1;
 		SetTree();
 		//	2003.06.22 Moca 名前変更
-		::SetWindowText( m_hWnd, "WZ階層付テキスト" );
+		::LoadString( m_hInstance, STR_ERR_DLGFNCLST3, _pszLabel, 255 );  // LMP: Added
+		::SetWindowText( m_hWnd, _pszLabel );//"WZ階層付テキスト" );
 	}else
 	if( OUTLINE_HTML == m_nListType ){ //@@@ 2003.05.20 zenryaku HTMLアウトライン解析
 		m_nViewType = 1;
@@ -261,7 +270,8 @@ void CDlgFuncList::SetData( void/*HWND hwndDlg*/ )
 		/* ツリーコントロールの初期化：テキストトピックツリー */
 //		SetTreeTxt();
 		SetTree();	//@@@ 2002.04.01 YAZAKI テキストトピックツリーも、汎用SetTreeを呼ぶように変更。
-		::SetWindowText( m_hWnd, "テキスト トピックツリー" );
+		::LoadString( m_hInstance, STR_ERR_DLGFNCLST4, _pszLabel, 255 );  // LMP: Added
+		::SetWindowText( m_hWnd, _pszLabel );//"テキスト トピックツリー" );
 	}else
 	if( OUTLINE_JAVA == m_nListType ){ /* Javaメソッドツリー */
 		//	May 18, 2001 genta
@@ -271,13 +281,15 @@ void CDlgFuncList::SetData( void/*HWND hwndDlg*/ )
 		m_nViewType = 1;
 		/* ツリーコントロールの初期化：Javaメソッドツリー */
 		SetTreeJava( m_hWnd, TRUE );
-		::SetWindowText( m_hWnd, "Java メソッドツリー" );
+		::LoadString( m_hInstance, STR_ERR_DLGFNCLST4_1, _pszLabel, 255 );  // LMP: Added
+		::SetWindowText( m_hWnd, _pszLabel ) ; //"Java メソッドツリー" );
 	}else
 	//	2007.02.08 genta Python追加
 	if( OUTLINE_PYTHON == m_nListType ){ /* Python メソッドツリー */
 		m_nViewType = 1;
 		SetTree( true );
-		::SetWindowText( m_hWnd, "Python メソッドツリー" );
+		::LoadString( m_hInstance, STR_ERR_DLGFNCLST5, _pszLabel, 255 );  // LMP: Added
+		::SetWindowText( m_hWnd, _pszLabel ); //"Python メソッドツリー" );
 	}else
 	if( OUTLINE_COBOL == m_nListType ){ /* COBOL アウトライン */
 		//	May 18, 2001 genta
@@ -287,28 +299,34 @@ void CDlgFuncList::SetData( void/*HWND hwndDlg*/ )
 		m_nViewType = 1;
 		/* ツリーコントロールの初期化：COBOL アウトライン */
 		SetTreeJava( m_hWnd, FALSE );
-		::SetWindowText( m_hWnd, "COBOL アウトライン" );
+		::LoadString( m_hInstance, STR_ERR_DLGFNCLST6, _pszLabel, 255 );  // LMP: Added
+		::SetWindowText( m_hWnd, _pszLabel ); //"COBOL アウトライン" );
 	}else
 	if( OUTLINE_VB == m_nListType ){	/* VisualBasic アウトライン */
 		// Jul 10, 2003  little YOSHI   処理が長くなったので独立
 		m_nViewType = 0;
 		/* リストビューコントロールの初期化：Visual Basic アウトライン */
 		SetListVB();
-		::SetWindowText( m_hWnd, "Visual Basic アウトライン" );
+		::LoadString( m_hInstance, STR_ERR_DLGFNCLST7, _pszLabel, 255 );  // LMP: Added
+		::SetWindowText( m_hWnd, _pszLabel ) ; // "Visual Basic アウトライン" );
 	}else{
 		m_nViewType = 0;
 		switch( m_nListType ){
 		case OUTLINE_C:
-			::SetWindowText( m_hWnd, "C 関数一覧" );
+			::LoadString( m_hInstance, STR_ERR_DLGFNCLST8, _pszLabel, 255 );  // LMP: Added
+			::SetWindowText( m_hWnd, _pszLabel); //"C 関数一覧" );
 			break;
 		case OUTLINE_PLSQL:
-			::SetWindowText( m_hWnd, "PL/SQL 関数一覧" );
+			::LoadString( m_hInstance, STR_ERR_DLGFNCLST9, _pszLabel, 255 );  // LMP: Added
+			::SetWindowText( m_hWnd, _pszLabel); //"PL/SQL 関数一覧" );
 			break;
 		case OUTLINE_ASM:
-			::SetWindowText( m_hWnd, "アセンブラ アウトライン" );
+			::LoadString( m_hInstance, STR_ERR_DLGFNCLST10, _pszLabel, 255 );  // LMP: Added
+			::SetWindowText( m_hWnd, _pszLabel); //"アセンブラ アウトライン" );
 			break;
 		case OUTLINE_PERL:	//	Sep. 8, 2000 genta
-			::SetWindowText( m_hWnd, "Perl 関数一覧" );
+			::LoadString( m_hInstance, STR_ERR_DLGFNCLST11, _pszLabel, 255 );  // LMP: Added
+			::SetWindowText( m_hWnd, _pszLabel); //"Perl 関数一覧" );
 			break;
 // Jul 10, 2003  little YOSHI  上に移動しました--->>
 //		case OUTLINE_VB:	// 2001/06/23 N.Nakatani for Visual Basic
@@ -316,16 +334,21 @@ void CDlgFuncList::SetData( void/*HWND hwndDlg*/ )
 //			break;
 // <<---ここまで
 		case OUTLINE_ERLANG:	//	2009.08.11 genta
-			::SetWindowText( m_hWnd, "Erlang 関数一覧" );
+			::LoadString( m_hInstance, STR_ERR_DLGFNCLST57, _pszLabel, 255 );  // LMP: Added
+			::SetWindowText( m_hWnd, _pszLabel); //"Erlang 関数一覧" );
 			break;
 		case OUTLINE_BOOKMARK:
 			LV_COLUMN col;
 			col.mask = LVCF_TEXT;
-			col.pszText = "テキスト";
+
+			::LoadString( m_hInstance, STR_ERR_DLGFNCLST12, _pszLabel, 255 );  // LMP: Added
+			col.pszText = _pszLabel ; //"テキスト";
 			col.iSubItem = 0;
 			//	Apr. 23, 2005 genta 行番号を左端へ
 			ListView_SetColumn( hwndList, 1, &col );
-			::SetWindowText( m_hWnd, "ブックマーク" );
+
+			::LoadString( m_hInstance, STR_ERR_DLGFNCLST13, _pszLabel, 255 );  // LMP: Added
+			::SetWindowText( m_hWnd, _pszLabel); //"ブックマーク" );
 			break;
 //		case OUTLINE_COBOL:
 //			::SetWindowText( m_hWnd, "COBOLアウトライン" );
@@ -381,17 +404,31 @@ void CDlgFuncList::SetData( void/*HWND hwndDlg*/ )
 			ListView_SetItem( hwndList, &item);
 			//	To Here Apr. 23, 2005 genta 行番号を左端へ
 
+			// Added Luc
+			static char _pszLabel[10][257] ;
+			::LoadString( m_hInstance, STR_ERR_DLGFNCLST14, _pszLabel[0], 255 );  // LMP: Added
+			::LoadString( m_hInstance, STR_ERR_DLGFNCLST15, _pszLabel[1], 255 );  // LMP: Added
+			::LoadString( m_hInstance, STR_ERR_DLGFNCLST16, _pszLabel[2], 255 );  // LMP: Added
+			::LoadString( m_hInstance, STR_ERR_DLGFNCLST17, _pszLabel[3], 255 );  // LMP: Added
+			::LoadString( m_hInstance, STR_ERR_DLGFNCLST18, _pszLabel[4], 255 );  // LMP: Added
+			::LoadString( m_hInstance, STR_ERR_DLGFNCLST19, _pszLabel[5], 255 );  // LMP: Added
+			::LoadString( m_hInstance, STR_ERR_DLGFNCLST20, _pszLabel[6], 255 );  // LMP: Added
+			::LoadString( m_hInstance, STR_ERR_DLGFNCLST21, _pszLabel[7], 255 );  // LMP: Added
+			::LoadString( m_hInstance, STR_ERR_DLGFNCLST22, _pszLabel[8], 255 );  // LMP: Added
+			::LoadString( m_hInstance, STR_ERR_DLGFNCLST23, _pszLabel[9], 255 );  // LMP: Added
+
+
 			item.mask = LVIF_TEXT;
-			if(  1 == pcFuncInfo->m_nInfo ){item.pszText = "宣言";}else
-			if( 10 == pcFuncInfo->m_nInfo ){item.pszText = "関数宣言";}else
-			if( 20 == pcFuncInfo->m_nInfo ){item.pszText = "プロシージャ宣言";}else
-			if( 11 == pcFuncInfo->m_nInfo ){item.pszText = "関数";}else
-			if( 21 == pcFuncInfo->m_nInfo ){item.pszText = "プロシージャ";}else
-			if( 31 == pcFuncInfo->m_nInfo ){item.pszText = "■パッケージ仕様部";}else
-			if( 41 == pcFuncInfo->m_nInfo ){item.pszText = "■パッケージ本体部";}else
-			if( 50 == pcFuncInfo->m_nInfo ){item.pszText = "PROC";}else
-			if( 51 == pcFuncInfo->m_nInfo ){item.pszText = "ラベル";}else
-			if( 52 == pcFuncInfo->m_nInfo ){item.pszText = "ENDP";}else{
+			if(  1 == pcFuncInfo->m_nInfo ){item.pszText = _pszLabel[0];}else //"宣言";}else
+			if( 10 == pcFuncInfo->m_nInfo ){item.pszText = _pszLabel[1];}else //"関数宣言";}else
+			if( 20 == pcFuncInfo->m_nInfo ){item.pszText = _pszLabel[2];}else //"プロシージャ宣言";}else
+			if( 11 == pcFuncInfo->m_nInfo ){item.pszText = _pszLabel[3];}else //"関数";}else
+			if( 21 == pcFuncInfo->m_nInfo ){item.pszText = _pszLabel[4];}else //"プロシージャ";}else
+			if( 31 == pcFuncInfo->m_nInfo ){item.pszText = _pszLabel[5];}else //"■パッケージ仕様部";}else
+			if( 41 == pcFuncInfo->m_nInfo ){item.pszText = _pszLabel[6];}else //"■パッケージ本体部";}else
+			if( 50 == pcFuncInfo->m_nInfo ){item.pszText = _pszLabel[7];}else //"PROC";}else
+			if( 51 == pcFuncInfo->m_nInfo ){item.pszText = _pszLabel[8];}else //"ラベル";}else
+			if( 52 == pcFuncInfo->m_nInfo ){item.pszText = _pszLabel[9];}else{ //"ENDP";}else{
 				// Jul 10, 2003  little YOSHI
 				// ここにあったVB関係の処理はSetListVB()メソッドに移動しました。
 
@@ -483,8 +520,13 @@ void CDlgFuncList::SetData( void/*HWND hwndDlg*/ )
 		::EnableWindow( hWnd_Combo_Sort , TRUE );
 		::ShowWindow( hWnd_Combo_Sort , SW_SHOW );
 		::SendMessage( hWnd_Combo_Sort , CB_RESETCONTENT, 0, 0 ); // 2002.11.10 Moca 追加
-		::SendMessage( hWnd_Combo_Sort , CB_ADDSTRING, 0, (LPARAM)(_T("デフォルト")));
-		::SendMessage( hWnd_Combo_Sort , CB_ADDSTRING, 0, (LPARAM)(_T("アルファベット順")));
+
+		::LoadString( m_hInstance, STR_ERR_DLGFNCLST24, _pszLabel, 255 );  // LMP: Added
+		::SendMessage( hWnd_Combo_Sort , CB_ADDSTRING, 0, (LPARAM)_pszLabel ) ; // (LPARAM)(_T("デフォルト")));
+
+		::LoadString( m_hInstance, STR_ERR_DLGFNCLST25, _pszLabel, 255 );  // LMP: Added
+		::SendMessage( hWnd_Combo_Sort , CB_ADDSTRING, 0, (LPARAM)_pszLabel ) ; //(LPARAM)(_T("アルファベット順")));
+
 		::SendMessage( hWnd_Combo_Sort , CB_SETCURSEL, m_nSortType, 0L);
 		::ShowWindow( GetDlgItem( m_hWnd, IDC_STATIC_nSortType ), SW_SHOW );
 		// 2002.11.10 Moca 追加 ソートする
@@ -775,6 +817,9 @@ void CDlgFuncList::SetTreeJava( HWND hwndDlg, BOOL bAddClass )
 	int				nDummylParam = -64000;	// 2002.11.10 Moca クラス名のダミーlParam ソートのため
 	char			szClassArr[16][64];	// Jan. 04, 2001 genta クラス名エリアの拡大
 
+	// LMP: Added
+	char _pszLabel[257];
+
 	::EnableWindow( ::GetDlgItem( m_hWnd , IDC_BUTTON_COPY ), TRUE );
 
 	hwndTree = ::GetDlgItem( m_hWnd, IDC_TREE1 );
@@ -900,19 +945,22 @@ void CDlgFuncList::SetTreeJava( HWND hwndDlg, BOOL bAddClass )
 				/* クラス名のアイテムが登録されていないので登録 */
 				if( NULL == htiClass ){
 					// 2002/10/28 frozen 上からここへ移動
-					pClassName = new char[ lstrlen( szClassArr[k] ) + 1 + 9 ]; // 2002/10/28 frozen +9は追加する文字列の最大長（" 名前空間"が最大）
+					pClassName = new char[ lstrlen( szClassArr[k] ) + 1 + /*LMP: was 9, for ASCII needs bigger */ 16 ]; // 2002/10/28 frozen +9は追加する文字列の最大長（" 名前空間"が最大）
 					strcpy( pClassName, szClassArr[k] );
 
 					tvis.item.lParam = -1;
 					if( bAddClass )
 					{
+						::LoadString( m_hInstance, STR_ERR_DLGFNCLST26, _pszLabel, 255 );  // LMP: Added
 						if( pcFuncInfo->m_nInfo == 7 )
 						{
-							strcat( pClassName, " 名前空間" );
+							::LoadString( m_hInstance, STR_ERR_DLGFNCLST27, _pszLabel, 255 );  // LMP: Added
+
+							strcat( pClassName, _pszLabel );//" 名前空間" );
 							tvis.item.lParam = i;
 						}
 						else
-							strcat( pClassName, " クラス" );
+							strcat( pClassName, _pszLabel); //" クラス" );
 							tvis.item.lParam = nDummylParam;
 							nDummylParam++;
 					}
@@ -955,7 +1003,10 @@ void CDlgFuncList::SetTreeJava( HWND hwndDlg, BOOL bAddClass )
 					tvg.hParent = TVI_ROOT;
 					tvg.hInsertAfter = TVI_LAST;
 					tvg.item.mask = TVIF_TEXT | TVIF_PARAM;
-					tvg.item.pszText = "グローバル";
+
+
+					::LoadString( m_hInstance, STR_ERR_DLGFNCLST28, _pszLabel, 255 );  // LMP: Added
+					tvg.item.pszText = _pszLabel; //"グローバル";
 //					tvg.item.lParam = -1;
 					tvg.item.lParam = nDummylParam;
 					htiGlobal = TreeView_InsertItem( hwndTree, &tvg );
@@ -970,16 +1021,20 @@ void CDlgFuncList::SetTreeJava( HWND hwndDlg, BOOL bAddClass )
 		// 2002/10/27 frozen 追加文字列の種類を増やした
 		switch(pcFuncInfo->m_nInfo)
 		{// case 4以上の各追加文字列の最初にある半角スペースを省略することはできない。
-		case 1: strcat( pFuncName, "(宣言)" );break;
-		case 3: strcat( pFuncName, " クラス" );break;
-		case 4: strcat( pFuncName, " 構造体" );break;
-		case 5: strcat( pFuncName, " 列挙体" );break;
-		case 6: strcat( pFuncName, " 共用体" );break;
+		case 1: ::LoadString( m_hInstance, STR_ERR_DLGFNCLST29, _pszLabel, 255 );  break; // LMP: Added //strcat( pFuncName, "(宣言)" );break;
+		case 3: ::LoadString( m_hInstance, STR_ERR_DLGFNCLST30, _pszLabel, 255 );  break; // LMP: Added //strcat( pFuncName, " クラス" );break;
+		case 4: ::LoadString( m_hInstance, STR_ERR_DLGFNCLST31, _pszLabel, 255 );  break; // LMP: Added //strcat( pFuncName, " 構造体" );break;
+		case 5: ::LoadString( m_hInstance, STR_ERR_DLGFNCLST32, _pszLabel, 255 );  break; // LMP: Added //strcat( pFuncName, " 列挙体" );break;
+		case 6: ::LoadString( m_hInstance, STR_ERR_DLGFNCLST33, _pszLabel, 255 );  break; // LMP: Added //strcat( pFuncName, " 共用体" );break;
 //		case 7: strcat( pFuncName, " 名前空間" );break;
 		
-		case 8: strcat( pFuncName, " インターフェース" );break; // 2007.05.26 genta : "__interface"
+		case 8: ::LoadString( m_hInstance, STR_ERR_DLGFNCLST34, _pszLabel, 255 );  break; // LMP: Added //strcat( pFuncName, " インターフェース" );break; // 2007.05.26 genta : "__interface"
 		};
 //		}
+
+		// LMP: Added 
+		strcat( pFuncName, _pszLabel );
+
 		/* 該当クラス名のアイテムの子として、メソッドのアイテムを登録 */
 		tvis.hParent = htiClass;
 		tvis.hInsertAfter = TVI_LAST;
@@ -989,11 +1044,12 @@ void CDlgFuncList::SetTreeJava( HWND hwndDlg, BOOL bAddClass )
 		htiItem = TreeView_InsertItem( hwndTree, &tvis );
 
 		/* クリップボードにコピーするテキストを編集 */
+		::LoadString( m_hInstance, STR_ERR_DLGFNCLST29, _pszLabel, 255 );  // LMP: Added //"(宣言)" 
 		wsprintf( szText, "%s(%d): %s %s\r\n",
 			m_pcFuncInfoArr->m_szFilePath,				/* 解析対象ファイル名 */
 			pcFuncInfo->m_nFuncLineCRLF,				/* 検出行番号 */
 			pcFuncInfo->m_cmemFuncName.GetPtr(), 	/* 検出結果 */
-			( 1 == pcFuncInfo->m_nInfo ? "(宣言)" : "" ) 	//	Jan. 04, 2001 genta C++で使用
+			( 1 == pcFuncInfo->m_nInfo ? _pszLabel/*"(宣言)"*/ : "" ) 	//	Jan. 04, 2001 genta C++で使用
 		);
 		m_cmemClipText.AppendSz( (const char *)szText ); /* クリップボードコピー用テキスト */
 		delete [] pFuncName;
@@ -1058,6 +1114,9 @@ void CDlgFuncList::SetListVB (void)
 	int				nSelectedLine;
 	RECT			rc;
 
+	// LMP: Added
+	char _pszLabel[257];
+
 	::EnableWindow( ::GetDlgItem( m_hWnd , IDC_BUTTON_COPY ), TRUE );
 
 	hwndList = ::GetDlgItem( m_hWnd, IDC_LIST1 );
@@ -1117,56 +1176,70 @@ void CDlgFuncList::SetListVB (void)
 		if( 1 == ((pcFuncInfo->m_nInfo >> 8) & 0x01) ){
 			// スタティック宣言(Static)
 			// 2006.12.12 Moca 末尾にスペース追加
-			strcpy(szOption, "静的 ");
+			::LoadString( m_hInstance, STR_ERR_DLGFNCLST35, _pszLabel, 255 );  // LMP: Added
+
+			strcpy(szOption, _pszLabel);//"静的 ");
 		}
 		switch ((pcFuncInfo->m_nInfo >> 4) & 0x0f) {
 			case 2  :	// プライベート(Private)
-				strncat(szOption, "プライベート", sizeof(szOption) - strlen(szOption)); //	2006.12.17 genta サイズ誤り修正
+				::LoadString( m_hInstance, STR_ERR_DLGFNCLST36, _pszLabel, 255 );  // LMP: Added
+				strncat(szOption, _pszLabel/*"プライベート"*/, sizeof(szOption) - strlen(szOption)); //	2006.12.17 genta サイズ誤り修正
 				break;
 
 			case 3  :	// フレンド(Friend)
-				strncat(szOption, "フレンド", sizeof(szOption) - strlen(szOption)); //	2006.12.17 genta サイズ誤り修正
+				::LoadString( m_hInstance, STR_ERR_DLGFNCLST37, _pszLabel, 255 );  // LMP: Added
+				strncat(szOption, _pszLabel/*"フレンド"*/, sizeof(szOption) - strlen(szOption)); //	2006.12.17 genta サイズ誤り修正
 				break;
 
 			default :	// パブリック(Public)
-				strncat(szOption, "パブリック", sizeof(szOption) - strlen(szOption)); //	2006.12.17 genta サイズ誤り修正
+				::LoadString( m_hInstance, STR_ERR_DLGFNCLST38, _pszLabel, 255 );  // LMP: Added
+				strncat(szOption, _pszLabel/*"パブリック"*/, sizeof(szOption) - strlen(szOption)); //	2006.12.17 genta サイズ誤り修正
 		}
 		switch (pcFuncInfo->m_nInfo & 0x0f) {
 			case 1:		// 関数(Function)
-				strcpy(szType, "関数");
+				::LoadString( m_hInstance, STR_ERR_DLGFNCLST39, szType, 64 );  // LMP: Added
+				//strcpy(szType, "関数");
 				break;
 
 			// 2006.12.12 Moca ステータス→プロシージャに変更
 			case 2:		// プロシージャ(Sub)
-				strcpy(szType, "プロシージャ");
+				::LoadString( m_hInstance, STR_ERR_DLGFNCLST40, szType, 64 );  // LMP: Added
+				//strcpy(szType, "プロシージャ");
 				break;
 
 			case 3:		// プロパティ 取得(Property Get)
-				strcpy(szType, "プロパティ 取得");
+				::LoadString( m_hInstance, STR_ERR_DLGFNCLST41, szType, 64 );  // LMP: Added
+				//strcpy(szType, "プロパティ 取得");
 				break;
 
 			case 4:		// プロパティ 設定(Property Let)
-				strcpy(szType, "プロパティ 設定");
+				::LoadString( m_hInstance, STR_ERR_DLGFNCLST42, szType, 64 );  // LMP: Added
+				//strcpy(szType, "プロパティ 設定");
 				break;
 
 			case 5:		// プロパティ 参照(Property Set)
-				strcpy(szType, "プロパティ 参照");
+				::LoadString( m_hInstance, STR_ERR_DLGFNCLST43, szType, 64 );  // LMP: Added
+				//strcpy(szType, "プロパティ 参照");
 				break;
 
 			case 6:		// 定数(Const)
-				strcpy(szType, "定数");
+				::LoadString( m_hInstance, STR_ERR_DLGFNCLST44, szType, 64 );  // LMP: Added
+				//strcpy(szType, "定数");
 				break;
 
 			case 7:		// 列挙型(Enum)
-				strcpy(szType, "列挙型");
+				::LoadString( m_hInstance, STR_ERR_DLGFNCLST45, szType, 64 );  // LMP: Added
+				//strcpy(szType, "列挙型");
 				break;
 
 			case 8:		// ユーザ定義型(Type)
-				strcpy(szType, "ユーザ定義型");
+				::LoadString( m_hInstance, STR_ERR_DLGFNCLST46, szType, 64 );  // LMP: Added
+				//strcpy(szType, "ユーザ定義型");
 				break;
 
 			case 9:		// イベント(Event)
-				strcpy(szType, "イベント");
+				::LoadString( m_hInstance, STR_ERR_DLGFNCLST47, szType, 64 );  // LMP: Added
+				//strcpy(szType, "イベント");
 				break;
 
 			default:	// 未定義なのでクリア
@@ -1175,7 +1248,8 @@ void CDlgFuncList::SetListVB (void)
 		}
 		if ( 2 == ((pcFuncInfo->m_nInfo >> 8) & 0x02) ) {
 			// 宣言(Declareなど)
-			strncat(szType, "宣言", sizeof(szType) - strlen(szType));
+			::LoadString( m_hInstance, STR_ERR_DLGFNCLST48, _pszLabel, 255 );  // LMP: Added
+			strncat(szType, _pszLabel/*"宣言"*/, sizeof(szType) - strlen(szType));
 		}
 
 		if ( 0 == pcFuncInfo->m_nInfo ) {
@@ -1534,6 +1608,10 @@ BOOL CDlgFuncList::OnInitDialog( HWND hwndDlg, WPARAM wParam, LPARAM lParam )
 	int			nColWidthArr[3] = { 0, 46, 80 };
 	RECT		rc;
 	LV_COLUMN	col;
+
+	// LMP: Added
+	static char _pszLabel[2][257];
+
 	hwndList = ::GetDlgItem( hwndDlg, IDC_LIST1 );
 	// 2005.10.21 zenryaku 1行選択
 	SendMessage(hwndList, LVM_SETEXTENDEDLISTVIEWSTYLE, 0,
@@ -1546,7 +1624,8 @@ BOOL CDlgFuncList::OnInitDialog( HWND hwndDlg, WPARAM wParam, LPARAM lParam )
 	col.fmt = LVCFMT_LEFT;
 	col.cx = rc.right - rc.left - ( nColWidthArr[1] + nColWidthArr[2] ) - nCxVScroll - 8;
 	//	Apr. 23, 2005 genta 行番号を左端へ
-	col.pszText = "行 *";
+	::LoadString( m_hInstance, STR_ERR_DLGFNCLST49, _pszLabel[0], 255 );  // LMP: Added
+	col.pszText = _pszLabel[0];//"行 *";
 	col.iSubItem = 0;
 	ListView_InsertColumn( hwndList, 0, &col);
 
@@ -1554,7 +1633,8 @@ BOOL CDlgFuncList::OnInitDialog( HWND hwndDlg, WPARAM wParam, LPARAM lParam )
 	col.fmt = LVCFMT_LEFT;
 	col.cx = nColWidthArr[1];
 	//	Apr. 23, 2005 genta 行番号を左端へ
-	col.pszText = "関数名";
+	::LoadString( m_hInstance, STR_ERR_DLGFNCLST50, _pszLabel[1], 255 );  // LMP: Added
+	col.pszText = _pszLabel[1];//"関数名";
 	col.iSubItem = 1;
 	ListView_InsertColumn( hwndList, 1, &col);
 
@@ -1755,7 +1835,18 @@ BOOL CDlgFuncList::OnNotify( WPARAM wParam, LPARAM lParam )
 */
 void CDlgFuncList::SortListView(HWND hwndList, int sortcol)
 {
+	// LMP: Added
+	char _pszLabel[6][257];
+
 	LV_COLUMN		col;
+
+	::LoadString( m_hInstance, STR_ERR_DLGFNCLST51, _pszLabel[0], 255 );  // LMP: Added //"テキスト *"
+	::LoadString( m_hInstance, STR_ERR_DLGFNCLST52, _pszLabel[1], 255 );  // LMP: Added //"関数名 *"
+	::LoadString( m_hInstance, STR_ERR_DLGFNCLST53, _pszLabel[2], 255 );  // LMP: Added //"テキスト"
+	::LoadString( m_hInstance, STR_ERR_DLGFNCLST54, _pszLabel[3], 255 );  // LMP: Added //"関数名"
+	::LoadString( m_hInstance, STR_ERR_DLGFNCLST55, _pszLabel[4], 255 );  // LMP: Added //"行"
+	::LoadString( m_hInstance, STR_ERR_DLGFNCLST56, _pszLabel[5], 255 );  // LMP: Added //"行 *"
+
 
 	//	Apr. 23, 2005 genta 行番号を左端へ
 	if( sortcol == 1 ){
@@ -1763,15 +1854,15 @@ void CDlgFuncList::SortListView(HWND hwndList, int sortcol)
 	// From Here 2001.12.03 hor
 	//	col.pszText = "関数名 *";
 		if(OUTLINE_BOOKMARK == m_nListType){
-			col.pszText = "テキスト *";
+			col.pszText = _pszLabel[0];//"テキスト *";
 		}else{
-			col.pszText = "関数名 *";
+			col.pszText = _pszLabel[1];//"関数名 *";
 		}
 	// To Here 2001.12.03 hor
 		col.iSubItem = 0;
 		ListView_SetColumn( hwndList, 1, &col );
 		col.mask = LVCF_TEXT;
-		col.pszText = "行";
+		col.pszText = _pszLabel[4];//"行";
 		col.iSubItem = 0;
 		ListView_SetColumn( hwndList, 0, &col );
 	// From Here 2001.12.07 hor
@@ -1787,15 +1878,15 @@ void CDlgFuncList::SortListView(HWND hwndList, int sortcol)
 	// From Here 2001.12.03 hor
 	//	col.pszText = "関数名";
 		if(OUTLINE_BOOKMARK == m_nListType){
-			col.pszText = "テキスト";
+			col.pszText = _pszLabel[2];//"テキスト";
 		}else{
-			col.pszText = "関数名";
+			col.pszText = _pszLabel[3];//"関数名";
 		}
 	// To Here 2001.12.03 hor
 		col.iSubItem = 0;
 		ListView_SetColumn( hwndList, 1, &col );
 		col.mask = LVCF_TEXT;
-		col.pszText = "行 *";
+		col.pszText = _pszLabel[5];//"行 *";
 		col.iSubItem = 0;
 		ListView_SetColumn( hwndList, 0, &col );
 	// From Here 2001.12.07 hor
@@ -1810,14 +1901,14 @@ void CDlgFuncList::SortListView(HWND hwndList, int sortcol)
 	if( sortcol == 2 ){
 		col.mask = LVCF_TEXT;
 		if(OUTLINE_BOOKMARK == m_nListType){
-			col.pszText = "テキスト";
+			col.pszText = _pszLabel[2];//"テキスト";
 		}else{
-			col.pszText = "関数名";
+			col.pszText = _pszLabel[3];//"関数名";
 		}
 		col.iSubItem = 0;
 		ListView_SetColumn( hwndList, 1, &col );
 		col.mask = LVCF_TEXT;
-		col.pszText = "行";
+		col.pszText = _pszLabel[4];//"行";
 		col.iSubItem = 0;
 		ListView_SetColumn( hwndList, 0, &col );
 		col.mask = LVCF_TEXT;

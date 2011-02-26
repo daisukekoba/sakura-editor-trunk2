@@ -18,6 +18,7 @@
 	This source code is designed for sakura editor.
 	Please contact the copyright holder to use this code for other purpose.
 */
+/* LMP (Lucien Murray-Pitts) : 2011-02-26 Added Basic English Translation Resources */
 
 //	Sept. 14, 2000 Jepro note: functions & commands list
 //	キーワード：コマンド一覧順序

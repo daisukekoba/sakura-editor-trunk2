@@ -11,6 +11,8 @@
 	This source code is designed for sakura editor.
 	Please contact the copyright holder to use this code for other purpose.
 */
+/* LMP (Lucien Murray-Pitts) : 2011-02-26 Added Basic English Translation Resources */
+
 #include "stdafx.h"
 #include "CLineComment.h"
 #include "my_icmp.h" // 2002/11/30 Moca ’Ç‰Á

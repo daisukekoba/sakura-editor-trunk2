@@ -19,6 +19,7 @@
 	This source code is designed for sakura editor.
 	Please contact the copyright holder to use this code for other purpose.
 */
+/* LMP (Lucien Murray-Pitts) : 2011-02-26 Added Basic English Translation Resources */
 
 #include "stdafx.h"
 #include "funccode.h"
@@ -334,7 +335,12 @@ void CMacro::Save( HINSTANCE hInstance, HFILE hFile )
 	}
 #endif
 	}
-	wsprintf( szLine, "CMacro::GetFuncInfoByID()に、バグがあるのでエラーが出ましたぁぁぁぁぁぁあああ\r\n" );
+
+	// LMP: Added
+	char _pszLabel[257];
+	::LoadString( GetModuleHandle(NULL), STR_ERR_DLGMACRO1, _pszLabel, 255 );  // LMP: Added
+
+	wsprintf( szLine, _pszLabel ) ; // "CMacro::GetFuncInfoByID()に、バグがあるのでエラーが出ましたぁぁぁぁぁぁあああ\r\n" );
 	_lwrite( hFile, szLine, strlen( szLine ) );
 }
 
@@ -352,7 +358,13 @@ void CMacro::Save( HINSTANCE hInstance, HFILE hFile )
 */
 void CMacro::HandleCommand( CEditView* pcEditView, const int Index,	const char* Argument[], const int ArgSize )
 {
-	const char EXEC_ERROR_TITLE[] = "Macro実行エラー";
+	// const char EXEC_ERROR_TITLE[] = "Macro実行エラー";
+
+	// LMP: Added
+	static char EXEC_ERROR_TITLE[257] ;
+	char _pszLabel[257];
+	::LoadString( GetModuleHandle(NULL), STR_ERR_DLGMACRO2, EXEC_ERROR_TITLE, 255 );  // LMP: Added
+
 
 	switch ( LOWORD(Index) ) 
 	{
@@ -361,8 +373,10 @@ void CMacro::HandleCommand( CEditView* pcEditView, const int Index,	const char* 
 	case F_CHGMOD_EOL:	//	入力改行コード指定。enumEOLTypeの数値を指定。2003.06.23 Moca
 		//	Jun. 16, 2002 genta
 		if( Argument[0] == NULL ){
+			::LoadString( GetModuleHandle(NULL), STR_ERR_DLGMACRO3, _pszLabel, 255 );  // LMP: Added
+
 			::MYMESSAGEBOX( NULL, MB_OK | MB_ICONSTOP | MB_TOPMOST, EXEC_ERROR_TITLE,
-				_T(	"挿入すべき文字コードが指定されていません．" ));
+				_pszLabel ) ; // _T(	"挿入すべき文字コードが指定されていません．" ));
 			break;
 		}
 		/* NO BREAK */
@@ -377,8 +391,10 @@ void CMacro::HandleCommand( CEditView* pcEditView, const int Index,	const char* 
 		//	一つ目の引数が文字列。
 		//	ただし2つ目の引数は文字数。
 		if( Argument[0] == NULL ){
+			::LoadString( GetModuleHandle(NULL), STR_ERR_DLGMACRO4, _pszLabel, 255 );  // LMP: Added
+
 			::MYMESSAGEBOX( NULL, MB_OK | MB_ICONSTOP | MB_TOPMOST, EXEC_ERROR_TITLE,
-				_T(	"引数(文字列)が指定されていません．" ));
+				_pszLabel ) ; // _T(	"引数(文字列)が指定されていません．" ));
 			break;
 		}
 		{
@@ -397,8 +413,10 @@ void CMacro::HandleCommand( CEditView* pcEditView, const int Index,	const char* 
 		//		未定義	テキストの□行目をブロックの1行目とする
 		//		未定義	検出されたPL/SQLパッケージのブロックから選択
 		if( Argument[0] == NULL ){
+			::LoadString( GetModuleHandle(NULL), STR_ERR_DLGMACRO5, _pszLabel, 255 );  // LMP: Added
+
 			::MYMESSAGEBOX( NULL, MB_OK | MB_ICONSTOP | MB_TOPMOST, EXEC_ERROR_TITLE,
-				_T(	"ジャンプ先行番号が指定されていません．" ));
+				_pszLabel ) ; // _T(	"ジャンプ先行番号が指定されていません．" ));
 			break;
 		}
 		{
@@ -412,8 +430,10 @@ void CMacro::HandleCommand( CEditView* pcEditView, const int Index,	const char* 
 	/*	一つ目の引数は文字列、二つ目の引数は数値	*/
 	case F_BOOKMARK_PATTERN:	//2002.02.08 hor
 		if( Argument[0] == NULL ){
+			::LoadString( GetModuleHandle(NULL), STR_ERR_DLGMACRO6, _pszLabel, 255 );  // LMP: Added
+
 			::MYMESSAGEBOX( NULL, MB_OK | MB_ICONSTOP | MB_TOPMOST, EXEC_ERROR_TITLE,
-				_T(	"マーク行のパターンが指定されていません．" ));
+				_pszLabel ) ; // _T(	"マーク行のパターンが指定されていません．" ));
 			break;
 		}
 		/* NO BREAK */
@@ -479,8 +499,10 @@ void CMacro::HandleCommand( CEditView* pcEditView, const int Index,	const char* 
 		//		0x01	ExpandParameterによる文字列展開を行う
 		//		0x02	テキスト末尾に改行コードを付加しない
 		if( Argument[0] == NULL ){
+			::LoadString( GetModuleHandle(NULL), STR_ERR_DLGMACRO7, _pszLabel, 255 );  // LMP: Added
+
 			::MYMESSAGEBOX( NULL, MB_OK | MB_ICONSTOP | MB_TOPMOST, EXEC_ERROR_TITLE,
-				_T(	"引数(文字列)が指定されていません．" ));
+				_pszLabel ) ; // _T(	"引数(文字列)が指定されていません．" ));
 			break;
 		}
 		{
@@ -499,8 +521,10 @@ void CMacro::HandleCommand( CEditView* pcEditView, const int Index,	const char* 
 		//	Argument[2]:
 		//		現在は特になし
 		if( Argument[0] == NULL ){
+			::LoadString( GetModuleHandle(NULL), STR_ERR_DLGMACRO8, _pszLabel, 255 );  // LMP: Added
+
 			::MYMESSAGEBOX( NULL, MB_OK | MB_ICONSTOP | MB_TOPMOST, EXEC_ERROR_TITLE,
-				_T(	"ファイル名が指定されていません．" ));
+				_pszLabel ) ; // _T(	"ファイル名が指定されていません．" ));
 			break;
 		}
 		{
@@ -534,13 +558,15 @@ void CMacro::HandleCommand( CEditView* pcEditView, const int Index,	const char* 
 		//		**********************************
 		//		0x400	「すべて置換」は置換の繰返し（ON:連続置換, OFF:一括置換）
 		if( Argument[0] == NULL || 0 == lstrlen( Argument[0] ) ){
+			::LoadString( GetModuleHandle(NULL), STR_ERR_DLGMACRO9, _pszLabel, 255 );  // LMP: Added
 			::MYMESSAGEBOX( NULL, MB_OK | MB_ICONSTOP | MB_TOPMOST, EXEC_ERROR_TITLE,
-				_T(	"置換元パターンが指定されていません．" ));
+				_pszLabel ) ; // _T(	"置換元パターンが指定されていません．" ));
 			break;
 		}
 		if( Argument[1] == NULL ){
+			::LoadString( GetModuleHandle(NULL), STR_ERR_DLGMACRO10, _pszLabel, 255 );  // LMP: Added
 			::MYMESSAGEBOX( NULL, MB_OK | MB_ICONSTOP | MB_TOPMOST, EXEC_ERROR_TITLE,
-				_T(	"置換先パターンが指定されていません．" ));
+				_pszLabel ) ; // _T(	"置換先パターンが指定されていません．" ));
 			break;
 		}
 		{
@@ -601,18 +627,24 @@ void CMacro::HandleCommand( CEditView* pcEditView, const int Index,	const char* 
 		//		**********************************
 		//		0x0100 ～ 0xff00	文字コードセット番号 * 0x100
 		if( Argument[0] == NULL ){
+			::LoadString( GetModuleHandle(NULL), STR_ERR_DLGMACRO11, _pszLabel, 255 );  // LMP: Added
+
 			::MYMESSAGEBOX( NULL, MB_OK | MB_ICONSTOP | MB_TOPMOST, EXEC_ERROR_TITLE,
-				_T(	"GREPパターンが指定されていません．" ));
+				_pszLabel ) ; // _T(	"GREPパターンが指定されていません．" ));
 			break;
 		}
 		if( Argument[1] == NULL ){
+			::LoadString( GetModuleHandle(NULL), STR_ERR_DLGMACRO12, _pszLabel, 255 );  // LMP: Added
+
 			::MYMESSAGEBOX( NULL, MB_OK | MB_ICONSTOP | MB_TOPMOST, EXEC_ERROR_TITLE,
-				_T(	"ファイル種別が指定されていません．" ));
+				_pszLabel ) ; // _T(	"ファイル種別が指定されていません．" ));
 			break;
 		}
 		if( Argument[2] == NULL ){
+			::LoadString( GetModuleHandle(NULL), STR_ERR_DLGMACRO13, _pszLabel, 255 );  // LMP: Added
+
 			::MYMESSAGEBOX( NULL, MB_OK | MB_ICONSTOP | MB_TOPMOST, EXEC_ERROR_TITLE,
-				_T(	"検索先フォルダが指定されていません．" ));
+				_pszLabel ) ; // _T(	"検索先フォルダが指定されていません．" ));
 			break;
 		}
 		{
@@ -690,8 +722,10 @@ void CMacro::HandleCommand( CEditView* pcEditView, const int Index,	const char* 
 	case F_FILEOPEN:
 		//	Argument[0]を開く。
 		if( Argument[0] == NULL ){
+			::LoadString( GetModuleHandle(NULL), STR_ERR_DLGMACRO14, _pszLabel, 255 );  // LMP: Added
+
 			::MYMESSAGEBOX( NULL, MB_OK | MB_ICONSTOP | MB_TOPMOST, EXEC_ERROR_TITLE,
-				_T(	"読み込みファイル名が指定されていません．" ));
+				_pszLabel ) ; // _T(	"読み込みファイル名が指定されていません．" ));
 			break;
 		}
 		{
@@ -701,8 +735,10 @@ void CMacro::HandleCommand( CEditView* pcEditView, const int Index,	const char* 
 	case F_FILESAVEAS:
 		//	Argument[0]を別名で保存。
 		if( Argument[0] == NULL ){
+			::LoadString( GetModuleHandle(NULL), STR_ERR_DLGMACRO15, _pszLabel, 255 );  // LMP: Added
+
 			::MYMESSAGEBOX( NULL, MB_OK | MB_ICONSTOP | MB_TOPMOST, EXEC_ERROR_TITLE,
-				_T(	"保存ファイル名が指定されていません．" ));
+				_pszLabel ) ; // _T(	"保存ファイル名が指定されていません．" ));
 			break;
 		}
 		{

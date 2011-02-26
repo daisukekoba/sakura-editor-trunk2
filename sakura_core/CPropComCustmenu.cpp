@@ -15,6 +15,7 @@
 	This source code is designed for sakura editor.
 	Please contact the copyright holder to use this code for other purpose.
 */
+/* LMP (Lucien Murray-Pitts) : 2011-02-26 Added Basic English Translation Resources */
 
 #include "stdafx.h"
 #include "CPropCommon.h"
@@ -142,6 +143,11 @@ INT_PTR CPropCommon::DispatchEvent_p8(
 //	char*		pszWork;
 	CDlgInput1	cDlgInput1;
 
+
+	// LMP: Added
+	char _pszLabel1[257];
+	char _pszLabel2[257];
+
 	switch( uMsg ){
 	case WM_INITDIALOG:
 		/* ダイアログデータの設定 p8 */
@@ -263,7 +269,8 @@ INT_PTR CPropCommon::DispatchEvent_p8(
 					if( 0 == m_Common.m_nCustMenuItemFuncArr[nIdx1][i] ){
 //						strcpy( szLabel2, "セパレータ" );
 //						strcpy( szLabel2, "--------------------------------" );
-						strcpy( szLabel2, " ─────────────" );	//Oct. 18, 2000 JEPRO 「ツールバー」タブで使っているセパレータと同じ線種に統一した
+						::LoadString( m_hInstance, STR_ERR_DLGPROPCOMCUST1, szLabel2, 300 );  // LMP: Added
+						// strcpy( szLabel2, " ─────────────" );	//Oct. 18, 2000 JEPRO 「ツールバー」タブで使っているセパレータと同じ線種に統一した
 					}else{
 						//	Oct. 3, 2001 genta
 						m_cLookup.Funccode2Name( m_Common.m_nCustMenuItemFuncArr[nIdx1][i], szLabel, 256 );
@@ -314,8 +321,12 @@ INT_PTR CPropCommon::DispatchEvent_p8(
 
 //			idListBox = (int) LOWORD(wParam);	// identifier of list box
 //			hwndListBox = (HWND) lParam;		// handle of list box
+
+				::LoadString( m_hInstance, STR_ERR_DLGPROPCOMCUST2, _pszLabel1, 255 );  // LMP: Added
+				::LoadString( m_hInstance, STR_ERR_DLGPROPCOMCUST3, _pszLabel2, 255 );  // LMP: Added
+
 				wsprintf( szKey, "%c", m_Common.m_nCustMenuItemKeyArr[nIdx1][nIdx2] );
-				if( FALSE == cDlgInput1.DoModal( m_hInstance, hwndDlg, "メニューアイテムのアクセスキー設定", "キーを入力してください。", 1, szKey ) ){
+				if( FALSE == cDlgInput1.DoModal( m_hInstance, hwndDlg, _pszLabel1, _pszLabel2, /*"メニューアイテムのアクセスキー設定", "キーを入力してください。",*/ 1, szKey ) ){
 					return TRUE;
 				}
 				//	Oct. 3, 2001 genta
@@ -406,7 +417,9 @@ INT_PTR CPropCommon::DispatchEvent_p8(
 					}
 //					nIdx2 = ::SendMessage( hwndLIST_RES, LB_INSERTSTRING, nIdx2, (LPARAM)"セパレータ" );	//Oct. 8, 2000 jepro 「ツールバー」タブ内のセパレータボタンで入る文字列
 //					nIdx2 = ::SendMessage( hwndLIST_RES, LB_INSERTSTRING, nIdx2, (LPARAM)"--------------------------------" );
-					nIdx2 = ::SendMessage( hwndLIST_RES, LB_INSERTSTRING, nIdx2, (LPARAM)" ─────────────" );	//Oct. 18, 2000 JEPRO 「ツールバー」タブで使っているセパレータと同じ線種に統一した
+
+					::LoadString( m_hInstance, STR_ERR_DLGPROPCOMCUST1, _pszLabel1, 255 );  // LMP: Added
+					nIdx2 = ::SendMessage( hwndLIST_RES, LB_INSERTSTRING, nIdx2, (LPARAM)_pszLabel1 ) ; // (LPARAM)" ─────────────" );	//Oct. 18, 2000 JEPRO 「ツールバー」タブで使っているセパレータと同じ線種に統一した
 					if( nIdx2 == LB_ERR || nIdx2 == LB_ERRSPACE ){
 						break;
 					}
@@ -763,7 +776,8 @@ void CPropCommon::SetData_p8( HWND hwndDlg )
 		if( 0 == m_Common.m_nCustMenuItemFuncArr[nIdx][i] ){
 //			strcpy( szLabel, "セパレータ" );	//Oct. 8, 2000 jepro iniファイルやデフォルト設定などの情報から入る文字列
 //			strcpy( szLabel, "--------------------------------" );
-			strcpy( szLabel, " ─────────────" );	//Oct. 18, 2000 JEPRO 「ツールバー」タブで使っているセパレータと同じ線種に統一した
+			::LoadString( m_hInstance, STR_ERR_DLGPROPCOMCUST1, szLabel, 299 );  // LMP: Added
+			// strcpy( szLabel, " ─────────────" );	//Oct. 18, 2000 JEPRO 「ツールバー」タブで使っているセパレータと同じ線種に統一した
 		}else{
 			//	Oct. 3, 2001 genta
 			m_cLookup.Funccode2Name( m_Common.m_nCustMenuItemFuncArr[nIdx][i], szLabel, 256 );
@@ -823,6 +837,10 @@ void CPropCommon::p8_Import_CustMenuSetting( HWND hwndDlg )
 	HWND			hwndCtrl;
 	char			szInitDir[_MAX_PATH + 1];
 
+
+	// LMP: Added
+	char _pszLabel[257];
+
 	strcpy( szPath, "" );
 	strcpy( szInitDir, m_pShareData->m_szIMPORTFOLDER );	/* インポート用フォルダ */
 	/* ファイルオープンダイアログの初期化 */
@@ -842,8 +860,10 @@ void CPropCommon::p8_Import_CustMenuSetting( HWND hwndDlg )
 
 	hFile = _lopen( szPath, OF_READ );
 	if( HFILE_ERROR == hFile ){
+		::LoadString( m_hInstance, STR_ERR_DLGPROPCOMCUST4, _pszLabel, 255 );  // LMP: Added
+
 		::MYMESSAGEBOX(	hwndDlg, MB_OK | MB_ICONSTOP, GSTR_APPNAME,
-			"ファイルを開けませんでした。\n\n%s", szPath
+			_pszLabel /*"ファイルを開けませんでした。\n\n%s"*/, szPath
 		);
 		return;
 	}
@@ -854,8 +874,10 @@ void CPropCommon::p8_Import_CustMenuSetting( HWND hwndDlg )
 		sizeof( m_Common.m_nCustMenuItemKeyArr	)	!= _lread( hFile, (LPVOID)&m_Common.m_nCustMenuItemKeyArr , sizeof( m_Common.m_nCustMenuItemKeyArr  ) ) ||
 		0 != memcmp( pHeader, STR_CUSTMENU_HEAD, STR_CUSTMENU_HEAD_LEN )
 	){
+		::LoadString( m_hInstance, STR_ERR_DLGPROPCOMCUST5, _pszLabel, 255 );  // LMP: Added
+
 		::MYMESSAGEBOX(	hwndDlg, MB_OK | MB_ICONSTOP, GSTR_APPNAME,
-			"カスタムメニュー設定ファイルの形式が違います。\n\n%s", szPath
+			_pszLabel /*"カスタムメニュー設定ファイルの形式が違います。\n\n%s"*/, szPath
 		);
 		return;
 	}
@@ -896,8 +918,12 @@ void CPropCommon::p8_Export_CustMenuSetting( HWND hwndDlg )
 
 	hFile = _lcreat( szPath, 0 );
 	if( HFILE_ERROR == hFile ){
+		// LMP: Added
+		char _pszLabel[257];
+		::LoadString( m_hInstance, STR_ERR_DLGPROPCOMCUST4, _pszLabel, 255 );  // LMP: Added
+
 		::MYMESSAGEBOX(	hwndDlg, MB_OK | MB_ICONSTOP, GSTR_APPNAME,
-			"ファイルを開けませんでした。\n\n%s", szPath
+			_pszLabel /*"ファイルを開けませんでした。\n\n%s"*/, szPath
 		);
 		return;
 	}
@@ -913,8 +939,12 @@ void CPropCommon::p8_Export_CustMenuSetting( HWND hwndDlg )
 		sizeof( m_Common.m_nCustMenuItemFuncArr	)	!= _lwrite( hFile, (LPCSTR)&m_Common.m_nCustMenuItemFuncArr, sizeof( m_Common.m_nCustMenuItemFuncArr ) ) ||
 		sizeof( m_Common.m_nCustMenuItemKeyArr	)	!= _lwrite( hFile, (LPCSTR)&m_Common.m_nCustMenuItemKeyArr , sizeof( m_Common.m_nCustMenuItemKeyArr  ) )
 	){
+		// LMP: Added
+		char _pszLabel[257];
+		::LoadString( m_hInstance, STR_ERR_DLGPROPCOMCUST6, _pszLabel, 255 );  // LMP: Added
+
 		::MYMESSAGEBOX(	hwndDlg, MB_OK | MB_ICONSTOP, GSTR_APPNAME,
-			"ファイルの書き込みに失敗しました。\n\n%s", szPath
+			_pszLabel /*"ファイルの書き込みに失敗しました。\n\n%s"*/, szPath
 		);
 		return;
 	}

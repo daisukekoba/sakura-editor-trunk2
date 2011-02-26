@@ -32,6 +32,7 @@
 		3. This notice may not be removed or altered from any source
 		   distribution.
 */
+/* LMP (Lucien Murray-Pitts) : 2011-02-26 Added Basic English Translation Resources */
 
 
 #include "stdafx.h"
@@ -372,21 +373,34 @@ int CPropCommon::GetData_PROP_Macro( HWND hwndDlg )
 
 void CPropCommon::InitDialog_PROP_Macro( HWND hwndDlg )
 {
+	char pszLabel[5][128] ;
+	char _pszLabel[256] ;
+
 	struct ColumnData {
 		char *title;
 		int width;
 	} ColumnList[] = {
-		{ "番号", 40 },
-		{ "マクロ名", 150 },
-		{ "ファイル名", 150 },
-		{ "実行時に読み込み", 40 },
-		{ "自動実行", 40 },
+		{ pszLabel[0]/*"番号"*/, 40 },
+		{ pszLabel[1]/*"マクロ名"*/, 150 },
+		{ pszLabel[2]/*"ファイル名"*/, 150 },
+		{ pszLabel[3]/*"実行時に読み込み"*/, 40 },
+		{ pszLabel[4]/*"自動実行"*/, 40 },
 	};
+
+	// LMP: Added
+	::LoadString( m_hInstance, STR_ERR_DLGPROPCOMMACRO01, pszLabel[0], 128 );  // LMP: Added
+	::LoadString( m_hInstance, STR_ERR_DLGPROPCOMMACRO02, pszLabel[1], 128 );  // LMP: Added
+	::LoadString( m_hInstance, STR_ERR_DLGPROPCOMMACRO03, pszLabel[2], 128 );  // LMP: Added
+	::LoadString( m_hInstance, STR_ERR_DLGPROPCOMMACRO04, pszLabel[3], 128 );  // LMP: Added
+	::LoadString( m_hInstance, STR_ERR_DLGPROPCOMMACRO05, pszLabel[4], 128 );  // LMP: Added
+
+	::LoadString( m_hInstance, STR_ERR_DLGPROPCOMMACRO06, _pszLabel, 256 );  // LMP: Added
 
 	//	ListViewの初期化
 	HWND hListView = ::GetDlgItem( hwndDlg, IDC_MACROLIST );
 	if( hListView == NULL ){
-		::MessageBox( hwndDlg, "PropComMacro::InitDlg::NoListView", "バグ報告お願い", MB_OK );
+
+		::MessageBox( hwndDlg, "PropComMacro::InitDlg::NoListView", _pszLabel/*"バグ報告お願い"*/, MB_OK );
 		return;	//	よくわからんけど失敗した	
 	}
 
@@ -403,7 +417,7 @@ void CPropCommon::InitDialog_PROP_Macro( HWND hwndDlg )
 		sColumn.fmt = LVCFMT_LEFT;
 		
 		if( ListView_InsertColumn( hListView, pos, &sColumn ) < 0 ){
-			::MessageBox( hwndDlg, "PropComMacro::InitDlg::ColumnRegistrationFail", "バグ報告お願い", MB_OK );
+			::MessageBox( hwndDlg, "PropComMacro::InitDlg::ColumnRegistrationFail", _pszLabel/*"バグ報告お願い"*/, MB_OK );
 			return;	//	よくわからんけど失敗した
 		}
 	}
@@ -433,12 +447,16 @@ void CPropCommon::InitDialog_PROP_Macro( HWND hwndDlg )
 		wsprintf( buf, "%d", pos );
 		int result = ::SendMessage( hNumCombo, CB_ADDSTRING, (WPARAM)0, (LPARAM)buf );
 		if( result == CB_ERR ){
-			::MessageBox( hwndDlg, "PropComMacro::InitDlg::AddMacroId", "バグ報告お願い", MB_OK );
+			::MessageBox( hwndDlg, "PropComMacro::InitDlg::AddMacroId", _pszLabel/*"バグ報告お願い"*/, MB_OK );
 			return;	//	よくわからんけど失敗した
 		}
 		else if( result == CB_ERRSPACE ){
+			// LMP: Added
+			char _pszLabel[257];
+			::LoadString( m_hInstance, STR_ERR_DLGPROPCOMMACRO08, _pszLabel, 255 );  // LMP: Added
+
 			::MessageBox( hwndDlg, "PropComMacro::InitDlg::AddMacroId/InsufficientSpace",
-				"バグ報告お願い", MB_OK );
+				_pszLabel /*"バグ報告お願い"*/, MB_OK );
 			return;	//	よくわからんけど失敗した
 		}
 	}
@@ -457,8 +475,12 @@ void CPropCommon::SetMacro2List_Macro( HWND hwndDlg )
 	//	設定先取得
 	index = ::SendMessage( hNum, CB_GETCURSEL, 0, 0 );
 	if( index == CB_ERR ){
+		// LMP: Added
+		char _pszLabel[257];
+		::LoadString( m_hInstance, STR_ERR_DLGPROPCOMMACRO08, _pszLabel, 255 );  // LMP: Added
+
 		::MessageBox( hwndDlg, "PropComMacro::SetMacro2List::GetCurSel",
-			"バグ報告お願い", MB_OK );
+			_pszLabel /*"バグ報告お願い"*/, MB_OK );
 		return;	//	よくわからんけど失敗した
 	}
 
@@ -569,7 +591,11 @@ void CPropCommon::SelectBaseDir_Macro( HWND hwndDlg )
 		GetInidirOrExedir( szDir, folder );
 	}
 
-	if( SelectDir( hwndDlg, "Macroディレクトリの選択", szDir, szDir ) ){
+	// LMP: Added
+	char _pszLabel[257];
+	::LoadString( m_hInstance, STR_ERR_DLGPROPCOMMACRO07, _pszLabel, 255 );  // LMP: Added
+
+	if( SelectDir( hwndDlg, _pszLabel/*"Macroディレクトリの選択"*/, szDir, szDir ) ){
 		//	末尾に\\マークを追加する．
 		AddLastChar( szDir, _MAX_PATH, '\\' );
 		::SetDlgItemText( hwndDlg, IDC_MACRODIR, szDir );
@@ -621,6 +647,7 @@ void CPropCommon::OnFileDropdown_Macro( HWND hwndDlg )
 		GetInidirOrExedir( path, folder );
 	}
 	strcat( path, "*.*" );	//	2002/05/01 YAZAKI どんなファイルもどんと来い。
+//	strcat( path, "*.mac" );	//	LMP: FIXME MACの拡張子を使うほうが良いじゃない？
 
 	//	候補の初期化
 	::SendMessage( hCombo, CB_RESETCONTENT, (WPARAM)0, (LPARAM)0 );

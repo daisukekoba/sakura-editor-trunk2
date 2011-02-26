@@ -28,6 +28,7 @@
 		   distribution.
 
 */
+/* LMP (Lucien Murray-Pitts) : 2011-02-26 Added Basic English Translation Resources */
 
 #include "stdafx.h"
 #include <string.h>
@@ -518,7 +519,8 @@ void CEditDoc::MakeFuncList_python( CFuncInfoArr* pcFuncInfoArr )
 				szWord[ len ] = '\0';
 			}
 			else {
-				strcpy( szWord, "名称未定" );
+				::LoadString( m_hInstance, STR_ERR_DLGEDITDOCFL21, szWord, 255 );  // LMP: Added
+//				strcpy( szWord, "名称未定" );
 				len = 8;
 			}
 			if( nItemFuncId == 4  ){
@@ -527,7 +529,8 @@ void CEditDoc::MakeFuncList_python( CFuncInfoArr* pcFuncInfoArr )
 					len = sizeof( szWord ) - 8;
 				}
 				// class
-				strcpy( szWord + len, " クラス" );
+				::LoadString( m_hInstance, STR_ERR_DLGEDITDOCFL22, (szWord + len), 255 );  // LMP: Added
+//				strcpy( szWord + len, " クラス" );
 			}
 			
 			/*

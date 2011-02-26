@@ -15,6 +15,7 @@
 	This source code is designed for sakura editor.
 	Please contact the copyright holders to use this code for other purpose.
 */
+/* LMP (Lucien Murray-Pitts) : 2011-02-26 Added Basic English Translation Resources */
 
 #include "stdafx.h"
 #include <string.h>
@@ -613,7 +614,8 @@ void CEditDoc::MakeFuncList_C( CFuncInfoArr* pcFuncInfoArr ,bool bVisibleMemberF
 						{
 							nMode2 = M2_NAMESPACE_SAVE;
 							nItemLine = nLineCount + 1;
-							strcpy(szItemName,"無名");
+							//strcpy(szItemName,"無名");
+							::LoadString( m_hInstance, STR_ERR_DLGEDITDOCFL11, szItemName, nItemNameLenMax );  // LMP: Added
 						}
 					}
 					else if( nMode2 == M2_FUNC_NAME_END )
@@ -723,7 +725,9 @@ void CEditDoc::MakeFuncList_C( CFuncInfoArr* pcFuncInfoArr ,bool bVisibleMemberF
 							++ nNestLevel_global;
 							nNamespaceLen[nNestLevel_global] = nNamespaceLen[nNestLevel_global-1] + nItemNameLen;
 							if( nItemFuncId == 7)
-								strcpy(&szNamespace[nNamespaceLen[nNestLevel_global]],"::定義位置");
+								::LoadString( m_hInstance, STR_ERR_DLGEDITDOCFL12, &szNamespace[nNamespaceLen[nNestLevel_global]], 255 );  // LMP: Added
+//								strcpy(&szNamespace[nNamespaceLen[nNestLevel_global]],"::定義位置");
+//strcpy(&szNamespace[nNamespaceLen[nNestLevel_global]],"::x");
 							else
 							{
 								szNamespace[nNamespaceLen[nNestLevel_global]] = '\0';

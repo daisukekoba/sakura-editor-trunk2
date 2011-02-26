@@ -17,6 +17,8 @@
 	This source code is designed for sakura editor.
 	Please contact the copyright holders to use this code for other purpose.
 */
+/* LMP (Lucien Murray-Pitts) : 2011-02-26 Added Basic English Translation Resources */
+
 
 #include "stdafx.h"
 #include <stdio.h>
@@ -49,8 +51,12 @@ void CEditView::Command_Diff( const char *szTmpFile2, int nFlgOpt )
 
 	if( -1 == ::GetFileAttributes( szTmpFile2 ) )
 	{
+		// LMP: Added
+		char _pszLabel[257];
+		::LoadString( m_hInstance, STR_ERR_DLGEDITVWDIFF1, _pszLabel, 255 );  // LMP: Added
+
 		::MYMESSAGEBOX( m_hWnd,	MB_OK | MB_ICONEXCLAMATION, GSTR_APPNAME,
-			_T( "差分コマンド実行は失敗しました。\n\n比較するファイルが見つかりません。" ) );
+			_pszLabel ) ; // _T( "差分コマンド実行は失敗しました。\n\n比較するファイルが見つかりません。" ) );
 		return;
 	}
 
@@ -156,6 +162,9 @@ void CEditView::ViewDiffInfo(
 	/* exeのあるフォルダ */
 	char	szExeFolder[_MAX_PATH + 1];
 
+	// LMP: Added
+	char _pszLabel[257];
+
 	GetExedir( cmdline, _T("diff.exe") );
 	SplitPath_FolderAndFile( cmdline, szExeFolder, NULL );
 
@@ -163,8 +172,10 @@ void CEditView::ViewDiffInfo(
 	//	diff.exeの存在チェック
 	if( -1 == ::GetFileAttributes( cmdline ) )
 	{
+		::LoadString( m_hInstance, STR_ERR_DLGEDITVWDIFF2, _pszLabel, 255 );  // LMP: Added
+
 		::MYMESSAGEBOX( m_hWnd,	MB_OK | MB_ICONEXCLAMATION, GSTR_APPNAME,
-			_T( "差分コマンド実行は失敗しました。\n\nDIFF.EXE が見つかりません。" ) );
+			_pszLabel ) ; // _T( "差分コマンド実行は失敗しました。\n\nDIFF.EXE が見つかりません。" ) );
 		return;
 	}
 
@@ -253,8 +264,10 @@ void CEditView::ViewDiffInfo(
 	if( CreateProcess( NULL, cmdline, NULL, NULL, TRUE,
 			CREATE_NEW_CONSOLE, NULL, NULL, &sui, &pi ) == FALSE )
 	{
+			::LoadString( m_hInstance, STR_ERR_DLGEDITVWDIFF3, _pszLabel, 255 );  // LMP: Added
+
 			::MYMESSAGEBOX( NULL, MB_OK | MB_ICONEXCLAMATION, GSTR_APPNAME,
-				"差分コマンド実行は失敗しました。\n\n%s", cmdline );
+				_pszLabel /*"差分コマンド実行は失敗しました。\n\n%s"*/, cmdline );
 		goto finish;
 	}
 
@@ -326,8 +339,10 @@ void CEditView::ViewDiffInfo(
 						bFirst = false;
 						if( strncmp( work, "Binary files ", strlen( "Binary files " ) ) == 0 )
 						{
+							::LoadString( m_hInstance, STR_ERR_DLGEDITVWDIFF4, _pszLabel, 255 );  // LMP: Added
+
 							::MYMESSAGEBOX( NULL, MB_OK | MB_ICONEXCLAMATION, GSTR_APPNAME,
-								"DIFF差分を行おうとしたファイルはバイナリファイルです。" );
+								_pszLabel ) ; //"DIFF差分を行おうとしたファイルはバイナリファイルです。" );
 							goto finish;
 						}
 					}
@@ -411,8 +426,10 @@ void CEditView::ViewDiffInfo(
 	{
 		if( false == m_pcEditDoc->m_cDocLineMgr.IsDiffUse() )
 		{
+			::LoadString( m_hInstance, STR_ERR_DLGEDITVWDIFF4, _pszLabel, 255 );  // LMP: Added
+
 			::MYMESSAGEBOX( m_hWnd,	MB_OK | MB_ICONINFORMATION, GSTR_APPNAME,
-				"DIFF差分は見つかりませんでした。" );
+				_pszLabel ) ; // "DIFF差分は見つかりませんでした。" );
 		}
 	}
 
@@ -580,16 +597,25 @@ re_do:;
 			goto re_do;		// 先頭から再検索
 		}
 	}
+
+	// LMP: Added
+	char _pszLabel[257];
 	if( bFound )
 	{
-		if( nYOld >= nY ) SendStatusMessage( "▼先頭から再検索しました" );
+		::LoadString( m_hInstance, STR_ERR_DLGEDITVWDIFF6, _pszLabel, 255 );  // LMP: Added
+
+		if( nYOld >= nY ) SendStatusMessage( _pszLabel ) ; //"▼先頭から再検索しました" );
 	}
 	else
 	{
-		SendStatusMessage( "▽見つかりませんでした" );
+		::LoadString( m_hInstance, STR_ERR_DLGEDITVWDIFF7, _pszLabel, 255 );  // LMP: Added
+
+		SendStatusMessage( _pszLabel ) ; // "▽見つかりませんでした" );
+
+		::LoadString( m_hInstance, STR_ERR_DLGEDITVWDIFF8, _pszLabel, 255 );  // LMP: Added
 		if( m_pShareData->m_Common.m_bNOTIFYNOTFOUND )	/* 見つからないときメッセージを表示 */
 			::MYMESSAGEBOX( m_hWnd,	MB_OK | MB_ICONINFORMATION, GSTR_APPNAME,
-				"後方(↓) に差分が見つかりません。" );
+				_pszLabel ) ; // "後方(↓) に差分が見つかりません。" );
 	}
 
 	return;
@@ -640,16 +666,24 @@ re_do:;
 			goto re_do;	// 末尾から再検索
 		}
 	}
+
+	// LMP: Added
+	char _pszLabel[257];
+
 	if( bFound )
 	{
-		if( nYOld <= nY ) SendStatusMessage( "▲末尾から再検索しました" );
+		::LoadString( m_hInstance, STR_ERR_DLGEDITVWDIFF9, _pszLabel, 255 );  // LMP: Added
+		if( nYOld <= nY ) SendStatusMessage( _pszLabel ) ; //"▲末尾から再検索しました" );
 	}
 	else
 	{
-		SendStatusMessage( "△見つかりませんでした" );
+		::LoadString( m_hInstance, STR_ERR_DLGEDITVWDIFF10, _pszLabel, 255 );  // LMP: Added
+		SendStatusMessage( _pszLabel ) ; //"△見つかりませんでした" );
+
+		::LoadString( m_hInstance, STR_ERR_DLGEDITVWDIFF11, _pszLabel, 255 );  // LMP: Added
 		if( m_pShareData->m_Common.m_bNOTIFYNOTFOUND )	/* 見つからないときメッセージを表示 */
 			::MYMESSAGEBOX( m_hWnd,	MB_OK | MB_ICONINFORMATION, GSTR_APPNAME,
-				"前方(↑) に差分が見つかりません。" );
+				_pszLabel ) ; // "前方(↑) に差分が見つかりません。" );
 	}
 
 	return;
@@ -683,11 +717,16 @@ BOOL CEditView::MakeDiffTmpFile( char* filename, HWND hWnd )
 
 	char	*pszTmpName;
 	
+	// LMP: Added
+	char _pszLabel[257];
+
 	pszTmpName = _tempnam( NULL, SAKURA_DIFF_TEMP_PREFIX );
 	if( NULL == pszTmpName )
 	{
+		::LoadString( m_hInstance, STR_ERR_DLGEDITVWDIFF12, _pszLabel, 255 );  // LMP: Added
+
 		::MYMESSAGEBOX( NULL, MB_OK | MB_ICONEXCLAMATION, GSTR_APPNAME,
-			"差分コマンド実行は失敗しました。" );
+			_pszLabel ) ; // "差分コマンド実行は失敗しました。" );
 		return FALSE;
 	}
 
@@ -712,8 +751,10 @@ BOOL CEditView::MakeDiffTmpFile( char* filename, HWND hWnd )
 	fp = fopen( filename, "wb" );
 	if( NULL == fp )
 	{
+		::LoadString( m_hInstance, STR_ERR_DLGEDITVWDIFF13, _pszLabel, 255 );  // LMP: Added
+
 		::MYMESSAGEBOX( NULL, MB_OK | MB_ICONEXCLAMATION, GSTR_APPNAME,
-			"差分コマンド実行は失敗しました。\n\n一時ファイルを作成できません。" );
+			_pszLabel ); // "差分コマンド実行は失敗しました。\n\n一時ファイルを作成できません。" );
 		return FALSE;
 	}
 
@@ -738,8 +779,10 @@ BOOL CEditView::MakeDiffTmpFile( char* filename, HWND hWnd )
 		{
 			// 一時バッファを超えている
 			fclose( fp );
+
+			::LoadString( m_hInstance, STR_ERR_DLGEDITVWDIFF14, _pszLabel, 255 );  // LMP: Added
 			::MYMESSAGEBOX( NULL, MB_OK | MB_ICONEXCLAMATION, GSTR_APPNAME,
-				"差分コマンド実行は失敗しました。\n\n行が長すぎます。" );
+				_pszLabel); // "差分コマンド実行は失敗しました。\n\n行が長すぎます。" );
 			unlink( filename );		//関数の実行に失敗したとき、一時ファイルの削除は関数内で行う。2005.10.29
 			return FALSE;
 		}
@@ -747,8 +790,10 @@ BOOL CEditView::MakeDiffTmpFile( char* filename, HWND hWnd )
 		if( 1 != fwrite( pLineData, nLineLen, 1, fp ) )
 		{
 			fclose( fp );
+
+			::LoadString( m_hInstance, STR_ERR_DLGEDITVWDIFF13, _pszLabel, 255 );  // LMP: Added
 			::MYMESSAGEBOX( NULL, MB_OK | MB_ICONEXCLAMATION, GSTR_APPNAME,
-				"差分コマンド実行は失敗しました。\n\n一時ファイルを作成できません。" );
+				_pszLabel); // "差分コマンド実行は失敗しました。\n\n一時ファイルを作成できません。" );
 			unlink( filename );		//関数の実行に失敗したとき、一時ファイルの削除は関数内で行う。2005.10.29
 			return FALSE;
 		}

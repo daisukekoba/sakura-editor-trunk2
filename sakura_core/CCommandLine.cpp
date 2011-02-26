@@ -16,6 +16,7 @@
 	This source code is designed for sakura editor.
 	Please contact the copyright holder to use this code for other purpose.
 */
+/* LMP (Lucien Murray-Pitts) : 2011-02-26 Added Basic English Translation Resources */
 
 
 #include "stdafx.h"
@@ -160,8 +161,13 @@ void strncpyWithCheckOverflow(char *dest, int destCount, char *src, int srcCount
 {
 	if( destCount < srcCount + 1 ){
 		dest[0] = '\0';
+
+		// LMP: Added
+		char _pszLabel[257];
+		::LoadString( GetModuleHandle(NULL), STR_ERR_OVERFLOW1, _pszLabel, 255 );  // LMP: Added
+
 		MYMESSAGEBOX( NULL, MB_OK | MB_ICONSTOP | MB_TOPMOST, GSTR_APPNAME,
-					  "ファイルパスが長すぎます。 ANSI 版では %d バイト以上の絶対パスを扱えません。",
+					  _pszLabel, //"ファイルパスが長すぎます。 ANSI 版では %d バイト以上の絶対パスを扱えません。",
 					  destCount );
 	}else{
 		strcpy(dest, src);
@@ -300,7 +306,12 @@ void CCommandLine::ParseCommandLine( void )
 					 ) &&
 					( i ==0 || (i > 0 && ! _IS_SJIS_1( (unsigned char)(m_fi.m_szPath[i - 1] )) ))){
 						char msg_str[_MAX_PATH + 1];
-						sprintf( msg_str, "%s\r\n上記のファイル名は不正です。ファイル名に \\ / : * ? \" < > | の文字は使えません。 ", m_fi.m_szPath );
+
+						// LMP: Added
+						char _pszLabel[257];
+						::LoadString( GetModuleHandle(NULL), STR_ERR_PARSECMD1, _pszLabel, 255 );  // LMP: Added
+
+						sprintf( msg_str, _pszLabel/*"%s\r\n上記のファイル名は不正です。ファイル名に \\ / : * ? \" < > | の文字は使えません。 "*/, m_fi.m_szPath );
 						MessageBox( NULL, msg_str, "FileNameError", MB_OK);
 						m_fi.m_szPath[0] = '\0';
 						break;

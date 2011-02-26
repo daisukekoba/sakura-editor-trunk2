@@ -33,6 +33,7 @@
 		3. This notice may not be removed or altered from any source
 		   distribution.
 */
+/* LMP (Lucien Murray-Pitts) : 2011-02-26 Added Basic English Translation Resources */
 
 #include "stdafx.h"
 #include <stdio.h>
@@ -47,6 +48,7 @@
 #include "charcode.h"
 #include "CESI.h"  // 2006.12.16  rastiv
 #include "my_icmp.h" // Nov. 29, 2002 genta/moca
+#include "funccode.h" // LMP Added
 
 //#ifdef _DEBUG
 #include "global.h"
@@ -2787,8 +2789,12 @@ void CMemory::AllocBuffer( int nNewDataLen )
 
 
 	if( NULL == pWork ){
+		// LMP: Added
+		char _pszLabel[257];
+		::LoadString( GetModuleHandle(NULL), STR_ERR_DLGMEM1, _pszLabel, 255 );  // LMP: Added
+
 		::MYMESSAGEBOX(	NULL, MB_OKCANCEL | MB_ICONQUESTION | MB_TOPMOST, GSTR_APPNAME,
-			"CMemory::AllocBuffer(nNewDataLen==%d)\nメモリ確保に失敗しました。\n", nNewDataLen
+			_pszLabel /*"CMemory::AllocBuffer(nNewDataLen==%d)\nメモリ確保に失敗しました。\n"*/, nNewDataLen
 		);
 		if( NULL != m_pData && 0 != nWorkLen ){
 			/* 古いバッファを解放して初期化 */

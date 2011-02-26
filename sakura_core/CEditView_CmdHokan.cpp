@@ -15,6 +15,8 @@
 	This source code is designed for sakura editor.
 	Please contact the copyright holders to use this code for other purpose.
 */
+/* LMP (Lucien Murray-Pitts) : 2011-02-26 Added Basic English Translation Resources */
+
 #include "stdafx.h"
 #include "sakura_rc.h"
 #include "CEditView.h"
@@ -174,8 +176,13 @@ retry:;
 		0 == lstrlen( m_pcEditDoc->GetDocumentAttribute().m_szHokanFile 
 	) ){
 		::MessageBeep( MB_ICONHAND );
+
+		// LMP: Added
+		char _pszLabel[257];
+		::LoadString( m_hInstance, STR_ERR_DLGEDITVWHOKAN1, _pszLabel, 255 );  // LMP: Added
+
 		if( IDYES == ::MYMESSAGEBOX( NULL, MB_YESNOCANCEL | MB_ICONEXCLAMATION | MB_APPLMODAL | MB_TOPMOST, GSTR_APPNAME,
-			"補完候補一覧ファイルが設定されていません。\n今すぐ設定しますか?"
+			_pszLabel //"補完候補一覧ファイルが設定されていません。\n今すぐ設定しますか?"
 		) ){
 			/* タイプ別設定 プロパティシート */
 			if( !m_pcEditDoc->OpenPropertySheetTypes( 2, m_pcEditDoc->GetDocumentType() ) ){

@@ -15,6 +15,8 @@
 	This source code is designed for sakura editor.
 	Please contact the copyright holder to use this code for other purpose.
 */
+/* LMP (Lucien Murray-Pitts) : 2011-02-26 Added Basic English Translation Resources */
+
 #include "stdafx.h"
 #include "sakura_rc.h"
 #include "CDlgReplace.h"
@@ -350,7 +352,12 @@ BOOL CDlgReplace::OnBnClicked( int wID )
 		/* テキストの貼り付け */
 		if( ::IsDlgButtonChecked( m_hWnd, IDC_CHK_PASTE ) &&
 			!pcEditView->m_pcEditDoc->IsEnablePaste() ){
-			::MYMESSAGEBOX( m_hWnd, MB_OK , GSTR_APPNAME,"クリップボードに有効なデータがありません！");
+
+			// LMP: Added
+			char _pszLabel[257];
+			::LoadString( m_hInstance, STR_ERR_DLGREPLC1, _pszLabel, 255 );  // LMP: Added
+
+			::MYMESSAGEBOX( m_hWnd, MB_OK , GSTR_APPNAME, _pszLabel);//"クリップボードに有効なデータがありません！");
 			::CheckDlgButton( m_hWnd, IDC_CHK_PASTE, FALSE );
 		}
 		::EnableWindow( ::GetDlgItem( m_hWnd, IDC_COMBO_TEXT2 ), !(::IsDlgButtonChecked( m_hWnd, IDC_CHK_PASTE)) );
@@ -457,8 +464,12 @@ BOOL CDlgReplace::OnBnClicked( int wID )
 			/* 再描画 */
 			pcEditView->Redraw();	// 前回0文字幅マッチの消去にも必要	// HandleCommand(F_REDRAW) -> Redraw() 非マッチ時に「見つからなかった」ステータスバーメッセージを消さない
 		}else{
+			// LMP: Added
+			char _pszLabel[257];
+			::LoadString( m_hInstance, STR_ERR_DLGREPLC2, _pszLabel, 255 );  // LMP: Added
+
 			::MYMESSAGEBOX( m_hWnd, MB_OK , GSTR_APPNAME,
-				"文字列を指定してください。"
+				_pszLabel //"文字列を指定してください。"
 			);
 		}
 		return TRUE;
@@ -485,8 +496,12 @@ BOOL CDlgReplace::OnBnClicked( int wID )
 			// To Here 2001.12.03 hor
                
 		}else{
+			// LMP: Added
+			char _pszLabel[257];
+			::LoadString( m_hInstance, STR_ERR_DLGREPLC2, _pszLabel, 255 );  // LMP: Added
+
 			::MYMESSAGEBOX( m_hWnd, MB_OK , GSTR_APPNAME,
-				"文字列を指定してください。"
+				_pszLabel//"文字列を指定してください。"
 			);
 		}
 		return TRUE;
@@ -515,8 +530,12 @@ BOOL CDlgReplace::OnBnClicked( int wID )
 			/* 再描画 */
 			pcEditView->HandleCommand( F_REDRAW, TRUE, 0, 0, 0, 0 );
 		}else{
+			// LMP: Added
+			char _pszLabel[257];
+			::LoadString( m_hInstance, STR_ERR_DLGREPLC2, _pszLabel, 255 );  // LMP: Added
+
 			::MYMESSAGEBOX( m_hWnd, MB_OK , GSTR_APPNAME,
-				"文字列を指定してください。"
+				_pszLabel//"文字列を指定してください。"
 			);
 		}
 		return TRUE;
@@ -536,8 +555,12 @@ BOOL CDlgReplace::OnBnClicked( int wID )
 			/* アクティブにする */
 			ActivateFrameWindow( m_hWnd );
 
+			// LMP: Added
+			char _pszLabel[257];
+			::LoadString( m_hInstance, STR_ERR_DLGREPLC3, _pszLabel, 255 );  // LMP: Added
+
 			::MYMESSAGEBOX( m_hWnd, MB_OK | MB_TOPMOST, GSTR_APPNAME,
-				"%d箇所を置換しました。", m_nReplaceCnt);
+				_pszLabel /*"%d箇所を置換しました。"*/, m_nReplaceCnt);
 
 //			nNewPos = 100;
 // 			::SendMessage( ::GetDlgItem( m_hWnd, IDC_PROGRESS_REPLACE ), PBM_SETPOS, nNewPos, 0 );
@@ -558,8 +581,12 @@ BOOL CDlgReplace::OnBnClicked( int wID )
 			}
 			return TRUE;
 		}else{
+			// LMP: Added
+			char _pszLabel[257];
+			::LoadString( m_hInstance, STR_ERR_DLGREPLC4, _pszLabel, 255 );  // LMP: Added
+
 			::MYMESSAGEBOX( m_hWnd, MB_OK , GSTR_APPNAME,
-				"置換条件を指定してください。"
+				_pszLabel //"置換条件を指定してください。"
 			);
 		}
 		return TRUE;

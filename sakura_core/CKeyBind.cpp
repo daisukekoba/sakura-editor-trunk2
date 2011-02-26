@@ -14,6 +14,7 @@
 	This source code is designed for sakura editor.
 	Please contact the copyright holder to use this code for other purpose.
 */
+/* LMP (Lucien Murray-Pitts) : 2011-02-26 Added Basic English Translation Resources */
 
 #include "stdafx.h"
 #include "CKeyBind.h"
@@ -172,8 +173,11 @@ int CKeyBind::CreateKeyBindList(
 //	char*	pszCR = "\n";	//Feb. 17, 2001 JEPRO \n=0x0a=LFが行末コードになってしまうので
 	char*	pszCR = "\r\n";	//\r=0x0d=CRを追加
 
+	// LMP: Added
+	char _pszLabel[257];
+	::LoadString( GetModuleHandle(NULL), STR_ERR_DLGKEYBIND1, _pszLabel, 255 );  // LMP: Added
 
-	cMemList.AppendSz( "キー\t機能名\t関数名\t機能番号\tキーマクロ記録可/不可" );
+	cMemList.AppendSz( _pszLabel ) ; // "キー\t機能名\t関数名\t機能番号\tキーマクロ記録可/不可" );
 	cMemList.AppendSz( pszCR );
 	cMemList.AppendSz( "-----\t-----\t-----\t-----\t-----" );
 	cMemList.AppendSz( pszCR );
@@ -200,7 +204,9 @@ int CKeyBind::CreateKeyBindList(
 				if( !pcFuncLookup->Funccode2Name(
 					iFunc,
 					szFuncNameJapanese, 255 )){
-					strcpy( szFuncNameJapanese, "---名前が定義されていない-----" );
+
+					::LoadString( GetModuleHandle(NULL), STR_ERR_DLGKEYBIND2, szFuncNameJapanese, 255 );  // LMP: Added
+					// strcpy( szFuncNameJapanese, "---名前が定義されていない-----" );
 				}
 				strcpy( szFuncName, ""/*"---unknown()--"*/ );
 

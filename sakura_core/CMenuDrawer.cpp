@@ -18,6 +18,8 @@
 	This source code is designed for sakura editor.
 	Please contact the copyright holder to use this code for other purpose.
 */
+/* LMP (Lucien Murray-Pitts) : 2011-02-26 Added Basic English Translation Resources */
+
 #include "stdafx.h"
 #include "CMenuDrawer.h"
 #include "sakura_rc.h"
@@ -213,8 +215,8 @@ CMenuDrawer::CMenuDrawer()
 /* 84 */		F_GOFILETOP						/* , TBSTATE_ENABLED, TBSTYLE_BUTTON, 0, 0 */,	//ファイルの先頭に移動
 /* 85 */		F_GOFILEEND						/* , TBSTATE_ENABLED, TBSTYLE_BUTTON, 0, 0 */,	//ファイルの最後に移動
 /* 86 */		F_CURLINECENTER					/* , TBSTATE_ENABLED, TBSTYLE_BUTTON, 0, 0 */,	//カーソル行をウィンドウ中央へ
-/* 87 */		F_JUMPHIST_PREV					/* , TBSTATE_ENABLED, TBSTYLE_BUTTON, 0, 0 */,	//移動履歴: 前へ	//Sept. 28, 2000 JEPRO 追加
-/* 88 */		F_JUMPHIST_NEXT					/* , TBSTATE_ENABLED, TBSTYLE_BUTTON, 0, 0 */,	//移動履歴: 次へ	//Sept. 28, 2000 JEPRO 追加
+/* 87 */		F_JUMPHIST_PREV						/* , TBSTATE_ENABLED, TBSTYLE_BUTTON, 0, 0 */,	//移動履歴: 前へ	//Sept. 28, 2000 JEPRO 追加
+/* 88 */		F_JUMPHIST_NEXT						/* , TBSTATE_ENABLED, TBSTYLE_BUTTON, 0, 0 */,	//移動履歴: 次へ	//Sept. 28, 2000 JEPRO 追加
 /* 89 */		F_WndScrollDown					/* , TBSTATE_ENABLED, TBSTYLE_BUTTON, 0, 0 */,	//テキストを１行下へスクロール	//Jun. 28, 2001 JEPRO 追加
 /* 90 */		F_WndScrollUp					/* , TBSTATE_ENABLED, TBSTYLE_BUTTON, 0, 0 */,	//テキストを１行上へスクロール	//Jun. 28, 2001 JEPRO 追加
 /* 91 */		F_GONEXTPARAGRAPH				/* , TBSTATE_ENABLED, TBSTYLE_BUTTON, 0, 0 */,	//次の段落へ
@@ -755,8 +757,12 @@ void CMenuDrawer::MyAppendMenu( HMENU hMenu, int nFlag, int nFuncId, const char*
 		/* アイコン用ビットマップを持つものは、オーナードロウにする */
 
 		if( m_nMenuItemNum + 1 > MAX_MENUITEMS ){
+			// LMP: Added
+			char _pszLabel[257];
+			::LoadString( m_hInstance, STR_ERR_DLGMNUDRAW1, _pszLabel, 255 );  // LMP: Added
+
 			::MYMESSAGEBOX(	NULL, MB_OK | MB_ICONSTOP | MB_TOPMOST, GSTR_APPNAME,
-				"CMenuDrawer::MyAppendMenu()エラー\n\nCMenuDrawerが管理できるメニューアイテムの上限はCMenuDrawer::MAX_MENUITEMS==%dです。\n ", MAX_MENUITEMS
+				_pszLabel /*"CMenuDrawer::MyAppendMenu()エラー\n\nCMenuDrawerが管理できるメニューアイテムの上限はCMenuDrawer::MAX_MENUITEMS==%dです。\n "*/, MAX_MENUITEMS
 			);
 		}else{
 

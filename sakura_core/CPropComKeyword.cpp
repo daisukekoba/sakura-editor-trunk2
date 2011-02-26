@@ -17,6 +17,7 @@
 	This source code is designed for sakura editor.
 	Please contact the copyright holders to use this code for other purpose.
 */
+/* LMP (Lucien Murray-Pitts) : 2011-02-26 Added Basic English Translation Resources */
 
 #include "stdafx.h"
 #include "sakura_rc.h"
@@ -120,6 +121,10 @@ INT_PTR CPropCommon::DispatchEvent_p7(
 	LV_DISPINFO*		plvdi;
 	LV_KEYDOWN*			pnkd;
 
+	// LMP: Added
+	char _pszLabel[257];
+	char _pszLabel2[257];
+
 	switch( uMsg ){
 	case WM_INITDIALOG:
 		/* ダイアログデータの設定 p7 */
@@ -195,8 +200,10 @@ INT_PTR CPropCommon::DispatchEvent_p7(
 				}
 				if( 0 < strlen( plvi->pszText ) ){
 					if( MAX_KEYWORDLEN < strlen( plvi->pszText ) ){
+						::LoadString( m_hInstance, STR_ERR_DLGPROPCOMKEYWORD1, _pszLabel, 255 );  // LMP: Added
+
 						::MYMESSAGEBOX(	hwndDlg, MB_OK | MB_ICONINFORMATION, GSTR_APPNAME,
-							"キーワードの長さは%dバイトまでです。", MAX_KEYWORDLEN
+							_pszLabel /*"キーワードの長さは%dバイトまでです。"*/, MAX_KEYWORDLEN
 						);
 						return TRUE;
 					}
@@ -264,15 +271,19 @@ INT_PTR CPropCommon::DispatchEvent_p7(
 				switch( wID ){
 				case IDC_BUTTON_ADDSET:	/* セット追加 */
 					if( MAX_SETNUM <= m_CKeyWordSetMgr.m_nKeyWordSetNum ){
+						::LoadString( m_hInstance, STR_ERR_DLGPROPCOMKEYWORD2, _pszLabel, 255 );  // LMP: Added
+
 						::MYMESSAGEBOX(	hwndDlg, MB_OK | MB_ICONINFORMATION, GSTR_APPNAME,
-							"セットは%d個までしか登録できません。\n", MAX_SETNUM
+							_pszLabel /*"セットは%d個までしか登録できません。\n"*/, MAX_SETNUM
 						);
 						return TRUE;
 					}
 					/* モードレスダイアログの表示 */
 					strcpy( szKeyWord, "" );
 					//	Oct. 5, 2002 genta 長さ制限の設定を修正．バッファオーバーランしていた．
-					if( FALSE == cDlgInput1.DoModal( m_hInstance, hwndDlg, "キーワードのセット追加", "セット名を入力してください。", MAX_SETNAMELEN, szKeyWord ) ){
+					::LoadString( m_hInstance, STR_ERR_DLGPROPCOMKEYWORD3, _pszLabel, 255 );  // LMP: Added
+					::LoadString( m_hInstance, STR_ERR_DLGPROPCOMKEYWORD4, _pszLabel2, 255 );  // LMP: Added
+					if( FALSE == cDlgInput1.DoModal( m_hInstance, hwndDlg, _pszLabel /*"キーワードのセット追加"*/, _pszLabel2 /*"セット名を入力してください。"*/, MAX_SETNAMELEN, szKeyWord ) ){
 						return TRUE;
 					}
 					if( 0 < strlen( szKeyWord ) ){
@@ -312,8 +323,10 @@ INT_PTR CPropCommon::DispatchEvent_p7(
 							strcat( pszLabel, "\n" );
 						}
 					}
+
+					::LoadString( m_hInstance, STR_ERR_DLGPROPCOMKEYWORD5, _pszLabel, 255 );  // LMP: Added
 					if( IDCANCEL == ::MYMESSAGEBOX(	hwndDlg, MB_OKCANCEL | MB_ICONQUESTION, GSTR_APPNAME,
-						"「%s」のセットを削除します。\nよろしいですか？\n削除しようとするセットは、以下のファイルタイプに割り当てられています。\n削除したセットは無効になります。\n\n%s",
+						_pszLabel, // "「%s」のセットを削除します。\nよろしいですか？\n削除しようとするセットは、以下のファイルタイプに割り当てられています。\n削除したセットは無効になります。\n\n%s",
 						m_CKeyWordSetMgr.GetTypeName( nIndex1 ),
 						pszLabel
 					) ){
@@ -339,8 +352,11 @@ INT_PTR CPropCommon::DispatchEvent_p7(
 				case IDC_BUTTON_KEYSETRENAME: // キーワードセットの名称変更
 					// モードレスダイアログの表示
 					strcpy( szKeyWord, m_CKeyWordSetMgr.GetTypeName( m_CKeyWordSetMgr.m_nCurrentKeyWordSetIdx ) );
-					if( FALSE == cDlgInput1.DoModal( m_hInstance, hwndDlg, "セットの名称変更",
-							"セット名を入力してください。", MAX_SETNAMELEN, szKeyWord ) ){
+
+					::LoadString( m_hInstance, STR_ERR_DLGPROPCOMKEYWORD6, _pszLabel, 255 );  // LMP: Added
+					::LoadString( m_hInstance, STR_ERR_DLGPROPCOMKEYWORD7, _pszLabel2, 255 );  // LMP: Added
+					if( FALSE == cDlgInput1.DoModal( m_hInstance, hwndDlg, _pszLabel /*"セットの名称変更"*/,
+							_pszLabel2 /*"セット名を入力してください。"*/, MAX_SETNAMELEN, szKeyWord ) ){
 						return TRUE;
 					}
 					if( 0 < strlen( szKeyWord ) ){
@@ -357,14 +373,18 @@ INT_PTR CPropCommon::DispatchEvent_p7(
 				case IDC_BUTTON_ADDKEYWORD:	/* キーワード追加 */
 					/* ｎ番目のセットのキーワードの数を返す */
 					if( !m_CKeyWordSetMgr.CanAddKeyWord( m_CKeyWordSetMgr.m_nCurrentKeyWordSetIdx ) ){
+						::LoadString( m_hInstance, STR_ERR_DLGPROPCOMKEYWORD8, _pszLabel, 255 );  // LMP: Added
 						::MYMESSAGEBOX(	hwndDlg,	MB_OK | MB_ICONINFORMATION, GSTR_APPNAME,
-							"登録できるキーワード数が上限に達しています。\n"
+							_pszLabel // "登録できるキーワード数が上限に達しています。\n"
 						);
 						return TRUE;
 					}
 					/* モードレスダイアログの表示 */
 					strcpy( szKeyWord, "" );
-					if( FALSE == cDlgInput1.DoModal( m_hInstance, hwndDlg, "キーワード追加", "キーワードを入力してください。", MAX_KEYWORDLEN, szKeyWord ) ){
+
+					::LoadString( m_hInstance, STR_ERR_DLGPROPCOMKEYWORD9, _pszLabel, 255 );  // LMP: Added
+					::LoadString( m_hInstance, STR_ERR_DLGPROPCOMKEYWORD10, _pszLabel2, 255 );  // LMP: Added
+					if( FALSE == cDlgInput1.DoModal( m_hInstance, hwndDlg, _pszLabel /*"キーワード追加"*/, _pszLabel2 /*"キーワードを入力してください。"*/, MAX_KEYWORDLEN, szKeyWord ) ){
 						return TRUE;
 					}
 					if( 0 < strlen( szKeyWord ) ){
@@ -460,7 +480,13 @@ void CPropCommon::p7_Edit_List_KeyWord( HWND hwndDlg, HWND hwndLIST_KEYWORD )
 	strcpy( szKeyWord, m_CKeyWordSetMgr.GetKeyWord( m_CKeyWordSetMgr.m_nCurrentKeyWordSetIdx, lvi.lParam ) );
 
 	/* モードレスダイアログの表示 */
-	if( FALSE == cDlgInput1.DoModal( m_hInstance, hwndDlg, "キーワード編集", "キーワードを編集してください。", MAX_KEYWORDLEN, szKeyWord ) ){
+	// LMP: Added
+	char _pszLabel[257];
+	char _pszLabel2[257];
+	::LoadString( m_hInstance, STR_ERR_DLGPROPCOMKEYWORD11, _pszLabel, 255 );  // LMP: Added
+	::LoadString( m_hInstance, STR_ERR_DLGPROPCOMKEYWORD12, _pszLabel2, 255 );  // LMP: Added
+
+	if( FALSE == cDlgInput1.DoModal( m_hInstance, hwndDlg, _pszLabel /*"キーワード編集"*/, _pszLabel2 /*"キーワードを編集してください。"*/, MAX_KEYWORDLEN, szKeyWord ) ){
 		return;
 	}
 	if( 0 < strlen( szKeyWord ) ){
@@ -523,6 +549,9 @@ void CPropCommon::p7_Import_List_KeyWord( HWND hwndDlg, HWND hwndLIST_KEYWORD )
 	int				i;
 	bool			bAddError = false;
 
+	// LMP: Added
+	char _pszLabel[257];
+
 	// 2007.05.19 ryoji 他画面と同じようにインポート用フォルダ設定を使うようにした
 	strcpy( szPath, "" );
 	strcpy( szInitDir, m_pShareData->m_szIMPORTFOLDER );	/* インポート用フォルダ */
@@ -543,8 +572,10 @@ void CPropCommon::p7_Import_List_KeyWord( HWND hwndDlg, HWND hwndLIST_KEYWORD )
 
 	pFile = fopen( szPath, "r" );
 	if( NULL == pFile ){
+		::LoadString( m_hInstance, STR_ERR_DLGPROPCOMKEYWORD13, _pszLabel, 255 );  // LMP: Added
+
 		::MYMESSAGEBOX( hwndDlg, MB_OK | MB_ICONSTOP, GSTR_APPNAME,
-			"ファイルを開けませんでした。\n\n%s", szPath
+			_pszLabel /*"ファイルを開けませんでした。\n\n%s"*/, szPath
 		);
 		return;
 	}
@@ -571,8 +602,10 @@ void CPropCommon::p7_Import_List_KeyWord( HWND hwndDlg, HWND hwndLIST_KEYWORD )
 	}
 	fclose( pFile );
 	if( bAddError ){
+		::LoadString( m_hInstance, STR_ERR_DLGPROPCOMKEYWORD14, _pszLabel, 255 );  // LMP: Added
+
 		::MYMESSAGEBOX( hwndDlg, MB_OK | MB_ICONSTOP, GSTR_APPNAME,
-			"キーワードの数が上限に達したため、いくつかのキーワードを追加できませんでした。"
+			_pszLabel //"キーワードの数が上限に達したため、いくつかのキーワードを追加できませんでした。"
 		);
 	}
 	/* ダイアログデータの設定 p7 指定キーワードセットの設定 */
@@ -595,6 +628,9 @@ void CPropCommon::p7_Export_List_KeyWord( HWND hwndDlg, HWND hwndLIST_KEYWORD )
 	int				i;
 	int				nKeyWordNum;
 
+	// LMP: Added
+	char _pszLabel[257];
+
 	// 2007.05.19 ryoji 他画面と同じようにインポート用フォルダ設定を使うようにした
 	strcpy( szPath, "" );
 	strcpy( szInitDir, m_pShareData->m_szIMPORTFOLDER );	/* インポート用フォルダ */
@@ -616,14 +652,19 @@ void CPropCommon::p7_Export_List_KeyWord( HWND hwndDlg, HWND hwndLIST_KEYWORD )
 
 	pFile = fopen( szPath, "w" );
 	if( NULL == pFile ){
+		::LoadString( m_hInstance, STR_ERR_DLGPROPCOMKEYWORD15, _pszLabel, 255 );  // LMP: Added
+
 		::MYMESSAGEBOX(	hwndDlg, MB_OK | MB_ICONSTOP, GSTR_APPNAME,
-			"ファイルを開けませんでした。\n\n%s", szPath
+			_pszLabel /*"ファイルを開けませんでした。\n\n%s"*/, szPath
 		);
 		return;
 	}
 	fputs( "// ", pFile );
 	fputs( m_CKeyWordSetMgr.GetTypeName( m_CKeyWordSetMgr.m_nCurrentKeyWordSetIdx ), pFile );
-	fputs( "  キーワード定義ファイル", pFile );
+
+	::LoadString( m_hInstance, STR_ERR_DLGPROPCOMKEYWORD16, _pszLabel, 255 );  // LMP: Added
+	fputs( _pszLabel /*"  キーワード定義ファイル"*/, pFile );
+
 	fputs( "\n", pFile );
 	fputs( "\n", pFile );
 
@@ -641,8 +682,9 @@ void CPropCommon::p7_Export_List_KeyWord( HWND hwndDlg, HWND hwndLIST_KEYWORD )
 	/* ダイアログデータの設定 p7 指定キーワードセットの設定 */
 	SetData_p7_KeyWordSet( hwndDlg, m_CKeyWordSetMgr.m_nCurrentKeyWordSetIdx );
 
+	::LoadString( m_hInstance, STR_ERR_DLGPROPCOMKEYWORD17, _pszLabel, 255 );  // LMP: Added
 	::MYMESSAGEBOX(	hwndDlg, MB_OK | MB_ICONINFORMATION, GSTR_APPNAME,
-		"ファイルへエクスポートしました。\n\n%s", szPath
+		_pszLabel /*"ファイルへエクスポートしました。\n\n%s"*/, szPath
 	);
 
 	return;
@@ -652,7 +694,11 @@ void CPropCommon::p7_Export_List_KeyWord( HWND hwndDlg, HWND hwndLIST_KEYWORD )
 //! キーワードを整頓する
 void CPropCommon::p7_Clean_List_KeyWord( HWND hwndDlg, HWND hwndLIST_KEYWORD )
 {
-	if( IDYES == ::MessageBox( hwndDlg, "現在の設定では強調キーワードとして表示できないキーワードを削除しますか？",
+	// LMP: Added
+	char _pszLabel[257];
+	::LoadString( m_hInstance, STR_ERR_DLGPROPCOMKEYWORD18, _pszLabel, 255 );  // LMP: Added
+
+	if( IDYES == ::MessageBox( hwndDlg, _pszLabel /*"現在の設定では強調キーワードとして表示できないキーワードを削除しますか？"*/,
 			GSTR_APPNAME, MB_YESNO | MB_ICONQUESTION ) ){	// 2009.03.26 ryoji MB_ICONSTOP->MB_ICONQUESTION
 		if( m_CKeyWordSetMgr.CleanKeyWords( m_CKeyWordSetMgr.m_nCurrentKeyWordSetIdx ) ){
 		}
@@ -805,7 +851,11 @@ void CPropCommon::DispKeywordCount( HWND hwndDlg )
 	nAlloc -= m_CKeyWordSetMgr.GetKeyWordNum( m_CKeyWordSetMgr.m_nCurrentKeyWordSetIdx );
 	nAlloc += m_CKeyWordSetMgr.GetFreeSize();
 	
-	wsprintf( szCount, _T("(最大 %d 文字, 登録数 %d, 空き %d 個)"), MAX_KEYWORDLEN, n, nAlloc );
+	// LMP: Added
+	char _pszLabel[257];
+	::LoadString( m_hInstance, STR_ERR_DLGPROPCOMKEYWORD19, _pszLabel, 255 );  // LMP: Added
+
+	wsprintf( szCount, _pszLabel /*_T("(最大 %d 文字, 登録数 %d, 空き %d 個)")*/, MAX_KEYWORDLEN, n, nAlloc );
 	::SetWindowText( ::GetDlgItem( hwndDlg, IDC_STATIC_KEYWORD_COUNT ), szCount );
 }
 

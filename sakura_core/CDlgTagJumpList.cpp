@@ -30,6 +30,7 @@
 		3. This notice may not be removed or altered from any source
 		   distribution.
 */
+/* LMP (Lucien Murray-Pitts) : 2011-02-26 Added Basic English Translation Resources */
 
 
 
@@ -264,15 +265,22 @@ void CDlgTagJumpList::UpdateData( void )
 	//	数が多すぎる場合は切り捨てた旨を末尾に挿入
 	if( m_cList.IsOverflow() )
 	{
+		// LMP: Added
+		char _pszLabel[257];
+		::LoadString( m_hInstance, STR_ERR_DLGTAGJMP1, _pszLabel, 255 );  // LMP: Added
+
 		lvi.mask     = LVIF_TEXT;
 		lvi.iItem    = nIndex;
 		lvi.iSubItem = 0;
-		lvi.pszText  = "(通知)";
+		lvi.pszText  = _pszLabel; //"(通知)";
+
+		::LoadString( m_hInstance, STR_ERR_DLGTAGJMP2, _pszLabel, 255 );  // LMP: Added
+
 		ListView_InsertItem( hwndList, &lvi );
 		ListView_SetItemText( hwndList, nIndex, 1, "" );
 		ListView_SetItemText( hwndList, nIndex, 2, "" );
 		ListView_SetItemText( hwndList, nIndex, 3, "" );
-		ListView_SetItemText( hwndList, nIndex, 4, "(これ以降は切り捨てました)" );
+		ListView_SetItemText( hwndList, nIndex, 4, _pszLabel );//"(これ以降は切り捨てました)" );
 		ListView_SetItemText( hwndList, nIndex, 5, "" );
 	}
 
@@ -334,6 +342,9 @@ BOOL CDlgTagJumpList::OnInitDialog( HWND hwndDlg, WPARAM wParam, LPARAM lParam )
 	long		lngStyle;
 	BOOL		bRet;
 
+	// LMP: Added
+	char _pszLabel[257];
+
 	m_hWnd = hwndDlg;
 
 	//リストビューの表示位置を取得する。
@@ -342,45 +353,51 @@ BOOL CDlgTagJumpList::OnInitDialog( HWND hwndDlg, WPARAM wParam, LPARAM lParam )
 	rc.left = rc.top = rc.right = rc.bottom = 0;
 	::GetWindowRect( hwndList, &rc );
 
+	::LoadString( m_hInstance, STR_ERR_DLGTAGJMP3, _pszLabel, 255 );  // LMP: Added
 	col.mask     = LVCF_FMT | LVCF_WIDTH | LVCF_TEXT | LVCF_SUBITEM;
 	col.fmt      = LVCFMT_LEFT;
 	col.cx       = (rc.right - rc.left) * 19 / 100;
-	col.pszText  = "キーワード";
+	col.pszText  = _pszLabel; //"キーワード";
 	col.iSubItem = 0;
 	ListView_InsertColumn( hwndList, 0, &col );
 
+	::LoadString( m_hInstance, STR_ERR_DLGTAGJMP4, _pszLabel, 255 );  // LMP: Added
 	col.mask     = LVCF_FMT | LVCF_WIDTH | LVCF_TEXT | LVCF_SUBITEM;
 	col.fmt      = LVCFMT_CENTER;
 	col.cx       = (rc.right - rc.left) * 6 / 100;
-	col.pszText  = "階層";
+	col.pszText  = _pszLabel; //"階層";
 	col.iSubItem = 1;
 	ListView_InsertColumn( hwndList, 1, &col );
 
+	::LoadString( m_hInstance, STR_ERR_DLGTAGJMP5, _pszLabel, 255 );  // LMP: Added
 	col.mask     = LVCF_FMT | LVCF_WIDTH | LVCF_TEXT | LVCF_SUBITEM;
 	col.fmt      = LVCFMT_RIGHT;
 	col.cx       = (rc.right - rc.left) * 8 / 100;
-	col.pszText  = "行番号";
+	col.pszText  = _pszLabel; //"行番号";
 	col.iSubItem = 2;
 	ListView_InsertColumn( hwndList, 2, &col );
 
+	::LoadString( m_hInstance, STR_ERR_DLGTAGJMP6, _pszLabel, 255 );  // LMP: Added
 	col.mask     = LVCF_FMT | LVCF_WIDTH | LVCF_TEXT | LVCF_SUBITEM;
 	col.fmt      = LVCFMT_LEFT;
 	col.cx       = (rc.right - rc.left) * 9 / 100;
-	col.pszText  = "種類";
+	col.pszText  = _pszLabel; //"種類";
 	col.iSubItem = 3;
 	ListView_InsertColumn( hwndList, 3, &col );
 
+	::LoadString( m_hInstance, STR_ERR_DLGTAGJMP7, _pszLabel, 255 );  // LMP: Added
 	col.mask     = LVCF_FMT | LVCF_WIDTH | LVCF_TEXT | LVCF_SUBITEM;
 	col.fmt      = LVCFMT_LEFT;
 	col.cx       = (rc.right - rc.left) * 35 / 100;
-	col.pszText  = "ファイル名";
+	col.pszText  = _pszLabel; //"ファイル名";
 	col.iSubItem = 4;
 	ListView_InsertColumn( hwndList, 4, &col );
 
+	::LoadString( m_hInstance, STR_ERR_DLGTAGJMP8, _pszLabel, 255 );  // LMP: Added
 	col.mask     = LVCF_FMT | LVCF_WIDTH | LVCF_TEXT | LVCF_SUBITEM;
 	col.fmt      = LVCFMT_LEFT;
 	col.cx       = (rc.right - rc.left) * 20 / 100;
-	col.pszText  = "備考";
+	col.pszText  = _pszLabel; //"備考";
 	col.iSubItem = 5;
 	ListView_InsertColumn( hwndList, 5, &col );
 

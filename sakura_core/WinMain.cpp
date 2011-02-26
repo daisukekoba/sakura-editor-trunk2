@@ -17,6 +17,7 @@
 	This source code is designed for sakura editor.
 	Please contact the copyright holder to use this code for other purpose.
 */
+/* LMP (Lucien Murray-Pitts) : 2011-02-26 Added Basic English Translation Resources */
 
 #include "stdafx.h"
 #include <windows.h>
@@ -35,6 +36,7 @@
 	コントロールプロセスはCControlProcessクラスのインスタンスを作り、
 	エディタプロセスはCNormalProcessクラスのインスタンスを作る。
 */
+extern char gm_pszCodeComboNameArr_Auto[];
 int WINAPI WinMain(
 	HINSTANCE	hInstance,		//!< handle to current instance
 	HINSTANCE	hPrevInstance,	//!< handle to previous instance
@@ -42,6 +44,18 @@ int WINAPI WinMain(
 	int			nCmdShow		//!< show state of window
 )
 {
+	// LMP: Added
+	// 1036 = french, 1031 = german 
+	SetThreadUILanguage( MAKELANGID(LANG_JAPANESE,SUBLANG_DEFAULT) );		// Vista / Win7
+	SetThreadLocale(MAKELCID(LANG_JAPANESE, SORT_DEFAULT));					// Win2000/XP
+
+	SetThreadUILanguage( MAKELANGID(LANG_ENGLISH,SUBLANG_DEFAULT) );		// Vista / Win7
+	SetThreadLocale(MAKELCID(LANG_ENGLISH, SORT_DEFAULT));					// Win2000/XP
+
+	// Global String Table setup - FIXME : HACK
+	::LoadString( GetModuleHandle(NULL), STR_ERR_GLOBAL01, gm_pszCodeComboNameArr_Auto, 32 );  // LMP: Added
+	
+
 	MY_RUNNINGTIMER(cRunningTimer, "WinMain" );
 	{
 		// 2010.08.28 Moca OleInitialize用に移動

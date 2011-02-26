@@ -13,6 +13,7 @@
 	This source code is designed for sakura editor.
 	Please contact the copyright holder to use this code for other purpose.
 */
+/* LMP (Lucien Murray-Pitts) : 2011-02-26 Added Basic English Translation Resources */
 
 #include "stdafx.h"
 #include "CPropCommon.h"
@@ -201,7 +202,11 @@ void CPropCommon::SetRegexpVersion( HWND hwndDlg )
 	::GetDlgItemText( hwndDlg, IDC_EDIT_REGEXPLIB, regexp_dll, sizeof( regexp_dll ));
 	CBregexp breg;
 	if( ! breg.Init( regexp_dll ) ){
-		::SetDlgItemText( hwndDlg, IDC_LABEL_REGEXP_VER, _T("正規表現は使用できません") );
+		// LMP: Added
+		char _pszLabel[257];
+		::LoadString( m_hInstance, STR_ERR_DLGPROPCOMGREP1, _pszLabel, 255 );  // LMP: Added
+
+		::SetDlgItemText( hwndDlg, IDC_LABEL_REGEXP_VER, _pszLabel ) ; // _T("正規表現は使用できません") );
 		return;
 	}
 	::SetDlgItemText( hwndDlg, IDC_LABEL_REGEXP_VER, breg.GetVersion() );

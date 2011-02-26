@@ -14,6 +14,7 @@
 	Please contact the copyright holder to use this code for other purpose.
 
 */
+/* LMP (Lucien Murray-Pitts) : 2011-02-26 Added Basic English Translation Resources */
 
 #include "stdafx.h"
 #include "CWSH.h"
@@ -515,18 +516,35 @@ CWSHClient::CWSHClient(wchar_t const *AEngine, ScriptErrorHandler AErrorHandler,
 
 	CLSID ClassID;
 	if(CLSIDFromProgID(AEngine, &ClassID) != S_OK)
-		Error(L"指名のスクリプトエンジンが見つかりません");
+	{
+		// LMP: Added
+		char _pszLabel[257];
+		::LoadString( GetModuleHandle(NULL), STR_ERR_CWSH01, _pszLabel, 255 );  // LMP: Added
+
+		Error( (wchar_t *)_pszLabel );//L"指名のスクリプトエンジンが見つかりません");
+	}
 	else
 	{
 		if(CoCreateInstance(ClassID, 0, CLSCTX_INPROC_SERVER, IID_IActiveScript, reinterpret_cast<void **>(&m_Engine)) != S_OK)
-			Error(L"指名のスクリプトエンジンが作成できません");
+		{
+			// LMP: Added
+			char _pszLabel[257];
+			::LoadString( GetModuleHandle(NULL), STR_ERR_CWSH02, _pszLabel, 255 );  // LMP: Added
+
+			Error( (wchar_t *)_pszLabel ); //L"指名のスクリプトエンジンが作成できません");
+		}
 		else
 		{
 			IActiveScriptSite *Site = new CWSHSite(this);
 			if(m_Engine->SetScriptSite(Site) != S_OK)
 			{
 				delete Site;
-				Error(L"サイトを登録できません");
+
+				// LMP: Added
+				char _pszLabel[257];
+				::LoadString( GetModuleHandle(NULL), STR_ERR_CWSH03, _pszLabel, 255 );  // LMP: Added
+
+				Error( (wchar_t *)_pszLabel ); // L"サイトを登録できません");
 			}
 			else
 			{
@@ -549,23 +567,53 @@ void CWSHClient::Execute(wchar_t const *AScript)
 {
 	IActiveScriptParse *Parser;
 	if(m_Engine->QueryInterface(IID_IActiveScriptParse, reinterpret_cast<void **>(&Parser)) != S_OK)
-		Error(L"パーサを取得できません");
+	{
+		// LMP: Added
+		char _pszLabel[257];
+		::LoadString( GetModuleHandle(NULL), STR_ERR_CWSH04, _pszLabel, 255 );  // LMP: Added
+
+		Error( (wchar_t *)_pszLabel ); // L"パーサを取得できません");
+	}
 	else 
 	{
 		if(Parser->InitNew() != S_OK)
-			Error(L"初期化できません");
+		{
+			// LMP: Added
+			char _pszLabel[257];
+			::LoadString( GetModuleHandle(NULL), STR_ERR_CWSH05, _pszLabel, 255 );  // LMP: Added
+
+			Error( (wchar_t *)_pszLabel ) ; // L"初期化できません");
+		}
 		else
 		{
 			if(m_Engine->AddNamedItem(L"Editor", SCRIPTITEM_GLOBALMEMBERS | SCRIPTITEM_ISVISIBLE) != S_OK)
-				Error(L"オブジェクトを渡せなかった");
+			{
+				// LMP: Added
+				char _pszLabel[257];
+				::LoadString( GetModuleHandle(NULL), STR_ERR_CWSH06, _pszLabel, 255 );  // LMP: Added
+
+				Error( (wchar_t *)_pszLabel ) ; // L"オブジェクトを渡せなかった");
+			}
 			else
 			{
 				if(m_Engine->SetScriptState(SCRIPTSTATE_STARTED) != S_OK)
-					Error(L"状態変更エラー");
+				{
+					// LMP: Added
+					char _pszLabel[257];
+					::LoadString( GetModuleHandle(NULL), STR_ERR_CWSH07, _pszLabel, 255 );  // LMP: Added
+
+					Error( (wchar_t *)_pszLabel ); // L"状態変更エラー");
+				}
 				else
 				{
 					if(Parser->ParseScriptText(AScript, 0, 0, 0, 0, 0, SCRIPTTEXT_ISVISIBLE, 0, 0) != S_OK)
-						Error(L"実行に失敗しました");
+					{
+						// LMP: Added
+						char _pszLabel[257];
+						::LoadString( GetModuleHandle(NULL), STR_ERR_CWSH08, _pszLabel, 255 );  // LMP: Added
+
+						Error( (wchar_t *)_pszLabel ); //L"実行に失敗しました");
+					}
 				}
 			}
 		}

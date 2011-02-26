@@ -19,6 +19,7 @@
 	This source code is designed for sakura editor.
 	Please contact the copyright holder to use this code for other purpose.
 */
+/* LMP (Lucien Murray-Pitts) : 2011-02-26 Added Basic English Translation Resources */
 
 #include "stdafx.h"
 #include "sakura_rc.h"
@@ -35,49 +36,57 @@
 #include "funccode.h"	//Stonee, 2001/05/18
 #include "CDlgSameColor.h"	// 2006.04.26 ryoji
 
+
 struct TYPE_NAME {
 	int		nMethod;
 	char*	pszName;
 };
+
+
+char _lang_pszLabel[12][128] ;
+
 TYPE_NAME OlmArr[] = {
 //	{ OUTLINE_C,		"C" },
-	{ OUTLINE_CPP,		"C/C++" },
-	{ OUTLINE_PLSQL,	"PL/SQL" },
-	{ OUTLINE_JAVA,		"Java" },
-	{ OUTLINE_COBOL,	"COBOL" },
-	{ OUTLINE_PERL,		"Perl" },			//Sep. 8, 2000 genta
-	{ OUTLINE_ASM,		"アセンブラ" },
-	{ OUTLINE_VB,		"Visual Basic" },	// 2001/06/23 N.Nakatani
-	{ OUTLINE_PYTHON,	"Python" },		//	2007.02.08 genta
-	{ OUTLINE_ERLANG,	"Erlang" },				//	2009.08.11 genta
-	{ OUTLINE_WZTXT,	"WZ階層付テキスト" },	// 2003.05.20 zenryaku, 2003.06.23 Moca 名称変更
-	{ OUTLINE_HTML,		"HTML" },			// 2003.05.20 zenryaku
-	{ OUTLINE_TEX,		"TeX" },			// 2003.07.20 naoh
-	{ OUTLINE_TEXT,		"テキスト" }		//Jul. 08, 2001 JEPRO 常に最後尾におく
+	{ OUTLINE_CPP,		_lang_pszLabel[0] }, //"C/C++" },
+	{ OUTLINE_PLSQL,	_lang_pszLabel[1] }, //"PL/SQL" },
+	{ OUTLINE_JAVA,		_lang_pszLabel[2] }, //"Java" },
+	{ OUTLINE_COBOL,	_lang_pszLabel[3] }, //"COBOL" },
+	{ OUTLINE_PERL,		_lang_pszLabel[4] }, //"Perl" },			//Sep. 8, 2000 genta
+	{ OUTLINE_ASM,		_lang_pszLabel[5] }, // "アセンブラ" },
+	{ OUTLINE_VB,		_lang_pszLabel[6] }, //"Visual Basic" },	// 2001/06/23 N.Nakatani
+	{ OUTLINE_PYTHON,	_lang_pszLabel[7] }, //"Python" },		//	2007.02.08 genta
+	{ OUTLINE_ERLANG,	"Erlang" },				//	2009.08.11 genta		// LMP FIXME
+	{ OUTLINE_WZTXT,	_lang_pszLabel[8] }, // "WZ階層付テキスト" },	// 2003.05.20 zenryaku, 2003.06.23 Moca 名称変更
+	{ OUTLINE_HTML,		_lang_pszLabel[9] }, //"HTML" },			// 2003.05.20 zenryaku
+	{ OUTLINE_TEX,		_lang_pszLabel[10] }, //"TeX" },			// 2003.07.20 naoh
+	{ OUTLINE_TEXT,		_lang_pszLabel[11] } // "テキスト" }		//Jul. 08, 2001 JEPRO 常に最後尾におく
 };
 const int	nOlmArrNum = sizeof( OlmArr ) / sizeof( OlmArr[0] );
 
+char _sindent_pszLabel[2][128] ;
 
 TYPE_NAME SmartIndentArr[] = {
-	{ SMARTINDENT_NONE,	"なし" },
-	{ SMARTINDENT_CPP,	"C/C++" }
+	{ SMARTINDENT_NONE,	_sindent_pszLabel[0] }, // "なし" },
+	{ SMARTINDENT_CPP,	_sindent_pszLabel[1] }  // "C/C++" }
 };
 const int	nSmartIndentArrNum = sizeof( SmartIndentArr ) / sizeof( SmartIndentArr[0] );
 
+char _imestate_pszLabel[5][128] ;
 //	Nov. 20, 2000 genta
 TYPE_NAME ImeStateArr[] = {
-	{ 0, "標準設定" },
-	{ 1, "全角" },
-	{ 2, "全角ひらがな" },
-	{ 3, "全角カタカナ" },
-	{ 4, "無変換" }
+	{ 0, _imestate_pszLabel[0] /* "標準設定"*/ },
+	{ 1, _imestate_pszLabel[1] /* "全角"*/ },
+	{ 2, _imestate_pszLabel[2] /* "全角ひらがな"*/ },
+	{ 3, _imestate_pszLabel[3] /* "全角カタカナ"*/ },
+	{ 4, _imestate_pszLabel[4] /* "無変換"*/ }
 };
 const int nImeStateArrNum = sizeof( ImeStateArr ) / sizeof( ImeStateArr[0] );
 
+char _imeswitch_pszLabel[3][128] ;
 TYPE_NAME ImeSwitchArr[] = {
-	{ 0, "そのまま" },
-	{ 1, "常にON" },
-	{ 2, "常にOFF" },
+	{ 0, _imeswitch_pszLabel[0] }, // "そのまま" },
+	{ 1, _imeswitch_pszLabel[1] }, // "常にON" },
+	{ 2, _imeswitch_pszLabel[2] }, // "常にOFF" },
 };
 const int nImeSwitchArrNum = sizeof( ImeSwitchArr ) / sizeof( ImeSwitchArr[0] );
 
@@ -86,18 +95,20 @@ const int nImeSwitchArrNum = sizeof( ImeSwitchArr ) / sizeof( ImeSwitchArr[0] );
 	@sa CLayoutMgr::SetLayoutInfo()
 	@date Oct. 1, 2002 genta 
 */
+char _ident_pszLabel[3][128] ;
 TYPE_NAME IndentTypeArr[] = {
-	{ 0, "なし" },
-	{ 1, "tx2x" },
-	{ 2, "論理行先頭" },
+	{ 0, _ident_pszLabel[0] }, // "なし" },
+	{ 1, _ident_pszLabel[1] }, // "tx2x" },
+	{ 2, _ident_pszLabel[2] }, // "論理行先頭" },
 };
 const int nIndentTypeArrNum = sizeof( IndentTypeArr ) / sizeof( IndentTypeArr[0] );
 
 // 2008.05.30 nasukoji	テキストの折り返し方法
+char _wrapmthd_pszLabel[3][128] ;
 TYPE_NAME WrapMethodArr[] = {
-	{ WRAP_NO_TEXT_WRAP,	"折り返さない" },
-	{ WRAP_SETTING_WIDTH,	"指定桁で折り返す" },
-	{ WRAP_WINDOW_WIDTH,	"右端で折り返す" },
+	{ WRAP_NO_TEXT_WRAP,	_wrapmthd_pszLabel[0] }, // "折り返さない" },
+	{ WRAP_SETTING_WIDTH,	_wrapmthd_pszLabel[1] }, // "指定桁で折り返す" },
+	{ WRAP_WINDOW_WIDTH,	_wrapmthd_pszLabel[2] }, // "右端で折り返す" },
 };
 const int	nWrapMethodArrNum = sizeof( WrapMethodArr ) / sizeof( WrapMethodArr[0] );
 
@@ -601,6 +612,13 @@ int CPropTypes::DoPropertySheet( int nPageNum )
 	PROPSHEETHEADER	psh;
 	int				nIdx;
 
+	// LMP: Added
+	char _pszLabel[6][128];
+	for( int i=0 ; i<6 ; i++ )
+	{
+		::LoadString( m_hInstance, STR_ERR_DLGCPROPTYPES29+i, _pszLabel[i], 255 );  // LMP: Added
+	}
+
 	m_nMaxLineSize_org = m_Types.m_nMaxLineSize;
 
 	// 2005.11.30 Moca カスタム色の先頭にテキスト色を設定しておく
@@ -615,7 +633,7 @@ int CPropTypes::DoPropertySheet( int nPageNum )
 	psp[nIdx].pszTemplate = MAKEINTRESOURCE( IDD_PROPTYPESP1 );
 	psp[nIdx].pszIcon = NULL/*MAKEINTRESOURCE( IDI_FONT )*/;
 	psp[nIdx].pfnDlgProc = (DLGPROC)PropTypesP1Proc;
-	psp[nIdx].pszTitle = "スクリーン";
+	psp[nIdx].pszTitle = _pszLabel[0] ; // "スクリーン";
 	psp[nIdx].lParam = (LPARAM)this;
 	psp[nIdx].pfnCallback = NULL;
 	nIdx++;
@@ -639,7 +657,7 @@ int CPropTypes::DoPropertySheet( int nPageNum )
 	psp[nIdx].pszTemplate = MAKEINTRESOURCE( IDD_PROP_COLOR );
 	psp[nIdx].pszIcon = NULL /*MAKEINTRESOURCE( IDI_BORDER) */;
 	psp[nIdx].pfnDlgProc = (DLGPROC)PropTypesP3_newProc;
-	psp[nIdx].pszTitle = "カラー";
+	psp[nIdx].pszTitle = _pszLabel[1] ; // "カラー";
 	psp[nIdx].lParam = (LPARAM)this;
 	psp[nIdx].pfnCallback = NULL;
 	nIdx++;
@@ -652,7 +670,7 @@ int CPropTypes::DoPropertySheet( int nPageNum )
 	psp[nIdx].pszTemplate = MAKEINTRESOURCE( IDD_PROPTYPESP2 );
 	psp[nIdx].pszIcon = NULL;
 	psp[nIdx].pfnDlgProc = (DLGPROC)PropTypesP2Proc;
-	psp[nIdx].pszTitle = "支援";
+	psp[nIdx].pszTitle = _pszLabel[2] ; // "支援";
 	psp[nIdx].lParam = (LPARAM)this;
 	psp[nIdx].pfnCallback = NULL;
 	nIdx++;
@@ -666,7 +684,7 @@ int CPropTypes::DoPropertySheet( int nPageNum )
 	psp[nIdx].pszTemplate = MAKEINTRESOURCE( IDD_PROP_REGEX );
 	psp[nIdx].pszIcon = NULL;
 	psp[nIdx].pfnDlgProc = (DLGPROC)PropTypesRegex;
-	psp[nIdx].pszTitle = "正規表現キーワード";
+	psp[nIdx].pszTitle = _pszLabel[3] ; // "正規表現キーワード";
 	psp[nIdx].lParam = (LPARAM)this;
 	psp[nIdx].pfnCallback = NULL;
 	nIdx++;
@@ -680,7 +698,7 @@ int CPropTypes::DoPropertySheet( int nPageNum )
 	psp[nIdx].pszTemplate = MAKEINTRESOURCE( IDD_PROP_KEYHELP );
 	psp[nIdx].pszIcon = NULL;
 	psp[nIdx].pfnDlgProc = (DLGPROC)PropTypesKeyHelp;
-	psp[nIdx].pszTitle = "キーワードヘルプ";
+	psp[nIdx].pszTitle = _pszLabel[4] ; // "キーワードヘルプ";
 	psp[nIdx].lParam = (LPARAM)this;
 	psp[nIdx].pfnCallback = NULL;
 	nIdx++;
@@ -701,7 +719,7 @@ int CPropTypes::DoPropertySheet( int nPageNum )
 	psh.hwndParent = m_hwndParent;
 	psh.hInstance = m_hInstance;
 	psh.pszIcon = NULL /*MAKEINTRESOURCE( IDI_CELL_PROPERTIES )*/;
-	psh.pszCaption = (LPSTR)"タイプ別設定";	// Sept. 8, 2000 jepro 単なる「設定」から変更
+	psh.pszCaption = (LPSTR)_pszLabel[5] ; // "タイプ別設定";	// Sept. 8, 2000 jepro 単なる「設定」から変更
 	psh.nPages = nIdx;
 
 	//- 20020106 aroka # psh.nStartPage は unsigned なので負にならない
@@ -738,8 +756,14 @@ int CPropTypes::DoPropertySheet( int nPageNum )
 			0,
 			NULL
 		);
-		::MYMESSAGEBOX( NULL, MB_OK | MB_ICONINFORMATION | MB_TOPMOST, "作者に教えて欲しいエラー",
-			"CPropTypes::DoPropertySheet()内でエラーが出ました。\npsh.nStartPage=[%d]\n::PropertySheet()失敗。\n\n%s\n", psh.nStartPage, pszMsgBuf
+
+		// LMP: Added
+		char __pszLabel[2][257];
+		::LoadString( m_hInstance, STR_ERR_DLGCPROPTYPES35, __pszLabel[0], 255 );  // LMP: Added
+		::LoadString( m_hInstance, STR_ERR_DLGCPROPTYPES36, __pszLabel[1], 255 );  // LMP: Added
+
+		::MYMESSAGEBOX( NULL, MB_OK | MB_ICONINFORMATION | MB_TOPMOST, __pszLabel[0], // "作者に教えて欲しいエラー",
+			__pszLabel[1] /*"CPropTypes::DoPropertySheet()内でエラーが出ました。\npsh.nStartPage=[%d]\n::PropertySheet()失敗。\n\n%s\n"*/, psh.nStartPage, pszMsgBuf
 		);
 		::LocalFree( pszMsgBuf );
 	}
@@ -1026,6 +1050,34 @@ void CPropTypes::SetData_p1( HWND hwndDlg )
 	int			i;
 	//char		szWork[32];
 
+
+	// LMP: Added to translate type tables...
+	for( int _i=0 ; _i<12 ; _i++ )
+	{
+		::LoadString( m_hInstance, STR_ERR_DLGCPROPTYPES01+_i, _lang_pszLabel[_i], 255 );  // LMP: Added
+	}
+	for( int _i=0 ; _i<2 ; _i++ )
+	{
+		::LoadString( m_hInstance, STR_ERR_DLGCPROPTYPES13+_i, _sindent_pszLabel[_i], 255 );  // LMP: Added
+	}
+
+	// _imestate_pszLabel // 5
+	for( int _i=0 ; _i<5 ; _i++ )
+	{
+		::LoadString( m_hInstance, STR_ERR_DLGCPROPTYPES15+_i, _imestate_pszLabel[_i], 255 );  // LMP: Added
+	}
+
+	// _imeswitch_pszLabel	// 3
+	// _ident_pszLabel		// 3
+	// _wrapmthd_pszLabel	// 3
+	for( int _i=0 ; _i<3 ; _i++ )
+	{
+		::LoadString( m_hInstance, STR_ERR_DLGCPROPTYPES20+_i, _imeswitch_pszLabel[_i], 255 );  // LMP: Added
+		::LoadString( m_hInstance, STR_ERR_DLGCPROPTYPES23+_i, _ident_pszLabel[_i], 255 );  // LMP: Added
+		::LoadString( m_hInstance, STR_ERR_DLGCPROPTYPES26+_i, _wrapmthd_pszLabel[_i], 255 );  // LMP: Added
+	}
+
+
 	/* タイプ属性：名称 */
 	::SetDlgItemText( hwndDlg, IDC_EDIT_TYPENAME, m_Types.m_szTypeName );
 
@@ -1100,6 +1152,9 @@ void CPropTypes::SetData_p1( HWND hwndDlg )
 	hwndCombo = ::GetDlgItem( hwndDlg, IDC_COMBO_OUTLINES );
 	::SendMessage( hwndCombo, CB_RESETCONTENT, 0, 0 );
 	nSelPos = 0;
+
+
+
 	for( i = 0; i < nOlmArrNum; ++i ){
 		::SendMessage( hwndCombo, CB_INSERTSTRING, i, (LPARAM)OlmArr[i].pszName );
 		if( OlmArr[i].nMethod == m_Types.m_nDefaultOutline ){	/* アウトライン解析方法 */
@@ -1634,7 +1689,11 @@ void CPropTypes::p3_Import_Colors( HWND hwndDlg )
 	/* 色設定Ver1か */
 	hFile = _lopen( szPath, OF_READ );
 	if( HFILE_ERROR == hFile ){
-		::MYMESSAGEBOX( hwndDlg, MB_OK | MB_ICONSTOP, GSTR_APPNAME, "ファイルを開けませんでした。\n\n%s", szPath );
+		// LMP: Added
+		char _pszLabel[257];
+		::LoadString( m_hInstance, STR_ERR_DLGCPROPTYPES37, _pszLabel, 255 );  // LMP: Added
+
+		::MYMESSAGEBOX( hwndDlg, MB_OK | MB_ICONSTOP, GSTR_APPNAME, _pszLabel/*"ファイルを開けませんでした。\n\n%s"*/, szPath );
 		return;
 	}
 //	if( STR_COLORDATA_HEAD_LEN		== _lread( hFile, pHeader, STR_COLORDATA_HEAD_LEN )
@@ -1670,12 +1729,22 @@ void CPropTypes::p3_Import_Colors( HWND hwndDlg )
 			0 == memcmp( pHeader, szWork, nWorkLen )
 		){
 		}else{
+			// LMP: Added
+			char _pszLabel[257];
+			#ifdef STR_COLORDATA_HEAD3
+				::LoadString( m_hInstance, STR_ERR_DLGCPROPTYPES38, _pszLabel, 255 );  // LMP: Added
+			#else
+				::LoadString( m_hInstance, STR_ERR_DLGCPROPTYPES39, _pszLabel, 255 );  // LMP: Added
+			#endif
+
 			::MYMESSAGEBOX( hwndDlg, MB_OK | MB_ICONSTOP, GSTR_APPNAME,
+				_pszLabel
+
 //				"色設定ファイルの形式が違います。\n古い形式はサポートされなくなりました。\n%s", szPath
 //				Nov. 2, 2000 JEPRO 変更 [注]. 0.3.9.0:ur3β10以降、設定項目の番号を入れ替えたため
 //				Dec. 26, 2000 JEPRO UR1.2.24.0で強調キーワード2が入ってきたためCI[13]が追加された. それに伴い13番以降を1つづらした
 //				"色設定ファイルの形式が違います。\n古い形式はサポートされなくなりました。\n%s\n\n"
-				"色設定ファイルの形式が違います。古い形式はサポートされなくなりました。\n%s\n\n"	//Jan. 20, 2001 JEPRO 改行を1つ取った
+//LMP:			"色設定ファイルの形式が違います。古い形式はサポートされなくなりました。\n%s\n\n"	//Jan. 20, 2001 JEPRO 改行を1つ取った
 #ifdef STR_COLORDATA_HEAD3
 //				"色設定ファイルの変更内容はヘルプをご覧ください。"	//Jan. 15, 2001 Stonee added	//Jan. 20, 2001 JEPRO killed
 // From Here Jan. 20, 2001 JEPRO 文字数オーバーのためコメントアウト！
@@ -1696,34 +1765,34 @@ void CPropTypes::p3_Import_Colors( HWND hwndDlg )
 //				"      09(WQT), 10(UND), 11(RAP), 12(CTL), 13(URL), 14(FND), 15(MOD), 16(RUL)\n\n"
 // To Here Jan. 20, 2001
 // From Here Jan. 21, 2001 JEPRO
-				"色設定Ver3では CI[番号] から C[名前] に変更されました。\n"
-				"上記ファイルの設定内容を利用したい場合は、以下の修正を行ってからインポートしてください。\n\n"
-				"・UR1.2.24.0 (00/12/04) 以降で使っていた場合は\n"
-				"  (1) 一行目を Ver3 と書き換え、CI をすべて C に縮める\n"
-				"  (2) (1)の後、番号を( )内の文字列に変更:\n"
-				"      00(TXT), 01(RUL), 02(UND), 03(LNO), 04(MOD), 05(TAB), 06(ZEN), 07(CTL), 08(EOL),\n"
-				"      09(RAP), 10(EOF), 11(FND), 12(KW1), 13(KW2), 14(CMT), 15(SQT), 16(WQT), 17(URL)\n\n"
-				"・ur3β10 (00/09/28)～UR1.2.23.0 (00/11/29) で使っていた場合は\n"
-				"  (3) (1)の後、00-12 までは(2)と同じ  13(CMT), 14(SQT), 15(WQT), 16(URL)\n\n"
-				"・ur3β9 (00/09/26) 以前で使っていた場合は\n"
-				"  (4) (1)の後、(2)と同様:\n"
-				"      00(TXT), 01(LNO), 02(EOL), 03(TAB), 04(ZEN), 05(EOF), 06(KW1), 07(CMT), 08(SQT),\n"
-				"      09(WQT), 10(UND), 11(RAP), 12(CTL), 13(URL), 14(FND), 15(MOD), 16(RUL)\n\n"
+//LMP			"色設定Ver3では CI[番号] から C[名前] に変更されました。\n"
+//				"上記ファイルの設定内容を利用したい場合は、以下の修正を行ってからインポートしてください。\n\n"
+//				"・UR1.2.24.0 (00/12/04) 以降で使っていた場合は\n"
+//				"  (1) 一行目を Ver3 と書き換え、CI をすべて C に縮める\n"
+//				"  (2) (1)の後、番号を( )内の文字列に変更:\n"
+//				"      00(TXT), 01(RUL), 02(UND), 03(LNO), 04(MOD), 05(TAB), 06(ZEN), 07(CTL), 08(EOL),\n"
+//				"      09(RAP), 10(EOF), 11(FND), 12(KW1), 13(KW2), 14(CMT), 15(SQT), 16(WQT), 17(URL)\n\n"
+//				"・ur3β10 (00/09/28)～UR1.2.23.0 (00/11/29) で使っていた場合は\n"
+//				"  (3) (1)の後、00-12 までは(2)と同じ  13(CMT), 14(SQT), 15(WQT), 16(URL)\n\n"
+//				"・ur3β9 (00/09/26) 以前で使っていた場合は\n"
+//				"  (4) (1)の後、(2)と同様:\n"
+//				"      00(TXT), 01(LNO), 02(EOL), 03(TAB), 04(ZEN), 05(EOF), 06(KW1), 07(CMT), 08(SQT),\n"
+//				"      09(WQT), 10(UND), 11(RAP), 12(CTL), 13(URL), 14(FND), 15(MOD), 16(RUL)\n\n"
 // To Here Jan. 21, 2001
 #else
 // From Here Nov. 2, Dec. 26, 2000, Dec. 26, 2000 追加, Jan. 21, 2001 修正 JEPRO
-				"現在の色設定Ver2.1ではVer2での仕様が一部変更されました。\n"
-				"上記のファイルの設定内容を利用したい場合は、そのファイルをコピーしエディタで\n"
-				"以下の修正を行ってからインポートしてください。\n\n"
-				"・0.3.9.0 UR1.2.24.0 (2000/12/04) 以降で使っていた場合は\n"
-				"  (1) 一行目に書かれている Ver2 を Ver2.1 と書き換える\n\n"
-				"・0.3.9.0:ur3β10 (2000/09/28)～UR1.2.23.0 (2000/11/29) で使っていた場合は\n"
-				"  (2) (1)に加えて CI[12] の次行に CI[12] の設定をコピーして CI[13] とし\n"
-				"      元の CI[13] 以降の番号を1つづつ17までずらす\n\n"
-				"・0.3.9.0:ur3β9 (2000/09/26) 以前で使っていた場合は\n"
-				"  (3) (1)に加えて CI の[ ]内を順に\n"
-				"      00, 17, 10, 01, 16, 03, 04, 12, 02, 11, 05, 15, 06, 07, 08, 09, 14\n"
-				"      と書き換えた後、CI[12] の設定をコピーして CI[13] とする\n\n"
+//LMP			"現在の色設定Ver2.1ではVer2での仕様が一部変更されました。\n"
+//				"上記のファイルの設定内容を利用したい場合は、そのファイルをコピーしエディタで\n"
+//				"以下の修正を行ってからインポートしてください。\n\n"
+//				"・0.3.9.0 UR1.2.24.0 (2000/12/04) 以降で使っていた場合は\n"
+//				"  (1) 一行目に書かれている Ver2 を Ver2.1 と書き換える\n\n"
+//				"・0.3.9.0:ur3β10 (2000/09/28)～UR1.2.23.0 (2000/11/29) で使っていた場合は\n"
+//				"  (2) (1)に加えて CI[12] の次行に CI[12] の設定をコピーして CI[13] とし\n"
+//				"      元の CI[13] 以降の番号を1つづつ17までずらす\n\n"
+//				"・0.3.9.0:ur3β9 (2000/09/26) 以前で使っていた場合は\n"
+//				"  (3) (1)に加えて CI の[ ]内を順に\n"
+//				"      00, 17, 10, 01, 16, 03, 04, 12, 02, 11, 05, 15, 06, 07, 08, 09, 14\n"
+//				"      と書き換えた後、CI[12] の設定をコピーして CI[13] とする\n\n"
 // To Here Nov. 2, Dec. 26, 2000, Jan. 21, 2001 JEPRO
 #endif
 				, szPath
@@ -1738,9 +1807,13 @@ void CPropTypes::p3_Import_Colors( HWND hwndDlg )
 	/* 色設定Ver2 */
 	nColorInfoArrNum = COLORIDX_LAST;
 	if( false == cProfile.ReadProfile( szPath ) ){
+		// LMP: Added
+		char _pszLabel[257];
+		::LoadString( m_hInstance, STR_ERR_DLGCPROPTYPES40, _pszLabel, 255 );  // LMP: Added
+		
 		/* 設定ファイルが存在しない */
 		::MYMESSAGEBOX( hwndDlg, MB_OK | MB_ICONSTOP, GSTR_APPNAME,
-			"ファイルを開けませんでした。\n\n%s", szPath
+			_pszLabel /*"ファイルを開けませんでした。\n\n%s"*/, szPath
 		);
 		return;
 	}

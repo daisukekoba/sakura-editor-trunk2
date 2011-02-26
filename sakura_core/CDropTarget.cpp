@@ -12,6 +12,8 @@
 	This source code is designed for sakura editor.
 	Please contact the copyright holders to use this code for other purpose.
 */
+/* LMP (Lucien Murray-Pitts) : 2011-02-26 Added Basic English Translation Resources */
+
 
 #include "stdafx.h"
 #include "CEditWnd.h"	// 2008.06.20 ryoji
@@ -176,9 +178,13 @@ CDropTarget::~CDropTarget()
 
 BOOL CDropTarget::Register_DropTarget( HWND hWnd )
 {
+	// LMP: Added
+	char _pszLabel[257];
+
 	if( FAILED( ::RegisterDragDrop( hWnd, this ) ) ){
+		::LoadString( GetModuleHandle(NULL), STR_ERR_DLGDRPTGT1, _pszLabel, 255 );  // LMP: Added
 		::MYMESSAGEBOX( hWnd, MB_OK | MB_ICONEXCLAMATION | MB_TOPMOST, GSTR_APPNAME,
-			"::RegisterDragDrop()\né∏îs"
+			_pszLabel //"::RegisterDragDrop()\né∏îs"
 		);
 		return FALSE;
 	}

@@ -14,6 +14,7 @@
 	This source code is designed for sakura editor.
 	Please contact the copyright holder to use this code for other purpose.
 */
+/* LMP (Lucien Murray-Pitts) : 2011-02-26 Added Basic English Translation Resources */
 
 #include "stdafx.h"
 #include <stdlib.h>
@@ -265,8 +266,12 @@ HDC CPrint::CreateDC(
 		&hPrinter,					/* プリンタハンドルのポインタ */
 		(PRINTER_DEFAULTS*)NULL
 	) ){
+		// LMP: Added
+		char _pszLabel[257];
+		::LoadString( GetModuleHandle(NULL), STR_ERR_CPRINT01, _pszLabel, 255 );  // LMP: Added
+
 		wsprintf( pszErrMsg,
-			"OpenPrinter()に失敗。\nプリンタデバイス名=[%s]",
+			_pszLabel, // "OpenPrinter()に失敗。\nプリンタデバイス名=[%s]",
 			pMYDEVMODE->m_szPrinterDeviceName	/* プリンタデバイス名 */
 		);
 		goto end_of_func;
@@ -472,8 +477,12 @@ BOOL CPrint::PrintOpen(
 	di.lpszDatatype = NULL;
 	di.fwType = 0;
 	if( 0 >= ::StartDoc( hdc, &di ) ){
+		// LMP: Added
+		char _pszLabel[257];
+		::LoadString( GetModuleHandle(NULL), STR_ERR_CPRINT02, _pszLabel, 255 );  // LMP: Added
+
 		wsprintf( pszErrMsg,
-			"StartDoc()に失敗。\nプリンタデバイス名=[%s]",
+			_pszLabel, // "StartDoc()に失敗。\nプリンタデバイス名=[%s]",
 			pMYDEVMODE->m_szPrinterDeviceName	/* プリンタデバイス名 */
 		);
 		bRet = FALSE;
@@ -525,7 +534,11 @@ char* CPrint::GetPaperName( int nPaperSize, char* pszPaperName )
 	if( NULL != paperInfo ){
 		strcpy( pszPaperName, paperInfo->m_pszName );
 	}else{
-		strcpy( pszPaperName, "不明" );
+		// LMP: Added
+		char _pszLabel[257];
+		::LoadString( GetModuleHandle(NULL), STR_ERR_CPRINT03, _pszLabel, 255 );  // LMP: Added
+
+		strcpy( pszPaperName, _pszLabel ) ; // "不明" );
 	}
 	return pszPaperName;
 

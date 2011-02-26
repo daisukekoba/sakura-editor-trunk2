@@ -17,6 +17,8 @@
 	This source code is designed for sakura editor.
 	Please contact the copyright holder to use this code for other purpose.
 */
+/* LMP (Lucien Murray-Pitts) : 2011-02-26 Added Basic English Translation Resources */
+
 #include "stdafx.h"
 #include "CPropCommon.h"
 
@@ -218,7 +220,11 @@ INT_PTR CPropCommon::DispatchEvent_PROP_BACKUP( HWND hwndDlg, UINT uMsg, WPARAM 
 				/* バックアップを作成するフォルダ */
 				::GetDlgItemText( hwndDlg, IDC_EDIT_BACKUPFOLDER, szFolder, sizeof( szFolder ));
 
-				if( SelectDir( hwndDlg, "バックアップを作成するフォルダを選んでください", (const char *)szFolder, (char *)szFolder ) ){
+				// LMP: Added
+				char _pszLabel[257];
+				::LoadString( m_hInstance, STR_ERR_DLGPROPCOMBK1, _pszLabel, 255 );  // LMP: Added
+
+				if( SelectDir( hwndDlg, _pszLabel /*"バックアップを作成するフォルダを選んでください"*/, (const char *)szFolder, (char *)szFolder ) ){
 					strcpy( m_Common.m_szBackUpFolder, szFolder );
 					::SetDlgItemText( hwndDlg, IDC_EDIT_BACKUPFOLDER, m_Common.m_szBackUpFolder );
 				}
@@ -578,7 +584,8 @@ void CPropCommon::UpdateBackupFile(HWND hwndDlg)	//	バックアップファイルの詳細設
 			_tcscpy( temp, _T("") );
 		}
 		else if( m_Common.m_bBackUpDustBox  ){
-			wsprintf( temp, _T("%s\\"), _T("(ゴミ箱)") );
+			::LoadString( m_hInstance, STR_ERR_DLGPROPCOMBK2, temp, MAX_PATH );  // LMP: Added
+//			wsprintf( temp, _T("%s\\"), _T("(ゴミ箱)") );
 		}
 		else{
 			wsprintf( temp, _T(".\\") );

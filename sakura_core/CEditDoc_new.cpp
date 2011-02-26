@@ -18,6 +18,7 @@
 	This source code is designed for sakura editor.
 	Please contact the copyright holder to use this code for other purpose.
 */
+/* LMP (Lucien Murray-Pitts) : 2011-02-26 Added Basic English Translation Resources */
 
 #include "stdafx.h"
 #include "CEditDoc.h"
@@ -154,7 +155,9 @@ void CEditDoc::MakeFuncList_Java( CFuncInfoArr* pcFuncInfoArr )
 							&nPosY
 						);
 						char szWork[256];
-						wsprintf( szWork, "%s::%s", szClass, "定義位置" );
+						char _pszLabel[257] ;
+						::LoadString( m_hInstance, STR_ERR_DLGEDITDOCNEW1, _pszLabel, 255 );  // LMP: Added
+						wsprintf( szWork, "%s::%s", szClass, _pszLabel ) ; // "定義位置" );
 						pcFuncInfoArr->AppendData( nPosY + 1/*nFuncLine*/, nPosY + 1, szWork, nFuncId );
 
 					}
@@ -1286,9 +1289,13 @@ void CEditDoc::OpenFile( const char *filename, int nCharCode, BOOL bReadOnly )
 		//	変換しないとIsPathOpenedで正しい結果が得られず，
 		//	同一ファイルを複数開くことがある．
 		if( ! GetLongFileName( filename, pszPath )){
+			// LMP: Added
+			char _pszLabel[257] ;
+			::LoadString( m_hInstance, STR_ERR_DLGEDITDOCNEW2, _pszLabel, 255 );  // LMP: Added
+
 			//	ファイル名の変換に失敗
 			::MYMESSAGEBOX( m_hWnd, MB_OK , GSTR_APPNAME,
-				"ファイル名の変換に失敗しました [%s]", filename );
+				_pszLabel /*"ファイル名の変換に失敗しました [%s]"*/, filename );
 			return;
 		}
 	}
@@ -1471,14 +1478,20 @@ BOOL CEditDoc::FileSave( bool warnbeep, bool askname )
 		//	読みとり専用のチェックをCEditDocから上書き保存処理に移動
 		if( m_bReadOnly ){	/* 読み取り専用モード */
 			if( warnbeep ){
+				// LMP: Added
+				char _pszLabel[2][257] ;
+				::LoadString( m_hInstance, STR_ERR_DLGEDITDOCNEW3, _pszLabel[0], 255 );  // LMP: Added
+				::LoadString( m_hInstance, STR_ERR_DLGEDITDOCNEW4, _pszLabel[1], 255 );  // LMP: Added
+
 				::MessageBeep( MB_ICONHAND );
 				MYMESSAGEBOX(
 					m_hWnd,
 					MB_OK | MB_ICONSTOP | MB_TOPMOST,
 					GSTR_APPNAME,
-					"%s\n\nは読み取り専用モードで開いています。 上書き保存はできません。\n\n"
-					"名前を付けて保存をすればいいと思います。",
-					IsFilePathAvailable() ? GetFilePath() : "（無題）"
+					_pszLabel[0],
+					// "%s\n\nは読み取り専用モードで開いています。 上書き保存はできません。\n\n"
+					// "名前を付けて保存をすればいいと思います。",
+					IsFilePathAvailable() ? GetFilePath() : _pszLabel[1] // "（無題）"
 				);
 			}
 			return FALSE;
@@ -1517,12 +1530,16 @@ BOOL CEditDoc::FileSaveAs_Dialog( void )
 		//	読みとり専用のチェックをCEditDocから上書き保存処理に移動
 		//	同名で上書きされるのを防ぐ
 		if( m_bReadOnly && strcmp( szPath, GetFilePath()) == 0 ){
+			// LMP: Added
+			char _pszLabel[257] ;
+			::LoadString( m_hInstance, STR_ERR_DLGEDITDOCNEW5, _pszLabel, 255 );  // LMP: Added
+
 			::MessageBeep( MB_ICONHAND );
 			MYMESSAGEBOX(
 				m_hWnd,
 				MB_OK | MB_ICONSTOP | MB_TOPMOST,
 				GSTR_APPNAME,
-				"読み取り専用モードでは同一ファイルへの上書き保存はできません。"
+				_pszLabel //"読み取り専用モードでは同一ファイルへの上書き保存はできません。"
 			);
 		}
 		else {

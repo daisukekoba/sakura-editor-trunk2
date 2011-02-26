@@ -19,6 +19,8 @@
 	This source code is designed for sakura editor.
 	Please contact the copyright holder to use this code for other purpose.
 */
+/* LMP (Lucien Murray-Pitts) : 2011-02-26 Added Basic English Translation Resources */
+
 
 /* for TRACE() of MFC */
 //#ifdef _DEBUG
@@ -30,6 +32,7 @@
 
 
 #include "stdafx.h"
+#include "charcode.h"
 #include "CDocLineMgr.h"
 #include "debug.h"
 #include "charcode.h"
@@ -50,10 +53,10 @@
 
 #include "CFileWrite.h" //2002/05/22 Frozen
 #include "CFileLoad.h" // 2002/08/30 Moca
-#include "CShareData.h" // 2010/03/03 Moca
-
 #include "my_icmp.h" // Nov. 29, 2002 genta/moca
 
+// LMP: Added
+#include "CShareData.h"
 
 
 
@@ -452,6 +455,11 @@ int CDocLineMgr::ReadFile( const char* pszPath, HWND hWndParent, HWND hwndProgre
 	const char*	pLine;
 	int			nLineLen;
 
+	// LMP: Added
+	char _pszLabel[257];
+
+
+
 	/* 既存データのクリア */
 	Empty();
 	Init();
@@ -494,7 +502,7 @@ int CDocLineMgr::ReadFile( const char* pszPath, HWND hWndParent, HWND hwndProgre
 			int nRet = MYMESSAGEBOX( hWndParent,
 				MB_ICONQUESTION | MB_YESNO | MB_TOPMOST,
 				GSTR_APPNAME,
-				"ファイルサイズが%dMB以上あります。開きますか？",
+				"ファイルサイズが%dMB以上あります。開きますか？",	// LMP FIXME
 				nFileMBSize );
 			if( nRet != IDYES ){
 				return FALSE;
@@ -527,18 +535,22 @@ int CDocLineMgr::ReadFile( const char* pszPath, HWND hWndParent, HWND hwndProgre
 	catch( CError_FileOpen ){
 		nRetVal = FALSE;
 		if( -1 == _access( pszPath, 0 )){
+			::LoadString( GetModuleHandle(NULL), STR_ERR_DLGDOCLM1, _pszLabel, 255 );  // LMP: Added
+
 			// ファイルがない
 			::MYMESSAGEBOX(
 				hWndParent, MB_OK | MB_ICONSTOP, GSTR_APPNAME,
-				_T("%s\nというファイルを開けません。\nファイルが存在しません。"),	//Mar. 24, 2001 jepro 若干修正
+				_pszLabel, //_T("%s\nというファイルを開けません。\nファイルが存在しません。"),	//Mar. 24, 2001 jepro 若干修正
 				pszPath
 			 );
 		}
 		else if( -1 == _access( pszPath, 4 )){
+			::LoadString( GetModuleHandle(NULL), STR_ERR_DLGDOCLM2, _pszLabel, 255 );  // LMP: Added
+
 			// 読み込みアクセス権がない
 			::MYMESSAGEBOX(
 				hWndParent, MB_OK | MB_ICONSTOP, GSTR_APPNAME,
-				_T("\'%s\'\nというファイルを開けません。\n読み込みアクセス権がありません。"),
+				_pszLabel, //_T("\'%s\'\nというファイルを開けません。\n読み込みアクセス権がありません。"),
 				pszPath
 			 );
 		}
@@ -551,18 +563,22 @@ int CDocLineMgr::ReadFile( const char* pszPath, HWND hWndParent, HWND hwndProgre
 //			 );
 //		}
 		else{
+			::LoadString( GetModuleHandle(NULL), STR_ERR_DLGDOCLM3, _pszLabel, 255 );  // LMP: Added
+
 			::MYMESSAGEBOX(
 				hWndParent, MB_OK | MB_ICONSTOP, GSTR_APPNAME,
-				_T("\'%s\'\nというファイルを開けません。\n他のアプリケーションで使用されている可能性があります。"),
+				_pszLabel, //_T("\'%s\'\nというファイルを開けません。\n他のアプリケーションで使用されている可能性があります。"),
 				pszPath
 			 );
 		}
 	}
 	catch( CError_FileRead ){
 		nRetVal = FALSE;
+
+		::LoadString( GetModuleHandle(NULL), STR_ERR_DLGDOCLM4, _pszLabel, 255 );  // LMP: Added
 		::MYMESSAGEBOX(
 			hWndParent, MB_OK | MB_ICONSTOP, GSTR_APPNAME,
-			_T("\'%s\'というファイルの読み込み中にエラーが発生しました。\nファイルの読み込みを中止します。"),
+			_pszLabel, //_T("\'%s\'というファイルの読み込み中にエラーが発生しました。\nファイルの読み込みを中止します。"),
 			pszPath
 		 );
 		/* 既存データのクリア */
@@ -890,11 +906,15 @@ int CDocLineMgr::WriteFile( const char* pszPath, HWND hWndParent, HWND hwndProgr
 	}
 	catch(CError_FileOpen)
 	{
+		// LMP: Added
+		char _pszLabel[257];
+		::LoadString( GetModuleHandle(NULL), STR_ERR_DLGDOCLM5, _pszLabel, 255 );  // LMP: Added
+
 		::MYMESSAGEBOX(
 			hWndParent,
 			MB_OK | MB_ICONSTOP,
 			GSTR_APPNAME,
-			"\'%s\'\nファイルを保存できません。\nパスが存在しないか、他のアプリケーションで使用されている可能性があります。",
+			_pszLabel, //"\'%s\'\nファイルを保存できません。\nパスが存在しないか、他のアプリケーションで使用されている可能性があります。",
 			pszPath);
 		nRetVal = FALSE;
 	}
@@ -2396,9 +2416,13 @@ char* CDocLineMgr::GetAllData( int*	pnDataLen )
 	char*	pData;
 	pData = (char*)malloc( nDataLen + 1 );
 	if( NULL == pData ){
+		// LMP: Added
+		char _pszLabel[257];
+		::LoadString( GetModuleHandle(NULL), STR_ERR_DLGDOCLM6, _pszLabel, 255 );  // LMP: Added
+
 		::MYMESSAGEBOX(
 			NULL, MB_OK | MB_ICONSTOP | MB_TOPMOST, GSTR_APPNAME,
-			"CDocLineMgr::GetAllData()\nメモリ確保に失敗しました。\n%dバイト",
+			_pszLabel, //"CDocLineMgr::GetAllData()\nメモリ確保に失敗しました。\n%dバイト",
 			nDataLen + 1
 		);
 		return NULL;

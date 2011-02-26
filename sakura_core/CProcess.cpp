@@ -12,6 +12,7 @@
 	This source code is designed for sakura editor.
 	Please contact the copyright holder to use this code for other purpose.
 */
+/* LMP (Lucien Murray-Pitts) : 2011-02-26 Added Basic English Translation Resources */
 
 
 #include "stdafx.h"
@@ -44,9 +45,13 @@ bool CProcess::Initialize()
 {
 	/* 共有データ構造体のアドレスを返す */
 	if( !m_cShareData.Init() ){
+		// LMP: Added
+		char _pszLabel[257];
+		::LoadString( m_hInstance, STR_ERR_DLGPROCESS1, _pszLabel, 255 );  // LMP: Added
+
 		//	適切なデータを得られなかった
 		::MYMESSAGEBOX( NULL, MB_OK | MB_ICONERROR,
-			GSTR_APPNAME, _T("異なるバージョンのエディタを同時に起動することはできません。") );
+			GSTR_APPNAME, _pszLabel ) ; // _T("異なるバージョンのエディタを同時に起動することはできません。") );
 		return false;
 	}
 	m_pShareData = m_cShareData.GetShareData();

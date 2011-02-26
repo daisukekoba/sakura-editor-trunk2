@@ -17,6 +17,7 @@
 	This source code is designed for sakura editor.
 	Please contact the copyright holder to use this code for other purpose.
 */
+/* LMP (Lucien Murray-Pitts) : 2011-02-26 Added Basic English Translation Resources */
 
 #include "stdafx.h"
 #include "CDlgOpenFile.h"
@@ -176,14 +177,20 @@ UINT_PTR CALLBACK OFNHookProc(
 		EOL_LF,
 		EOL_CR,
 	};
+
 	//	文字列はResource内に入れる
-	const char*	const	pEolNameArr[] = {
+/*LMP:	const char*	const	pEolNameArr[] = {
 		"変換なし",
 		"CR+LF",
 		"LF (UNIX)",
 		"CR (Mac)",
 	};
+
 	int nEolNameArrNum = (int) (sizeof( pEolNameArr ) / sizeof( pEolNameArr[0] ) );
+
+*/
+
+
 //	To Here	Feb. 9, 2001 genta
 	int	Controls[nControls] = {
 		stc3, stc2,		// The two label controls
@@ -195,6 +202,25 @@ UINT_PTR CALLBACK OFNHookProc(
 	};
 	int	nRightMargin = 24;
 	HWND	hwndFrame;
+
+	// LMP: Added
+	char _pszLabel[257];
+	
+
+	//	文字列はResource内に入れる
+	// LMP: Added to replace first item for EN/FR/GR...
+	char	pEolNameArr[4][32] = {
+		"変換なし",
+		"CR+LF",
+		"LF (UNIX)",
+		"CR (Mac)",
+	};
+	int nEolNameArrNum = (int) (sizeof( pEolNameArr ) / sizeof( pEolNameArr[0] ) );
+
+	// LMP: Added
+	::LoadString( GetModuleHandle(NULL), STR_ERR_DLGOPNFL1, pEolNameArr[0], 255 );  // LMP: Added
+
+
 
 	switch( uiMsg ){
 	case WM_MOVE:
@@ -460,8 +486,12 @@ UINT_PTR CALLBACK OFNHookProc(
 				if( IsFileExists(pcDlgOpenFile->m_szPath, true) ){
 					TCHAR szText[_MAX_PATH + 100];
 					::lstrcpyn(szText, pcDlgOpenFile->m_szPath, _MAX_PATH);
-					::lstrcat(szText, _T(" は既に存在します。\r\n上書きしますか？"));
-					if( IDYES != ::MessageBox( hwndOpenDlg, szText, _T("名前を付けて保存"), MB_YESNO | MB_ICONEXCLAMATION) ){
+
+					::LoadString( GetModuleHandle(NULL), STR_ERR_DLGOPNFL2, _pszLabel, 255 );  // LMP: Added
+					::lstrcat(szText, _pszLabel );//_T(" は既に存在します。\r\n上書きしますか？"));
+
+					::LoadString( GetModuleHandle(NULL), STR_ERR_DLGOPNFL3, _pszLabel, 255 );  // LMP: Added
+					if( IDYES != ::MessageBox( hwndOpenDlg, szText, _pszLabel, /*_T("名前を付けて保存"),*/ MB_YESNO | MB_ICONEXCLAMATION) ){
 						::SetWindowLongPtr( hdlg, DWLP_MSGRESULT, TRUE );
 						return TRUE;
 					}
@@ -746,9 +776,19 @@ BOOL CDlgOpenFile::DoModal_GetOpenFileName( char* pszPath , bool bSetCurDir )
 
 	//	2003.05.12 MIK
 	CFileExt	cFileExt;
-	cFileExt.AppendExtRaw( "ユーザー指定",     m_szDefaultWildCard );
-	cFileExt.AppendExtRaw( "テキストファイル", "*.txt" );
-	cFileExt.AppendExtRaw( "すべてのファイル", "*.*" );
+
+	// LMP: Added
+	char _pszLabel[257];
+
+	::LoadString( GetModuleHandle(NULL), STR_ERR_DLGOPNFL4, _pszLabel, 255 );  // LMP: Added
+	cFileExt.AppendExtRaw( _pszLabel /*"ユーザー指定"*/,     m_szDefaultWildCard );
+
+	::LoadString( GetModuleHandle(NULL), STR_ERR_DLGOPNFL5, _pszLabel, 255 );  // LMP: Added
+	cFileExt.AppendExtRaw( _pszLabel /*"テキストファイル"*/, "*.txt" );
+
+	::LoadString( GetModuleHandle(NULL), STR_ERR_DLGOPNFL6, _pszLabel, 255 );  // LMP: Added
+	cFileExt.AppendExtRaw( _pszLabel /*"すべてのファイル"*/, "*.*" );
+
 
 	/* 構造体の初期化 */
 	InitOfn( m_ofn );		// 2005.10.29 ryoji
@@ -821,13 +861,22 @@ BOOL CDlgOpenFile::DoModal_GetSaveFileName( char* pszPath, bool bSetCurDir )
 {
 	//カレントディレクトリを保存。関数から抜けるときに自動でカレントディレクトリは復元される。
 	CCurrentDirectoryBackupPoint cCurDirBackup;
-
+	
 	//	2003.05.12 MIK
 	CFileExt	cFileExt;
-	cFileExt.AppendExtRaw( "ユーザー指定",     m_szDefaultWildCard );
-	cFileExt.AppendExtRaw( "テキストファイル", "*.txt" );
-	cFileExt.AppendExtRaw( "すべてのファイル", "*.*" );
-	
+
+	// LMP: Added
+	char _pszLabel[257];
+
+	::LoadString( GetModuleHandle(NULL), STR_ERR_DLGOPNFL4, _pszLabel, 255 );  // LMP: Added
+	cFileExt.AppendExtRaw( _pszLabel /*"ユーザー指定"*/,     m_szDefaultWildCard );
+
+	::LoadString( GetModuleHandle(NULL), STR_ERR_DLGOPNFL5, _pszLabel, 255 );  // LMP: Added
+	cFileExt.AppendExtRaw( _pszLabel /*"テキストファイル"*/, "*.txt" );
+
+	::LoadString( GetModuleHandle(NULL), STR_ERR_DLGOPNFL6, _pszLabel, 255 );  // LMP: Added
+	cFileExt.AppendExtRaw( _pszLabel /*"すべてのファイル"*/, "*.*" );
+
 	// 2010.08.28 カレントディレクトリを移動するのでパス解決する
 	if( pszPath[0] ){
 		TCHAR szFullPath[_MAX_PATH];
@@ -889,8 +938,16 @@ BOOL CDlgOpenFile::DoModalOpenDlg( char* pszPath, int* pnCharCode, BOOL* pbReadO
 
 	//	2003.05.12 MIK
 	CFileExt	cFileExt;
-	cFileExt.AppendExtRaw( "すべてのファイル", "*.*" );
-	cFileExt.AppendExtRaw( "テキストファイル", "*.txt" );
+
+	// LMP: Added
+	char _pszLabel[257];
+
+	::LoadString( GetModuleHandle(NULL), STR_ERR_DLGOPNFL6, _pszLabel, 255 );  // LMP: Added
+	cFileExt.AppendExtRaw( _pszLabel /*"すべてのファイル"*/, "*.*" );
+
+	::LoadString( GetModuleHandle(NULL), STR_ERR_DLGOPNFL5, _pszLabel, 255 );  // LMP: Added
+	cFileExt.AppendExtRaw( _pszLabel /*"テキストファイル"*/, "*.txt" );
+
 	for( i = 0; i < MAX_TYPES; i++ )
 	{
 		cFileExt.AppendExt( m_pShareData->m_Types[i].m_szTypeName, m_pShareData->m_Types[i].m_szTypeExts );
@@ -974,13 +1031,23 @@ BOOL CDlgOpenFile::DoModalSaveDlg( char* pszPath, int* pnCharCode, CEOL* pcEol, 
 
 	//	2003.05.12 MIK
 	CFileExt	cFileExt;
-	cFileExt.AppendExtRaw( "ユーザー指定",     m_szDefaultWildCard );
-	cFileExt.AppendExtRaw( "テキストファイル", "*.txt" );
-	cFileExt.AppendExtRaw( "すべてのファイル", "*.*" );
+
+	// LMP: Added
+	char _pszLabel[257];
+
+	::LoadString( GetModuleHandle(NULL), STR_ERR_DLGOPNFL4, _pszLabel, 255 );  // LMP: Added
+	cFileExt.AppendExtRaw( _pszLabel /*"ユーザー指定"*/,     m_szDefaultWildCard );
+
+	::LoadString( GetModuleHandle(NULL), STR_ERR_DLGOPNFL5, _pszLabel, 255 );  // LMP: Added
+	cFileExt.AppendExtRaw( _pszLabel /*"テキストファイル"*/, "*.txt" );
+
+	::LoadString( GetModuleHandle(NULL), STR_ERR_DLGOPNFL6, _pszLabel, 255 );  // LMP: Added
+	cFileExt.AppendExtRaw( _pszLabel /*"すべてのファイル"*/, "*.*" );
 
 	// ファイル名の初期設定	// 2006.11.10 ryoji
+	::LoadString( GetModuleHandle(NULL), STR_ERR_DLGOPNFL7, _pszLabel, 255 );  // LMP: Added
 	if( pszPath[0] == '\0' )
-		::lstrcpyn(pszPath, _T("無題"), _MAX_PATH);
+		::lstrcpyn(pszPath, _pszLabel /*_T("無題")*/, _MAX_PATH);
 
 	/* 構造体の初期化 */
 	InitOfn( m_ofn );		// 2005.10.29 ryoji
@@ -1097,9 +1164,13 @@ void CDlgOpenFile::DlgOpenFail(void)
 	default: pszError = "UNKNOWN_ERRORCODE"; break;
 	}
 
+	// LMP: Added
+	char _pszLabel[257];
+	::LoadString( GetModuleHandle(NULL), STR_ERR_DLGOPNFL8, _pszLabel, 255 );  // LMP: Added
+	
 	::MessageBeep( MB_ICONSTOP );
 	::MYMESSAGEBOX( m_hwndParent, MB_OK | MB_ICONSTOP | MB_TOPMOST, GSTR_APPNAME,
-		"ダイアログが開けません。\n\nエラー:%s", pszError
+		_pszLabel /*"ダイアログが開けません。\n\nエラー:%s"*/, pszError
 	);
 }
 
@@ -1353,9 +1424,13 @@ BOOL CDlgOpenFile::CheckPathLengthOverflow( const char *pszPath, int nLength, BO
 		;
 
 	if( bErrDisp && i >= nLength ){
+		// LMP: Added
+		char _pszLabel[257];
+		::LoadString( GetModuleHandle(NULL), STR_ERR_DLGOPNFL9, _pszLabel, 255 );  // LMP: Added
+
 		::MessageBeep( MB_ICONSTOP );
 		MYMESSAGEBOX( m_hWnd, MB_OK | MB_ICONSTOP | MB_TOPMOST, GSTR_APPNAME,
-					  "ファイルパスが長すぎます。 ANSI 版では %d バイト以上の絶対パスを扱えません。",
+					  _pszLabel, //"ファイルパスが長すぎます。 ANSI 版では %d バイト以上の絶対パスを扱えません。",
 					  nLength );
 	}
 	

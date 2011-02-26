@@ -28,6 +28,7 @@
 		3. This notice may not be removed or altered from any source
 		   distribution.
 */
+/* LMP (Lucien Murray-Pitts) : 2011-02-26 Added Basic English Translation Resources */
 
 #include "stdafx.h"
 #include "global.h"
@@ -123,6 +124,14 @@ INT_PTR CPropTypes::DispatchEvent_KeyHelp(
 
 	hwndList = GetDlgItem( hwndDlg, IDC_LIST_KEYHELP );
 
+	// LMP: Added
+	char _pszLabel[10][257];
+	for( int ii=0 ; ii<10 ; ii++ )
+	{
+		::LoadString( m_hInstance, STR_ERR_DLGPROPTYPKEYHELP01+ii, _pszLabel[ii], 255 );  // LMP: Added
+	}
+
+
 	switch( uMsg ){
 	case WM_INITDIALOG:
 		::SetWindowLongPtr( hwndDlg, DWLP_USER, lParam );
@@ -133,22 +142,23 @@ INT_PTR CPropTypes::DispatchEvent_KeyHelp(
 		dwStyle |= LVS_EX_CHECKBOXES /*| LVS_EX_FULLROWSELECT*/ | LVS_EX_GRIDLINES;
 		ListView_SetExtendedListViewStyle(hwndList, dwStyle);
 
+
 		col.mask     = LVCF_FMT | LVCF_WIDTH | LVCF_TEXT | LVCF_SUBITEM;
 		col.fmt      = LVCFMT_LEFT;
 		col.cx       = (rc.right - rc.left) * 25 / 100;
-		col.pszText  = "   辞書ファイル";	/* 指定辞書ファイルの使用可否 */
+		col.pszText  = _pszLabel[0] ; // "   辞書ファイル";	/* 指定辞書ファイルの使用可否 */
 		col.iSubItem = 0;
 		ListView_InsertColumn( hwndList, 0, &col );
 		col.mask     = LVCF_FMT | LVCF_WIDTH | LVCF_TEXT | LVCF_SUBITEM;
 		col.fmt      = LVCFMT_LEFT;
 		col.cx       = (rc.right - rc.left) * 55 / 100;
-		col.pszText  = "辞書の説明";		/* 指定辞書の１行目を取得 */
+		col.pszText  = _pszLabel[1] ; // "辞書の説明";		/* 指定辞書の１行目を取得 */
 		col.iSubItem = 1;
 		ListView_InsertColumn( hwndList, 1, &col );
 		col.mask     = LVCF_FMT | LVCF_WIDTH | LVCF_TEXT | LVCF_SUBITEM;
 		col.fmt      = LVCFMT_LEFT;
 		col.cx       = (rc.right - rc.left) * 18 / 100;
-		col.pszText  = "パス";				/* 指定辞書ファイルパス */
+		col.pszText  = _pszLabel[2] ; // "パス";				/* 指定辞書ファイルパス */
 		col.iSubItem = 2;
 		ListView_InsertColumn( hwndList, 2, &col );
 		nPrevIndex = -1;	//@@@ 2003.05.12 MIK
@@ -158,8 +168,8 @@ INT_PTR CPropTypes::DispatchEvent_KeyHelp(
 			ListView_SetItemState( hwndList, 0, LVIS_SELECTED /*| LVIS_FOCUSED*/, LVIS_SELECTED /*| LVIS_FOCUSED*/ );
 		}else{
 		/* リストがなければ初期値として用途を表示 */
-			::SetDlgItemText( hwndDlg, IDC_LABEL_KEYHELP_ABOUT, "辞書ファイルの１行目の文字列" );
-			::SetDlgItemText( hwndDlg, IDC_EDIT_KEYHELP, "キーワード辞書ファイル パス" );
+			::SetDlgItemText( hwndDlg, IDC_LABEL_KEYHELP_ABOUT, _pszLabel[3] ); // "辞書ファイルの１行目の文字列" );
+			::SetDlgItemText( hwndDlg, IDC_EDIT_KEYHELP, _pszLabel[4] ); // "キーワード辞書ファイル パス" );
 		}
 		/* 初期状態を設定 */
 		SendMessage(hwndDlg, WM_COMMAND, (WPARAM)MAKELONG(IDC_CHECK_KEYHELP,BN_CLICKED), 0 );
@@ -230,7 +240,7 @@ INT_PTR CPropTypes::DispatchEvent_KeyHelp(
 
 				if(wID == IDC_BUTTON_KEYHELP_INS){	/* 挿入 */
 					if( nIndex2 >= MAX_KEYHELP_FILE ){
-						::MYMESSAGEBOX( hwndDlg, MB_OK | MB_ICONSTOP, GSTR_APPNAME, "これ以上登録できません。");
+						::MYMESSAGEBOX( hwndDlg, MB_OK | MB_ICONSTOP, GSTR_APPNAME, _pszLabel[5] ) ; // "これ以上登録できません。");
 						return FALSE;
 					}if( -1 == nIndex ){
 						/* 選択中でなければ最後にする。 */
@@ -240,7 +250,7 @@ INT_PTR CPropTypes::DispatchEvent_KeyHelp(
 					}
 				}else{								/* 更新 */
 					if( -1 == nIndex ){
-						::MYMESSAGEBOX( hwndDlg, MB_OK | MB_ICONSTOP, GSTR_APPNAME, "更新する辞書をリストから選択してください。");
+						::MYMESSAGEBOX( hwndDlg, MB_OK | MB_ICONSTOP, GSTR_APPNAME, _pszLabel[6] ) ; // "更新する辞書をリストから選択してください。");
 						return FALSE;
 					}
 				}
@@ -258,7 +268,7 @@ INT_PTR CPropTypes::DispatchEvent_KeyHelp(
 					if( strcmp(szPath, szPath2) == 0 ){
 						if( (wID ==IDC_BUTTON_KEYHELP_UPD) && (i == nIndex) ){	/* 更新時、変わっていなかったら何もしない */
 						}else{
-							::MYMESSAGEBOX( hwndDlg, MB_OK | MB_ICONSTOP, GSTR_APPNAME, "既に登録済みの辞書です。");
+							::MYMESSAGEBOX( hwndDlg, MB_OK | MB_ICONSTOP, GSTR_APPNAME, _pszLabel[7] ) ; // "既に登録済みの辞書です。");
 							return FALSE;
 						}
 					}
@@ -266,7 +276,7 @@ INT_PTR CPropTypes::DispatchEvent_KeyHelp(
 				/* 指定したパスに辞書があるかチェックする */
 				FILE* fp;
 				if( (fp=_tfopen_absini(szPath,"r")) == NULL ){	// 2006.02.01 genta 本体からの相対パスを受け付ける	// 2007.05.19 ryoji 相対パスは設定ファイルからのパスを優先
-					::MYMESSAGEBOX( hwndDlg, MB_OK | MB_ICONSTOP, GSTR_APPNAME, "ファイルを開けませんでした。\n\n%s", szPath );
+					::MYMESSAGEBOX( hwndDlg, MB_OK | MB_ICONSTOP, GSTR_APPNAME, _pszLabel[8] /* "ファイルを開けませんでした。\n\n%s" */, szPath );
 					return FALSE;
 				}
 				/* 開けたなら1行目を取得してから閉じる */
@@ -315,8 +325,8 @@ INT_PTR CPropTypes::DispatchEvent_KeyHelp(
 				ListView_DeleteItem( hwndList, nIndex );
 				/* リストがなくなったら初期値として用途を表示 */
 				if(ListView_GetItemCount(hwndList) == 0){
-					::SetDlgItemText( hwndDlg, IDC_LABEL_KEYHELP_ABOUT, "辞書ファイルの１行目の文字列" );
-					::SetDlgItemText( hwndDlg, IDC_EDIT_KEYHELP, "キーワード辞書ファイル パス" );
+					::SetDlgItemText( hwndDlg, IDC_LABEL_KEYHELP_ABOUT, _pszLabel[9] ) ; // "辞書ファイルの１行目の文字列" );
+					::SetDlgItemText( hwndDlg, IDC_EDIT_KEYHELP, _pszLabel[10] ) ; // "キーワード辞書ファイル パス" );
 				}/* リストの最後を削除した場合は、削除後のリストの最後を選択する。 */
 				else if(nIndex > ListView_GetItemCount(hwndList)-1){
 					ListView_SetItemState( hwndList, ListView_GetItemCount(hwndList)-1, LVIS_SELECTED | LVIS_FOCUSED, LVIS_SELECTED | LVIS_FOCUSED );
@@ -693,7 +703,11 @@ BOOL CPropTypes::Import_KeyHelp(HWND hwndDlg)
 
 	FILE		*fp;
 	if( (fp = fopen(szPath, "r")) == NULL ){
-		::MYMESSAGEBOX( hwndDlg, MB_OK | MB_ICONSTOP, GSTR_APPNAME, "ファイルを開けませんでした。\n\n%s", szPath );
+		// LMP: Added
+		char _pszLabel[257];
+		::LoadString( m_hInstance, STR_ERR_DLGPROPTYPKEYHELP12, _pszLabel, 255 );  // LMP: Added
+
+		::MYMESSAGEBOX( hwndDlg, MB_OK | MB_ICONSTOP, GSTR_APPNAME, _pszLabel /*"ファイルを開けませんでした。\n\n%s"*/, szPath );
 		return FALSE;
 	}
 	/* LIST内のデータ全削除 */
@@ -757,7 +771,10 @@ BOOL CPropTypes::Import_KeyHelp(HWND hwndDlg)
 		FILE* fp2;
 		if( (fp2=_tfopen_absini(p3,"r")) == NULL ){	// 2007.02.03 genta 相対パスはsakura.exe基準で開く	// 2007.05.19 ryoji 相対パスは設定ファイルからのパスを優先
 			// 2007.02.03 genta 辞書が見つからない場合の措置．警告を出すが取り込む
-			p2 = "【辞書ファイルが見つかりません】";
+			// LMP: Added
+			static char _pszLabel[257];
+			::LoadString( m_hInstance, STR_ERR_DLGPROPTYPKEYHELP13, _pszLabel, 255 );  // LMP: Added
+			p2 = _pszLabel ; // "【辞書ファイルが見つかりません】";
 			b_enable_flag = 0;
 		}
 		else
@@ -765,7 +782,10 @@ BOOL CPropTypes::Import_KeyHelp(HWND hwndDlg)
 
 		//About
 		if(strlen(p2)>DICT_ABOUT_LEN){
-			::MYMESSAGEBOX( hwndDlg, MB_OK | MB_ICONSTOP, GSTR_APPNAME, "辞書の説明は%d文字以内にしてください。\n", DICT_ABOUT_LEN );
+			// LMP: Added
+			char _pszLabel[257];
+			::LoadString( m_hInstance, STR_ERR_DLGPROPTYPKEYHELP14, _pszLabel, 255 );  // LMP: Added
+			::MYMESSAGEBOX( hwndDlg, MB_OK | MB_ICONSTOP, GSTR_APPNAME, _pszLabel /*"辞書の説明は%d文字以内にしてください。\n"*/, DICT_ABOUT_LEN );
 			++invalid_record;
 			continue;
 		}
@@ -781,8 +801,11 @@ BOOL CPropTypes::Import_KeyHelp(HWND hwndDlg)
 	SetData_KeyHelp(hwndDlg);
 	// 2007.02.03 genta 失敗したら警告する
 	if( invalid_record > 0 ){
+		// LMP: Added
+		char _pszLabel[257];
+		::LoadString( m_hInstance, STR_ERR_DLGPROPTYPKEYHELP15, _pszLabel, 255 );  // LMP: Added
 		::MYMESSAGEBOX( hwndDlg, MB_OK | MB_ICONWARNING, GSTR_APPNAME,
-		"一部のデータが読み込めませんでした\n不正な行数: %d",
+		_pszLabel, // "一部のデータが読み込めませんでした\n不正な行数: %d",
 		invalid_record );
 	}
 	return TRUE;
@@ -812,11 +835,17 @@ BOOL CPropTypes::Export_KeyHelp(HWND hwndDlg)
 	strcat( m_pShareData->m_szIMPORTFOLDER, "\\" );
 	FILE		*fp;
 	if( (fp = fopen(szXPath, "w")) == NULL ){
-		::MYMESSAGEBOX( hwndDlg, MB_OK | MB_ICONSTOP, GSTR_APPNAME, "ファイルを開けませんでした。\n\n%s", szXPath );
+		// LMP: Added
+		char _pszLabel[257];
+		::LoadString( m_hInstance, STR_ERR_DLGPROPTYPKEYHELP16, _pszLabel, 255 );  // LMP: Added
+		::MYMESSAGEBOX( hwndDlg, MB_OK | MB_ICONSTOP, GSTR_APPNAME, _pszLabel /*"ファイルを開けませんでした。\n\n%s"*/, szXPath );
 		return FALSE;
 	}
 
-	fprintf(fp, "// キーワード辞書設定 Ver1\n");
+	// LMP: Added
+	char _pszLabel[257];
+	::LoadString( m_hInstance, STR_ERR_DLGPROPTYPKEYHELP17, _pszLabel, 255 );  // LMP: Added
+	fprintf(fp, _pszLabel ); // "// キーワード辞書設定 Ver1\n");
 
 	GetData_KeyHelp(hwndDlg);
 	HWND hwndList = GetDlgItem( hwndDlg, IDC_LIST_KEYHELP );
@@ -833,8 +862,10 @@ BOOL CPropTypes::Export_KeyHelp(HWND hwndDlg)
 	}
 	fclose(fp);
 
+	// LMP: Added
+	::LoadString( m_hInstance, STR_ERR_DLGPROPTYPKEYHELP18, _pszLabel, 255 );  // LMP: Added
 	::MYMESSAGEBOX(	hwndDlg, MB_OK | MB_ICONINFORMATION, GSTR_APPNAME,
-		"ファイルへエクスポートしました。\n\n%s", szXPath
+		_pszLabel /*"ファイルへエクスポートしました。\n\n%s"*/, szXPath
 	);
 	return TRUE;
 }

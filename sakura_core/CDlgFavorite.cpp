@@ -28,6 +28,7 @@
 		3. This notice may not be removed or altered from any source
 		   distribution.
 */
+/* LMP (Lucien Murray-Pitts) : 2011-02-26 Added Basic English Translation Resources */
 
 
 
@@ -76,58 +77,68 @@ const DWORD p_helpids[] = {
 CDlgFavorite::CDlgFavorite()
 {
 	int	i;
+	static char _pszLabel[7][257];
 
 	m_nCurrentTab = 0;
 	strcpy( m_szMsg, "" );
 
 	{
+		::LoadString( m_hInstance, STR_ERR_DLGFAV1, _pszLabel[0], 255 );  // LMP: Added
+		::LoadString( m_hInstance, STR_ERR_DLGFAV2, _pszLabel[1], 255 );  // LMP: Added
+		::LoadString( m_hInstance, STR_ERR_DLGFAV3, _pszLabel[2], 255 );  // LMP: Added
+		::LoadString( m_hInstance, STR_ERR_DLGFAV4, _pszLabel[3], 255 );  // LMP: Added
+		::LoadString( m_hInstance, STR_ERR_DLGFAV5, _pszLabel[4], 255 );  // LMP: Added
+		::LoadString( m_hInstance, STR_ERR_DLGFAV6, _pszLabel[5], 255 );  // LMP: Added
+		::LoadString( m_hInstance, STR_ERR_DLGFAV7, _pszLabel[6], 255 );  // LMP: Added
+//		sprintf( _pszLabel, "%i err", iii ) ;
+
 		memset( p_favorite_info, 0, sizeof( p_favorite_info ) );
 
 		i = 0;
 		p_favorite_info[i].m_pRecent    = &m_cRecentFile;
-		p_favorite_info[i].m_pszCaption = "ファイル";
+		p_favorite_info[i].m_pszCaption = _pszLabel[0] ; //"ファイル";
 		p_favorite_info[i].m_nId        = IDC_LIST_FAVORITE_FILE;
 		p_favorite_info[i].m_bHaveFavorite = true;
 		p_favorite_info[i].m_bHaveView  = true;
 
 		i++;
 		p_favorite_info[i].m_pRecent    = &m_cRecentFolder;
-		p_favorite_info[i].m_pszCaption = "フォルダ";
+		p_favorite_info[i].m_pszCaption = _pszLabel[1] ; //"フォルダ";
 		p_favorite_info[i].m_nId        = IDC_LIST_FAVORITE_FOLDER;
 		p_favorite_info[i].m_bHaveFavorite = true;
 		p_favorite_info[i].m_bHaveView  = true;
 
 		i++;
 		p_favorite_info[i].m_pRecent    = &m_cRecentSearch;
-		p_favorite_info[i].m_pszCaption = "検索";
+		p_favorite_info[i].m_pszCaption = _pszLabel[2] ; //"検索";
 		p_favorite_info[i].m_nId        = IDC_LIST_FAVORITE_SEARCH;
 		p_favorite_info[i].m_bHaveFavorite = false;
 		p_favorite_info[i].m_bHaveView  = false;
 
 		i++;
 		p_favorite_info[i].m_pRecent    = &m_cRecentReplace;
-		p_favorite_info[i].m_pszCaption = "置換";
+		p_favorite_info[i].m_pszCaption = _pszLabel[3] ; //"置換";
 		p_favorite_info[i].m_nId        = IDC_LIST_FAVORITE_REPLACE;
 		p_favorite_info[i].m_bHaveFavorite = false;
 		p_favorite_info[i].m_bHaveView  = false;
 
 		i++;
 		p_favorite_info[i].m_pRecent    = &m_cRecentGrepFile;
-		p_favorite_info[i].m_pszCaption = "GREPファイル";
+		p_favorite_info[i].m_pszCaption = _pszLabel[4] ; //"GREPファイル";
 		p_favorite_info[i].m_nId        = IDC_LIST_FAVORITE_GREP_FILE;
 		p_favorite_info[i].m_bHaveFavorite = false;
 		p_favorite_info[i].m_bHaveView  = false;
 
 		i++;
 		p_favorite_info[i].m_pRecent    = &m_cRecentGrepFolder;
-		p_favorite_info[i].m_pszCaption = "GREPフォルダ";
+		p_favorite_info[i].m_pszCaption = _pszLabel[5] ; //"GREPフォルダ";
 		p_favorite_info[i].m_nId        = IDC_LIST_FAVORITE_GREP_FOLDER;
 		p_favorite_info[i].m_bHaveFavorite = false;
 		p_favorite_info[i].m_bHaveView  = false;
 
 		i++;
 		p_favorite_info[i].m_pRecent    = &m_cRecentCmd;
-		p_favorite_info[i].m_pszCaption = "コマンド";
+		p_favorite_info[i].m_pszCaption = _pszLabel[6] ; //"コマンド";
 		p_favorite_info[i].m_nId        = IDC_LIST_FAVORITE_CMD;
 		p_favorite_info[i].m_bHaveFavorite = false;
 		p_favorite_info[i].m_bHaveView  = false;
@@ -225,7 +236,10 @@ void CDlgFavorite::SetDataOne( int nIndex, int nCurrentIndex )
 
 	for( i = 0; i < pRecent->GetItemCount(); i++ )
 	{
-		wsprintf( tmp, "%s", (i < nViewCount) ? " " : "(非表示)" );
+		// LMP: Added
+		char _pszLabel[257];
+		::LoadString( m_hInstance, STR_ERR_DLGFAV8, _pszLabel, 255 );  // LMP: Added
+		wsprintf( tmp, "%s", (i < nViewCount) ? " " : _pszLabel ) ; // "(非表示)" );
 		lvi.mask     = LVIF_TEXT | LVIF_PARAM;
 		lvi.pszText  = tmp;
 		lvi.iItem    = i;
@@ -341,10 +355,14 @@ BOOL CDlgFavorite::OnInitDialog( HWND hwndDlg, WPARAM wParam, LPARAM lParam )
 		::MoveWindow( hwndList, rc.left, rc.top, rc.right - rc.left, rc.bottom - rc.top, FALSE );
 		::ShowWindow( hwndList, SW_HIDE );
 
+		// LMP: Added
+		char _pszLabel[257];
+		::LoadString( m_hInstance, STR_ERR_DLGFAV9, _pszLabel, 255 );  // LMP: Added
+
 		col.mask     = LVCF_FMT | LVCF_WIDTH | LVCF_TEXT | LVCF_SUBITEM;
 		col.fmt      = LVCFMT_LEFT;
 		col.cx       = (rc.right - rc.left) * 16 / 100;
-		col.pszText  = "お気に入り";
+		col.pszText  = _pszLabel ; // "お気に入り";
 		col.iSubItem = 0;
 		ListView_InsertColumn( hwndList, 0, &col );
 
@@ -404,21 +422,28 @@ BOOL CDlgFavorite::OnBnClicked( int wID )
 			if( -1 != nIndex )
 			{
 				int	nRet;
+
+				// LMP: Added
+				char _pszLabel[257];
 				
 				if( p_favorite_info[nIndex].m_bHaveFavorite )
 				{
+					::LoadString( m_hInstance, STR_ERR_DLGFAV10, _pszLabel, 255 );  // LMP: Added
 					nRet = ::MYMESSAGEBOX( m_hWnd, 
 						MB_YESNOCANCEL | MB_ICONQUESTION, GSTR_APPNAME,
-						"最近使った%sの履歴を削除します。\n\nよろしいですか？\n\n"
-						"「はい」\tすべて削除します。\n"
-						"「いいえ」\tお気に入り以外を削除します。\n",
+						_pszLabel,
+						//"最近使った%sの履歴を削除します。\n\nよろしいですか？\n\n"
+						//"「はい」\tすべて削除します。\n"
+						//"「いいえ」\tお気に入り以外を削除します。\n",
 						p_favorite_info[nIndex].m_pszCaption );
 				}
 				else
 				{
+					::LoadString( m_hInstance, STR_ERR_DLGFAV11, _pszLabel, 255 );  // LMP: Added
 					nRet = ::MYMESSAGEBOX( m_hWnd, 
 						MB_OKCANCEL | MB_ICONQUESTION, GSTR_APPNAME,
-						"最近使った%sの履歴を削除します。\n\nよろしいですか？\n",
+						_pszLabel,
+						// "最近使った%sの履歴を削除します。\n\nよろしいですか？\n",
 						p_favorite_info[nIndex].m_pszCaption );
 				}
 				
@@ -430,8 +455,10 @@ BOOL CDlgFavorite::OnBnClicked( int wID )
 				case IDYES:
 				case IDOK:
 					if( pRecent ) pRecent->DeleteAllItem();
+
+					::LoadString( m_hInstance, STR_ERR_DLGFAV12, _pszLabel, 255 );  // LMP: Added
 					::MYMESSAGEBOX( m_hWnd, MB_OK | MB_ICONINFORMATION, GSTR_APPNAME,
-						"最近使った%sの履歴を削除しました。",
+						_pszLabel, //"最近使った%sの履歴を削除しました。",
 						p_favorite_info[nIndex].m_pszCaption );
 					break;
 					
@@ -449,8 +476,9 @@ BOOL CDlgFavorite::OnBnClicked( int wID )
 							}
 						}
 					}
+					::LoadString( m_hInstance, STR_ERR_DLGFAV13, _pszLabel, 255 );  // LMP: Added
 					::MYMESSAGEBOX( m_hWnd, MB_OK | MB_ICONINFORMATION, GSTR_APPNAME,
-						"最近使った%sの履歴(お気に入り以外)を削除しました。",
+						_pszLabel, //"最近使った%sの履歴(お気に入り以外)を削除しました。",
 						p_favorite_info[nIndex].m_pszCaption );
 					break;
 					
@@ -572,8 +600,12 @@ bool CDlgFavorite::RefreshList( void )
 
 	if( ret_val )
 	{
+		// LMP: Added
+		char _pszLabel[257];
+		::LoadString( m_hInstance, STR_ERR_DLGFAV14, _pszLabel, 255 );  // LMP: Added
+
 		wsprintf( m_szMsg, 
-			"履歴(%s)が更新されたため編集中情報を破棄し再表示しました。",
+			_pszLabel,// "履歴(%s)が更新されたため編集中情報を破棄し再表示しました。",
 			msg );
 	}
 

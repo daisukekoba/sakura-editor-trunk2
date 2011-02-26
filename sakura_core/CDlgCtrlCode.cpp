@@ -28,6 +28,7 @@
 		3. This notice may not be removed or altered from any source
 		   distribution.
 */
+/* LMP (Lucien Murray-Pitts) : 2011-02-26 Added Basic English Translation Resources */
 
 #include "stdafx.h"
 #include <stdio.h>
@@ -56,7 +57,7 @@ struct ctrl_info_t {
 	unsigned int	vKey;			
 	char			name[4];	//名前
 	char			*jname;		//日本語名
-} static const p_ctrl_list[] = {
+} static /*const LMP */ p_ctrl_list[] = {
 	{ 0x00, 0x00c0, "NUL", "空文字"       },
 	{ 0x01, 'A', "SOH", "ヘッダ開始"   },
 	{ 0x02, 'B', "STX", "テキスト開始" },
@@ -97,9 +98,20 @@ struct ctrl_info_t {
 // Feb. 12, 2003 MIK longが抜けていた
 static const long p_ctrl_list_num = sizeof(p_ctrl_list) / sizeof(struct ctrl_info_t);
 
+// LMP: FIXME - May need to be moved if we use dynamic language switching
+// LMP: Added
+static	char _pszLabel_jname[p_ctrl_list_num][257];
+
 CDlgCtrlCode::CDlgCtrlCode()
 {
 	m_nCode = 0;
+
+	for( int i = 0; i < p_ctrl_list_num; i++ )
+	{
+		// LMP: Added
+		::LoadString( m_hInstance, STR_ERR_DLGCTL5+i, _pszLabel_jname[i], 255 );
+		p_ctrl_list[i].jname = _pszLabel_jname[i] ;
+	}
 }
 
 /* モーダルダイアログの表示 */
@@ -198,6 +210,9 @@ BOOL CDlgCtrlCode::OnInitDialog( HWND hwndDlg, WPARAM wParam, LPARAM lParam )
 	LV_COLUMN	col;
 	RECT		rc;
 
+	// LMP: Added
+	char _pszLabel[257];
+
 	m_hWnd = hwndDlg;
 
 	hwndList = GetDlgItem( hwndDlg, IDC_LIST_CTRLCODE );
@@ -206,28 +221,40 @@ BOOL CDlgCtrlCode::OnInitDialog( HWND hwndDlg, WPARAM wParam, LPARAM lParam )
 	col.mask     = LVCF_FMT | LVCF_WIDTH | LVCF_TEXT | LVCF_SUBITEM;
 	col.fmt      = LVCFMT_LEFT;
 	col.cx       = (rc.right - rc.left) * 15 / 100;
-	col.pszText  = "コード";
+
+	// LMP: Added
+	::LoadString( m_hInstance, STR_ERR_DLGCTL1, _pszLabel, 255 );
+	col.pszText  = _pszLabel ; //"コード";
 	col.iSubItem = 0;
 	ListView_InsertColumn( hwndList, 0, &col );
 
 	col.mask     = LVCF_FMT | LVCF_WIDTH | LVCF_TEXT | LVCF_SUBITEM;
 	col.fmt      = LVCFMT_LEFT;
 	col.cx       = (rc.right - rc.left) * 15 / 100;
-	col.pszText  = "表記";
+
+	// LMP: Added
+	::LoadString( m_hInstance, STR_ERR_DLGCTL2, _pszLabel, 255 );
+	col.pszText  = _pszLabel ; // "表記";
 	col.iSubItem = 1;
 	ListView_InsertColumn( hwndList, 1, &col );
 
 	col.mask     = LVCF_FMT | LVCF_WIDTH | LVCF_TEXT | LVCF_SUBITEM;
 	col.fmt      = LVCFMT_LEFT;
 	col.cx       = (rc.right - rc.left) * 15 / 100;
-	col.pszText  = "名前";
+
+	// LMP: Added
+	::LoadString( m_hInstance, STR_ERR_DLGCTL3, _pszLabel, 255 );
+	col.pszText  = _pszLabel ; // "名前";
 	col.iSubItem = 2;
 	ListView_InsertColumn( hwndList, 2, &col );
 
 	col.mask     = LVCF_FMT | LVCF_WIDTH | LVCF_TEXT | LVCF_SUBITEM;
 	col.fmt      = LVCFMT_LEFT;
 	col.cx       = (rc.right - rc.left) * 46 / 100;
-	col.pszText  = "説明";
+
+	// LMP: Added
+	::LoadString( m_hInstance, STR_ERR_DLGCTL4, _pszLabel, 255 );
+	col.pszText  = _pszLabel ; // "説明";
 	col.iSubItem = 3;
 	ListView_InsertColumn( hwndList, 3, &col );
 

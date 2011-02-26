@@ -29,6 +29,7 @@
 		   distribution.
 
 */
+/* LMP (Lucien Murray-Pitts) : 2011-02-26 Added Basic English Translation Resources */
 
 #include "stdafx.h"
 #include <string.h>
@@ -251,7 +252,7 @@ const char* COutlineErlang::ScanArgs( const char* end, const char* p )
 					case ']': op = '['; break;
 					case '}': op = '{'; break;
 					default:
-						::MYMESSAGEBOX(	NULL, MB_OK | MB_ICONINFORMATION | MB_TOPMOST, "作者に教えて欲しいエラー",
+						::MYMESSAGEBOX(	NULL, MB_OK | MB_ICONINFORMATION | MB_TOPMOST, "作者に教えて欲しいエラー", // LMP FIXME
 							_T("COutlineErlang::ScanArgs 未知の括弧"));
 						break;
 				}
@@ -374,7 +375,7 @@ bool COutlineErlang::parse( const char* buf, int linelen, int linenum )
 			case STATE_FUNC_ARGS_FIN:
 				pos = EnterCond( end, pos ); break;
 			default:
-				::MYMESSAGEBOX(	NULL, MB_OK | MB_ICONINFORMATION | MB_TOPMOST, "作者に教えて欲しいエラー",
+				::MYMESSAGEBOX(	NULL, MB_OK | MB_ICONINFORMATION | MB_TOPMOST, "作者に教えて欲しいエラー", // LMP FIXME
 					_T("COutlineErlang::parse Unknown State: %d"), m_state );
 				break;
 		}

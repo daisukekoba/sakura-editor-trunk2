@@ -16,6 +16,7 @@
 	This source code is designed for sakura editor.
 	Please contact the copyright holder to use this code for other purpose.
 */
+/* LMP (Lucien Murray-Pitts) : 2011-02-26 Added Basic English Translation Resources */
 
 #include "stdafx.h"
 #include "CDlgFind.h"
@@ -309,8 +310,12 @@ BOOL CDlgFind::OnBnClicked( int wID )
 //		return TRUE;
 //ここまでコメントアウトし、代わりに以下を追加
 		}else{
+			// LMP: Added
+			char _pszLabel[257];
+			::LoadString( m_hInstance, STR_ERR_DLGFIND1, _pszLabel, 255 );  // LMP: Added
+
 			::MYMESSAGEBOX( m_hWnd, MB_OK , GSTR_APPNAME,
-				"検索条件を指定してください。"
+				_pszLabel // "検索条件を指定してください。"
 			);
 		}
 		return TRUE;
@@ -360,8 +365,12 @@ BOOL CDlgFind::OnBnClicked( int wID )
 //		return TRUE;
 //ここまでコメントアウトし、代わりに以下を追加
 		}else{
+			// LMP: Added
+			char _pszLabel[257];
+			::LoadString( m_hInstance, STR_ERR_DLGFIND1, _pszLabel, 255 );  // LMP: Added
+
 			::MYMESSAGEBOX( m_hWnd, MB_OK , GSTR_APPNAME,
-				"検索条件を指定してください。"
+				_pszLabel //"検索条件を指定してください。"
 			);
 		}
 		return TRUE;

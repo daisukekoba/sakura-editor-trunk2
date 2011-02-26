@@ -15,6 +15,7 @@
 	This source code is designed for sakura editor.
 	Please contact the copyright holders to use this code for other purpose.
 */
+/* LMP (Lucien Murray-Pitts) : 2011-02-26 Added Basic English Translation Resources */
 
 #include "stdafx.h"
 #include "CPropCommon.h"
@@ -100,15 +101,20 @@ int Listbox_INSERTDATA(
 	int value
 )
 {
+	// LMP: Added
+	char _pszLabel[2][257];
+	::LoadString( GetModuleHandle(NULL), STR_ERR_DLGPROPCOMTOOL01, _pszLabel[0], 255 );  // LMP: Added
+	::LoadString( GetModuleHandle(NULL), STR_ERR_DLGPROPCOMTOOL02, _pszLabel[1], 255 );  // LMP: Added
+
 	int nIndex1 = ::SendMessage( hWnd, LB_INSERTSTRING, index, 1 );
 	if( nIndex1 == LB_ERR || nIndex1 == LB_ERRSPACE ){
 		::MYMESSAGEBOX( NULL, MB_OK | MB_ICONSTOP | MB_TOPMOST, GSTR_APPNAME,
-			_T("Toolbar Dialog: 要素の挿入に失敗しました。(%d:%d)"), index, nIndex1 );
+			_pszLabel[0] /*_T("Toolbar Dialog: 要素の挿入に失敗しました。(%d:%d)")*/, index, nIndex1 );
 		return nIndex1;
 	}
 	else if( ::SendMessage( hWnd, LB_SETITEMDATA, nIndex1, value ) == LB_ERR ){
 		::MYMESSAGEBOX( NULL, MB_OK | MB_ICONSTOP | MB_TOPMOST, GSTR_APPNAME,
-			_T("Toolbar Dialog: INS: 値の設定に失敗しました。:%d"), nIndex1 );
+			_pszLabel[0] /*_T("Toolbar Dialog: INS: 値の設定に失敗しました。:%d")*/, nIndex1 );
 		return LB_ERR;
 	}
 	return nIndex1;
@@ -135,15 +141,20 @@ int Listbox_ADDDATA(
 	int value
 )
 {
+	// LMP: Added
+	char _pszLabel[2][257];
+	::LoadString( GetModuleHandle(NULL), STR_ERR_DLGPROPCOMTOOL03, _pszLabel[0], 255 );  // LMP: Added
+	::LoadString( GetModuleHandle(NULL), STR_ERR_DLGPROPCOMTOOL04, _pszLabel[1], 255 );  // LMP: Added
+
 	int nIndex1 = ::SendMessage( hWnd, LB_ADDSTRING, index, 1 );
 	if( nIndex1 == LB_ERR || nIndex1 == LB_ERRSPACE ){
 		::MYMESSAGEBOX( NULL, MB_OK | MB_ICONSTOP | MB_TOPMOST, GSTR_APPNAME,
-			_T("Toolbar Dialog: 要素の追加に失敗しました。(%d:%d)"), index, nIndex1 );
+			_pszLabel[0] /*_T("Toolbar Dialog: 要素の追加に失敗しました。(%d:%d)")*/, index, nIndex1 );
 		return nIndex1;
 	}
 	else if( ::SendMessage( hWnd, LB_SETITEMDATA, nIndex1, value ) == LB_ERR ){
 		::MYMESSAGEBOX( NULL, MB_OK | MB_ICONSTOP | MB_TOPMOST, GSTR_APPNAME,
-			_T("Toolbar Dialog: ADD: 値の設定に失敗しました。:%d"), nIndex1 );
+			_pszLabel[0] /*_T("Toolbar Dialog: ADD: 値の設定に失敗しました。:%d")*/, nIndex1 );
 		return LB_ERR;
 	}
 	return nIndex1;
@@ -307,6 +318,9 @@ INT_PTR CPropCommon::DispatchEvent_PROP_TOOLBAR(
 				return TRUE;
 			}
 		}else{
+			// LMP: Added
+			char _pszLabel[257];
+
 			switch( wNotifyCode ){
 			/* ボタン／チェックボックスがクリックされた */
 			case BN_CLICKED:
@@ -394,8 +408,10 @@ INT_PTR CPropCommon::DispatchEvent_PROP_TOOLBAR(
 					//	ここでは i != 0 だとは思うけど、一応保険です。
 					nIndex1 = ::Listbox_INSERTDATA( hwndResList, nIndex1, i );
 					if( nIndex1 == LB_ERR || nIndex1 == LB_ERRSPACE ){
+						::LoadString( m_hInstance, STR_ERR_DLGPROPCOMTOOL05, _pszLabel, 255 );  // LMP: Added
+
 						::MYMESSAGEBOX( NULL, MB_OK | MB_ICONSTOP | MB_TOPMOST, GSTR_APPNAME,
-							_T("Toolbar Dialog: 要素の追加に失敗しました。:%d"), nIndex1 );
+							_pszLabel /*_T("Toolbar Dialog: 要素の追加に失敗しました。:%d")*/, nIndex1 );
 						break;
 					}
 					//	To Here Apr. 13, 2002 genta
@@ -416,8 +432,10 @@ INT_PTR CPropCommon::DispatchEvent_PROP_TOOLBAR(
 					//	From Here Apr. 13, 2002 genta
 					nIndex1 = ::Listbox_INSERTDATA( hwndResList, nIndex1 - 1, i );
 					if( nIndex1 == LB_ERR || nIndex1 == LB_ERRSPACE ){
+						::LoadString( m_hInstance, STR_ERR_DLGPROPCOMTOOL05, _pszLabel, 255 );  // LMP: Added
+
 						::MYMESSAGEBOX( NULL, MB_OK | MB_ICONSTOP | MB_TOPMOST, GSTR_APPNAME,
-							_T("Toolbar Dialog: 要素の追加に失敗しました。:%d"), nIndex1 );
+							_pszLabel /*_T("Toolbar Dialog: 要素の追加に失敗しました。:%d")*/, nIndex1 );
 						break;
 					}
 					//	To Here Apr. 13, 2002 genta
@@ -439,8 +457,10 @@ INT_PTR CPropCommon::DispatchEvent_PROP_TOOLBAR(
 					//	From Here Apr. 13, 2002 genta
 					nIndex1 = ::Listbox_INSERTDATA( hwndResList, nIndex1 + 1, i );
 					if( nIndex1 == LB_ERR || nIndex1 == LB_ERRSPACE ){
+						::LoadString( m_hInstance, STR_ERR_DLGPROPCOMTOOL05, _pszLabel, 255 );  // LMP: Added
+
 						::MYMESSAGEBOX( NULL, MB_OK | MB_ICONSTOP | MB_TOPMOST, GSTR_APPNAME,
-							_T("Toolbar Dialog: 要素の追加に失敗しました。:%d"), nIndex1 );
+							_pszLabel /*_T("Toolbar Dialog: 要素の追加に失敗しました。:%d")*/, nIndex1 );
 						break;
 					}
 					::SendMessage( hwndResList, LB_SETCURSEL, nIndex1, 0 );
@@ -634,6 +654,7 @@ void CPropCommon::DrawToolBarItemList( DRAWITEMSTRUCT* pDis )
 	if( (int)pDis->itemID < 0 ){
 	}else{
 
+
 //@@@ 2002.01.03 YAZAKI m_tbMyButtonなどをCShareDataからCMenuDrawerへ移動したことによる修正。
 //		tbb = m_cShareData.m_tbMyButton[pDis->itemData];
 //		tbb = m_pcMenuDrawer->m_tbMyButton[pDis->itemData];
@@ -643,13 +664,16 @@ void CPropCommon::DrawToolBarItemList( DRAWITEMSTRUCT* pDis )
 		if( tbb.fsStyle & TBSTYLE_SEP ){
 			// テキストだけ表示する
 			if( tbb.idCommand == F_DISABLE ){
-				strcpy( szLabel, "───────────" );	// nLength 未使用 2003/01/09 Moca
+				::LoadString( GetModuleHandle(NULL), STR_ERR_DLGPROPCOMTOOL06, szLabel, 255 );  // LMP: Added
+				// strcpy( szLabel, "───────────" );	// nLength 未使用 2003/01/09 Moca
 			}else if( tbb.idCommand == F_MENU_NOT_USED_FIRST ){
 				if( ::LoadString( m_hInstance, tbb.idCommand, szLabel, sizeof( szLabel ) ) <= 0 ){
-					strcpy( szLabel, "――ツールバー折返――" );
+					::LoadString( GetModuleHandle(NULL), STR_ERR_DLGPROPCOMTOOL07, szLabel, 255 );  // LMP: Added
+					// strcpy( szLabel, "――ツールバー折返――" );
 				}
 			}else{
-				strcpy( szLabel, "────不　明────" );
+				::LoadString( GetModuleHandle(NULL), STR_ERR_DLGPROPCOMTOOL08, szLabel, 255 );  // LMP: Added
+				// strcpy( szLabel, "────不　明────" );
 			}
 		//	From Here Oct. 15, 2001 genta
 		}else{

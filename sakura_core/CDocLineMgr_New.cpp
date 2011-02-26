@@ -16,6 +16,8 @@
 	This source code is designed for sakura editor.
 	Please contact the copyright holder to use this code for other purpose.
 */
+/* LMP (Lucien Murray-Pitts) : 2011-02-26 Added Basic English Translation Resources */
+
 #include "stdafx.h"
 #include "charcode.h"
 #include "CDocLineMgr.h"
@@ -75,6 +77,10 @@ void CDocLineMgr::ReplaceData( DocLineReplaceArg* pArg )
 	HWND		hwndCancel = NULL;	//	初期化
 	HWND		hwndProgress = NULL;	//	初期化
 
+	// LMP: Added
+	char _pszLabel[257];
+
+
 	pArg->nNewLine = pArg->nDelLineFrom;
 	pArg->nNewPos =  pArg->nDelPosFrom;
 
@@ -128,7 +134,8 @@ void CDocLineMgr::ReplaceData( DocLineReplaceArg* pArg )
 			goto next_line;
 		}
 		if( 0 > nWorkLen ){
-			::MYMESSAGEBOX(	NULL, MB_OK | MB_ICONINFORMATION, "作者に教えて欲しいエラー",
+			::LoadString( GetModuleHandle(NULL), STR_ERR_DLGDOCLMN1, _pszLabel, 255 );  // LMP: Added
+			::MYMESSAGEBOX(	NULL, MB_OK | MB_ICONINFORMATION, _pszLabel, //"作者に教えて欲しいエラー",
 				"CDocLineMgr::ReplaceData()\n\n0 > nWorkLen\nnWorkLen=%d\ni=%d\npArg->nDelLineTo=%d", nWorkLen, i, pArg->nDelLineTo
 			);
 		}
@@ -143,7 +150,8 @@ void CDocLineMgr::ReplaceData( DocLineReplaceArg* pArg )
 		/* 削除されたデータを保存 */
 		// 2002/2/10 aroka from here CMemory変更 念のため。
 		if( pLine != pCDocLine->m_pLine->GetPtr() ){
-			::MYMESSAGEBOX(	NULL, MB_OK | MB_ICONINFORMATION, "作者に教えて欲しいエラー",
+			::LoadString( GetModuleHandle(NULL), STR_ERR_DLGDOCLMN1, _pszLabel, 255 );  // LMP: Added
+			::MYMESSAGEBOX(	NULL, MB_OK | MB_ICONINFORMATION, _pszLabel, //"作者に教えて欲しいエラー",
 				"CDocLineMgr::ReplaceData()\n\npLine != pCDocLine->m_pLine->GetPtr() =%d\ni=%d\npArg->nDelLineTo=%d", pLine, i, pArg->nDelLineTo
 			);
 		}

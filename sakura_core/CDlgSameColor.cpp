@@ -27,6 +27,8 @@
 		3. This notice may not be removed or altered from any source
 		   distribution.
 */
+/* LMP (Lucien Murray-Pitts) : 2011-02-26 Added Basic English Translation Resources */
+
 
 #include "stdafx.h"
 #include "sakura_rc.h"
@@ -138,11 +140,16 @@ BOOL CDlgSameColor::OnInitDialog( HWND hwndDlg, WPARAM wParam, LPARAM lParam )
 	int nItem;
 	int i;
 
+	// LMP: Added
+	char _pszLabel[257];
+
 	switch( m_wID )	// タイプ別設定ダイアログで押されたボタンID
 	{
 	case IDC_BUTTON_SAMETEXTCOLOR:
+		::LoadString( m_hInstance, STR_ERR_DLGSMCLR1, _pszLabel, 255 );  // LMP: Added
+
 		// タイプ別設定から文字色を重複しないように取り出す
-		::SetWindowText( m_hWnd, _T("文字色統一") );
+		::SetWindowText( m_hWnd, _pszLabel ) ; //_T("文字色統一") );
 		for( i = 0; i < COLORIDX_LAST; ++i ){
 			if( m_cr != m_pTypes->m_ColorInfoArr[i].m_colTEXT ){
 				_ultot( m_pTypes->m_ColorInfoArr[i].m_colTEXT, szText, 10 );
@@ -155,8 +162,10 @@ BOOL CDlgSameColor::OnInitDialog( HWND hwndDlg, WPARAM wParam, LPARAM lParam )
 		break;
 
 	case IDC_BUTTON_SAMEBKCOLOR:
+		::LoadString( m_hInstance, STR_ERR_DLGSMCLR2, _pszLabel, 255 );  // LMP: Added
+
 		// タイプ別設定から背景色を重複しないように取り出す
-		::SetWindowText( m_hWnd, _T("背景色統一") );
+		::SetWindowText( m_hWnd, _pszLabel ) ; //_T("背景色統一") );
 		for( i = 0; i < COLORIDX_LAST; ++i ){
 			if( 0 != (g_ColorAttributeArr[i].fAttribute & COLOR_ATTRIB_NO_BACK) )	// 2006.12.18 ryoji フラグ利用で簡素化
 				continue;

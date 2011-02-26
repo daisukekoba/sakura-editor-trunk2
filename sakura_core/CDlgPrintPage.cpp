@@ -11,6 +11,8 @@
 	This source code is designed for sakura editor.
 	Please contact the copyright holder to use this code for other purpose.
 */
+/* LMP (Lucien Murray-Pitts) : 2011-02-26 Added Basic English Translation Resources */
+
 #include "stdafx.h"
 #include "CDlgPrintPage.h"
 #include "sakura_rc.h"
@@ -64,7 +66,12 @@ void CDlgPrintPage::SetData( void )
 	}else{
 		::CheckDlgButton( m_hWnd, IDC_RADIO_FROMTO, BST_CHECKED );
 	}
-	wsprintf( szText, "%d ～ %d ページ", m_nPageMin, m_nPageMax );
+
+	// LMP: Added
+	char _pszLabel[257];
+	::LoadString( GetModuleHandle(NULL), STR_ERR_DLGPRNPG1, _pszLabel, 255 );  // LMP: Added
+
+	wsprintf( szText, _pszLabel /*"%d ～ %d ページ"*/, m_nPageMin, m_nPageMax );
 	::SetDlgItemText( m_hWnd, IDC_STATIC_ALL, szText );
 
 	::SetDlgItemInt( m_hWnd, IDC_EDIT_FROM, m_nPageFrom, FALSE );
@@ -107,7 +114,12 @@ int CDlgPrintPage::GetData( void )
 			m_nPageFrom <= m_nPageTo
 		){
 		}else{
-			::MYMESSAGEBOX(	m_hWnd, MB_OK | MB_ICONSTOP | MB_TOPMOST, "入力エラー", "ページ範囲指定が正しくありません。" );
+			// LMP: Added
+			char _pszLabel[2][257];
+			::LoadString( GetModuleHandle(NULL), STR_ERR_DLGPRNPG2, _pszLabel[0], 255 );  // LMP: Added
+			::LoadString( GetModuleHandle(NULL), STR_ERR_DLGPRNPG3, _pszLabel[1], 255 );  // LMP: Added
+
+			::MYMESSAGEBOX(	m_hWnd, MB_OK | MB_ICONSTOP | MB_TOPMOST, _pszLabel[0], _pszLabel[1] ) ; // "入力エラー", "ページ範囲指定が正しくありません。" );
 			return FALSE;
 		}
 	}

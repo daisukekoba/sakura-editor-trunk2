@@ -32,6 +32,7 @@
 /* ↑ファイルの属性取得に _dos_getfileattr (Dos function) を使用する場合に定義
 　 しておく。未定義の場合は GetFileAttributes (Windows API) を使用する。
 　 主に LSI-C 試食版で動作確認していたもので。 */
+/* LMP (Lucien Murray-Pitts) : 2011-02-26 Added Basic English Translation Resources */
 
 #ifdef	LSI_C	/* LSI-C なら絶対 _dos_getfileattr を使う */
 #ifndef	_USE_MS_DOS_FUNC_

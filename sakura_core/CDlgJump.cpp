@@ -15,6 +15,8 @@
 	This source code is designed for sakura editor.
 	Please contact the copyright holder to use this code for other purpose.
 */
+/* LMP (Lucien Murray-Pitts) : 2011-02-26 Added Basic English Translation Resources */
+
 #include "stdafx.h"
 #include "sakura_rc.h"
 #include "CDlgJump.h"
@@ -178,8 +180,12 @@ BOOL CDlgJump::OnBnClicked( int wID )
 		if( 0 < GetData() ){
 			CloseDialog( 1 );
 		}else{
+			// LMP: Added
+			char _pszLabel[257];
+			::LoadString( m_hInstance, STR_ERR_DLGJUMP1, _pszLabel, 255 );  // LMP: Added
+
 			::MYMESSAGEBOX( m_hWnd, MB_OK , GSTR_APPNAME,
-				"正しく行番号を入力してください。"
+				_pszLabel //"正しく行番号を入力してください。"
 			);
 		}
 //To Here Feb. 20, 2001
@@ -210,6 +216,10 @@ void CDlgJump::SetData( void )
 	int				nIndex;
 	int				nWorkLine;
 	int				nPLSQLBlockNum;
+
+	// LMP: Added
+	char _pszLabel[257];
+
 
 //	m_hWnd = hwndDlg;
 //From Here Oct. 7, 2000 JEPRO 前回入力した行番号を保持するように下行を変更
@@ -243,12 +253,15 @@ void CDlgJump::SetData( void )
 		if( 31 == cFuncInfoArr.GetAt( i )->m_nInfo ){
 //@@@ 2002.01.08 YAZAKI 設定を保存するためにShareDataに移動
 			if( m_pShareData->m_bLineNumIsCRLF ){	/* 行番号の表示 FALSE=折り返し単位／TRUE=改行単位 */
-				wsprintf( szText, "%d 行  %s  パッケージ仕様部",
+
+				::LoadString( m_hInstance, STR_ERR_DLGJUMP2, _pszLabel, 255 );  // LMP: Added
+				wsprintf( szText, _pszLabel, //"%d 行  %s  パッケージ仕様部",
 					cFuncInfoArr.GetAt( i )->m_nFuncLineCRLF,
 					cFuncInfoArr.GetAt( i )->m_cmemFuncName.GetPtr()
 				);
 			}else{
-				wsprintf( szText, "%d 行  %s  パッケージ仕様部",
+				::LoadString( m_hInstance, STR_ERR_DLGJUMP2, _pszLabel, 255 );  // LMP: Added
+				wsprintf( szText, _pszLabel, // "%d 行  %s  パッケージ仕様部",
 					cFuncInfoArr.GetAt( i )->m_nFuncLineLAYOUT,
 					cFuncInfoArr.GetAt( i )->m_cmemFuncName.GetPtr()
 				);
@@ -265,12 +278,14 @@ void CDlgJump::SetData( void )
 		if( 41 == cFuncInfoArr.GetAt( i )->m_nInfo ){
 //@@@ 2002.01.08 YAZAKI 設定を保存するためにShareDataに移動
 			if( m_pShareData->m_bLineNumIsCRLF ){	/* 行番号の表示 FALSE=折り返し単位／TRUE=改行単位 */
-				wsprintf( szText, "%d 行  %s  パッケージ本体部",
+				::LoadString( m_hInstance, STR_ERR_DLGJUMP2, _pszLabel, 255 );  // LMP: Added
+				wsprintf( szText, _pszLabel, //"%d 行  %s  パッケージ本体部",
 					cFuncInfoArr.GetAt( i )->m_nFuncLineCRLF,
 					cFuncInfoArr.GetAt( i )->m_cmemFuncName.GetPtr()
 				);
 			}else{
-				wsprintf( szText, "%d 行  %s  パッケージ本体部",
+				::LoadString( m_hInstance, STR_ERR_DLGJUMP2, _pszLabel, 255 );  // LMP: Added
+				wsprintf( szText, _pszLabel, //"%d 行  %s  パッケージ本体部",
 					cFuncInfoArr.GetAt( i )->m_nFuncLineLAYOUT,
 					cFuncInfoArr.GetAt( i )->m_cmemFuncName.GetPtr()
 				);

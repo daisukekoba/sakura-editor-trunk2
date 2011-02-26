@@ -10,12 +10,15 @@
 	This source code is designed for sakura editor.
 	Please contact the copyright holder to use this code for other purpose.
 */
+/* LMP (Lucien Murray-Pitts) : 2011-02-26 Added Basic English Translation Resources */
+
 #include "stdafx.h"
 #include <windows.h>
 #include <stdlib.h>
 #include <malloc.h>
 #include "COpeBlk.h"
 #include "debug.h"
+#include "funccode.h" // LMP Added
 
 
 
@@ -72,8 +75,13 @@ int COpeBlk::AppendOpe( COpe* pcOpe/*, CLayoutMgr* pCLayoutMgr*/ )
 	 || -1 == pcOpe->m_nCaretPosY_PHY_After		/* カーソル位置 改行単位行の行番号（０開始）*/
 	){
 //		MessageBox( 0, "COpeBlk::AppendOpe() error", "バグ", MB_OK );
+
+		// LMP: Added
+		char _pszLabel[257];
+		::LoadString( GetModuleHandle(NULL), STR_ERR_DLGOPEBLK1, _pszLabel, 255 );  // LMP: Added
+
 		MYMESSAGEBOX( NULL, MB_OK | MB_ICONSTOP | MB_TOPMOST, GSTR_APPNAME,
-			"COpeBlk::AppendOpe() error.\n バグ\n pcOpe->m_nCaretPosX_PHY_Before = %d\npcOpe->m_nCaretPosY_PHY_Before = %d\npcOpe->m_nCaretPosX_PHY_After = %d\npcOpe->m_nCaretPosY_PHY_After = %d\n",
+			_pszLabel, //"COpeBlk::AppendOpe() error.\n バグ\n pcOpe->m_nCaretPosX_PHY_Before = %d\npcOpe->m_nCaretPosY_PHY_Before = %d\npcOpe->m_nCaretPosX_PHY_After = %d\npcOpe->m_nCaretPosY_PHY_After = %d\n",
 			pcOpe->m_nCaretPosX_PHY_Before,
 			pcOpe->m_nCaretPosY_PHY_Before,
 			pcOpe->m_nCaretPosX_PHY_After,
@@ -109,7 +117,11 @@ int COpeBlk::AppendOpe( COpe* pcOpe/*, CLayoutMgr* pCLayoutMgr*/ )
 		m_ppCOpeArr = (COpe**)realloc( (void*)m_ppCOpeArr,  sizeof( COpe* ) * (m_nCOpeArrNum + 1 ) );
 	}
 	if( NULL == m_ppCOpeArr ){
-		MessageBox( 0, "COpeBlk::AppendOpe() error", "メモリ確保に失敗しました。\n非常に危険な状態です。", MB_OK );
+		// LMP: Added
+		char _pszLabel[257];
+		::LoadString( GetModuleHandle(NULL), STR_ERR_DLGOPEBLK2, _pszLabel, 255 );  // LMP: Added
+
+		MessageBox( 0, "COpeBlk::AppendOpe() error", _pszLabel/*"メモリ確保に失敗しました。\n非常に危険な状態です。"*/, MB_OK );
 		return FALSE;
 	}
 	m_ppCOpeArr[m_nCOpeArrNum] = pcOpe;

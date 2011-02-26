@@ -28,6 +28,8 @@
 		3. This notice may not be removed or altered from any source
 		   distribution.
 */
+/* LMP (Lucien Murray-Pitts) : 2011-02-26 Added Basic English Translation Resources */
+
 
 #include "stdafx.h"
 #include <string.h>
@@ -114,7 +116,11 @@ void CDlgTagsMake::SelectFolder( HWND hwndDlg )
 	/* フォルダ */
 	::GetDlgItemText( hwndDlg, IDC_EDIT_TAG_MAKE_FOLDER, szPath, _MAX_PATH );
 
-	if( SelectDir( hwndDlg, "タグ作成フォルダの選択", szPath, szPath ) )
+	// LMP: Added
+	char _pszLabel[257];
+	::LoadString( m_hInstance, STR_ERR_DLGTAGMAK1, _pszLabel, 255 );  // LMP: Added
+
+	if( SelectDir( hwndDlg, _pszLabel /*"タグ作成フォルダの選択"*/, szPath, szPath ) )
 	{
 		//末尾に\\マークを追加する．
 		int pos = strlen( szPath );

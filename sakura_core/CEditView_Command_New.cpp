@@ -19,6 +19,8 @@
 	This source code is designed for sakura editor.
 	Please contact the copyright holder to use this code for other purpose.
 */
+/* LMP (Lucien Murray-Pitts) : 2011-02-26 Added Basic English Translation Resources */
+
 #include "stdafx.h"
 #include "CEditView.h"
 #include "CWaitCursor.h"
@@ -816,7 +818,6 @@ void CEditView::Command_UNDO( void )
 //				if( 0 == pcMem->GetLength() ){
 //					MYTRACE( "?? ERROR\n" );
 //				}
-
 				}
 				break;
 			case OPE_DELETE:
@@ -2226,13 +2227,21 @@ re_do:;								// hor
 			goto re_do;		// 先頭から再検索
 		}
 	}
+
+	// LMP: Added
+	char _pszLabel[257];
+
 	if(bFound){
-		if(nYOld >= nY)SendStatusMessage("▼先頭から再検索しました");
+		::LoadString( m_hInstance, STR_ERR_DLGEDITVWCMDNW1, _pszLabel, 255 );  // LMP: Added
+		if(nYOld >= nY)SendStatusMessage(_pszLabel);//"▼先頭から再検索しました");
 	}else{
-		SendStatusMessage("▽見つかりませんでした");
+		::LoadString( m_hInstance, STR_ERR_DLGEDITVWCMDNW2, _pszLabel, 255 );  // LMP: Added
+		SendStatusMessage(_pszLabel);//"▽見つかりませんでした");
+
+		::LoadString( m_hInstance, STR_ERR_DLGEDITVWCMDNW3, _pszLabel, 255 );  // LMP: Added
 		if(m_pShareData->m_Common.m_bNOTIFYNOTFOUND)	/* 検索／置換  見つからないときメッセージを表示 */
 			::MYMESSAGEBOX( m_hWnd,	MB_OK | MB_ICONINFORMATION, GSTR_APPNAME,
-				"後方(↓) にブックマークが見つかりません。" );
+				_pszLabel);//"後方(↓) にブックマークが見つかりません。" );
 	}
 	return;
 }
@@ -2268,13 +2277,21 @@ re_do:;								// hor
 			goto re_do;	// 末尾から再検索
 		}
 	}
+
+	// LMP: Added
+	char _pszLabel[257];
+
 	if(bFound){
-		if(nYOld <= nY)SendStatusMessage("▲末尾から再検索しました");
+		::LoadString( m_hInstance, STR_ERR_DLGEDITVWCMDNW4, _pszLabel, 255 );  // LMP: Added
+		if(nYOld <= nY)SendStatusMessage(_pszLabel);//"▲末尾から再検索しました");
 	}else{
-		SendStatusMessage("△見つかりませんでした");
+		::LoadString( m_hInstance, STR_ERR_DLGEDITVWCMDNW5, _pszLabel, 255 );  // LMP: Added
+		SendStatusMessage(_pszLabel);//"△見つかりませんでした");
+
+		::LoadString( m_hInstance, STR_ERR_DLGEDITVWCMDNW6, _pszLabel, 255 );  // LMP: Added
 		if(m_pShareData->m_Common.m_bNOTIFYNOTFOUND)	/* 検索／置換  見つからないときメッセージを表示 */
 			::MYMESSAGEBOX( m_hWnd,	MB_OK | MB_ICONINFORMATION, GSTR_APPNAME,
-				"前方(↑) にブックマークが見つかりません。" );
+				_pszLabel);//"前方(↑) にブックマークが見つかりません。" );
 	}
 	return;
 }
@@ -2723,13 +2740,18 @@ void CEditView::Command_MERGE(void)
 	}
 	RedrawAll();
 
+	// LMP: Added
+	char _pszLabel[257];
+
 	if(j){
+		::LoadString( m_hInstance, STR_ERR_DLGEDITVWCMDNW7, _pszLabel, 255 );  // LMP: Added
 		::MYMESSAGEBOX( m_hWnd, MB_OK | MB_TOPMOST, GSTR_APPNAME,
-			"%d行をマージしました。", j
+			_pszLabel /*"%d行をマージしました。"*/, j
 		);
 	}else{
+		::LoadString( m_hInstance, STR_ERR_DLGEDITVWCMDNW8, _pszLabel, 255 );  // LMP: Added
 		::MYMESSAGEBOX( m_hWnd,	MB_OK | MB_ICONINFORMATION, GSTR_APPNAME,
-			"マージ可能な行がみつかりませんでした。" );
+			_pszLabel ) ; //"マージ可能な行がみつかりませんでした。" );
 	}
 }
 
@@ -2975,6 +2997,9 @@ void CEditView::Command_TRACEOUT( const char* outputstr, int nFlgOpt )
 */
 BOOL CEditView::Command_PUTFILE( const char* filename, const int nCharCode, int nFlgOpt )
 {
+	// LMP: Added
+	char _pszLabel[257];
+
 	BOOL	bResult = TRUE;
 	int		nSaveCharCode;
 	nSaveCharCode = nCharCode;
@@ -3006,7 +3031,8 @@ BOOL CEditView::Command_PUTFILE( const char* filename, const int nCharCode, int 
 				default:
 					//	genta ここに来るのはバグだ
 					//	2007.09.08 genta 追加
-					::MYMESSAGEBOX( NULL, MB_OK | MB_ICONSTOP | MB_TOPMOST, _T("作者に教えて欲しいエラー"),
+					::LoadString( m_hInstance, STR_ERR_DLGEDITVWCMDNW9, _pszLabel, 255 );  // LMP: Added
+					::MYMESSAGEBOX( NULL, MB_OK | MB_ICONSTOP | MB_TOPMOST, _pszLabel, //_T("作者に教えて欲しいエラー"),
 					_T("CEditView::Command_PUTFILE/BOM Error\nSaveCharCode=%d"), nSaveCharCode );
 					;
 				}
@@ -3031,14 +3057,16 @@ BOOL CEditView::Command_PUTFILE( const char* filename, const int nCharCode, int 
 		}
 		catch(CError_FileOpen)
 		{
+			::LoadString( m_hInstance, STR_ERR_DLGEDITVWCMDNW10, _pszLabel, 255 );  // LMP: Added
 			::MYMESSAGEBOX( NULL, MB_OK | MB_ICONEXCLAMATION, GSTR_APPNAME,
-				"\'%s\'\nファイルを保存できません。\nパスが存在しないか、他のアプリケーションで使用されている可能性があります。",
+				_pszLabel, //"\'%s\'\nファイルを保存できません。\nパスが存在しないか、他のアプリケーションで使用されている可能性があります。",
 				filename);
 			bResult = FALSE;
 		}
 		catch(CError_FileWrite)
 		{
-			::MYMESSAGEBOX( NULL, MB_OK | MB_ICONEXCLAMATION, GSTR_APPNAME, "ファイルの書き込み中にエラーが発生しました。" );
+			::LoadString( m_hInstance, STR_ERR_DLGEDITVWCMDNW11, _pszLabel, 255 );  // LMP: Added
+			::MYMESSAGEBOX( NULL, MB_OK | MB_ICONEXCLAMATION, GSTR_APPNAME, _pszLabel ) ; //"ファイルの書き込み中にエラーが発生しました。" );
 			bResult = FALSE;
 		}
 	}
@@ -3170,7 +3198,11 @@ BOOL CEditView::Command_INSFILE( const char* filename, int nCharCode, int nFlgOp
 		bResult = FALSE;
 	}
 	catch( CError_FileRead ){
-		::MYMESSAGEBOX( NULL, MB_OK | MB_ICONEXCLAMATION, GSTR_APPNAME, "ファイルの読み込み中にエラーが発生しました。" );
+		// LMP: Added
+		char _pszLabel[257];
+		::LoadString( m_hInstance, STR_ERR_DLGEDITVWCMDNW12, _pszLabel, 255 );  // LMP: Added
+
+		::MYMESSAGEBOX( NULL, MB_OK | MB_ICONEXCLAMATION, GSTR_APPNAME, _pszLabel ) ; //"ファイルの読み込み中にエラーが発生しました。" );
 		bResult = FALSE;
 	} // 例外処理終わり
 

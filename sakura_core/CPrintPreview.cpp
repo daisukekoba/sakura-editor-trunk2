@@ -15,6 +15,8 @@
 	This source code is designed for sakura editor.
 	Please contact the copyright holder to use this code for other purpose.
 */
+/* LMP (Lucien Murray-Pitts) : 2011-02-26 Added Basic English Translation Resources */
+
 
 #include "stdafx.h"
 #include "CPrintPreview.h"
@@ -127,9 +129,18 @@ LRESULT CPrintPreview::OnPaint(
 	char	szPaperName[256];
 	::SetDlgItemText( m_hwndPrintPreviewBar, IDC_STATIC_PRNDEV, m_pPrintSetting->m_mdmDevMode.m_szPrinterDeviceName );
 	CPrint::GetPaperName( m_pPrintSetting->m_mdmDevMode.dmPaperSize , szPaperName );
+
+
+	// LMP: Added
+	char _pszLabel[257];
+	char _pszLabel2[257];
+
+	::LoadString( GetModuleHandle(NULL), STR_ERR_DLGPRNPRVW1, _pszLabel, 255 );  // LMP: Added
+	::LoadString( GetModuleHandle(NULL), STR_ERR_DLGPRNPRVW2, _pszLabel2, 255 );  // LMP: Added
+
 	wsprintf( szText, "%s  %s",
 		szPaperName,
-		(m_pPrintSetting->m_mdmDevMode.dmOrientation & DMORIENT_LANDSCAPE) ? "横" : "縦"
+		(m_pPrintSetting->m_mdmDevMode.dmOrientation & DMORIENT_LANDSCAPE) ? _pszLabel : _pszLabel2 // "横" : "縦"
 	);
 	::SetDlgItemText( m_hwndPrintPreviewBar, IDC_STATIC_PAPER, szText );
 
@@ -682,8 +693,12 @@ void CPrintPreview::OnChangePrintSetting( void )
 			CPrint::GetPaperName( m_pPrintSetting->m_nPrintPaperSize , szPaperNameOld );
 			CPrint::GetPaperName( m_pPrintSetting->m_mdmDevMode.dmPaperSize , szPaperNameNew );
 
+			// LMP: Added
+			char _pszLabel[257];
+			::LoadString( m_pParentWnd->m_hInstance, STR_ERR_DLGPRNPRVW3, _pszLabel, 255 );  // LMP: Added
+
 			::MYMESSAGEBOX( m_pParentWnd->m_hWnd, MB_OK | MB_ICONEXCLAMATION | MB_TOPMOST, GSTR_APPNAME,
-				"現在のプリンタ %s では、\n指定された用紙 %s は使用できません。\n利用可能な用紙 %s に変更しました。",
+				_pszLabel, // "現在のプリンタ %s では、\n指定された用紙 %s は使用できません。\n利用可能な用紙 %s に変更しました。",
 				m_pPrintSetting->m_mdmDevMode.m_szPrinterDeviceName,
 				szPaperNameOld, szPaperNameNew
 			);
@@ -767,11 +782,18 @@ void CPrintPreview::OnPreviewGoDirectPage( void )
 	TCHAR      szMessage[512];
 	TCHAR      szPageNum[INPUT_PAGE_NUM_LEN];
 	
-	wsprintf( szMessage, "表示するページ番号を指定してください。(1 - %d)" , m_nAllPageNum );
+	// LMP: Added
+	char _pszLabel[257];
+	::LoadString( m_pParentWnd->m_hInstance, STR_ERR_DLGPRNPRVW4, _pszLabel, 255 );  // LMP: Added
+
+	wsprintf( szMessage, _pszLabel /* "表示するページ番号を指定してください。(1 - %d)"*/ , m_nAllPageNum );
 	wsprintf( szPageNum, "%d", m_nCurPageNum + 1 );
 
+	// LMP: Added
+	::LoadString( m_pParentWnd->m_hInstance, STR_ERR_DLGPRNPRVW5, _pszLabel, 255 );  // LMP: Added
+
 	if( FALSE != cDlgInputPage.DoModal( m_pParentWnd->m_hInstance, m_hwndPrintPreviewBar, 
-		"プレビューページ指定", szMessage, INPUT_PAGE_NUM_LEN, szPageNum ) ){
+		_pszLabel /*"プレビューページ指定"*/, szMessage, INPUT_PAGE_NUM_LEN, szPageNum ) ){
 		int i;
 		int nPageNumLen = lstrlen( szPageNum );
 		for( i = 0; i < nPageNumLen;  i++ ){
@@ -822,8 +844,13 @@ void CPrintPreview::OnPreviewGoPage( int nPage )
 		::SetFocus( ::GetDlgItem( m_hwndPrintPreviewBar, IDC_BUTTON_NEXTPAGE ));
 		::EnableWindow( ::GetDlgItem( m_hwndPrintPreviewBar, IDC_BUTTON_PREVPAGE ), FALSE );
 	}
+
+	// LMP: Added
+	char _pszLabel[257];
+	::LoadString( m_pParentWnd->m_hInstance, STR_ERR_DLGPRNPRVW6, _pszLabel, 255 );  // LMP: Added
+
 	char	szEdit[1024];
-	wsprintf( szEdit, "%d/%d頁", m_nCurPageNum + 1, m_nAllPageNum );
+	wsprintf( szEdit, _pszLabel /*"%d/%d頁"*/, m_nCurPageNum + 1, m_nAllPageNum );
 	::SetDlgItemText( m_hwndPrintPreviewBar, IDC_STATIC_PAGENUM, szEdit );
 
 	wsprintf( szEdit, "%d %%", m_nPreview_Zoom );
@@ -909,16 +936,22 @@ void CPrintPreview::OnPrint( void )
 	HFONT		hFontHan;	//	印刷用半角フォント
 	HFONT		hFontZen;	//	印刷用全角フォント
 
+	// LMP: Added
+	char _pszLabel[257];
+
 	if( 0 == m_nAllPageNum ){
+		::LoadString( m_pParentWnd->m_hInstance, STR_ERR_DLGPRNPRVW7, _pszLabel, 255 );  // LMP: Added
+
 		::MYMESSAGEBOX( m_pParentWnd->m_hWnd, MB_OK | MB_ICONEXCLAMATION | MB_TOPMOST, GSTR_APPNAME,
-			"印刷するページがありません。"
+			_pszLabel //"印刷するページがありません。"
 		);
 		return;
 	}
 
 	/* プリンタに渡すジョブ名を生成 */
 	if( ! m_pParentWnd->m_cEditDoc.IsFilePathAvailable() ){	/* 現在編集中のファイルのパス */
-		strcpy( szJobName, "無題" );
+		::LoadString( m_pParentWnd->m_hInstance, STR_ERR_DLGPRNPRVW8, szJobName, 255 );  // LMP: Added
+		// strcpy( szJobName, "無題" );
 	}else{
 		char	szFileName[_MAX_FNAME];
 		char	szExt[_MAX_EXT];

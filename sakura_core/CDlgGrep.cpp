@@ -13,6 +13,8 @@
 	This source code is designed for sakura editor.
 	Please contact the copyright holder to use this code for other purpose.
 */
+/* LMP (Lucien Murray-Pitts) : 2011-02-26 Added Basic English Translation Resources */
+
 #include "stdafx.h"
 #include <windows.h>
 
@@ -285,7 +287,12 @@ BOOL CDlgGrep::OnBnClicked( int wID )
 			if( 0 == lstrlen( szFolder ) ){
 				::GetCurrentDirectory( sizeof( szFolder ), szFolder );
 			}
-			if( SelectDir( m_hWnd, "検索するフォルダを選んでください", szFolder, szFolder ) ){
+
+			// LMP: Added
+			char _pszLabel[257];
+			::LoadString( m_hInstance, STR_ERR_DLGGREP1, _pszLabel, 255 );  // LMP: Added
+
+			if( SelectDir( m_hWnd, _pszLabel /*"検索するフォルダを選んでください"*/, szFolder, szFolder ) ){
 				::SetDlgItemText( m_hWnd, IDC_COMBO_FOLDER, szFolder );
 			}
 		}
@@ -470,6 +477,9 @@ int CDlgGrep::GetData( void )
 //	int			j;
 //	CMemory*	pcmWork;
 
+	// LMP: Added
+	char _pszLabel[257];
+
 	m_pShareData = CShareData::getInstance()->GetShareData();
 
 	/* サブフォルダからも検索する*/
@@ -545,8 +555,9 @@ int CDlgGrep::GetData( void )
 		strcpy( m_szFile, "*.*" );
 	}
 	if( 0 == lstrlen( m_szFolder ) ){
+		::LoadString( m_hInstance, STR_ERR_DLGGREP2, _pszLabel, 255 );  // LMP: Added
 		::MYMESSAGEBOX(	m_hWnd,	MB_OK | MB_ICONEXCLAMATION, GSTR_APPNAME,
-			"検索対象フォルダを指定してください。"
+			_pszLabel //"検索対象フォルダを指定してください。"
 		);
 		return FALSE;
 	}
@@ -555,8 +566,9 @@ int CDlgGrep::GetData( void )
 	::GetCurrentDirectory( MAX_PATH, szCurDirOld );
 	/* 相対パス→絶対パス */
 	if( 0 == ::SetCurrentDirectory( m_szFolder ) ){
+		::LoadString( m_hInstance, STR_ERR_DLGGREP3, _pszLabel, 255 );  // LMP: Added
 		::MYMESSAGEBOX(	m_hWnd,	MB_OK | MB_ICONEXCLAMATION, GSTR_APPNAME,
-			"検索対象フォルダが正しくありません。"
+			_pszLabel //"検索対象フォルダが正しくありません。"
 		);
 		::SetCurrentDirectory( szCurDirOld );
 		return FALSE;

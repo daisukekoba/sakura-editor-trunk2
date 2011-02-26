@@ -13,6 +13,7 @@
 	This source code is designed for sakura editor.
 	Please contact the copyright holder to use this code for other purpose.
 */
+/* LMP (Lucien Murray-Pitts) : 2011-02-26 Added Basic English Translation Resources */
 
 //@@@ 2001.11.17 add start MIK
 
@@ -119,7 +120,11 @@ BOOL CPropTypes::Import_Regex(HWND hwndDlg)
 
 	if( (fp = fopen(szPath, "r")) == NULL )
 	{
-		::MYMESSAGEBOX( hwndDlg, MB_OK | MB_ICONSTOP, GSTR_APPNAME, "ファイルを開けませんでした。\n\n%s", szPath );
+		// LMP: Added
+		char _pszLabel[257];
+		::LoadString( m_hInstance, STR_ERR_DLGPROPTYPESREGEX01, _pszLabel, 255 );  // LMP: Added
+
+		::MYMESSAGEBOX( hwndDlg, MB_OK | MB_ICONSTOP, GSTR_APPNAME, _pszLabel /*"ファイルを開けませんでした。\n\n%s"*/, szPath );
 		return FALSE;
 	}
 
@@ -220,11 +225,19 @@ BOOL CPropTypes::Export_Regex(HWND hwndDlg)
 
 	if( (fp = fopen(szPath, "w")) == NULL )
 	{
-		::MYMESSAGEBOX( hwndDlg, MB_OK | MB_ICONSTOP, GSTR_APPNAME, "ファイルを開けませんでした。\n\n%s", szPath );
+		// LMP: Added
+		char _pszLabel[257];
+		::LoadString( m_hInstance, STR_ERR_DLGPROPTYPESREGEX02, _pszLabel, 255 );  // LMP: Added
+
+		::MYMESSAGEBOX( hwndDlg, MB_OK | MB_ICONSTOP, GSTR_APPNAME, _pszLabel /*"ファイルを開けませんでした。\n\n%s"*/, szPath );
 		return FALSE;
 	}
 
-	fprintf(fp, "// 正規表現キーワード Ver1\n");
+	// LMP: Added
+	char _pszLabel[257];
+	::LoadString( m_hInstance, STR_ERR_DLGPROPTYPESREGEX03, _pszLabel, 255 );  // LMP: Added
+
+	fprintf(fp, _pszLabel ) ; // "// 正規表現キーワード Ver1\n");
 
 	hwndList = GetDlgItem( hwndDlg, IDC_LIST_REGEX );
 	j = ListView_GetItemCount(hwndList);
@@ -250,8 +263,11 @@ BOOL CPropTypes::Export_Regex(HWND hwndDlg)
 
 	fclose(fp);
 
+	// LMP: Added
+	::LoadString( m_hInstance, STR_ERR_DLGPROPTYPESREGEX04, _pszLabel, 255 );  // LMP: Added
+
 	::MYMESSAGEBOX(	hwndDlg, MB_OK | MB_ICONINFORMATION, GSTR_APPNAME,
-		"ファイルへエクスポートしました。\n\n%s", szPath
+		_pszLabel /*"ファイルへエクスポートしました。\n\n%s"*/, szPath
 	);
 
 	return TRUE;
@@ -277,6 +293,12 @@ INT_PTR CPropTypes::DispatchEvent_Regex(
 	char	szKeyWord[256], szColorIndex[256];
 	static int nPrevIndex = -1;	//更新時におかしくなるバグ修正 @@@ 2003.03.26 MIK
 
+
+	// LMP: Added
+	char _pszLabel[2][257];
+	::LoadString( m_hInstance, STR_ERR_DLGPROPTYPESREGEX05, _pszLabel[0], 255 );  // LMP: Added
+	::LoadString( m_hInstance, STR_ERR_DLGPROPTYPESREGEX06, _pszLabel[1], 255 );  // LMP: Added
+
 	hwndList = GetDlgItem( hwndDlg, IDC_LIST_REGEX );
 
 	switch( uMsg ){
@@ -291,13 +313,13 @@ INT_PTR CPropTypes::DispatchEvent_Regex(
 		col.mask     = LVCF_FMT | LVCF_WIDTH | LVCF_TEXT | LVCF_SUBITEM;
 		col.fmt      = LVCFMT_LEFT;
 		col.cx       = (rc.right - rc.left) * 54 / 100;
-		col.pszText  = "キーワード";
+		col.pszText  = _pszLabel[0] ; // "キーワード";
 		col.iSubItem = 0;
 		ListView_InsertColumn( hwndList, 0, &col );
 		col.mask     = LVCF_FMT | LVCF_WIDTH | LVCF_TEXT | LVCF_SUBITEM;
 		col.fmt      = LVCFMT_LEFT;
 		col.cx       = (rc.right - rc.left) * 38 / 100;
-		col.pszText  = "色指定";
+		col.pszText  = _pszLabel[0] ; //"色指定";
 		col.iSubItem = 1;
 		ListView_InsertColumn( hwndList, 1, &col );
 
@@ -305,7 +327,8 @@ INT_PTR CPropTypes::DispatchEvent_Regex(
 		SetData_Regex( hwndDlg );	/* ダイアログデータの設定 正規表現キーワード */
 		if( CheckRegexpVersion( hwndDlg, IDC_LABEL_REGEX_VERSION, false ) == false )	//@@@ 2001.11.17 add MIK
 		{
-			::SetDlgItemText( hwndDlg, IDC_LABEL_REGEX_VERSION, "正規表現キーワードは使えません。" );
+			::LoadString( m_hInstance, STR_ERR_DLGPROPTYPESREGEX07, _pszLabel[0], 255 );  // LMP: Added
+			::SetDlgItemText( hwndDlg, IDC_LABEL_REGEX_VERSION, _pszLabel[0] ); // "正規表現キーワードは使えません。" );
 			//ライブラリがなくて、使用しないになっている場合は、無効にする。
 			if( ! IsDlgButtonChecked( hwndDlg, IDC_CHECK_REGEX ) )
 			{
@@ -333,12 +356,16 @@ INT_PTR CPropTypes::DispatchEvent_Regex(
 				{
 					if( CheckRegexpVersion( NULL, 0, false ) == false )
 					{
+						::LoadString( m_hInstance, STR_ERR_DLGPROPTYPESREGEX08, _pszLabel[0], 255 );  // LMP: Added
+						::LoadString( m_hInstance, STR_ERR_DLGPROPTYPESREGEX09, _pszLabel[1], 255 );  // LMP: Added
 						nRet = ::MYMESSAGEBOX(
 								hwndDlg,
 								MB_YESNO | MB_ICONQUESTION | MB_TOPMOST | MB_DEFBUTTON2,
 								GSTR_APPNAME,
-								"正規表現ライブラリが見つかりません。\n\n正規表現キーワードは機能しませんが、それでも有効にしますか？",
-								"正規表現キーワードを使用する" );
+								_pszLabel[0],
+								_pszLabel[1] ) ;
+								// "正規表現ライブラリが見つかりません。\n\n正規表現キーワードは機能しませんが、それでも有効にしますか？",
+								// "正規表現キーワードを使用する" );
 						if( nRet != IDYES )
 						{
 							CheckDlgButton( hwndDlg, IDC_CHECK_REGEX, BST_UNCHECKED );
@@ -368,7 +395,8 @@ INT_PTR CPropTypes::DispatchEvent_Regex(
 				nIndex2 = ListView_GetItemCount(hwndList);
 				if( nIndex2 >= MAX_REGEX_KEYWORD )
 				{
-					::MYMESSAGEBOX( hwndDlg, MB_OK | MB_ICONSTOP, GSTR_APPNAME, "これ以上登録できません。");
+					::LoadString( m_hInstance, STR_ERR_DLGPROPTYPESREGEX10, _pszLabel[0], 255 );  // LMP: Added
+					::MYMESSAGEBOX( hwndDlg, MB_OK | MB_ICONSTOP, GSTR_APPNAME, _pszLabel[0] ) ; // "これ以上登録できません。");
 					return FALSE;
 				}
 				for(i = 0; i < nIndex2; i++)
@@ -377,7 +405,8 @@ INT_PTR CPropTypes::DispatchEvent_Regex(
 					ListView_GetItemText(hwndList, i, 0, szColorIndex, sizeof(szColorIndex));
 					if( strcmp(szKeyWord, szColorIndex) == 0 ) 
 					{
-						::MYMESSAGEBOX( hwndDlg, MB_OK | MB_ICONSTOP, GSTR_APPNAME, "同じキーワードで登録済みです。");
+						::LoadString( m_hInstance, STR_ERR_DLGPROPTYPESREGEX11, _pszLabel[0], 255 );  // LMP: Added
+						::MYMESSAGEBOX( hwndDlg, MB_OK | MB_ICONSTOP, GSTR_APPNAME, _pszLabel[0] ) ; // "同じキーワードで登録済みです。");
 						return FALSE;
 					}
 				}
@@ -389,24 +418,35 @@ INT_PTR CPropTypes::DispatchEvent_Regex(
 					nIndex = nIndex2;
 				}
 				//書式をチェックする。
+	
 				if( RegexKakomiCheck(szKeyWord) == FALSE )	//囲みをチェックする。
 				{
+					// LMP -- FIXME need to check lifetime of variable in dialog..
+					::LoadString( m_hInstance, STR_ERR_DLGPROPTYPESREGEX12, _pszLabel[0], 255 );  // LMP: Added
+					::LoadString( m_hInstance, STR_ERR_DLGPROPTYPESREGEX13, _pszLabel[1], 255 );  // LMP: Added
 					nRet = ::MYMESSAGEBOX(
 							hwndDlg,
 							MB_OK | MB_ICONSTOP | MB_TOPMOST,
 							GSTR_APPNAME,
-							"正規表現キーワードを / と /k で囲ってください。\nキーワードに / がある場合は m# と #k で囲ってください。",
-							"正規表現キーワード" );
+							_pszLabel[0],
+							_pszLabel[1] ) ;
+							// "正規表現キーワードを / と /k で囲ってください。\nキーワードに / がある場合は m# と #k で囲ってください。",
+							// "正規表現キーワード" );
 					return FALSE;
 				}
 				if( CheckRegexpSyntax( szKeyWord, hwndDlg, false ) == false )
 				{
+					// LMP -- FIXME need to check lifetime of variable in dialog..
+					::LoadString( m_hInstance, STR_ERR_DLGPROPTYPESREGEX14, _pszLabel[0], 255 );  // LMP: Added
+					::LoadString( m_hInstance, STR_ERR_DLGPROPTYPESREGEX15, _pszLabel[1], 255 );  // LMP: Added
 					nRet = ::MYMESSAGEBOX(
 							hwndDlg,
 							MB_YESNO | MB_ICONQUESTION | MB_TOPMOST | MB_DEFBUTTON2,
 							GSTR_APPNAME,
-							"書式が正しくないか、正規表現ライブラリが見つかりません。\n\n登録しますか？",
-							"正規表現キーワード" );
+							_pszLabel[0],
+							_pszLabel[1] ) ;
+							// "書式が正しくないか、正規表現ライブラリが見つかりません。\n\n登録しますか？",
+							// "正規表現キーワード" );
 					if( nRet != IDYES ) return FALSE;
 				}
 				//挿入するキー情報を取得する。
@@ -439,7 +479,10 @@ INT_PTR CPropTypes::DispatchEvent_Regex(
 				nIndex2 = ListView_GetItemCount(hwndList);
 				if( nIndex2 >= MAX_REGEX_KEYWORD )
 				{
-					::MYMESSAGEBOX( hwndDlg, MB_OK | MB_ICONSTOP, GSTR_APPNAME, "これ以上登録できません。");
+					// LMP -- FIXME need to check lifetime of variable in dialog..
+					::LoadString( m_hInstance, STR_ERR_DLGPROPTYPESREGEX16, _pszLabel[0], 255 );  // LMP: Added
+
+					::MYMESSAGEBOX( hwndDlg, MB_OK | MB_ICONSTOP, GSTR_APPNAME, _pszLabel[0] ) ; // "これ以上登録できません。");
 					return FALSE;
 				}
 				for(i = 0; i < nIndex2; i++)
@@ -448,29 +491,44 @@ INT_PTR CPropTypes::DispatchEvent_Regex(
 					ListView_GetItemText(hwndList, i, 0, szColorIndex, sizeof(szColorIndex));
 					if( strcmp(szKeyWord, szColorIndex) == 0 ) 
 					{
-						::MYMESSAGEBOX( hwndDlg, MB_OK | MB_ICONSTOP, GSTR_APPNAME, "同じキーワードで登録済みです。");
+						// LMP -- FIXME need to check lifetime of variable in dialog..
+						::LoadString( m_hInstance, STR_ERR_DLGPROPTYPESREGEX17, _pszLabel[0], 255 );  // LMP: Added
+
+						::MYMESSAGEBOX( hwndDlg, MB_OK | MB_ICONSTOP, GSTR_APPNAME, _pszLabel[0] ) ; // "同じキーワードで登録済みです。");
 						return FALSE;
 					}
 				}
 				//書式をチェックする。
 				if( RegexKakomiCheck(szKeyWord) == FALSE )	//囲みをチェックする。
 				{
+					// LMP -- FIXME need to check lifetime of variable in dialog..
+					::LoadString( m_hInstance, STR_ERR_DLGPROPTYPESREGEX18, _pszLabel[0], 255 );  // LMP: Added
+					::LoadString( m_hInstance, STR_ERR_DLGPROPTYPESREGEX19, _pszLabel[1], 255 );  // LMP: Added
+
 					nRet = ::MYMESSAGEBOX(
 							hwndDlg,
 							MB_OK | MB_ICONSTOP | MB_TOPMOST,
 							GSTR_APPNAME,
-							"正規表現キーワードを / と /k で囲ってください。\nキーワードに / がある場合は m# と #k で囲ってください。",
-							"正規表現キーワード" );
+							_pszLabel[0],
+							_pszLabel[1] ) ; 
+							// "正規表現キーワードを / と /k で囲ってください。\nキーワードに / がある場合は m# と #k で囲ってください。",
+							// "正規表現キーワード" );
 					return FALSE;
 				}
 				if( CheckRegexpSyntax( szKeyWord, hwndDlg, false ) == false )
 				{
+					// LMP -- FIXME need to check lifetime of variable in dialog..
+					::LoadString( m_hInstance, STR_ERR_DLGPROPTYPESREGEX20, _pszLabel[0], 255 );  // LMP: Added
+					::LoadString( m_hInstance, STR_ERR_DLGPROPTYPESREGEX21, _pszLabel[1], 255 );  // LMP: Added
+
 					nRet = ::MYMESSAGEBOX(
 							hwndDlg,
 							MB_YESNO | MB_ICONQUESTION | MB_TOPMOST | MB_DEFBUTTON2,
 							GSTR_APPNAME,
-							"書式が正しくないか、正規表現ライブラリが見つかりません。\n\n登録しますか？",
-							"正規表現キーワード" );
+							_pszLabel[0],
+							_pszLabel[1] ) ;
+							// "書式が正しくないか、正規表現ライブラリが見つかりません。\n\n登録しますか？",
+							// "正規表現キーワード" );
 					if( nRet != IDYES ) return FALSE;
 				}
 				//追加するキー情報を取得する。
@@ -498,7 +556,10 @@ INT_PTR CPropTypes::DispatchEvent_Regex(
 				nIndex = ListView_GetNextItem( hwndList, -1, LVNI_ALL | LVNI_SELECTED );
 				if( -1 == nIndex )
 				{
-					::MYMESSAGEBOX( hwndDlg, MB_OK | MB_ICONSTOP, GSTR_APPNAME, "キーワードが選択されていません。");
+					// LMP -- FIXME need to check lifetime of variable in dialog..
+					::LoadString( m_hInstance, STR_ERR_DLGPROPTYPESREGEX22, _pszLabel[0], 255 );  // LMP: Added
+
+					::MYMESSAGEBOX( hwndDlg, MB_OK | MB_ICONSTOP, GSTR_APPNAME, _pszLabel[0] ) ; // "キーワードが選択されていません。");
 					return FALSE;
 				}
 				//更新するキー情報を取得する。
@@ -514,7 +575,10 @@ INT_PTR CPropTypes::DispatchEvent_Regex(
 						ListView_GetItemText(hwndList, i, 0, szColorIndex, sizeof(szColorIndex));
 						if( strcmp(szKeyWord, szColorIndex) == 0 ) 
 						{
-							::MYMESSAGEBOX( hwndDlg, MB_OK | MB_ICONSTOP, GSTR_APPNAME, "同じキーワードで登録済みです。");
+							// LMP -- FIXME need to check lifetime of variable in dialog..
+							::LoadString( m_hInstance, STR_ERR_DLGPROPTYPESREGEX23, _pszLabel[0], 255 );  // LMP: Added
+
+							::MYMESSAGEBOX( hwndDlg, MB_OK | MB_ICONSTOP, GSTR_APPNAME, _pszLabel[0] ) ; // "同じキーワードで登録済みです。");
 							return FALSE;
 						}
 					}
@@ -522,22 +586,34 @@ INT_PTR CPropTypes::DispatchEvent_Regex(
 				//書式をチェックする。
 				if( RegexKakomiCheck(szKeyWord) == FALSE )	//囲みをチェックする。
 				{
+					// LMP -- FIXME need to check lifetime of variable in dialog..
+					::LoadString( m_hInstance, STR_ERR_DLGPROPTYPESREGEX24, _pszLabel[0], 255 );  // LMP: Added
+					::LoadString( m_hInstance, STR_ERR_DLGPROPTYPESREGEX25, _pszLabel[1], 255 );  // LMP: Added
+
 					nRet = ::MYMESSAGEBOX(
 							hwndDlg,
 							MB_OK | MB_ICONSTOP | MB_TOPMOST | MB_DEFBUTTON2,
 							GSTR_APPNAME,
-							"正規表現キーワードを / と /k で囲ってください。\nキーワードに / がある場合は m# と #k で囲ってください。",
-							"正規表現キーワード" );
+							_pszLabel[0],
+							_pszLabel[1] ) ;
+							// "正規表現キーワードを / と /k で囲ってください。\nキーワードに / がある場合は m# と #k で囲ってください。",
+							// "正規表現キーワード" );
 					return FALSE;
 				}
 				if( CheckRegexpSyntax( szKeyWord, hwndDlg, false ) == false )
 				{
+					// LMP -- FIXME need to check lifetime of variable in dialog..
+					::LoadString( m_hInstance, STR_ERR_DLGPROPTYPESREGEX26, _pszLabel[0], 255 );  // LMP: Added
+					::LoadString( m_hInstance, STR_ERR_DLGPROPTYPESREGEX27, _pszLabel[1], 255 );  // LMP: Added
+
 					nRet = ::MYMESSAGEBOX(
 							hwndDlg,
 							MB_YESNO | MB_ICONQUESTION | MB_TOPMOST | MB_DEFBUTTON2,
 							GSTR_APPNAME,
-							"書式が正しくないか、正規表現ライブラリが見つかりません。\n\n登録しますか？",
-							"正規表現キーワード" );
+							_pszLabel[0],
+							_pszLabel[1] ) ;
+							// "書式が正しくないか、正規表現ライブラリが見つかりません。\n\n登録しますか？",
+							// "正規表現キーワード" );
 					if( nRet != IDYES ) return FALSE;
 				}
 				//追加するキー情報を取得する。

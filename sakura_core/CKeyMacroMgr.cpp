@@ -15,6 +15,7 @@
 	This source code is designed for sakura editor.
 	Please contact the copyright holder to use this code for other purpose.
 */
+/* LMP (Lucien Murray-Pitts) : 2011-02-26 Added Basic English Translation Resources */
 
 #include "stdafx.h"
 #include <stdio.h>
@@ -109,7 +110,9 @@ BOOL CKeyMacroMgr::SaveKeyMacro( HINSTANCE hInstance, const char* pszPath ) cons
 	if( HFILE_ERROR == hFile ){
 		return FALSE;
 	}
-	strcpy( szLine, "//キーボードマクロのファイル\r\n" );
+
+	::LoadString( GetModuleHandle(NULL), STR_ERR_DLGKEYMACMGR1, szLine, 1023 );  // LMP: Added
+	// strcpy( szLine, "//キーボードマクロのファイル\r\n" );
 	_lwrite( hFile, szLine, strlen( szLine ) );
 	CMacro* p = m_pTop;
 
@@ -164,7 +167,12 @@ BOOL CKeyMacroMgr::LoadKeyMacro( HINSTANCE hInstance, const char* pszPath )
 
 	//	Jun. 16, 2002 genta
 	m_nReady = true;	//	エラーがあればfalseになる
-	static const char MACRO_ERROR_TITLE[] = "Macro読み込みエラー";
+
+	// static const char MACRO_ERROR_TITLE[] = "Macro読み込みエラー";
+	// LMP: Added
+	static char MACRO_ERROR_TITLE[257];
+	char _pszLabel[257];
+	::LoadString( GetModuleHandle(NULL), STR_ERR_DLGKEYMACMGR2, MACRO_ERROR_TITLE, 255 );  // LMP: Added
 
 	// 一行ずつ読みこみ、コメント行を排除した上で、macroコマンドを作成する。
 	char	szLine[LINEREADBUFSIZE];
@@ -217,8 +225,9 @@ BOOL CKeyMacroMgr::LoadKeyMacro( HINSTANCE hInstance, const char* pszPath )
 			for(nArgs = 0; szLine[i] ; ++nArgs ) {
 				// Jun. 16, 2002 genta プロトタイプチェック
 				if( nArgs >= sizeof( mInfo->m_varArguments ) / sizeof( mInfo->m_varArguments[0] )){
+					::LoadString( GetModuleHandle(NULL), STR_ERR_DLGKEYMACMGR3, _pszLabel, 255 );  // LMP: Added
 					::MYMESSAGEBOX( NULL, MB_OK | MB_ICONSTOP | MB_TOPMOST, MACRO_ERROR_TITLE,
-						_T("Line %d: Column %d: 引数が多すぎます\n" ), line, i + 1 );
+						_pszLabel /*_T("Line %d: Column %d: 引数が多すぎます\n" )*/, line, i + 1 );
 					m_nReady = false;
 				}
 
@@ -232,9 +241,11 @@ BOOL CKeyMacroMgr::LoadKeyMacro( HINSTANCE hInstance, const char* pszPath )
 					// Jun. 27, 2002 genta 余分な引数を無視するよう，VT_EMPTYを許容する．
 					if( mInfo->m_varArguments[nArgs] != VT_BSTR && 
 						mInfo->m_varArguments[nArgs] != VT_EMPTY ){
+						::LoadString( GetModuleHandle(NULL), STR_ERR_DLGKEYMACMGR4, _pszLabel, 255 );  // LMP: Added
+
 						::MYMESSAGEBOX( NULL, MB_OK | MB_ICONSTOP | MB_TOPMOST, MACRO_ERROR_TITLE,
-							_T("Line %d: Column %d\r\n"
-							"関数%sの%d番目の引数に文字列は置けません．" ), line, i + 1, szFuncName, nArgs + 1 );
+							_pszLabel /* _T("Line %d: Column %d\r\n"
+							"関数%sの%d番目の引数に文字列は置けません．" )*/, line, i + 1, szFuncName, nArgs + 1 );
 						m_nReady = false;
 						break;
 					}
@@ -257,8 +268,10 @@ BOOL CKeyMacroMgr::LoadKeyMacro( HINSTANCE hInstance, const char* pszPath )
 							break;
 						}
 						if( szLine[i] == '\0' ){	//	行末に来てしまった
+							::LoadString( GetModuleHandle(NULL), STR_ERR_DLGKEYMACMGR5, _pszLabel, 255 );  // LMP: Added
+
 							::MYMESSAGEBOX( NULL, MB_OK | MB_ICONSTOP | MB_TOPMOST, MACRO_ERROR_TITLE,
-								_T("Line %d:\r\n関数%sの%d番目の引数の終わりに%cがありません．" ),
+								_pszLabel /*_T("Line %d:\r\n関数%sの%d番目の引数の終わりに%cがありません．" )*/,
 								line, szFuncName, nArgs + 1, cQuote);
 							m_nReady = false;
 							nEnd = i - 1;	//	nEndは終わりの次の文字（'）
@@ -282,9 +295,11 @@ BOOL CKeyMacroMgr::LoadKeyMacro( HINSTANCE hInstance, const char* pszPath )
 					// Jun. 27, 2002 genta 余分な引数を無視するよう，VT_EMPTYを許容する．
 					if( mInfo->m_varArguments[nArgs] != VT_I4 && 
 						mInfo->m_varArguments[nArgs] != VT_EMPTY){
+						::LoadString( GetModuleHandle(NULL), STR_ERR_DLGKEYMACMGR6, _pszLabel, 255 );  // LMP: Added
+
 						::MYMESSAGEBOX( NULL, MB_OK | MB_ICONSTOP | MB_TOPMOST, MACRO_ERROR_TITLE,
-							_T("Line %d: Column %d\r\n"
-							"関数%sの%d番目の引数に数値は置けません．" ), line, i + 1, szFuncName, nArgs + 1);
+							_pszLabel /*_T("Line %d: Column %d\r\n"
+							"関数%sの%d番目の引数に数値は置けません．" )*/, line, i + 1, szFuncName, nArgs + 1);
 						m_nReady = false;
 						break;
 					}
@@ -316,8 +331,10 @@ BOOL CKeyMacroMgr::LoadKeyMacro( HINSTANCE hInstance, const char* pszPath )
 					//	Parse Error:文法エラーっぽい。
 					//	Jun. 16, 2002 genta
 					nBgn = nEnd = i;
+					::LoadString( GetModuleHandle(NULL), STR_ERR_DLGKEYMACMGR7, _pszLabel, 255 );  // LMP: Added
+
 					::MYMESSAGEBOX( NULL, MB_OK | MB_ICONSTOP | MB_TOPMOST, MACRO_ERROR_TITLE,
-						_T("Line %d: Column %d: Syntax Error\n" ), line, i );
+						_pszLabel /*_T("Line %d: Column %d: Syntax Error\n" )*/, line, i );
 					m_nReady = false;
 					break;
 				}
@@ -342,8 +359,10 @@ BOOL CKeyMacroMgr::LoadKeyMacro( HINSTANCE hInstance, const char* pszPath )
 			Append( macro );
 		}
 		else {
+			::LoadString( GetModuleHandle(NULL), STR_ERR_DLGKEYMACMGR8, _pszLabel, 255 );  // LMP: Added
+
 			::MYMESSAGEBOX( NULL, MB_OK | MB_ICONSTOP | MB_TOPMOST, MACRO_ERROR_TITLE,
-				_T("Line %d: %sは存在しない関数です．\n" ), line, szFuncName );
+				_pszLabel /*_T("Line %d: %sは存在しない関数です．\n" )*/, line, szFuncName );
 			//	Jun. 16, 2002 genta
 			m_nReady = false;
 			break;

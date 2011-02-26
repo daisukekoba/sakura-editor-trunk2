@@ -17,6 +17,7 @@
 	This source code is designed for sakura editor.
 	Please contact the copyright holders to use this code for other purpose.
 */
+/* LMP (Lucien Murray-Pitts) : 2011-02-26 Added Basic English Translation Resources */
 
 #include "stdafx.h"
 #include "sakura_rc.h"
@@ -43,13 +44,14 @@ struct TYPE_NAME {
 	char*	pszName;
 };
 
+char _ssma_label[6][128] ;
 TYPE_NAME SpecialScrollModeArr[] = {
-	{ 0,						"組み合わせなし" },
-	{ MOUSEFUNCTION_CENTER,		"マウス中ボタン" },
-	{ MOUSEFUNCTION_LEFTSIDE,	"マウスサイドボタン1" },
-	{ MOUSEFUNCTION_RIGHTSIDE,	"マウスサイドボタン2" },
-	{ VK_CONTROL,				"CONTROLキー" },
-	{ VK_SHIFT,					"SHIFTキー" },
+	{ 0,						_ssma_label[0] /*"組み合わせなし"*/ },
+	{ MOUSEFUNCTION_CENTER,		_ssma_label[1] /*"マウス中ボタン"*/ },
+	{ MOUSEFUNCTION_LEFTSIDE,	_ssma_label[2] /*"マウスサイドボタン1"*/ },
+	{ MOUSEFUNCTION_RIGHTSIDE,	_ssma_label[3] /*"マウスサイドボタン2"*/ },
+	{ VK_CONTROL,				_ssma_label[4] /*"CONTROLキー"*/ },
+	{ VK_SHIFT,					_ssma_label[5] /*"SHIFTキー"*/ },
 };
 
 const int	nSpecialScrollModeArrNum = sizeof( SpecialScrollModeArr ) / sizeof( SpecialScrollModeArr[0] );
@@ -428,6 +430,9 @@ struct ComPropSheetInfo {
 /*! プロパティシートの作成
 	@date 2002.2.17 YAZAKI CShareDataのインスタンスは、CProcessにひとつあるのみ。
 */
+// LMP: Added
+char _ps_pszLabel[15][128];
+
 int CPropCommon::DoPropertySheet( int nPageNum/*, int nActiveItem*/ )
 {
 //	m_nActiveItem = nActiveItem;
@@ -441,27 +446,38 @@ int CPropCommon::DoPropertySheet( int nPageNum/*, int nActiveItem*/ )
 	int				nIdx;
 	int				i;
 
+	for( int i = 0 ; i<15 ; i++ )
+	{
+		::LoadString( m_hInstance, STR_ERR_DLGPROPCOMMON01+i, _ps_pszLabel[i], 128 );  // LMP: Added
+	}
+
+	for( int i = 0 ; i<6 ; i++ )
+	{
+		::LoadString( m_hInstance, STR_ERR_DLGPROPCOMMON16+i, _ssma_label[i], 128 );  // LMP: Added
+	}
+
+
 //	m_Common.m_nMAXLINELEN_org = m_Common.m_nMAXLINELEN;
 
 	//	From Here Jun. 2, 2001 genta
 	//!	「共通設定」プロパティシートの作成時に必要な情報の配列．
 	static ComPropSheetInfo ComPropSheetInfoList[] = {
-		{ "全般", 			IDD_PROP1P1,		DlgProc_PROP_GENERAL },
-		{ "ウィンドウ",		IDD_PROP_WIN,		DlgProc_PROP_WIN },
+		{ _ps_pszLabel[0] /*"全般"*/, 			IDD_PROP1P1,		DlgProc_PROP_GENERAL },
+		{ _ps_pszLabel[1] /*"ウィンドウ"*/,		IDD_PROP_WIN,		DlgProc_PROP_WIN },
 		//	Feb. 11, 2007 genta URLをTABと入れ換え	// 2007.02.13 順序変更（TABをWINの次に）
-		{ "タブバー",		IDD_PROP_TAB,		DlgProc_PROP_TAB },
-		{ "編集",			IDD_PROP_EDIT,		DlgProc_PROP_EDIT },
-		{ "ファイル",		IDD_PROP_FILE,		DlgProc_PROP_FILE },
-		{ "バックアップ",	IDD_PROP_BACKUP,	DlgProc_PROP_BACKUP },
-		{ "書式",			IDD_PROP_FORMAT,	DlgProc_PROP_FORMAT },
-		{ "検索",			IDD_PROP_GREP,		DlgProc_PROP_GREP },	// 2006.08.23 ryoji タイトル変更（Grep -> 検索）
-		{ "キー割り当て",	IDD_PROP_KEYBIND,	DlgProc_PROP_KEYBIND },
-		{ "カスタムメニュー",IDD_PROP_CUSTMENU,	DlgProc_PROP_CUSTMENU },
-		{ "ツールバー",		IDD_PROP_TOOLBAR,	DlgProc_PROP_TOOLBAR },
-		{ "強調キーワード",	IDD_PROP_KEYWORD,	DlgProc_PROP_KEYWORD },
-		{ "支援",			IDD_PROP_HELPER,	DlgProc_PROP_HELPER },
-		{ "マクロ",			IDD_PROP_MACRO,		DlgProc_PROP_MACRO },
-		{ "ファイル名表示", IDD_PROP_FNAME,  DlgProc_PROP_FILENAME},
+		{ _ps_pszLabel[2] /*"タブバー"*/,		IDD_PROP_TAB,		DlgProc_PROP_TAB },
+		{ _ps_pszLabel[3] /*"編集"*/,			IDD_PROP_EDIT,		DlgProc_PROP_EDIT },
+		{ _ps_pszLabel[4] /*"ファイル"*/,		IDD_PROP_FILE,		DlgProc_PROP_FILE },
+		{ _ps_pszLabel[5] /*"バックアップ"*/,	IDD_PROP_BACKUP,	DlgProc_PROP_BACKUP },
+		{ _ps_pszLabel[6] /*"書式"*/,			IDD_PROP_FORMAT,	DlgProc_PROP_FORMAT },
+		{ _ps_pszLabel[7] /*"検索"*/,			IDD_PROP_GREP,		DlgProc_PROP_GREP },	// 2006.08.23 ryoji タイトル変更（Grep -> 検索）
+		{ _ps_pszLabel[8] /*"キー割り当て"*/,	IDD_PROP_KEYBIND,	DlgProc_PROP_KEYBIND },
+		{ _ps_pszLabel[9] /*"カスタムメニュー"*/,IDD_PROP_CUSTMENU,	DlgProc_PROP_CUSTMENU },
+		{ _ps_pszLabel[10] /*"ツールバー"*/,		IDD_PROP_TOOLBAR,	DlgProc_PROP_TOOLBAR },
+		{ _ps_pszLabel[11] /*"強調キーワード"*/,	IDD_PROP_KEYWORD,	DlgProc_PROP_KEYWORD },
+		{ _ps_pszLabel[12] /*"支援"*/,			IDD_PROP_HELPER,	DlgProc_PROP_HELPER },
+		{ _ps_pszLabel[13] /*"マクロ"*/,			IDD_PROP_MACRO,		DlgProc_PROP_MACRO },
+		{ _ps_pszLabel[14] /*"ファイル名表示"*/, IDD_PROP_FNAME,  DlgProc_PROP_FILENAME},
 	};
 
 	for( nIdx = 0, i = 0; i < sizeof(ComPropSheetInfoList)/sizeof(ComPropSheetInfoList[0])
@@ -483,6 +499,10 @@ int CPropCommon::DoPropertySheet( int nPageNum/*, int nActiveItem*/ )
 	}
 	//	To Here Jun. 2, 2001 genta
 
+	// LMP: Added
+	char _pszLabelShared[257] ;
+	::LoadString( m_hInstance, STR_ERR_DLGPROPCOMMON22, _pszLabelShared, 256 );  // LMP: Added
+
 	memset( &psh, 0, sizeof( PROPSHEETHEADER ) );
 #ifdef _WIN64
 	psh.dwSize = sizeof( psh );
@@ -498,7 +518,7 @@ int CPropCommon::DoPropertySheet( int nPageNum/*, int nActiveItem*/ )
 	psh.hwndParent = m_hwndParent;
 	psh.hInstance = m_hInstance;
 	psh.pszIcon = NULL /*MAKEINTRESOURCE( IDI_CELL_PROPERTIES )*/;
-	psh.pszCaption = (LPSTR) "共通設定";
+	psh.pszCaption = (LPSTR) _pszLabelShared ; // "共通設定";
 	psh.nPages = nIdx;
 
 	//- 20020106 aroka # psh.nStartPage は unsigned なので負にならない
@@ -534,8 +554,14 @@ int CPropCommon::DoPropertySheet( int nPageNum/*, int nActiveItem*/ )
 			0,
 			NULL
 		);
-		::MYMESSAGEBOX(	NULL, MB_OK | MB_ICONINFORMATION | MB_TOPMOST, "作者に教えて欲しいエラー",
-			"CPropCommon::DoPropertySheet()内でエラーが出ました。\npsh.nStartPage=[%d]\n::PropertySheet()失敗\n\n%s\n", psh.nStartPage, pszMsgBuf
+
+		// LMP: Added
+		char _pszLabel[2][257] ;
+		::LoadString( m_hInstance, STR_ERR_DLGPROPCOMMON23, _pszLabel[0], 255 );  // LMP: Added
+		::LoadString( m_hInstance, STR_ERR_DLGPROPCOMMON24, _pszLabel[1], 255 );  // LMP: Added
+
+		::MYMESSAGEBOX(	NULL, MB_OK | MB_ICONINFORMATION | MB_TOPMOST, _pszLabel[0], // "作者に教えて欲しいエラー",
+			_pszLabel[0] /*"CPropCommon::DoPropertySheet()内でエラーが出ました。\npsh.nStartPage=[%d]\n::PropertySheet()失敗\n\n%s\n"*/ , psh.nStartPage, pszMsgBuf
 		);
 		::LocalFree( pszMsgBuf );
 	}
@@ -657,6 +683,9 @@ INT_PTR CPropCommon::DispatchEvent_p1(
 	int			nVal;
 //	LPDRAWITEMSTRUCT pDis;
 
+	// LMP: Added
+	char _pszLabel[257] ;
+
 	switch( uMsg ){
 
 	case WM_INITDIALOG:
@@ -719,8 +748,9 @@ INT_PTR CPropCommon::DispatchEvent_p1(
 #endif
 			case IDC_BUTTON_CLEAR_MRU_FILE:
 				/* ファイルの履歴をクリア */
+				::LoadString( m_hInstance, STR_ERR_DLGPROPCOMMON25, _pszLabel, 255 );  // LMP: Added
 				if( IDCANCEL == ::MYMESSAGEBOX( hwndDlg, MB_OKCANCEL | MB_ICONQUESTION, GSTR_APPNAME,
-					"最近使ったファイルの履歴を削除します。\nよろしいですか？\n" ) ){
+					_pszLabel /*"最近使ったファイルの履歴を削除します。\nよろしいですか？\n"*/ ) ){
 					return TRUE;
 				}
 //@@@ 2001.12.26 YAZAKI MRUリストは、CMRUに依頼する
@@ -729,14 +759,16 @@ INT_PTR CPropCommon::DispatchEvent_p1(
 					CMRU cMRU;
 					cMRU.ClearAll();
 				}
+				::LoadString( m_hInstance, STR_ERR_DLGPROPCOMMON26, _pszLabel, 255 );  // LMP: Added
 				::MYMESSAGEBOX( hwndDlg, MB_OK | MB_ICONINFORMATION, GSTR_APPNAME,
-					"最近使ったファイルの履歴を削除しました。\n"
+					_pszLabel // "最近使ったファイルの履歴を削除しました。\n"
 				);
 				return TRUE;
 			case IDC_BUTTON_CLEAR_MRU_FOLDER:
 				/* フォルダの履歴をクリア */
+				::LoadString( m_hInstance, STR_ERR_DLGPROPCOMMON27, _pszLabel, 255 );  // LMP: Added
 				if( IDCANCEL == ::MYMESSAGEBOX( hwndDlg, MB_OKCANCEL | MB_ICONQUESTION, GSTR_APPNAME,
-					"最近使ったフォルダの履歴を削除します。\nよろしいですか？\n" ) ){
+					_pszLabel /*"最近使ったフォルダの履歴を削除します。\nよろしいですか？\n"*/ ) ){
 					return TRUE;
 				}
 //@@@ 2001.12.26 YAZAKI OPENFOLDERリストは、CMRUFolderにすべて依頼する
@@ -745,8 +777,9 @@ INT_PTR CPropCommon::DispatchEvent_p1(
 					CMRUFolder cMRUFolder;	//	MRUリストの初期化。ラベル内だと問題あり？
 					cMRUFolder.ClearAll();
 				}
+				::LoadString( m_hInstance, STR_ERR_DLGPROPCOMMON28, _pszLabel, 255 );  // LMP: Added
 				::MYMESSAGEBOX( hwndDlg, MB_OK | MB_ICONINFORMATION, GSTR_APPNAME,
-					"最近使ったフォルダの履歴を削除しました。\n"
+					_pszLabel // "最近使ったフォルダの履歴を削除しました。\n"
 				);
 				return TRUE;
 

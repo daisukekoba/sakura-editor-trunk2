@@ -15,6 +15,8 @@
 	This source code is designed for sakura editor.
 	Please contact the copyright holder to use this code for other purpose.
 */
+/* LMP (Lucien Murray-Pitts) : 2011-02-26 Added Basic English Translation Resources */
+
 #include "stdafx.h"
 #include "CFuncKeyWnd.h"
 #include "debug.h"
@@ -91,7 +93,7 @@ CFuncKeyWnd::CFuncKeyWnd()
 	lf.lfClipPrecision	= 0x2;
 	lf.lfQuality		= 0x1;
 	lf.lfPitchAndFamily	= 0x31;
-	strcpy( lf.lfFaceName, "ＭＳ Ｐゴシック" );
+	strcpy( lf.lfFaceName, "ＭＳ Ｐゴシック" );				// LMP: Needs converting?
 	m_hFont = ::CreateFontIndirect( &lf );
 
 	m_bSizeBox = FALSE;
@@ -585,8 +587,12 @@ void CFuncKeyWnd::Timer_ONOFF( BOOL bStart )
 		if( bStart ){
 			/* タイマーを起動 */
 			if( 0 == ::SetTimer( m_hWnd, IDT_FUNCWND, TIMER_TIMEOUT, NULL ) ){
+				// LMP: Added
+				char _pszLabel[257];
+				::LoadString( m_hInstance, STR_ERR_DLGFUNCKEYWN1, _pszLabel, 255 );  // LMP: Added
+
 				::MYMESSAGEBOX(	m_hWnd,	MB_OK | MB_ICONEXCLAMATION, GSTR_APPNAME,
-					"CFuncKeyWnd::Open()\nタイマーが起動できません。\nシステムリソースが不足しているのかもしれません。"
+					_pszLabel // "CFuncKeyWnd::Open()\nタイマーが起動できません。\nシステムリソースが不足しているのかもしれません。"
 				);
 			}
 		} else {

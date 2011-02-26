@@ -16,6 +16,8 @@
 	This source code is designed for sakura editor.
 	Please contact the copyright holder to use this code for other purpose.
 */
+/* LMP (Lucien Murray-Pitts) : 2011-02-26 Added Basic English Translation Resources */
+
 #include "stdafx.h"
 #include <stdio.h>
 #include "CDlgPrintSetting.h"
@@ -219,7 +221,13 @@ BOOL CDlgPrintSetting::OnBnClicked( int wID )
 		return TRUE;
 	case IDC_BUTTON_EDITSETTINGNAME:
 		strcpy( szWork, m_PrintSettingArr[m_nCurrentPrintSetting].m_szPrintSettingName );
-		if( FALSE == cDlgInput1.DoModal( m_hInstance, m_hWnd, "設定名の変更", "設定の名称を入力してください。", sizeof( m_PrintSettingArr[m_nCurrentPrintSetting].m_szPrintSettingName ) - 1, szWork ) ){
+
+		// LMP: Added
+		char _pszLabel[2][257];
+		::LoadString( GetModuleHandle(NULL), STR_ERR_DLGPRNST1, _pszLabel[0], 255 );  // LMP: Added
+		::LoadString( GetModuleHandle(NULL), STR_ERR_DLGPRNST2, _pszLabel[1], 255 );  // LMP: Added
+
+		if( FALSE == cDlgInput1.DoModal( m_hInstance, m_hWnd, _pszLabel[0], _pszLabel[1]   /*"設定名の変更", "設定の名称を入力してください。"*/, sizeof( m_PrintSettingArr[m_nCurrentPrintSetting].m_szPrintSettingName ) - 1, szWork ) ){
 			return TRUE;
 		}
 		if( 0 < lstrlen( szWork ) ){

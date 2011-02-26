@@ -19,6 +19,7 @@
 	This source code is designed for sakura editor.
 	Please contact the copyright holder to use this code for other purpose.
 */
+/* LMP (Lucien Murray-Pitts) : 2011-02-26 Added Basic English Translation Resources */
 
 //	Sep. 10, 2005 genta GetLongPathNameのエミュレーション関数の実体生成のため
 #define COMPILE_NEWAPIS_STUBS
@@ -427,12 +428,19 @@ BOOL CheckSystemResources( const char* pszAppName )
 //		MYTRACE( "nSystemResources=%d\n", nSystemResources );
 //		MYTRACE( "nUserResources=%d\n", nUserResources );
 //		MYTRACE( "nGDIResources=%d\n", nGDIResources );
+		// LMP: Added
+		char _pszLabel[257];
+		char _pszLabel2[257];
 		pszResourceName = NULL;
 		if( nSystemResources <= 5 ){
-			pszResourceName = "システム ";
+			::LoadString( GetModuleHandle(NULL), STR_ERR_ETCUTY01, _pszLabel, 255 );  // LMP: Added
+			pszResourceName = _pszLabel ;
+			// pszResourceName = "システム ";
 		}else
 		if( nUserResources <= 5 ){
-			pszResourceName = "ユーザー ";
+			::LoadString( GetModuleHandle(NULL), STR_ERR_ETCUTY02, _pszLabel, 255 );  // LMP: Added
+			pszResourceName = _pszLabel ;
+			// pszResourceName = "ユーザー ";
 		}else
 		if( nGDIResources <= 5 ){
 			pszResourceName = "GDI ";
@@ -440,15 +448,18 @@ BOOL CheckSystemResources( const char* pszAppName )
 		if( NULL != pszResourceName ){
 			::MessageBeep( MB_ICONHAND );
 			::MessageBeep( MB_ICONHAND );
+
+			::LoadString( GetModuleHandle(NULL), STR_ERR_ETCUTY03, _pszLabel2, 255 );  // LMP: Added
 //			if( IDYES == ::MYMESSAGEBOX( NULL, MB_YESNO | MB_ICONSTOP | MB_APPLMODAL | MB_TOPMOST, pszAppName,
 			::MYMESSAGEBOX( NULL, MB_OK | /*MB_YESNO | */ MB_ICONSTOP | MB_APPLMODAL | MB_TOPMOST, pszAppName,
-				"%sリソースが極端に不足しています。\n\
-このまま%sを起動すると、正常に動作しない可能性があります。\n\
-新しい%sの起動を中断します。\n\
-\n\
-システム リソース\t残り  %d%%\n\
-User リソース\t残り  %d%%\n\
-GDI リソース\t残り  %d%%\n\n",
+				_pszLabel2,
+//				"%sリソースが極端に不足しています。\n\
+// このまま%sを起動すると、正常に動作しない可能性があります。\n\
+// 新しい%sの起動を中断します。\n\
+// \n\
+// システム リソース\t残り  %d%%\n\
+// User リソース\t残り  %d%%\n\
+// GDI リソース\t残り  %d%%\n\n",
 				pszResourceName,
 				pszAppName,
 				pszAppName,
@@ -2365,9 +2376,13 @@ bool InitRegexp( HWND hWnd, CBregexp& rRegexp, bool bShowMessage )
 	if( !rRegexp.Init( RegexpDll ) ){
 		if( bShowMessage ){
 			::MessageBeep( MB_ICONEXCLAMATION );
-			::MessageBox( hWnd, _T("正規表現ライブラリが見つかりません。\r\n"
-				"正規表現を利用するにはBREGEXP.DLL互換のライブラリが必要です。\r\n"
-				"入手方法はヘルプを参照してください。"),
+
+			char _pszLabel[257] ;
+			::LoadString( GetModuleHandle(NULL), STR_ERR_ETCUTY04, _pszLabel, 255 );  // LMP: Added
+			::MessageBox( hWnd, _pszLabel,
+//				_T("正規表現ライブラリが見つかりません。\r\n"
+//				"正規表現を利用するにはBREGEXP.DLL互換のライブラリが必要です。\r\n"
+//				"入手方法はヘルプを参照してください。"),
 				GSTR_APPNAME, MB_OK | MB_ICONEXCLAMATION );
 		}
 		return false;
@@ -2423,8 +2438,11 @@ bool CheckRegexpSyntax( const char* szPattern, HWND hWnd, bool bShowMessage, int
 	}
 	if( !cRegexp.Compile( szPattern, nOption ) ){	// 2002/2/1 hor追加
 		if( bShowMessage ){
+			char _pszLabel[257] ;
+			::LoadString( GetModuleHandle(NULL), STR_ERR_ETCUTY05, _pszLabel, 255 );  // LMP: Added
+
 			::MessageBox( hWnd, cRegexp.GetLastMessage(),
-				"正規表現エラー", MB_OK | MB_ICONEXCLAMATION );
+				_pszLabel /*"正規表現エラー"*/, MB_OK | MB_ICONEXCLAMATION );
 		}
 		return false;
 	}
@@ -2463,9 +2481,13 @@ HWND OpenHtmlHelp( HWND hWnd, LPCSTR szFile, UINT uCmd, DWORD_PTR data, bool msg
 		return g_cHtmlHelp.HtmlHelp( hWnd, szFile, uCmd, data );
 	}
 	if( msgflag ){
-		::MessageBox( hWnd, "HHCTRL.OCXが見つかりません。\r\n"
-			"HTMLヘルプを利用するにはHHCTRL.OCXが必要です。\r\n",
-			"情報", MB_OK | MB_ICONEXCLAMATION );
+		char _pszLabel[2][257] ;
+		::LoadString( GetModuleHandle(NULL), STR_ERR_ETCUTY06, _pszLabel[0], 255 );  // LMP: Added
+		::LoadString( GetModuleHandle(NULL), STR_ERR_ETCUTY07, _pszLabel[1], 255 );  // LMP: Added
+
+		::MessageBox( hWnd, _pszLabel[0], //"HHCTRL.OCXが見つかりません。\r\n"
+//			"HTMLヘルプを利用するにはHHCTRL.OCXが必要です。\r\n",
+			_pszLabel[1] /*"情報"*/, MB_OK | MB_ICONEXCLAMATION );
 	}
 	return NULL;
 }
@@ -3417,8 +3439,13 @@ static LRESULT CALLBACK PropSheetWndProc( HWND hwnd, UINT uMsg, WPARAM wParam, L
 			GetMonitorWorkRect( pt, &rc );	// モニタのワークエリア
 
 			HMENU hMenu = ::CreatePopupMenu();
-			::InsertMenu( hMenu, 0, MF_BYPOSITION | MF_STRING, 100, _T("開く(&O)...") );
-			::InsertMenu( hMenu, 1, MF_BYPOSITION | MF_STRING, 101, _T("インポート／エクスポートの起点リセット(&R)") );
+
+			char _pszLabel[2][257] ;
+			::LoadString( GetModuleHandle(NULL), STR_ERR_ETCUTY08, _pszLabel[0], 255 );  // LMP: Added
+			::LoadString( GetModuleHandle(NULL), STR_ERR_ETCUTY09, _pszLabel[1], 255 );  // LMP: Added
+
+			::InsertMenu( hMenu, 0, MF_BYPOSITION | MF_STRING, 100, _pszLabel[0] ) ; // _T("開く(&O)...") );
+			::InsertMenu( hMenu, 1, MF_BYPOSITION | MF_STRING, 101, _pszLabel[1] ) ; // _T("インポート／エクスポートの起点リセット(&R)") );
 
 			int nId = ::TrackPopupMenu( hMenu, TPM_LEFTALIGN | TPM_TOPALIGN | TPM_LEFTBUTTON | TPM_RETURNCMD,
 										( pt.x > rc.left )? pt.x: rc.left,
@@ -3467,8 +3494,11 @@ static LRESULT CALLBACK PropSheetWndProc( HWND hwnd, UINT uMsg, WPARAM wParam, L
 				}
 				break;
 			case 101:	// インポート／エクスポートの起点リセット（起点を設定フォルダにする）
+				char _pszLabel[257] ;
+				::LoadString( GetModuleHandle(NULL), STR_ERR_ETCUTY10, _pszLabel, 255 );  // LMP: Added
+
 				if( IDOK == MYMESSAGEBOX( hwnd, MB_OKCANCEL | MB_ICONINFORMATION, GSTR_APPNAME,
-						_T("各種設定のインポート／エクスポート用ファイル選択画面の\n初期表示フォルダを設定フォルダに戻します。") ) )
+						_pszLabel /* _T("各種設定のインポート／エクスポート用ファイル選択画面の\n初期表示フォルダを設定フォルダに戻します。")*/ ) )
 				{
 					DLLSHAREDATA *pShareData = CShareData::getInstance()->GetShareData();
 					GetInidir( pShareData->m_szIMPORTFOLDER );
@@ -3496,7 +3526,11 @@ static int CALLBACK PropSheetProc( HWND hwndDlg, UINT uMsg, LPARAM lParam )
 	if( uMsg == PSCB_INITIALIZED ){
 		s_pOldPropSheetWndProc = (WNDPROC)::SetWindowLongPtr( hwndDlg, GWLP_WNDPROC, (LONG_PTR)PropSheetWndProc );
 		HINSTANCE hInstance = (HINSTANCE)::GetModuleHandle( NULL );
-		HWND hwndBtn = ::CreateWindowEx( 0, _T("BUTTON"), _T("設定フォルダ(&/) >>"), BS_PUSHBUTTON | WS_CHILD | WS_VISIBLE | WS_TABSTOP, 0, 0, 140, 20, hwndDlg, (HMENU)0x02000, hInstance, NULL );
+
+		char _pszLabel[257] ;
+		::LoadString( GetModuleHandle(NULL), STR_ERR_ETCUTY11, _pszLabel, 255 );  // LMP: Added
+
+		HWND hwndBtn = ::CreateWindowEx( 0, _T("BUTTON"), _pszLabel /*_T("設定フォルダ(&/) >>")*/, BS_PUSHBUTTON | WS_CHILD | WS_VISIBLE | WS_TABSTOP, 0, 0, 140, 20, hwndDlg, (HMENU)0x02000, hInstance, NULL );
 		::SendMessage( hwndBtn, WM_SETFONT, (WPARAM)::SendMessage( hwndDlg, WM_GETFONT, 0, 0 ), MAKELPARAM( FALSE, 0 ) );
 		::SetWindowPos( hwndBtn, ::GetDlgItem( hwndDlg, IDHELP), 0, 0, 0, 0, SWP_NOMOVE | SWP_NOSIZE );
 	}

@@ -31,6 +31,8 @@
 		3. This notice may not be removed or altered from any source
 		   distribution.
 */
+/* LMP (Lucien Murray-Pitts) : 2011-02-26 Added Basic English Translation Resources */
+
 #include "stdafx.h"
 #include "sakura_rc.h"
 #include "CPropCommon.h"
@@ -70,6 +72,9 @@ INT_PTR CPropCommon::DispatchEvent_PROP_FILENAME( HWND hwndDlg, UINT uMsg, WPARA
 	TCHAR	szFrom[_MAX_PATH];
 	TCHAR	szTo[_MAX_PATH];
 
+	// LMP: Added
+	char _pszLabel[257];
+
 	switch( uMsg ){
 
 	case WM_INITDIALOG:
@@ -84,13 +89,16 @@ INT_PTR CPropCommon::DispatchEvent_PROP_FILENAME( HWND hwndDlg, UINT uMsg, WPARA
 			col.mask     = LVCF_FMT | LVCF_WIDTH | LVCF_TEXT | LVCF_SUBITEM;
 			col.fmt      = LVCFMT_LEFT;
 			col.cx       = ( rc.right - rc.left ) * 60 / 100;
-			col.pszText  = _T("íuä∑ëO");
+
+			::LoadString( m_hInstance, STR_ERR_DLGPROPCOMFNM1, _pszLabel, 255 );  // LMP: Added
+			col.pszText  = _pszLabel ; // _T("íuä∑ëO");
 			col.iSubItem = 0;
 			ListView_InsertColumn( hListView, 0, &col );
 			col.mask     = LVCF_FMT | LVCF_WIDTH | LVCF_TEXT | LVCF_SUBITEM;
 			col.fmt      = LVCFMT_LEFT;
 			col.cx       = ( rc.right - rc.left ) * 35 / 100;
-			col.pszText  = _T("íuä∑å„");
+			::LoadString( m_hInstance, STR_ERR_DLGPROPCOMFNM2, _pszLabel, 255 );  // LMP: Added
+			col.pszText  = _pszLabel ; //_T("íuä∑å„");
 			col.iSubItem = 1;
 			ListView_InsertColumn( hListView, 1, &col );
 
@@ -378,7 +386,12 @@ int CPropCommon::SetListViewItem_FILENAME( HWND hListView, int nIndex, LPTSTR sz
 
 	// Ç±ÇÍà»è„í«â¡Ç≈Ç´Ç»Ç¢
 	if( bInsMode && MAX_TRANSFORM_FILENAME <= nCount ){
-		::MessageBox( GetParent( hListView ), _T("Ç±ÇÍà»è„ìoò^Ç≈Ç´Ç‹ÇπÇÒÅB"), GSTR_APPNAME, MB_OK | MB_ICONSTOP );
+		// LMP: Added
+		char _pszLabel[257];
+		::LoadString( GetModuleHandle(NULL), STR_ERR_DLGPROPCOMFNM3, _pszLabel, 255 );  // LMP: Added
+
+//::LoadString( GetModuleHandle(NULL)
+		::MessageBox( GetParent( hListView ), _pszLabel /*_T("Ç±ÇÍà»è„ìoò^Ç≈Ç´Ç‹ÇπÇÒÅB")*/, GSTR_APPNAME, MB_OK | MB_ICONSTOP );
 		return -1;
 	}
 

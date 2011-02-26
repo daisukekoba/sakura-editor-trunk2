@@ -44,6 +44,7 @@
  * 後になる場所に追加してください。
  *   →関数をマクロで定義し直すため。
  */
+/* LMP (Lucien Murray-Pitts) : 2011-02-26 Added Basic English Translation Resources */
 
 
 

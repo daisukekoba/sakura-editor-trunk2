@@ -20,6 +20,7 @@
 	This source code is designed for sakura editor.
 	Please contact the copyright holder to use this code for other purpose.
 */
+/* LMP (Lucien Murray-Pitts) : 2011-02-26 Added Basic English Translation Resources */
 
 #include "stdafx.h"
 #include <io.h>
@@ -359,10 +360,16 @@ bool CShareData::Init( void )
 		GSTR_CSHAREDATA
 	);
 	if( NULL == m_hFileMap ){
+		// LMP: Added
+		char _pszLabel_1[257];
+		char _pszLabel_2[257];
+		::LoadString( GetModuleHandle(NULL), STR_ERR_CSHAREDATA01, _pszLabel_1, 255 );  // LMP: Added
+		::LoadString( GetModuleHandle(NULL), STR_ERR_CSHAREDATA02, _pszLabel_2, 255 );  // LMP: Added
+
 		::MessageBox(
 			NULL,
-			"CreateFileMapping()に失敗しました",
-			"予期せぬエラー",
+			_pszLabel_1, // "CreateFileMapping()に失敗しました",
+			_pszLabel_2, // "予期せぬエラー",
 			MB_OK | MB_APPLMODAL | MB_ICONSTOP
 		);
 		return false;
@@ -443,37 +450,51 @@ bool CShareData::Init( void )
 			strcpy( m_pShareData->m_szTransformFileNameTo[i], "" );
 		}
 		strcpy( m_pShareData->m_szTransformFileNameFrom[0], "%DeskTop%\\" );
-		strcpy( m_pShareData->m_szTransformFileNameTo[0], "デスクトップ\\" );
+		// strcpy( m_pShareData->m_szTransformFileNameTo[0], "デスクトップ\\" );
+		::LoadString( GetModuleHandle(NULL), STR_ERR_CSHAREDATA03, m_pShareData->m_szTransformFileNameTo[0], 255 );  // LMP: Added
+
 		strcpy( m_pShareData->m_szTransformFileNameFrom[1], "%Personal%\\" );
-		strcpy( m_pShareData->m_szTransformFileNameTo[1], "マイドキュメント\\" );
+		//strcpy( m_pShareData->m_szTransformFileNameTo[1], "マイドキュメント\\" );
+		::LoadString( GetModuleHandle(NULL), STR_ERR_CSHAREDATA04, m_pShareData->m_szTransformFileNameTo[1], 255 );  // LMP: Added
+
 		strcpy( m_pShareData->m_szTransformFileNameFrom[2], "%Cache%\\Content.IE5\\" );
-		strcpy( m_pShareData->m_szTransformFileNameTo[2], "IEキャッシュ\\" );
+		//strcpy( m_pShareData->m_szTransformFileNameTo[2], "IEキャッシュ\\" );
+		::LoadString( GetModuleHandle(NULL), STR_ERR_CSHAREDATA05, m_pShareData->m_szTransformFileNameTo[2], 255 );  // LMP: Added
+
 		strcpy( m_pShareData->m_szTransformFileNameFrom[3], "%TEMP%\\" );
 		strcpy( m_pShareData->m_szTransformFileNameTo[3],   "TEMP\\" );
 		strcpy( m_pShareData->m_szTransformFileNameFrom[4], "%Common DeskTop%\\" );
-		strcpy( m_pShareData->m_szTransformFileNameTo[4],   "共有デスクトップ\\" );
+		//strcpy( m_pShareData->m_szTransformFileNameTo[4],   "共有デスクトップ\\" );
+		::LoadString( GetModuleHandle(NULL), STR_ERR_CSHAREDATA06, m_pShareData->m_szTransformFileNameTo[4], 255 );  // LMP: Added
+
 		strcpy( m_pShareData->m_szTransformFileNameFrom[5], "%Common Documents%\\" );
-		strcpy( m_pShareData->m_szTransformFileNameTo[5], "共有ドキュメント\\" );
+		//strcpy( m_pShareData->m_szTransformFileNameTo[5], "共有ドキュメント\\" );
+		::LoadString( GetModuleHandle(NULL), STR_ERR_CSHAREDATA07, m_pShareData->m_szTransformFileNameTo[5], 255 );  // LMP: Added
+
 		strcpy( m_pShareData->m_szTransformFileNameFrom[6], "%AppData%\\" );	// 2007.05.19 ryoji 追加
-		strcpy( m_pShareData->m_szTransformFileNameTo[6], "アプリデータ\\" );	// 2007.05.19 ryoji 追加
+		//strcpy( m_pShareData->m_szTransformFileNameTo[6], "アプリデータ\\" );	// 2007.05.19 ryoji 追加
+		::LoadString( GetModuleHandle(NULL), STR_ERR_CSHAREDATA08, m_pShareData->m_szTransformFileNameTo[6], 255 );  // LMP: Added
 		m_pShareData->m_nTransformFileNameArrNum = 7;
 		
 		/* m_PrintSettingArr[0]を設定して、残りの1～7にコピーする。
 			必要になるまで遅らせるために、CPrintに、CShareDataを操作する権限を与える。
 			YAZAKI.
 		*/
+		// LMP: Added
+		char _pszLabel[257];
+		::LoadString( GetModuleHandle(NULL), STR_ERR_CSHAREDATA09, _pszLabel, 255 );  // LMP: Added
 		{
 			/*
 				2006.08.16 Moca 初期化単位を PRINTSETTINGに変更。CShareDataには依存しない。
 			*/
 			char szSettingName[64];
 			i = 0;
-			wsprintf( szSettingName, "印刷設定 %d", i + 1 );
+			wsprintf( szSettingName, _pszLabel /*"印刷設定 %d"*/, i + 1 );
 			CPrint::SettingInitialize( m_pShareData->m_PrintSettingArr[0], szSettingName );	//	初期化命令。
 		}
 		for( i = 1; i < MAX_PRINTSETTINGARR; ++i ){
 			m_pShareData->m_PrintSettingArr[i] = m_pShareData->m_PrintSettingArr[0];
-			wsprintf( m_pShareData->m_PrintSettingArr[i].m_szPrintSettingName, "印刷設定 %d", i + 1 );	/* 印刷設定の名前 */
+			wsprintf( m_pShareData->m_PrintSettingArr[i].m_szPrintSettingName, _pszLabel /*"印刷設定 %d"*/, i + 1 );	/* 印刷設定の名前 */
 		}
 
 		//	Jan. 30, 2005 genta 関数として独立
@@ -499,7 +520,7 @@ bool CShareData::Init( void )
 		m_pShareData->m_Common.m_lf.lfClipPrecision		= 0x2;
 		m_pShareData->m_Common.m_lf.lfQuality			= 0x1;
 		m_pShareData->m_Common.m_lf.lfPitchAndFamily	= 0x31;
-		strcpy( m_pShareData->m_Common.m_lf.lfFaceName, "ＭＳ ゴシック" );
+		strcpy( m_pShareData->m_Common.m_lf.lfFaceName, "ＭＳ ゴシック" );			// LMP FIXME -- should convert font names for JP text?
 
 		// キーワードヘルプのフォント ai 02/05/21 Add S
 		::SystemParametersInfo(
@@ -593,8 +614,10 @@ bool CShareData::Init( void )
 
 		m_pShareData->m_Common.m_bDispTabWnd = FALSE;			//タブウインドウ表示	//@@@ 2003.05.31 MIK
 		m_pShareData->m_Common.m_bDispTabWndMultiWin = FALSE;	//タブウインドウ表示	//@@@ 2003.05.31 MIK
-		strcpy( m_pShareData->m_Common.m_szTabWndCaption,
-			"${w?【Grep】$h$:【アウトプット】$:$f$}${U?(更新)$}${R?(読みとり専用)$:(上書き禁止)$}${M?【キーマクロの記録中】$}" );	//@@@ 2003.06.13 MIK
+//		strcpy( m_pShareData->m_Common.m_szTabWndCaption,
+//			"${w?【Grep】$h$:【アウトプット】$:$f$}${U?(更新)$}${R?(読みとり専用)$:(上書き禁止)$}${M?【キーマクロの記録中】$}" );	//@@@ 2003.06.13 MIK
+		::LoadString( GetModuleHandle(NULL), STR_ERR_CSHAREDATA10, m_pShareData->m_Common.m_szTabWndCaption, 255 );  // LMP: Added
+
 		m_pShareData->m_Common.m_bSameTabWidth = FALSE;			//タブを等幅にする			//@@@ 2006.01.28 ryoji
 		m_pShareData->m_Common.m_bDispTabIcon = FALSE;			//タブにアイコンを表示する	//@@@ 2006.01.28 ryoji
 		m_pShareData->m_Common.m_bSortTabList = TRUE;			//タブ一覧をソートする		//@@@ 2006.05.10 ryoji
@@ -607,20 +630,25 @@ bool CShareData::Init( void )
 		m_pShareData->m_Common.m_bSplitterWndVScroll = TRUE;	// 2001/06/20 asa-o 分割ウィンドウの垂直スクロールの同期をとる
 
 		/* カスタムメニュー情報 */
-		wsprintf( m_pShareData->m_Common.m_szCustMenuNameArr[0], "右クリックメニュー", i );
+		//wsprintf( m_pShareData->m_Common.m_szCustMenuNameArr[0], "右クリックメニュー", i );  // LMP FIXME - possible original bug
+		::LoadString( GetModuleHandle(NULL), STR_ERR_CSHAREDATA11, m_pShareData->m_Common.m_szCustMenuNameArr[0], 255 );  // LMP: Added
 		for( i = 1; i < MAX_CUSTOM_MENU; ++i ){
-			wsprintf( m_pShareData->m_Common.m_szCustMenuNameArr[i], "メニュー%d", i );
+			char _pszLabel_3[256] ;
+			::LoadString( GetModuleHandle(NULL), STR_ERR_CSHAREDATA12, _pszLabel_3, 255 );  // LMP: Added
+			wsprintf( m_pShareData->m_Common.m_szCustMenuNameArr[i], _pszLabel_3 /*"メニュー%d"*/, i );
 			m_pShareData->m_Common.m_nCustMenuItemNumArr[i] = 0;
 			for( j = 0; j < MAX_CUSTOM_MENU_ITEMS; ++j ){
 				m_pShareData->m_Common.m_nCustMenuItemFuncArr[i][j] = 0;
 				m_pShareData->m_Common.m_nCustMenuItemKeyArr [i][j] = '\0';
 			}
 		}
-		wsprintf( m_pShareData->m_Common.m_szCustMenuNameArr[CUSTMENU_INDEX_FOR_TABWND], "タブメニュー" );	//@@@ 2003.06.13 MIK
+		::LoadString( GetModuleHandle(NULL), STR_ERR_CSHAREDATA13, m_pShareData->m_Common.m_szCustMenuNameArr[CUSTMENU_INDEX_FOR_TABWND], 255 );  // LMP: Added
+		// wsprintf( m_pShareData->m_Common.m_szCustMenuNameArr[CUSTMENU_INDEX_FOR_TABWND], "タブメニュー" );	//@@@ 2003.06.13 MIK
 
 
 		/* 見出し記号 */
-		strcpy( m_pShareData->m_Common.m_szMidashiKigou, "１２３４５６７８９０（(［[「『【■□▲△▼▽◆◇○◎●§・※☆★第①②③④⑤⑥⑦⑧⑨⑩⑪⑫⑬⑭⑮⑯⑰⑱⑲⑳ⅠⅡⅢⅣⅤⅥⅦⅧⅨⅩ一二三四五六七八九十壱弐参伍" );
+		::LoadString( GetModuleHandle(NULL), STR_ERR_CSHAREDATA14, m_pShareData->m_Common.m_szMidashiKigou, 255 );  // LMP: Added
+		// strcpy( m_pShareData->m_Common.m_szMidashiKigou, "１２３４５６７８９０（(［[「『【■□▲△▼▽◆◇○◎●§・※☆★第①②③④⑤⑥⑦⑧⑨⑩⑪⑫⑬⑭⑮⑯⑰⑱⑲⑳ⅠⅡⅢⅣⅤⅥⅦⅧⅨⅩ一二三四五六七八九十壱弐参伍" );
 		/* 引用符 */
 		strcpy( m_pShareData->m_Common.m_szInyouKigou, "> " );		/* 引用符 */
 		m_pShareData->m_Common.m_bUseHokan = FALSE;					/* 入力補完機能を使用する */
@@ -687,9 +715,11 @@ bool CShareData::Init( void )
 		*/
 
 		m_pShareData->m_Common.m_nDateFormatType = 0;	//日付書式のタイプ
-		strcpy( m_pShareData->m_Common.m_szDateFormat, "yyyy\'年\'M\'月\'d\'日(\'dddd\')\'" );	//日付書式
+		::LoadString( GetModuleHandle(NULL), STR_ERR_CSHAREDATA15, m_pShareData->m_Common.m_szMidashiKigou, 255 );  // LMP: Added
+//		strcpy( m_pShareData->m_Common.m_szDateFormat, "yyyy\'年\'M\'月\'d\'日(\'dddd\')\'" );	//日付書式
 		m_pShareData->m_Common.m_nTimeFormatType = 0;	//時刻書式のタイプ
-		strcpy( m_pShareData->m_Common.m_szTimeFormat, "tthh\'時\'mm\'分\'ss\'秒\'"  );			//時刻書式
+		::LoadString( GetModuleHandle(NULL), STR_ERR_CSHAREDATA16, m_pShareData->m_Common.m_szMidashiKigou, 255 );  // LMP: Added
+//		strcpy( m_pShareData->m_Common.m_szTimeFormat, "tthh\'時\'mm\'分\'ss\'秒\'"  );			//時刻書式
 
 		m_pShareData->m_Common.m_bMenuIcon = TRUE;		/* メニューにアイコンを表示する */
 
@@ -722,13 +752,16 @@ bool CShareData::Init( void )
 
 		//	Apr. 05, 2003 genta ウィンドウキャプションの初期値
 		//	Aug. 16, 2003 genta $N(ファイル名省略表示)をデフォルトに変更
+		::LoadString( GetModuleHandle(NULL), STR_ERR_CSHAREDATA17, m_pShareData->m_Common.m_szWindowCaptionActive, 255 );  // LMP: Added
+		::LoadString( GetModuleHandle(NULL), STR_ERR_CSHAREDATA18, m_pShareData->m_Common.m_szWindowCaptionInactive, 255 );  // LMP: Added
+/*
 		strcpy( m_pShareData->m_Common.m_szWindowCaptionActive, 
 			"${w?$h$:アウトプット$:${I?$f$:$N$}$}${U?(更新)$} -"
 			" sakura $V ${R?(読みとり専用)$:（上書き禁止）$}${M?  【キーマクロの記録中】$}" );
 		strcpy( m_pShareData->m_Common.m_szWindowCaptionInactive, 
 			"${w?$h$:アウトプット$:$f$}${U?(更新)$} -"
 			" sakura $V ${R?(読みとり専用)$:（上書き禁止）$}${M?  【キーマクロの記録中】$}" );
-
+*/
 		//	From Here Sep. 14, 2001 genta
 		//	Macro登録の初期化
 		MacroRec *mptr = m_pShareData->m_MacroTable;
@@ -1231,11 +1264,15 @@ BOOL CShareData::RequestCloseEditor( EditNode* pWndArr, int nArrCnt, BOOL bExit,
 
 	if( bCheckConfirm && GetShareData()->m_Common.m_bCloseAllConfirm ){	//[すべて閉じる]で他に編集用のウィンドウがあれば確認する
 		if( 1 < nCloseCount ){
+			char _pszLabel[257];
+			::LoadString( GetModuleHandle(NULL), STR_ERR_CSHAREDATA19, _pszLabel, 255 );  // LMP: Added
+
 			if( IDYES != ::MYMESSAGEBOX(
 				hWndFrom,
 				MB_YESNO | MB_APPLMODAL | MB_ICONQUESTION,
 				GSTR_APPNAME,
-				"同時に複数の編集用ウィンドウを閉じようとしています。これらを閉じますか?"
+				_pszLabel
+				// "同時に複数の編集用ウィンドウを閉じようとしています。これらを閉じますか?"
 			) ){
 				return FALSE;
 			}
@@ -1331,20 +1368,27 @@ BOOL CShareData::IsPathOpened( const char* pszPath, HWND* phwndOwner, int nCharC
 				pszCodeNameCur = (char*)gm_pszCodeNameArr_1[pfi->m_nCharCode];
 			}
 
+			char _pszLabel[257];
 			if(NULL != pszCodeNameCur && NULL != pszCodeNameNew){
+				::LoadString( GetModuleHandle(NULL), STR_ERR_CSHAREDATA20, _pszLabel, 255 );  // LMP: Added
 				if(nCharCode != pfi->m_nCharCode){
 					::MYMESSAGEBOX( *phwndOwner, MB_OK | MB_ICONEXCLAMATION | MB_TOPMOST, GSTR_APPNAME,
-						"%s\n\n\n既に開いているファイルを違う文字コードで開く場合は、\nファイルメニューから「開き直す」を使用してください。\n\n現在の文字コードセット=[%s]\n新しい文字コードセット=[%s]",
+						_pszLabel,
+						// "%s\n\n\n既に開いているファイルを違う文字コードで開く場合は、\nファイルメニューから「開き直す」を使用してください。\n\n現在の文字コードセット=[%s]\n新しい文字コードセット=[%s]",
 						pszPath, pszCodeNameCur, pszCodeNameNew
 					);
 				}
 			}
 			else{
+				char _pszLabel2[256];
+				::LoadString( GetModuleHandle(NULL), STR_ERR_CSHAREDATA21, _pszLabel, 255 );  // LMP: Added
+				::LoadString( GetModuleHandle(NULL), STR_ERR_CSHAREDATA22, _pszLabel2, 255 );  // LMP: Added
 				::MYMESSAGEBOX( *phwndOwner, MB_OK | MB_ICONEXCLAMATION | MB_TOPMOST, GSTR_APPNAME,
-					"%s\n\n多重オープンの確認で不明な文字コードが指定されました。\n\n現在の文字コードセット=%d [%s]\n新しい文字コードセット=%d [%s]",
+					_pszLabel,
+					//"%s\n\n多重オープンの確認で不明な文字コードが指定されました。\n\n現在の文字コードセット=%d [%s]\n新しい文字コードセット=%d [%s]",
 					pszPath,
-					pfi->m_nCharCode, NULL==pszCodeNameCur?"不明":pszCodeNameCur,
-					nCharCode,        NULL==pszCodeNameNew?"不明":pszCodeNameNew
+					pfi->m_nCharCode, NULL==pszCodeNameCur?_pszLabel2/*"不明"*/:pszCodeNameCur,
+					nCharCode,        NULL==pszCodeNameNew?_pszLabel2/*"不明"*/:pszCodeNameNew
 				);
 			}
 		}
@@ -4850,7 +4894,10 @@ void CShareData::InitKeyword(DLLSHAREDATA* pShareData)
 	PopulateKeyword( "Perl2", TRUE, ppszKeyWordsPERL2 );		/* セット12の追加 */	//Jul. 10, 2001 JEPRO Perlから変数を分離・独立
 	PopulateKeyword( "Visual Basic", FALSE, ppszKeyWordsVB );	/* セット13の追加 */	//Jul. 10, 2001 JEPRO
 	PopulateKeyword( "Visual Basic2", FALSE, ppszKeyWordsVB2 );	/* セット14の追加 */	//Jul. 10, 2001 JEPRO
-	PopulateKeyword( "リッチテキスト", TRUE, ppszKeyWordsRTF );	/* セット15の追加 */	//Jul. 10, 2001 JEPRO
+
+	static char _pszLabel[256];
+	::LoadString( GetModuleHandle(NULL), STR_ERR_CSHAREDATA23, _pszLabel, 255 );  // LMP: Added
+	PopulateKeyword( _pszLabel/*"リッチテキスト"*/, TRUE, ppszKeyWordsRTF );	/* セット15の追加 */	//Jul. 10, 2001 JEPRO
 
 #undef PopulateKeyword
 }
@@ -4879,6 +4926,13 @@ bool CShareData::InitKeyAssign(DLLSHAREDATA* pShareData)
 		short			nFuncCode_6;	/*!<         Ctrl + Alt + Key */
 		short			nFuncCode_7;	/*!< Shift + Ctrl + Alt + Key */
 	};
+
+	static char _pszLabel[10][257];
+	for( int _pszLoad=0 ; _pszLoad<10 ; _pszLoad++ )
+	{
+		::LoadString( GetModuleHandle(NULL), STR_ERR_CSHAREDATA24+_pszLoad, _pszLabel[ _pszLoad ], 255 );
+	}
+
 	static KEYDATAINIT	KeyDataInit[] = {
 	//Sept. 1, 2000 Jepro note: key binding
 	//Feb. 17, 2001 jepro note 2: 順番は2進で下位3ビット[Alt][Ctrl][Shift]の組合せの順(それに2を加えた値)
@@ -4886,17 +4940,17 @@ bool CShareData::InitKeyAssign(DLLSHAREDATA* pShareData)
 	//		keycode, keyname, なし, Shitf+, Ctrl+, Shift+Ctrl+, Alt+, Shit+Alt+, Ctrl+Alt+, Shift+Ctrl+Alt+
 	//
 		/* マウスボタン */
-		{ 0, "ダブルクリック",F_SELECTWORD, F_SELECTWORD, F_SELECTWORD, F_SELECTWORD, F_SELECTWORD, F_SELECTWORD, F_SELECTWORD, F_SELECTWORD },
+		{ 0, _pszLabel[0]/*"ダブルクリック"*/,F_SELECTWORD, F_SELECTWORD, F_SELECTWORD, F_SELECTWORD, F_SELECTWORD, F_SELECTWORD, F_SELECTWORD, F_SELECTWORD },
 	//Feb. 19, 2001 JEPRO Altと右クリックの組合せは効かないので右クリックメニューのキー割り当てをはずした
-		{ 0, "右クリック",F_MENU_RBUTTON, F_MENU_RBUTTON, F_MENU_RBUTTON, F_MENU_RBUTTON, 0, 0, 0, 0 },
+		{ 0, _pszLabel[1]/*"右クリック"*/,F_MENU_RBUTTON, F_MENU_RBUTTON, F_MENU_RBUTTON, F_MENU_RBUTTON, 0, 0, 0, 0 },
 	// novice 2004/10/11 マウス中ボタン対応
-		{ 0, "中クリック", 0, 0, 0, 0, 0, 0, 0, 0 },
+		{ 0, _pszLabel[2]/*"中クリック"*/, 0, 0, 0, 0, 0, 0, 0, 0 },
 	// novice 2004/10/10 マウスサイドボタン対応
-		{ 0, "左サイドクリック", 0, 0, 0, 0, 0, 0, 0, 0 },
-		{ 0, "右サイドクリック", 0, 0, 0, 0, 0, 0, 0, 0 },
+		{ 0, _pszLabel[3]/*"左サイドクリック"*/, 0, 0, 0, 0, 0, 0, 0, 0 },
+		{ 0, _pszLabel[4]/*"右サイドクリック"*/, 0, 0, 0, 0, 0, 0, 0, 0 },
 	// 2007.10.05 nasukoji	トリプルクリック・クアドラプルクリック対応
-		{ 0, "トリプルクリック", F_SELECTLINE, F_SELECTLINE, F_SELECTLINE, F_SELECTLINE, F_SELECTLINE, F_SELECTLINE, F_SELECTLINE, F_SELECTLINE },
-		{ 0, "クアドラプルクリック", F_SELECTALL, F_SELECTALL, F_SELECTALL, F_SELECTALL, F_SELECTALL, F_SELECTALL, F_SELECTALL, F_SELECTALL },
+		{ 0, _pszLabel[5]/*"トリプルクリック"*/, F_SELECTLINE, F_SELECTLINE, F_SELECTLINE, F_SELECTLINE, F_SELECTLINE, F_SELECTLINE, F_SELECTLINE, F_SELECTLINE },
+		{ 0, _pszLabel[6]/*"クアドラプルクリック"*/, F_SELECTALL, F_SELECTALL, F_SELECTALL, F_SELECTALL, F_SELECTALL, F_SELECTALL, F_SELECTALL, F_SELECTALL },
 		/* ファンクションキー */
 	//	From Here Sept. 14, 2000 JEPRO
 	//	VK_F1,"F1", F_EXTHTMLHELP, 0, F_EXTHELP1, 0, 0, 0, 0, 0,
@@ -5096,11 +5150,11 @@ bool CShareData::InitKeyAssign(DLLSHAREDATA* pShareData)
 		//Oct. 7, 2000 JEPRO	Shift+Ctrl+- に「上下に分割」を追加
 		// 2002.02.08 hor Ctrl+-にファイル名をコピーを追加
 		{ 0x00bd, "-",0, 0, F_COPYFNAME, F_SPLIT_V, 0, 0, 0, 0 },
-		{ 0x00de, "^(英語')",0, 0, F_COPYTAG, 0, 0, 0, 0, 0 },
+		{ 0x00de, _pszLabel[7]/*"^(英語')"*/,0, 0, F_COPYTAG, 0, 0, 0, 0, 0 },
 		//Oct. 7, 2000 JEPRO	Shift+Ctrl+\ に「左右に分割」を追加
 		{ 0x00dc, "\\",0, 0, F_COPYPATH, F_SPLIT_H, 0, 0, 0, 0 },
 		//Sept. 20, 2000 JEPRO	Ctrl+@ に「ファイル内容比較」を追加  //Oct. 15, 2000 JEPRO「選択範囲内全行コピー」に変更
-		{ 0x00c0, "@(英語`)",0, 0, F_COPYLINES, 0, 0, 0, 0, 0 },
+		{ 0x00c0, _pszLabel[8]/*"@(英語`)"*/,0, 0, F_COPYLINES, 0, 0, 0, 0, 0 },
 		//	Aug. 16, 2000 genta
 		//	反対向きの括弧にも括弧検索を追加
 		{ 0x00db, "[",0, 0, F_BRACKETPAIR, 0, 0, 0, 0, 0 },
@@ -5118,13 +5172,19 @@ bool CShareData::InitKeyAssign(DLLSHAREDATA* pShareData)
 		{ 0x00e2, "_",0, 0, F_UNDO, 0, 0, 0, 0, 0 },
 		{ 0x00df, "_(PC-98)",0, 0, F_UNDO, 0, 0, 0, 0, 0 },
 		//Oct. 7, 2000 JEPRO	長くて表示しきれない所がでてきてしまうのでアプリケーションキー→アプリキーに短縮
-		{ VK_APPS, "アプリキー",F_MENU_RBUTTON, F_MENU_RBUTTON, F_MENU_RBUTTON, F_MENU_RBUTTON, F_MENU_RBUTTON, F_MENU_RBUTTON, F_MENU_RBUTTON, F_MENU_RBUTTON }
+		{ VK_APPS, _pszLabel[9]/*"アプリキー"*/,F_MENU_RBUTTON, F_MENU_RBUTTON, F_MENU_RBUTTON, F_MENU_RBUTTON, F_MENU_RBUTTON, F_MENU_RBUTTON, F_MENU_RBUTTON, F_MENU_RBUTTON }
 	};
 	const int	nKeyDataInitNum = sizeof( KeyDataInit ) / sizeof( KeyDataInit[0] );
 	//	From Here 2007.11.04 genta バッファオーバーラン防止
 	if( nKeyDataInitNum > sizeof( pShareData->m_pKeyNameArr ) / sizeof( pShareData->m_pKeyNameArr[0])) {
-		::MYMESSAGEBOX( NULL, MB_OK | MB_ICONSTOP, _T("作者に教えて欲しいエラー"),
-			_T("キー設定数に対してDLLSHARE::m_nKeyNameArr[]のサイズが不足しています") );
+
+		char _pszLabel2[257];
+		char _pszLabel3[257];
+		::LoadString( GetModuleHandle(NULL), STR_ERR_CSHAREDATA33, _pszLabel2, 255 );
+		::LoadString( GetModuleHandle(NULL), STR_ERR_CSHAREDATA34, _pszLabel3, 255 );
+
+		::MYMESSAGEBOX( NULL, MB_OK | MB_ICONSTOP, _pszLabel2, // _T("作者に教えて欲しいエラー"),
+			_pszLabel3 ) ; // _T("キー設定数に対してDLLSHARE::m_nKeyNameArr[]のサイズが不足しています") );
 		return false;
 	}
 	//	To Here 2007.11.04 genta バッファオーバーラン防止
@@ -5265,64 +5325,73 @@ void CShareData::InitTypeConfig(DLLSHAREDATA* pShareData)
 
 	pShareData->m_Types[nIdx].m_nIndentLayout = 0;	/* 折り返しは2行目以降を字下げ表示 */
 
+
+	static char _pszLabel[47][257];
+	for( int _pszLoad=0 ; _pszLoad<47 ; _pszLoad++ )
+	{
+		::LoadString( GetModuleHandle(NULL), STR_ERR_CSHAREDATA36+_pszLoad, _pszLabel[ _pszLoad ], 255 );
+	}
+
+
+
 	static ColorInfoIni ColorInfo_DEFAULT[] = {
 	//	Nov. 9, 2000 Jepro note: color setting (詳細は CshareData.h を参照のこと)
 	//	0,							1(Disp),	 2(FatFont),3(UnderLIne) , 4(colTEXT),	5(colBACK),
 	//	szName(項目名),				色分け／表示, 太字,		下線,		文字色,		背景色,
 	//
 	//Oct. 8, 2000 JEPRO 背景色を真っ白RGB(255,255,255)→(255,251,240)に変更(眩しさを押さえた)
-		"テキスト",							TRUE , FALSE, FALSE, RGB( 0, 0, 0 )			, RGB( 255, 251, 240 ),
-		"ルーラー",							TRUE , FALSE, FALSE, RGB( 0, 0, 0 )			, RGB( 239, 239, 239 ),
-		"カーソル",							TRUE , FALSE, FALSE, RGB( 0, 0, 0 )			, RGB( 255, 251, 240 ),	// 2006.12.07 ryoji
-		"カーソル(IME ON)",					TRUE , FALSE, FALSE, RGB( 255, 0, 0 )		, RGB( 255, 251, 240 ),	// 2006.12.07 ryoji
-		"カーソル行アンダーライン",			TRUE , FALSE, FALSE, RGB( 0, 0, 255 )		, RGB( 255, 251, 240 ),
- 		"カーソル位置縦線",					FALSE, FALSE, FALSE, RGB( 128, 128, 255 )	, RGB( 255, 251, 240 ),// 2007.09.09 Moca
-		"行番号",							TRUE , FALSE, FALSE, RGB( 0, 0, 255 )		, RGB( 239, 239, 239 ),
-		"行番号(変更行)",					TRUE , TRUE , FALSE, RGB( 0, 0, 255 )		, RGB( 239, 239, 239 ),
-		"TAB記号",							TRUE , FALSE, FALSE, RGB( 128, 128, 128 )	, RGB( 255, 251, 240 ),	//Jan. 19, 2001 JEPRO RGB(192,192,192)より濃いグレーに変更
-		"半角空白"		,					FALSE , FALSE, FALSE , RGB( 192, 192, 192 )	, RGB( 255, 251, 240 ), //2002.04.28 Add by KK
-		"日本語空白",						TRUE , FALSE, FALSE, RGB( 192, 192, 192 )	, RGB( 255, 251, 240 ),
-		"コントロールコード",				TRUE , FALSE, FALSE, RGB( 255, 255, 0 )		, RGB( 255, 251, 240 ),
-		"改行記号",							TRUE , FALSE, FALSE, RGB( 0, 128, 255 )		, RGB( 255, 251, 240 ),
-		"折り返し記号",						TRUE , FALSE, FALSE, RGB( 255, 0, 255 )		, RGB( 255, 251, 240 ),
-		"指定桁縦線",						FALSE, FALSE, FALSE, RGB( 192, 192, 192 )	, RGB( 255, 251, 240 ), //2005.11.08 Moca
-		"EOF記号",							TRUE , FALSE, FALSE, RGB( 0, 255, 255 )		, RGB( 0, 0, 0 ),
+		_pszLabel[  0 ] /*"テキスト"*/,							TRUE , FALSE, FALSE, RGB( 0, 0, 0 )			, RGB( 255, 251, 240 ),
+		_pszLabel[  1 ] /*"ルーラー"*/,							TRUE , FALSE, FALSE, RGB( 0, 0, 0 )			, RGB( 239, 239, 239 ),
+		_pszLabel[  2 ] /*"カーソル"*/,							TRUE , FALSE, FALSE, RGB( 0, 0, 0 )			, RGB( 255, 251, 240 ),	// 2006.12.07 ryoji
+		_pszLabel[  3 ] /*"カーソル(IME ON)"*/,					TRUE , FALSE, FALSE, RGB( 255, 0, 0 )		, RGB( 255, 251, 240 ),	// 2006.12.07 ryoji
+		_pszLabel[  4 ] /*"カーソル行アンダーライン"*/,			TRUE , FALSE, FALSE, RGB( 0, 0, 255 )		, RGB( 255, 251, 240 ),
+ 		_pszLabel[  5 ] /*"カーソル位置縦線"*/,					FALSE, FALSE, FALSE, RGB( 128, 128, 255 )	, RGB( 255, 251, 240 ),// 2007.09.09 Moca
+		_pszLabel[  6 ] /*"行番号"*/,							TRUE , FALSE, FALSE, RGB( 0, 0, 255 )		, RGB( 239, 239, 239 ),
+		_pszLabel[  7 ] /*"行番号(変更行)"*/,					TRUE , TRUE , FALSE, RGB( 0, 0, 255 )		, RGB( 239, 239, 239 ),
+		_pszLabel[  8 ] /*"TAB記号"*/,							TRUE , FALSE, FALSE, RGB( 128, 128, 128 )	, RGB( 255, 251, 240 ),	//Jan. 19, 2001 JEPRO RGB(192,192,192)より濃いグレーに変更
+		_pszLabel[  9 ] /*"半角空白"*/,							FALSE , FALSE, FALSE , RGB( 192, 192, 192 )	, RGB( 255, 251, 240 ), //2002.04.28 Add by KK
+		_pszLabel[ 10 ] /*"日本語空白"*/,							TRUE , FALSE, FALSE, RGB( 192, 192, 192 )	, RGB( 255, 251, 240 ),
+		_pszLabel[ 11 ] /*"コントロールコード"*/,					TRUE , FALSE, FALSE, RGB( 255, 255, 0 )		, RGB( 255, 251, 240 ),
+		_pszLabel[ 12 ] /*"改行記号"*/,							TRUE , FALSE, FALSE, RGB( 0, 128, 255 )		, RGB( 255, 251, 240 ),
+		_pszLabel[ 13 ] /*"折り返し記号"*/,						TRUE , FALSE, FALSE, RGB( 255, 0, 255 )		, RGB( 255, 251, 240 ),
+		_pszLabel[ 14 ] /*"指定桁縦線"*/,							FALSE, FALSE, FALSE, RGB( 192, 192, 192 )	, RGB( 255, 251, 240 ), //2005.11.08 Moca
+		_pszLabel[ 15 ] /*"EOF記号"*/,							TRUE , FALSE, FALSE, RGB( 0, 255, 255 )		, RGB( 0, 0, 0 ),
 //#ifdef COMPILE_COLOR_DIGIT
-		"半角数値",							FALSE, FALSE, FALSE, RGB( 235, 0, 0 )		, RGB( 255, 251, 240 ),	//@@@ 2001.02.17 by MIK		//Mar. 7, 2001 JEPRO RGB(0,0,255)を変更  Mar.10, 2001 標準は色なしに
+		_pszLabel[ 16 ] /*"半角数値"*/,							FALSE, FALSE, FALSE, RGB( 235, 0, 0 )		, RGB( 255, 251, 240 ),	//@@@ 2001.02.17 by MIK		//Mar. 7, 2001 JEPRO RGB(0,0,255)を変更  Mar.10, 2001 標準は色なしに
 //#endif
-		"検索文字列",						TRUE , FALSE, FALSE, RGB( 0, 0, 0 )			, RGB( 255, 255, 0 ),
-		"強調キーワード1",					TRUE , FALSE, FALSE, RGB( 0, 0, 255 )		, RGB( 255, 251, 240 ),
-		"強調キーワード2",					TRUE , FALSE, FALSE, RGB( 255, 128, 0 )		, RGB( 255, 251, 240 ),	//Dec. 4, 2000 MIK added	//Jan. 19, 2001 JEPRO キーワード1とは違う色に変更
-		"強調キーワード3",					TRUE , FALSE, FALSE, RGB( 255, 128, 0 )		, RGB( 255, 251, 240 ),	//Dec. 4, 2000 MIK added	//Jan. 19, 2001 JEPRO キーワード1とは違う色に変更
-		"強調キーワード4",					TRUE , FALSE, FALSE, RGB( 255, 128, 0 )		, RGB( 255, 251, 240 ),
-		"強調キーワード5",					TRUE , FALSE, FALSE, RGB( 255, 128, 0 )		, RGB( 255, 251, 240 ),
-		"強調キーワード6",					TRUE , FALSE, FALSE, RGB( 255, 128, 0 )		, RGB( 255, 251, 240 ),
-		"強調キーワード7",					TRUE , FALSE, FALSE, RGB( 255, 128, 0 )		, RGB( 255, 251, 240 ),
-		"強調キーワード8",					TRUE , FALSE, FALSE, RGB( 255, 128, 0 )		, RGB( 255, 251, 240 ),
-		"強調キーワード9",					TRUE , FALSE, FALSE, RGB( 255, 128, 0 )		, RGB( 255, 251, 240 ),
-		"強調キーワード10",					TRUE , FALSE, FALSE, RGB( 255, 128, 0 )		, RGB( 255, 251, 240 ),
-		"コメント",							TRUE , FALSE, FALSE, RGB( 0, 128, 0 )		, RGB( 255, 251, 240 ),
+		_pszLabel[ 17 ] /*"検索文字列"*/,						TRUE , FALSE, FALSE, RGB( 0, 0, 0 )			, RGB( 255, 255, 0 ),
+		_pszLabel[ 18 ] /*"強調キーワード1"*/,					TRUE , FALSE, FALSE, RGB( 0, 0, 255 )		, RGB( 255, 251, 240 ),
+		_pszLabel[ 19 ] /*"強調キーワード2"*/,					TRUE , FALSE, FALSE, RGB( 255, 128, 0 )		, RGB( 255, 251, 240 ),	//Dec. 4, 2000 MIK added	//Jan. 19, 2001 JEPRO キーワード1とは違う色に変更
+		_pszLabel[ 20 ] /*"強調キーワード3"*/,					TRUE , FALSE, FALSE, RGB( 255, 128, 0 )		, RGB( 255, 251, 240 ),	//Dec. 4, 2000 MIK added	//Jan. 19, 2001 JEPRO キーワード1とは違う色に変更
+		_pszLabel[ 21 ] /*"強調キーワード4"*/,					TRUE , FALSE, FALSE, RGB( 255, 128, 0 )		, RGB( 255, 251, 240 ),
+		_pszLabel[ 22 ] /*"強調キーワード5"*/,					TRUE , FALSE, FALSE, RGB( 255, 128, 0 )		, RGB( 255, 251, 240 ),
+		_pszLabel[ 23 ] /*"強調キーワード6"*/,					TRUE , FALSE, FALSE, RGB( 255, 128, 0 )		, RGB( 255, 251, 240 ),
+		_pszLabel[ 24 ] /*"強調キーワード7"*/,					TRUE , FALSE, FALSE, RGB( 255, 128, 0 )		, RGB( 255, 251, 240 ),
+		_pszLabel[ 25 ] /*"強調キーワード8"*/,					TRUE , FALSE, FALSE, RGB( 255, 128, 0 )		, RGB( 255, 251, 240 ),
+		_pszLabel[ 26 ] /*"強調キーワード9"*/,					TRUE , FALSE, FALSE, RGB( 255, 128, 0 )		, RGB( 255, 251, 240 ),
+		_pszLabel[ 27 ] /*"強調キーワード10"*/,					TRUE , FALSE, FALSE, RGB( 255, 128, 0 )		, RGB( 255, 251, 240 ),
+		_pszLabel[ 28 ] /*"コメント"*/,							TRUE , FALSE, FALSE, RGB( 0, 128, 0 )		, RGB( 255, 251, 240 ),
 	//Sept. 4, 2000 JEPRO シングルクォーテーション文字列に色を割り当てるが色分け表示はしない
 	//Oct. 17, 2000 JEPRO 色分け表示するように変更(最初のFALSE→TRUE)
 	//"シングルクォーテーション文字列", FALSE, FALSE, FALSE, RGB( 0, 0, 0 ), RGB( 255, 255, 255 ),
-		"シングルクォーテーション文字列",	TRUE , FALSE, FALSE, RGB( 64, 128, 128 )	, RGB( 255, 251, 240 ),
-		"ダブルクォーテーション文字列",		TRUE , FALSE, FALSE, RGB( 128, 0, 64 )		, RGB( 255, 251, 240 ),
-		"URL",								TRUE , FALSE, TRUE , RGB( 0, 0, 255 )		, RGB( 255, 251, 240 ),
-		"正規表現キーワード1",		FALSE , FALSE, FALSE , RGB( 0, 0, 255 )		, RGB( 255, 251, 240 ),	//@@@ 2001.11.17 add MIK
-		"正規表現キーワード2",		FALSE , FALSE, FALSE , RGB( 0, 0, 255 )		, RGB( 255, 251, 240 ),	//@@@ 2001.11.17 add MIK
-		"正規表現キーワード3",		FALSE , FALSE, FALSE , RGB( 0, 0, 255 )		, RGB( 255, 251, 240 ),	//@@@ 2001.11.17 add MIK
-		"正規表現キーワード4",		FALSE , FALSE, FALSE , RGB( 0, 0, 255 )		, RGB( 255, 251, 240 ),	//@@@ 2001.11.17 add MIK
-		"正規表現キーワード5",		FALSE , FALSE, FALSE , RGB( 0, 0, 255 )		, RGB( 255, 251, 240 ),	//@@@ 2001.11.17 add MIK
-		"正規表現キーワード6",		FALSE , FALSE, FALSE , RGB( 0, 0, 255 )		, RGB( 255, 251, 240 ),	//@@@ 2001.11.17 add MIK
-		"正規表現キーワード7",		FALSE , FALSE, FALSE , RGB( 0, 0, 255 )		, RGB( 255, 251, 240 ),	//@@@ 2001.11.17 add MIK
-		"正規表現キーワード8",		FALSE , FALSE, FALSE , RGB( 0, 0, 255 )		, RGB( 255, 251, 240 ),	//@@@ 2001.11.17 add MIK
-		"正規表現キーワード9",		FALSE , FALSE, FALSE , RGB( 0, 0, 255 )		, RGB( 255, 251, 240 ),	//@@@ 2001.11.17 add MIK
-		"正規表現キーワード10",		FALSE , FALSE, FALSE , RGB( 0, 0, 255 )		, RGB( 255, 251, 240 ),	//@@@ 2001.11.17 add MIK
-		"DIFF差分表示(追加)",		FALSE , FALSE, FALSE, RGB( 0, 0, 0 )		, RGB( 255, 251, 240 ),	//@@@ 2002.06.01 MIK
-		"DIFF差分表示(変更)",		FALSE , FALSE, FALSE, RGB( 0, 0, 0 )		, RGB( 255, 251, 240 ),	//@@@ 2002.06.01 MIK
-		"DIFF差分表示(削除)",		FALSE , FALSE, FALSE, RGB( 0, 0, 0 )		, RGB( 255, 251, 240 ),	//@@@ 2002.06.01 MIK
-		"対括弧の強調表示",			FALSE , TRUE,  FALSE, RGB( 128, 0, 0 )		, RGB( 255, 251, 240 ),	// 02/09/18 ai
-		"ブックマーク",				TRUE  , FALSE, FALSE, RGB( 255, 251, 240 )	, RGB( 0, 128, 192 ),	// 02/10/16 ai
+		_pszLabel[ 29 ] /*"シングルクォーテーション文字列"*/,	TRUE , FALSE, FALSE, RGB( 64, 128, 128 )	, RGB( 255, 251, 240 ),
+		_pszLabel[ 30 ] /*"ダブルクォーテーション文字列"*/,		TRUE , FALSE, FALSE, RGB( 128, 0, 64 )		, RGB( 255, 251, 240 ),
+		_pszLabel[ 31 ] /*"URL"*/,								TRUE , FALSE, TRUE , RGB( 0, 0, 255 )		, RGB( 255, 251, 240 ),
+		_pszLabel[ 32 ] /*"正規表現キーワード1"*/,		FALSE , FALSE, FALSE , RGB( 0, 0, 255 )		, RGB( 255, 251, 240 ),	//@@@ 2001.11.17 add MIK
+		_pszLabel[ 33 ] /*"正規表現キーワード2"*/,		FALSE , FALSE, FALSE , RGB( 0, 0, 255 )		, RGB( 255, 251, 240 ),	//@@@ 2001.11.17 add MIK
+		_pszLabel[ 34 ] /*"正規表現キーワード3"*/,		FALSE , FALSE, FALSE , RGB( 0, 0, 255 )		, RGB( 255, 251, 240 ),	//@@@ 2001.11.17 add MIK
+		_pszLabel[ 35 ] /*"正規表現キーワード4"*/,		FALSE , FALSE, FALSE , RGB( 0, 0, 255 )		, RGB( 255, 251, 240 ),	//@@@ 2001.11.17 add MIK
+		_pszLabel[ 36 ] /*"正規表現キーワード5"*/,		FALSE , FALSE, FALSE , RGB( 0, 0, 255 )		, RGB( 255, 251, 240 ),	//@@@ 2001.11.17 add MIK
+		_pszLabel[ 37 ] /*"正規表現キーワード6"*/,		FALSE , FALSE, FALSE , RGB( 0, 0, 255 )		, RGB( 255, 251, 240 ),	//@@@ 2001.11.17 add MIK
+		_pszLabel[ 38 ] /*"正規表現キーワード7"*/,		FALSE , FALSE, FALSE , RGB( 0, 0, 255 )		, RGB( 255, 251, 240 ),	//@@@ 2001.11.17 add MIK
+		_pszLabel[ 39 ] /*"正規表現キーワード8"*/,		FALSE , FALSE, FALSE , RGB( 0, 0, 255 )		, RGB( 255, 251, 240 ),	//@@@ 2001.11.17 add MIK
+		_pszLabel[ 40 ] /*"正規表現キーワード9"*/,		FALSE , FALSE, FALSE , RGB( 0, 0, 255 )		, RGB( 255, 251, 240 ),	//@@@ 2001.11.17 add MIK
+		_pszLabel[ 41 ] /*"正規表現キーワード10"*/,		FALSE , FALSE, FALSE , RGB( 0, 0, 255 )		, RGB( 255, 251, 240 ),	//@@@ 2001.11.17 add MIK
+		_pszLabel[ 42 ] /*"DIFF差分表示(追加)"*/,		FALSE , FALSE, FALSE, RGB( 0, 0, 0 )		, RGB( 255, 251, 240 ),	//@@@ 2002.06.01 MIK
+		_pszLabel[ 43 ] /*"DIFF差分表示(変更)"*/,		FALSE , FALSE, FALSE, RGB( 0, 0, 0 )		, RGB( 255, 251, 240 ),	//@@@ 2002.06.01 MIK
+		_pszLabel[ 44 ] /*"DIFF差分表示(削除)"*/,		FALSE , FALSE, FALSE, RGB( 0, 0, 0 )		, RGB( 255, 251, 240 ),	//@@@ 2002.06.01 MIK
+		_pszLabel[ 45 ] /*"対括弧の強調表示"*/,			FALSE , TRUE,  FALSE, RGB( 128, 0, 0 )		, RGB( 255, 251, 240 ),	// 02/09/18 ai
+		_pszLabel[ 46 ] /*"ブックマーク"*/,				TRUE  , FALSE, FALSE, RGB( 255, 251, 240 )	, RGB( 0, 128, 192 ),	// 02/10/16 ai
 	};
 //	To Here Sept. 18, 2000
 
@@ -5384,23 +5453,29 @@ void CShareData::InitTypeConfig(DLLSHAREDATA* pShareData)
 		pShareData->m_Types[nIdx].m_nVertLineIdx[i] = 0;
 	}
 
+	static char _pszLabelTypeNameArr[16][257];
+	for( int _pszLoad=0 ; _pszLoad<16 ; _pszLoad++ )
+	{
+		::LoadString( GetModuleHandle(NULL), STR_ERR_CSHAREDATA83+_pszLoad, _pszLabelTypeNameArr[ _pszLoad ], 255 );
+	}
+
 	static char* pszTypeNameArr[] = {
-		"基本",
-		"テキスト",
-		"C/C++",
-		"HTML",
-		"PL/SQL",
-		"COBOL",
-		"Java",
-		"アセンブラ",
-		"AWK",
-		"MS-DOSバッチファイル",
-		"Pascal",
-		"TeX",				//Oct. 31, 2000 JEPRO TeX  ユーザに贈る
-		"Perl",				//Jul. 08, 2001 JEPRO Perl ユーザに贈る
-		"Visual Basic",		//JUl. 10, 2001 JEPRO VB   ユーザに贈る
-		"リッチテキスト",	//JUl. 10, 2001 JEPRO WinHelp作るのにいるケンね
-		"設定ファイル",		//Nov. 9, 2000 JEPRO Windows標準のini, inf, cnfファイルとsakuraキーワード設定ファイル.kwd, 色設定ファイル.col も読めるようにする
+		_pszLabelTypeNameArr[  0 ], //"基本",
+		_pszLabelTypeNameArr[  1 ], //"テキスト",
+		_pszLabelTypeNameArr[  2 ], //"C/C++",
+		_pszLabelTypeNameArr[  3 ], //"HTML",
+		_pszLabelTypeNameArr[  4 ], //"PL/SQL",
+		_pszLabelTypeNameArr[  5 ], //"COBOL",
+		_pszLabelTypeNameArr[  6 ], //"Java",
+		_pszLabelTypeNameArr[  7 ], //"アセンブラ",
+		_pszLabelTypeNameArr[  8 ], //"AWK",
+		_pszLabelTypeNameArr[  9 ], //"MS-DOSバッチファイル",
+		_pszLabelTypeNameArr[ 10 ], //"Pascal",
+		_pszLabelTypeNameArr[ 11 ], //"TeX",				//Oct. 31, 2000 JEPRO TeX  ユーザに贈る
+		_pszLabelTypeNameArr[ 12 ], //"Perl",				//Jul. 08, 2001 JEPRO Perl ユーザに贈る
+		_pszLabelTypeNameArr[ 13 ], //"Visual Basic",		//JUl. 10, 2001 JEPRO VB   ユーザに贈る
+		_pszLabelTypeNameArr[ 14 ], //"リッチテキスト",	//JUl. 10, 2001 JEPRO WinHelp作るのにいるケンね
+		_pszLabelTypeNameArr[ 15 ], //"設定ファイル",		//Nov. 9, 2000 JEPRO Windows標準のini, inf, cnfファイルとsakuraキーワード設定ファイル.kwd, 色設定ファイル.col も読めるようにする
 	};
 	static char* pszTypeExts[] = {
 		"",
@@ -5442,7 +5517,9 @@ void CShareData::InitTypeConfig(DLLSHAREDATA* pShareData)
 		if(nIdx < (sizeof(pszTypeNameArr)/sizeof(char*)))
 			pszTypeName = pszTypeNameArr[nIdx];
 		else{
-			sprintf( szTypeName, "設定%d", nIdx + 1 );
+			char _pszLabelSetting[257] ;
+			::LoadString( GetModuleHandle(NULL), STR_ERR_CSHAREDATA99, _pszLabelSetting, 255 );
+			sprintf( szTypeName, _pszLabelSetting /*"設定%d"*/, nIdx + 1 );
 			pszTypeName = szTypeName;
 		}
 		if(nIdx < (sizeof(pszTypeExts)/sizeof(char*)))

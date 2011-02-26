@@ -21,6 +21,7 @@
 	This source code is designed for sakura editor.
 	Please contact the copyright holders to use this code for other purpose.
 */
+/* LMP (Lucien Murray-Pitts) : 2011-02-26 Added Basic English Translation Resources */
 
 #include "stdafx.h"
 #include <stdlib.h>
@@ -430,6 +431,10 @@ BOOL CEditDoc::FileRead(
 //@@@ 2001.12.26 YAZAKI MRUリストは、CMRUに依頼する
 	CMRU			cMRU;
 
+	// LMP: Added
+	char _pszLabel[2][257];
+
+
 	/* ファイルの存在チェック */
 	bFileIsExist = FALSE;
 	if( -1 == _access( pszPath, 0 ) ){
@@ -485,10 +490,13 @@ BOOL CEditDoc::FileRead(
 		HANDLE hTest = 	CreateFile( pszPath, GENERIC_READ, FILE_SHARE_READ | FILE_SHARE_WRITE,
 			NULL, OPEN_EXISTING, FILE_FLAG_SEQUENTIAL_SCAN, NULL );
 		if( hTest == INVALID_HANDLE_VALUE ){
+
+			::LoadString( m_hInstance, STR_ERR_DLGEDITDOC1, _pszLabel[0], 255 );  // LMP: Added
+
 			// 読み込みアクセス権がない
 			::MYMESSAGEBOX(
 				m_hWnd, MB_OK | MB_ICONSTOP, GSTR_APPNAME,
-				_T("\'%s\'\nというファイルを開けません。\n読み込みアクセス権がありません。"),
+				_pszLabel[0], // _T("\'%s\'\nというファイルを開けません。\n読み込みアクセス権がありません。"),
 				pszPath
 			 );
 			return FALSE;
@@ -507,11 +515,14 @@ BOOL CEditDoc::FileRead(
 	}
 	bRet = TRUE;
 	if( NULL == pszPath ){
+		::LoadString( m_hInstance, STR_ERR_DLGEDITDOC2,	_pszLabel[0], 255 );  // LMP: Added
+		::LoadString( m_hInstance, STR_ERR_DLGEDITDOC3, _pszLabel[1], 255 );  // LMP: Added
+
 		MYMESSAGEBOX(
 			m_hWnd,
 			MB_YESNO | MB_ICONEXCLAMATION | MB_TOPMOST,
-			"バグじゃぁあああ！！！",
-			"CEditDoc::FileRead()\n\nNULL == pszPath\n【対処】エラーの出た状況を作者に連絡してくださいね。"
+			_pszLabel[0], // "バグじゃぁあああ！！！",
+			_pszLabel[1]  //"CEditDoc::FileRead()\n\nNULL == pszPath\n【対処】エラーの出た状況を作者に連絡してくださいね。"
 		);
 		return FALSE;
 	}
@@ -569,8 +580,10 @@ BOOL CEditDoc::FileRead(
 		} else {
 			m_nCharCode = CMemory::CheckKanjiCodeOfFile( pszPath );
 			if( -1 == m_nCharCode ){
+				::LoadString( m_hInstance, STR_ERR_DLGEDITDOC4,	_pszLabel[0], 255 );  // LMP: Added
+
 				::MYMESSAGEBOX( m_hWnd, MB_OK | MB_ICONEXCLAMATION | MB_TOPMOST, GSTR_APPNAME,
-					"%s\n文字コードの判別処理でエラーが発生しました。",
+					_pszLabel[0], // "%s\n文字コードの判別処理でエラーが発生しました。",
 					pszPath
 				);
 				//	Sep. 10, 2002 genta
@@ -594,12 +607,15 @@ BOOL CEditDoc::FileRead(
 				pszCodeNameNew = (char*)gm_pszCodeNameArr_1[m_nCharCode];
 			}
 			if( pszCodeName != NULL ){
+				::LoadString( m_hInstance, STR_ERR_DLGEDITDOC5,	_pszLabel[0], 255 );  // LMP: Added
+				::LoadString( m_hInstance, STR_ERR_DLGEDITDOC6,	_pszLabel[1], 255 );  // LMP: Added
+
 				::MessageBeep( MB_ICONQUESTION );
 				nRet = MYMESSAGEBOX(
 					m_hWnd,
 					MB_YESNOCANCEL | MB_ICONQUESTION | MB_TOPMOST,
-					"文字コード情報",
-					"%s\n\nこのファイルは、前回は別の文字コード %s で開かれています。\n前回と同じ文字コードを使いますか？\n\n・[はい(Y)]  ＝%s\n・[いいえ(N)]＝%s\n・[キャンセル]＝開きません",
+					_pszLabel[0], //"文字コード情報",
+					_pszLabel[1], //"%s\n\nこのファイルは、前回は別の文字コード %s で開かれています。\n前回と同じ文字コードを使いますか？\n\n・[はい(Y)]  ＝%s\n・[いいえ(N)]＝%s\n・[キャンセル]＝開きません",
 					GetFilePath(), pszCodeName, pszCodeName, pszCodeNameNew
 				);
 				if( IDYES == nRet ){
@@ -614,11 +630,14 @@ BOOL CEditDoc::FileRead(
 					goto end_of_func;
 				}
 			}else{
+				::LoadString( m_hInstance, STR_ERR_DLGEDITDOC7,	_pszLabel[0], 255 );  // LMP: Added
+				::LoadString( m_hInstance, STR_ERR_DLGEDITDOC8,	_pszLabel[1], 255 );  // LMP: Added
+
 				MYMESSAGEBOX(
 					m_hWnd,
 					MB_YESNO | MB_ICONEXCLAMATION | MB_TOPMOST,
-					"バグじゃぁあああ！！！",
-					"【対処】エラーの出た状況を作者に連絡してください。"
+					_pszLabel[0], //"バグじゃぁあああ！！！",
+					_pszLabel[1] //"【対処】エラーの出た状況を作者に連絡してください。"
 				);
 				//	Sep. 10, 2002 genta
 				SetFilePath( "" );
@@ -681,11 +700,12 @@ BOOL CEditDoc::FileRead(
 
 			//	Feb. 15, 2003 genta Popupウィンドウを表示しないように．
 			//	ここでステータスメッセージを使っても画面に表示されない．
+			::LoadString( m_hInstance, STR_ERR_DLGEDITDOC9,	_pszLabel[0], 255 );  // LMP: Added
 			::MYMESSAGEBOX(
 				m_hwndParent,
 				MB_OK | MB_ICONINFORMATION | MB_TOPMOST,
 				GSTR_APPNAME,
-				"%s\nというファイルは存在しません。\n\nファイルを保存したときに、ディスク上にこのファイルが作成されます。",	//Mar. 24, 2001 jepro 若干修正
+				_pszLabel[0], // "%s\nというファイルは存在しません。\n\nファイルを保存したときに、ディスク上にこのファイルが作成されます。",	//Mar. 24, 2001 jepro 若干修正
 				pszPath
 			);
 		}
@@ -851,6 +871,11 @@ BOOL CEditDoc::FileWrite( const char* pszPath, enumEOLType cEolType )
 	//	Feb. 9, 2001 genta
 	CEOL	cEol( cEolType );
 
+	// LMP: Added
+	char _pszLabel[2][257];
+	::LoadString( m_hInstance, STR_ERR_DLGEDITDOC10, _pszLabel[0], 255 );  // LMP: Added
+
+
 	//	Jun.  5, 2004 genta ここでReadOnlyチェックをすると，ファイル名を変更しても
 	//	保存できなくなってしまうので，チェックを上書き保存処理へ移動．
 
@@ -881,22 +906,24 @@ BOOL CEditDoc::FileWrite( const char* pszPath, enumEOLType cEolType )
 		case 2:	//	中断指示
 			return FALSE;
 		case 3: //	ファイルエラー
+			::LoadString( m_hInstance, STR_ERR_DLGEDITDOC11, _pszLabel[1], 255 );  // LMP: Added
 			if( IDYES != ::MYMESSAGEBOX(
 				m_hWnd,
 				MB_YESNO | MB_ICONQUESTION | MB_TOPMOST,
-				"ファイル保存",
-				"バックアップの作成に失敗しました．元ファイルへの上書きを継続して行いますか．"
+				_pszLabel[0], //"ファイル保存",
+				_pszLabel[1]  //"バックアップの作成に失敗しました．元ファイルへの上書きを継続して行いますか．"
 			)){
 				return FALSE;
 			}
 		case 4:	//	バックアップファイルのパスが長すぎる
+			::LoadString( m_hInstance, STR_ERR_DLGEDITDOC12, _pszLabel[1], 255 );  // LMP: Added
 			if( IDYES != ::MYMESSAGEBOX(
 				m_hWnd,
 				MB_YESNO | MB_ICONQUESTION | MB_TOPMOST,
-				"ファイル保存",
-				"ファイルパスが長すぎるためバックアップの作成に失敗しました．\n"
-				"ANSI 版では %d バイト以上の絶対パスを扱えません．\n\n"
-				"元ファイルへの上書きを継続して行いますか．",
+				_pszLabel[0], // "ファイル保存",
+				_pszLabel[1], // "ファイルパスが長すぎるためバックアップの作成に失敗しました．\n"
+				// "ANSI 版では %d バイト以上の絶対パスを扱えません．\n\n"
+				// "元ファイルへの上書きを継続して行いますか．",
 				_MAX_PATH
 			)){
 				return FALSE;
@@ -1324,6 +1351,11 @@ int CEditDoc::MakeBackUp( const char* target_file )
 	int		nRet;
 	char*	pBase;
 
+	// LMP: Added
+	char _pszLabel[2][257];
+
+
+
 	/* バックアップソースの存在チェック */
 	//	Aug. 21, 2005 genta 書き込みアクセス権がない場合も
 	//	ファイルがない場合と同様に何もしない
@@ -1334,12 +1366,15 @@ int CEditDoc::MakeBackUp( const char* target_file )
 	if( m_pShareData->m_Common.m_bBackUpFolder ){	/* 指定フォルダにバックアップを作成する */
 		//	Aug. 21, 2005 genta 指定フォルダがない場合に警告
 		if( (_access( m_pShareData->m_Common.m_szBackUpFolder, 0 )) == -1 ){
+			::LoadString( m_hInstance, STR_ERR_DLGEDITDOC13, _pszLabel[0], 255 );  // LMP: Added
+			::LoadString( m_hInstance, STR_ERR_DLGEDITDOC14, _pszLabel[1], 255 );  // LMP: Added
+
 			if( ::MYMESSAGEBOX(
 				m_hWnd,
 				MB_YESNO | MB_ICONQUESTION | MB_TOPMOST,
-				"バックアップエラー",
-				"以下のバックアップフォルダが見つかりません．\n%s\n"
-				"バックアップを作成せずに上書き保存してよろしいですか．",
+				_pszLabel[0], //"バックアップエラー",
+				_pszLabel[1], // "以下のバックアップフォルダが見つかりません．\n%s\n"
+				// "バックアップを作成せずに上書き保存してよろしいですか．",
 				m_pShareData->m_Common.m_szBackUpFolder
 			) == IDYES ){
 				return 0;//	保存継続
@@ -1375,20 +1410,26 @@ int CEditDoc::MakeBackUp( const char* target_file )
 //			return FALSE;
 //		}
 		if( m_pShareData->m_Common.m_bBackUpDustBox && dustflag == false ){	//@@@ 2001.12.11 add start MIK	//2002.03.23
+			::LoadString( m_hInstance, STR_ERR_DLGEDITDOC15, _pszLabel[0], 255 );  // LMP: Added
+			::LoadString( m_hInstance, STR_ERR_DLGEDITDOC16, _pszLabel[1], 255 );  // LMP: Added
+
 			nRet = ::MYMESSAGEBOX(
 				m_hWnd,
 				MB_YESNO/*CANCEL*/ | MB_ICONQUESTION | MB_TOPMOST,
-				"バックアップ作成の確認",
-				"変更される前に、バックアップファイルを作成します。\nよろしいですか？  [いいえ(N)] を選ぶと作成せずに上書き（または名前を付けて）保存になります。\n\n%s\n    ↓\n%s\n\n作成したバックアップファイルをごみ箱に放り込みます。\n",
+				_pszLabel[0], // "バックアップ作成の確認",
+				_pszLabel[0], //"変更される前に、バックアップファイルを作成します。\nよろしいですか？  [いいえ(N)] を選ぶと作成せずに上書き（または名前を付けて）保存になります。\n\n%s\n    ↓\n%s\n\n作成したバックアップファイルをごみ箱に放り込みます。\n",
 				target_file,
 				szPath
 			);
 		}else{	//@@@ 2001.12.11 add end MIK
+			::LoadString( m_hInstance, STR_ERR_DLGEDITDOC17, _pszLabel[0], 255 );  // LMP: Added
+			::LoadString( m_hInstance, STR_ERR_DLGEDITDOC18, _pszLabel[1], 255 );  // LMP: Added
+
 			nRet = ::MYMESSAGEBOX(
 				m_hWnd,
 				MB_YESNOCANCEL | MB_ICONQUESTION | MB_TOPMOST,
-				"バックアップ作成の確認",
-				"変更される前に、バックアップファイルを作成します。\nよろしいですか？  [いいえ(N)] を選ぶと作成せずに上書き（または名前を付けて）保存になります。\n\n%s\n    ↓\n%s\n\n",
+				_pszLabel[0], //"バックアップ作成の確認",
+				_pszLabel[1], //"変更される前に、バックアップファイルを作成します。\nよろしいですか？  [いいえ(N)] を選ぶと作成せずに上書き（または名前を付けて）保存になります。\n\n%s\n    ↓\n%s\n\n",
 				//IsFilePathAvailable() ? GetFilePath() : "（無題）",
 				//	Aug. 21, 2005 genta 現在のファイルではなくターゲットファイルをバックアップするように
 				target_file,
@@ -1446,7 +1487,9 @@ int CEditDoc::MakeBackUp( const char* target_file )
 			//	ファイル名をセット
 			wsprintf( pBase, "%02d", i );
 			if( ::DeleteFile( szPath ) == 0 ){
-				::MessageBox( m_hWnd, szPath, "削除失敗", MB_OK );
+				::LoadString( m_hInstance, STR_ERR_DLGEDITDOC19, _pszLabel[0], 255 );  // LMP: Added
+
+				::MessageBox( m_hWnd, szPath, _pszLabel[0] /*"削除失敗"*/, MB_OK );
 				//	Jun.  5, 2005 genta 戻り値変更
 				//	失敗しても保存は継続
 				return 0;
@@ -1473,7 +1516,9 @@ int CEditDoc::MakeBackUp( const char* target_file )
 			if( ::MoveFile( szPath, szNewPath ) == 0 ){
 				//	失敗した場合
 				//	後で考える
-				::MessageBox( m_hWnd, szPath, "移動失敗", MB_OK );
+				::LoadString( m_hInstance, STR_ERR_DLGEDITDOC20, _pszLabel[0], 255 );  // LMP: Added
+
+				::MessageBox( m_hWnd, szPath, _pszLabel[0] /*"移動失敗"*/, MB_OK );
 				//	Jun.  5, 2005 genta 戻り値変更
 				//	失敗しても保存は継続
 				return 0;
@@ -1547,7 +1592,7 @@ int CEditDoc::MakeBackUp( const char* target_file )
 		MakeBackUpから分離．書式を元にバックアップファイル名を作成する機能追加
 	@date 2008.11.23 nasukoji	パスが長すぎる場合への対応
 	@date 2009.10.10 aroka	階層が浅いときに落ちるバグの対応
-
+	
 	@retval true
 	@retval false	作成したファイルパスの長さがdwSizeより大きかった
 	
@@ -1847,6 +1892,11 @@ void CEditDoc::DoFileLock( void )
 	int		nAccessMode;
 	BOOL	bCheckOnly;
 
+	// LMP: Added
+	char _pszLabel[3][257];
+
+
+
 	/* ロックしている */
 	if( NULL != m_hLockedFile ){
 		/* ロック解除 */
@@ -1908,13 +1958,16 @@ void CEditDoc::DoFileLock( void )
 	m_hLockedFile = ::_lopen( GetFilePath(), OF_READWRITE );
 	_lclose( m_hLockedFile );
 	if( HFILE_ERROR == m_hLockedFile ){
+		::LoadString( m_hInstance, STR_ERR_DLGEDITDOC21, _pszLabel[0], 255 );  // LMP: Added
+		::LoadString( m_hInstance, STR_ERR_DLGEDITDOC22, _pszLabel[1], 255 );  // LMP: Added
+
 		::MessageBeep( MB_ICONEXCLAMATION );
 		MYMESSAGEBOX(
 			m_hWnd,
 			MB_OK | MB_ICONEXCLAMATION | MB_TOPMOST,
 			GSTR_APPNAME,
-			"%s\nは現在他のプロセスによって書込みが禁止されています。",
-			IsFilePathAvailable() ? GetFilePath() : "（無題）"
+			_pszLabel[0], 		// "%s\nは現在他のプロセスによって書込みが禁止されています。",
+			IsFilePathAvailable() ? GetFilePath() : _pszLabel[1] // "（無題）"
 		);
 		m_hLockedFile = NULL;
 		/* 親ウィンドウのタイトルを更新 */
@@ -1925,22 +1978,28 @@ void CEditDoc::DoFileLock( void )
 	if( HFILE_ERROR == m_hLockedFile ){
 		switch( m_pShareData->m_Common.m_nFileShareMode ){
 		case OF_SHARE_EXCLUSIVE:	/* 読み書き */
-			pszMode = "読み書き禁止モード";
+			::LoadString( m_hInstance, STR_ERR_DLGEDITDOC23, _pszLabel[0], 255 );  // LMP: Added
+			pszMode = _pszLabel[0]; //"読み書き禁止モード";
 			break;
 		case OF_SHARE_DENY_WRITE:	/* 書き */
-			pszMode = "書き込み禁止モード";
+			::LoadString( m_hInstance, STR_ERR_DLGEDITDOC24, _pszLabel[0], 255 );  // LMP: Added
+			pszMode = _pszLabel[0]; //"書き込み禁止モード";
 			break;
 		default:
-			pszMode = "未定義のモード（問題があります）";
+			::LoadString( m_hInstance, STR_ERR_DLGEDITDOC25, _pszLabel[0], 255 );  // LMP: Added
+			pszMode = _pszLabel[0]; //"未定義のモード（問題があります）";
 			break;
 		}
+
+		::LoadString( m_hInstance, STR_ERR_DLGEDITDOC26, _pszLabel[1], 255 );  // LMP: Added
+		::LoadString( m_hInstance, STR_ERR_DLGEDITDOC27, _pszLabel[2], 255 );  // LMP: Added
 		::MessageBeep( MB_ICONEXCLAMATION );
 		MYMESSAGEBOX(
 			m_hWnd,
 			MB_OK | MB_ICONEXCLAMATION | MB_TOPMOST,
 			GSTR_APPNAME,
-			"%s\nを%sでロックできませんでした。\n現在このファイルに対する排他制御は無効となります。",
-			IsFilePathAvailable() ? GetFilePath() : "（無題）",
+			_pszLabel[1], // "%s\nを%sでロックできませんでした。\n現在このファイルに対する排他制御は無効となります。",
+			IsFilePathAvailable() ? GetFilePath() : _pszLabel[2] /*"（無題）"*/,
 			pszMode
 		);
 		/* 親ウィンドウのタイトルを更新 */
@@ -2404,7 +2463,7 @@ void CEditDoc::MakeTopicList_txt( CFuncInfoArr* pcFuncInfoArr )
 			}
 			/* ①～⑳ */
 			else if( pLine[i] == 0x87 && ( pLine[i + 1] >= 0x40 && pLine[i + 1] <= 0x53 ) ){
-				strcpy( szTitle, "①" );
+				strcpy( szTitle, "①" );		// LMP FIXME												// LMP -- HOW DO WE FIX THIS FIXME
 			}
 			/* Ⅰ～Ⅹ */
 			else if( pLine[i] == 0x87 && ( pLine[i + 1] >= 0x54 && pLine[i + 1] <= 0x5d ) ){
@@ -2924,12 +2983,15 @@ void CEditDoc::MakeTopicList_wztxt(CFuncInfoArr* pcFuncInfoArr)
 
 			// 2003.06.27 Moca 階層が2段位上深くなるときは、無題の要素を追加
 			if( levelPrev < level && level != levelPrev + 1  ){
+				char _pszLabel[257] ;
+				::LoadString( m_hInstance, STR_ERR_DLGEDITDOC28, _pszLabel, 255 );  // LMP: Added
+
 				int dummyLevel;
 				// (無題)を挿入
 				//	ただし，TAG一覧には出力されないように
 				for( dummyLevel = levelPrev + 1; dummyLevel < level; dummyLevel++ ){
 					pcFuncInfoArr->AppendData( nLineCount+1, nPosY+1,
-						"(無題)", FUNCINFO_NOCLIPTEXT, dummyLevel - 1 );
+						"(無題)" /*_pszLabel /*"(無題)"*/, FUNCINFO_NOCLIPTEXT, dummyLevel - 1 );
 				}
 			}
 			levelPrev = level;
@@ -3406,7 +3468,7 @@ void  CEditDoc::SetActivePane( int nIndex )
 			m_cEditViewArr[m_nActivePaneIndex].OnSetFocus();
 		}
 	}
-
+	
 	m_cEditViewArr[m_nActivePaneIndex].RedrawAll();	/* フォーカス移動時の再描画 */
 
 	m_cSplitterWnd.SetActivePane( nIndex );
@@ -3505,7 +3567,6 @@ void CEditDoc::Views_Redraw()
 	//アクティブを再描画
 	ActiveView().Redraw();
 }
-
 
 /* すべてのペインで、行番号表示に必要な幅を再設定する（必要なら再描画する） */
 BOOL CEditDoc::DetectWidthOfLineNumberAreaAllPane( BOOL bRedraw )
@@ -3967,6 +4028,9 @@ BOOL CEditDoc::OnFileClose( void )
 	int			nRet;
 	int			nBool;
 	HWND		hwndMainFrame;
+
+	char		_pszLabel[2][257] ;
+
 	hwndMainFrame = ::GetParent( m_hWnd );
 
 	//	Mar. 30, 2003 genta サブルーチンにまとめた
@@ -3975,11 +4039,12 @@ BOOL CEditDoc::OnFileClose( void )
 	if( m_bGrepRunning ){		/* Grep処理中 */
 		/* アクティブにする */
 		ActivateFrameWindow( hwndMainFrame );	//@@@ 2003.06.25 MIK
+		::LoadString( m_hInstance, STR_ERR_DLGEDITDOC29, _pszLabel[0], 255 );  // LMP: Added
 		::MYMESSAGEBOX(
 			hwndMainFrame,
 			MB_OK | MB_ICONINFORMATION | MB_TOPMOST,
 			GSTR_APPNAME,
-			"Grepの処理中です。\n"
+			_pszLabel[0] // "Grepの処理中です。\n"
 		);
 		return FALSE;
 	}
@@ -4001,12 +4066,16 @@ BOOL CEditDoc::OnFileClose( void )
 		ActivateFrameWindow( hwndMainFrame );
 		if( m_bReadOnly ){	/* 読み取り専用モード */
 			::MessageBeep( MB_ICONQUESTION );
+
+			::LoadString( m_hInstance, STR_ERR_DLGEDITDOC30, _pszLabel[0], 255 );  // LMP: Added
+			::LoadString( m_hInstance, STR_ERR_DLGEDITDOC27, _pszLabel[1], 255 );  // LMP: Added
+
 			nRet = ::MYMESSAGEBOX(
 				hwndMainFrame,
 				MB_YESNOCANCEL | MB_ICONQUESTION | MB_TOPMOST,
 				GSTR_APPNAME,
-				"%s\nは変更されています。 閉じる前に保存しますか？\n\n読み取り専用で開いているので、名前を付けて保存すればいいと思います。\n",
-				IsFilePathAvailable() ? GetFilePath() : "（無題）"
+				_pszLabel[0], //"%s\nは変更されています。 閉じる前に保存しますか？\n\n読み取り専用で開いているので、名前を付けて保存すればいいと思います。\n",
+				IsFilePathAvailable() ? GetFilePath() : _pszLabel[1] //"（無題）"
 			);
 			switch( nRet ){
 			case IDYES:
@@ -4024,13 +4093,16 @@ BOOL CEditDoc::OnFileClose( void )
 				return FALSE;
 			}
 		}else{
+			::LoadString( m_hInstance, STR_ERR_DLGEDITDOC31, _pszLabel[0], 255 );  // LMP: Added
+			::LoadString( m_hInstance, STR_ERR_DLGEDITDOC27, _pszLabel[1], 255 );  // LMP: Added
+
 			::MessageBeep( MB_ICONQUESTION );
 			nRet = ::MYMESSAGEBOX(
 				hwndMainFrame,
 				MB_YESNOCANCEL | MB_ICONQUESTION | MB_TOPMOST,
 				GSTR_APPNAME,
-				"%s\nは変更されています。 閉じる前に保存しますか？",
-				IsFilePathAvailable() ? GetFilePath() : "（無題）"
+				_pszLabel[0], //"%s\nは変更されています。 閉じる前に保存しますか？",
+				IsFilePathAvailable() ? GetFilePath() : _pszLabel[1] //"（無題）"
 			);
 			switch( nRet ){
 			case IDYES:
@@ -4161,7 +4233,7 @@ void CEditDoc::InitAllView( void )
 		m_cEditViewArr[i].m_nCaretPosX_Prev = 0;
 	}
 
-	return;
+	return;	
 }
 
 
@@ -4192,6 +4264,7 @@ bool CEditDoc::CreateEditViewBySplit(int nViewCount )
 	}
 	return true;
 }
+
 
 
 /* ファイルのタイムスタンプのチェック処理 */
@@ -4241,7 +4314,11 @@ void CEditDoc::CheckFileTimeStamp( void )
 					//	現在時刻でごまかす
 					::GetLocalTime( &st );
 				}
-				wsprintf( szText, "★ファイル更新 %02d:%02d:%02d", st.wHour, st.wMinute, st.wSecond );
+				// LMP: Added
+				char _pszLabel[257] ;
+				::LoadString( m_hInstance, STR_ERR_DLGEDITDOC32, _pszLabel, 255 );  // LMP: Added
+
+				wsprintf( szText, _pszLabel /*"★ファイル更新 %02d:%02d:%02d"*/, st.wHour, st.wMinute, st.wSecond );
 				m_pcEditWnd->SendStatusMessage( szText );
 			}	
 			break;
@@ -4431,7 +4508,7 @@ void CEditDoc::SetImeMode( int mode )
 */
 void CEditDoc::ExpandParameter(const char* pszSource, char* pszBuffer, int nBufferLen)
 {
-	
+/*	
 	// Apr. 03, 2003 genta 固定文字列をまとめる
 	static const char PRINT_PREVIEW_ONLY[] = "(印刷プレビューでのみ使用できます)";
 	const int PRINT_PREVIEW_ONLY_LEN = sizeof( PRINT_PREVIEW_ONLY ) - 1;
@@ -4439,6 +4516,18 @@ void CEditDoc::ExpandParameter(const char* pszSource, char* pszBuffer, int nBuff
 	const int NO_TITLE_LEN = sizeof( NO_TITLE ) - 1;
 	static const char NOT_SAVED[] = "(保存されていません)";
 	const int NOT_SAVED_LEN = sizeof( NOT_SAVED ) - 1;
+*/
+	// LMP: Added
+	// Apr. 03, 2003 genta 固定文字列をまとめる
+	char PRINT_PREVIEW_ONLY[64] ; //= "(印刷プレビューでのみ使用できます)";
+	char NO_TITLE[64]  ;// "(無題)";
+	char NOT_SAVED[64] ; //"(保存されていません)";
+
+	int PRINT_PREVIEW_ONLY_LEN = ::LoadString( m_hInstance, STR_ERR_DLGEDITDOC33, PRINT_PREVIEW_ONLY, 64 );  // LMP: Added
+	int NO_TITLE_LEN = ::LoadString( m_hInstance, STR_ERR_DLGEDITDOC34, NO_TITLE, 64 );  // LMP: Added
+	int NOT_SAVED_LEN = ::LoadString( m_hInstance, STR_ERR_DLGEDITDOC35, NOT_SAVED, 64 );  // LMP: Added
+
+
 
 	const char *p, *r;	//	p：目的のバッファ。r：作業用のポインタ。
 	char *q, *q_max;

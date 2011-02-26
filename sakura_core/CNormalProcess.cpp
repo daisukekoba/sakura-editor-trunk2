@@ -16,6 +16,7 @@
 	This source code is designed for sakura editor.
 	Please contact the copyright holder to use this code for other purpose.
 */
+/* LMP (Lucien Murray-Pitts) : 2011-02-26 Added Basic English Translation Resources */
 
 
 #include "stdafx.h"
@@ -351,20 +352,27 @@ CNormalProcess::~CNormalProcess()
 */
 HANDLE CNormalProcess::GetInitializeMutex() const
 {
+	// LMP: Added
+	char _pszLabel[257];
+
 	MY_RUNNINGTIMER( cRunningTimer, "NormalProcess::GetInitializeMutex" );
 	HANDLE hMutex;
 	hMutex = ::CreateMutex( NULL, TRUE, GSTR_MUTEX_SAKURA_INIT );
 	if( NULL == hMutex ){
+		::LoadString( m_hInstance, STR_ERR_DLGNRMPROC1, _pszLabel, 255 );  // LMP: Added
+
 		::MessageBeep( MB_ICONSTOP );
 		::MYMESSAGEBOX( NULL, MB_OK | MB_ICONSTOP | MB_TOPMOST,
-			GSTR_APPNAME, _T("CreateMutex()失敗。\n終了します。") );
+			GSTR_APPNAME, _pszLabel ) ; // _T("CreateMutex()失敗。\n終了します。") );
 		return NULL;
 	}
 	if( ::GetLastError() == ERROR_ALREADY_EXISTS ){
 		DWORD dwRet = ::WaitForSingleObject( hMutex, 15000 );	// 2002/2/8 aroka 少し長くした
 		if( WAIT_TIMEOUT == dwRet ){// 別の誰かが起動中
+			::LoadString( m_hInstance, STR_ERR_DLGNRMPROC2, _pszLabel, 255 );  // LMP: Added
+
 			::MYMESSAGEBOX( NULL, MB_OK | MB_ICONSTOP | MB_TOPMOST, GSTR_APPNAME,
-				_T("エディタまたはシステムがビジー状態です。\nしばらく待って開きなおしてください。") );
+				_pszLabel ) ; // _T("エディタまたはシステムがビジー状態です。\nしばらく待って開きなおしてください。") );
 			::CloseHandle( hMutex );
 			return NULL;
 		}

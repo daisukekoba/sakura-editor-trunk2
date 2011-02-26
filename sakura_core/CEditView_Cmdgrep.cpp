@@ -14,6 +14,8 @@
 	This source code is designed for sakura editor.
 	Please contact the copyright holders to use this code for other purpose.
 */
+/* LMP (Lucien Murray-Pitts) : 2011-02-26 Added Basic English Translation Resources */
+
 #include "stdafx.h"
 #include "sakura_rc.h"
 #include "CEditView.h"
@@ -88,7 +90,12 @@ void CEditView::Command_GREP( void )
 	/* 編集ウィンドウの上限チェック */
 	if( m_pShareData->m_nEditArrNum >= MAX_EDITWINDOWS ){	//最大値修正	//@@@ 2003.05.31 MIK
 		char szMsg[512];
-		wsprintf( szMsg, "編集ウィンドウ数の上限は%dです。\nこれ以上は同時に開けません。", MAX_EDITWINDOWS );
+
+		// LMP: Added
+		char _pszLabel[257];
+		::LoadString( m_hInstance, STR_ERR_DLGEDITVWGREP1, _pszLabel, 255 );  // LMP: Added
+
+		wsprintf( szMsg, _pszLabel /*"編集ウィンドウ数の上限は%dです。\nこれ以上は同時に開けません。"*/, MAX_EDITWINDOWS );
 		::MessageBox( m_hWnd, szMsg, GSTR_APPNAME, MB_OK );
 		return;
 	}

@@ -13,6 +13,7 @@
 	Copyright (C) 2006, ryoji
 	Copyright (C) 2007, genta, ryoji
 */
+/* LMP (Lucien Murray-Pitts) : 2011-02-26 Added Basic English Translation Resources */
 
 #include "stdafx.h"
 #include "CPropCommon.h"

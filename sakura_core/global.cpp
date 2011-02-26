@@ -13,6 +13,7 @@
 	This source code is designed for sakura editor.
 	Please contact the copyright holder to use this code for other purpose.
 */
+/* LMP (Lucien Murray-Pitts) : 2011-02-26 Added Basic English Translation Resources */
 
 #include "stdafx.h"
 #include "global.h"
@@ -65,8 +66,11 @@ const int gm_nCodeComboValueArr[] = {
 	CODE_UTF8,
 	CODE_UTF7
 };
+
+char gm_pszCodeComboNameArr_Auto[32] = 	"Ž©“®‘I‘ð" ;		// LMP: Added, see the WinMain for its initialization ( a global func would be better )
+
 const char* const	gm_pszCodeComboNameArr[] = {
-	"Ž©“®‘I‘ð",
+	gm_pszCodeComboNameArr_Auto, // "Ž©“®‘I‘ð",
 	"SJIS",
 	"JIS",
 	"EUC",

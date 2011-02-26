@@ -31,6 +31,7 @@
 		3. This notice may not be removed or altered from any source
 		   distribution.
 */
+/* LMP (Lucien Murray-Pitts) : 2011-02-26 Added Basic English Translation Resources */
 
 #include "stdafx.h"
 #include "CFuncLookup.h"
@@ -122,7 +123,11 @@ bool CFuncLookup::Funccode2Name( int funccode, char *ptr, int bufsize ) const
 			strncpy( ptr, p, bufsize - 1 );
 			ptr[ bufsize - 1 ] = '\0';
 		}else{
-			_snprintf( ptr, bufsize, "マクロ %d (未登録)", position );
+			// LMP: Added
+			static char _pszLabel[257];
+			::LoadString( m_hInstance, STR_ERR_DLGFUNCLKUP3, _pszLabel, 255 );  // LMP: Added
+
+			_snprintf( ptr, bufsize, _pszLabel /*"マクロ %d (未登録)"*/, position );
 			ptr[ bufsize - 1 ] = '\0';
 		}
 		return true;
@@ -159,17 +164,24 @@ bool CFuncLookup::Funccode2Name( int funccode, char *ptr, int bufsize ) const
 */
 const char* CFuncLookup::Category2Name( int category ) const
 {
+	// LMP: Added
+	static char _pszLabel[2][257];
+	::LoadString( m_hInstance, STR_ERR_DLGFUNCLKUP1, _pszLabel[0], 255 );  // LMP: Added
+	::LoadString( m_hInstance, STR_ERR_DLGFUNCLKUP2, _pszLabel[1], 255 );  // LMP: Added
+
 	if( category < 0 )
 		return NULL;
 
 	if( category < nsFuncCode::nFuncKindNum ){
-		return nsFuncCode::ppszFuncKind[category];
+//		return nsFuncCode::ppszFuncKind[category];
+		::LoadString( m_hInstance, STR_ERR_DLGFUNCLKUP04+category, _pszLabel[0], 255 );  // LMP: Added
+		return _pszLabel[0] ;
 	}
 	else if( category == nsFuncCode::nFuncKindNum + LUOFFSET_MACRO ){
-		return DynCategory[0];
+		return _pszLabel[0]; // DynCategory[0];
 	}
 	else if( category == nsFuncCode::nFuncKindNum + LUOFFSET_CUSTMENU ){
-		return DynCategory[1];
+		return _pszLabel[1]; // DynCategory[1];
 	}
 	return NULL;
 }
@@ -182,18 +194,25 @@ void CFuncLookup::SetCategory2Combo( HWND hComboBox ) const
 {
 	int i;
 
+	// LMP: Added
+	static char _pszLabel[3][257];
+	::LoadString( m_hInstance, STR_ERR_DLGFUNCLKUP1, _pszLabel[0], 255 );  // LMP: Added
+	::LoadString( m_hInstance, STR_ERR_DLGFUNCLKUP2, _pszLabel[1], 255 );  // LMP: Added
+
 	//	リストを初期化する
 	::SendMessage( hComboBox, CB_RESETCONTENT, 0, (LPARAM)0 );
 
 	//	固定機能リスト
 	for( i = 0; i < nsFuncCode::nFuncKindNum; ++i ){
-		::SendMessage( hComboBox, CB_ADDSTRING, 0, (LPARAM)nsFuncCode::ppszFuncKind[i] );
+		::LoadString( m_hInstance, STR_ERR_DLGFUNCLKUP04+i, _pszLabel[2], 255 );  // LMP: Added
+
+		::SendMessage( hComboBox, CB_ADDSTRING, 0, (LPARAM) _pszLabel[2]/*nsFuncCode::ppszFuncKind[i]*/);
 	}
 
 	//	ユーザマクロ
-	::SendMessage( hComboBox, CB_ADDSTRING, 0, (LPARAM)DynCategory[0] );
+	::SendMessage( hComboBox, CB_ADDSTRING, 0, (LPARAM)_pszLabel[0] ); // DynCategory[0] );
 	//	カスタムメニュー
-	::SendMessage( hComboBox, CB_ADDSTRING, 0, (LPARAM)DynCategory[1] );
+	::SendMessage( hComboBox, CB_ADDSTRING, 0, (LPARAM)_pszLabel[1] ); // DynCategory[1] );
 }
 
 /*!	@brief 指定された分類に属する機能リストをListBoxに登録する．
